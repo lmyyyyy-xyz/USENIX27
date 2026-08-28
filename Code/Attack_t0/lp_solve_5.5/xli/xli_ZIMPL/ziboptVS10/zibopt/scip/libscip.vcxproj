@@ -1,0 +1,575 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{13102880-EF84-4731-80A4-800DF6474982}</ProjectGuid>
+    <RootNamespace>SCIPLib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\thirdparty\gmp;..\..\thirdparty\pcre\src;..\..\thirdparty\zlib;src;..\zimpl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NO_SIGACTION;NO_RAND_R;NO_STRTOK_R;NO_STRERROR_R;WITH_ZLIB;WITH_ZIMPL;inline=_inline;R_OK=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)x86\scipLib.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4274;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)\lib\sciplib\x86\debug\$(ProjectName).lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\thirdparty\gmp;..\..\thirdparty\pcre\src;..\..\thirdparty\zlib;src;..\zimpl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NO_SIGACTION;NO_RAND_R;NO_STRTOK_R;NO_STRERROR_R;WITH_ZLIB;WIN64;WITH_ZIMPL;inline=_inline;R_OK=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)x64\scipLib.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4274;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)\lib\sciplib\x64\debug\$(ProjectName).lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\thirdparty\gmp;..\..\thirdparty\pcre\src;..\..\thirdparty\zlib;src;..\zimpl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NO_SIGACTION;NO_RAND_R;NO_STRTOK_R;NO_STRERROR_R;WITH_ZLIB;WITH_ZIMPL;NDEBUG;inline=_inline;R_OK=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4274;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)\lib\sciplib\x86\release\$(ProjectName).lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\thirdparty\gmp;..\..\thirdparty\pcre\src;..\..\thirdparty\zlib;src;..\zimpl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NO_SIGACTION;NO_RAND_R;NO_STRTOK_R;NO_STRERROR_R;WITH_ZLIB;WIN64;WITH_ZIMPL;NDEBUG;inline=_inline;R_OK=4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4274;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(ProjectDir)\lib\sciplib\x64\release\$(ProjectName).lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\scip\branch.c" />
+    <ClCompile Include="src\scip\branch_allfullstrong.c" />
+    <ClCompile Include="src\scip\branch_fullstrong.c" />
+    <ClCompile Include="src\scip\branch_inference.c" />
+    <ClCompile Include="src\scip\branch_leastinf.c" />
+    <ClCompile Include="src\scip\branch_mostinf.c" />
+    <ClCompile Include="src\scip\branch_pscost.c" />
+    <ClCompile Include="src\scip\branch_random.c" />
+    <ClCompile Include="src\scip\branch_relpscost.c" />
+    <ClCompile Include="src\scip\buffer.c" />
+    <ClCompile Include="src\scip\clock.c" />
+    <ClCompile Include="src\scip\conflict.c" />
+    <ClCompile Include="src\scip\cons.c" />
+    <ClCompile Include="src\scip\cons_and.c" />
+    <ClCompile Include="src\scip\cons_binpack.c" />
+    <ClCompile Include="src\scip\cons_bounddisjunction.c" />
+    <ClCompile Include="src\scip\cons_conjunction.c" />
+    <ClCompile Include="src\scip\cons_countsols.c" />
+    <ClCompile Include="src\scip\cons_cumulative.c" />
+    <ClCompile Include="src\scip\cons_eqknapsack.c" />
+    <ClCompile Include="src\scip\cons_indicator.c" />
+    <ClCompile Include="src\scip\cons_integral.c" />
+    <ClCompile Include="src\scip\cons_invarknapsack.c" />
+    <ClCompile Include="src\scip\cons_knapsack.c" />
+    <ClCompile Include="src\scip\cons_linear.c" />
+    <ClCompile Include="src\scip\cons_linking.c" />
+    <ClCompile Include="src\scip\cons_logicor.c" />
+    <ClCompile Include="src\scip\cons_or.c" />
+    <ClCompile Include="src\scip\cons_orbitope.c" />
+    <ClCompile Include="src\scip\cons_quadratic.c" />
+    <ClCompile Include="src\scip\cons_setppc.c" />
+    <ClCompile Include="src\scip\cons_soc.c" />
+    <ClCompile Include="src\scip\cons_sos1.c" />
+    <ClCompile Include="src\scip\cons_sos2.c" />
+    <ClCompile Include="src\scip\cons_varbound.c" />
+    <ClCompile Include="src\scip\cons_xor.c" />
+    <ClCompile Include="src\scip\cutpool.c" />
+    <ClCompile Include="src\scip\debug.c" />
+    <ClCompile Include="src\scip\dialog.c" />
+    <ClCompile Include="src\scip\dialog_default.c" />
+    <ClCompile Include="src\dijkstra\dijkstra_bh.c" />
+    <ClCompile Include="src\scip\disp.c" />
+    <ClCompile Include="src\scip\disp_default.c" />
+    <ClCompile Include="src\scip\event.c" />
+    <ClCompile Include="src\scip\expression.c" />
+    <ClCompile Include="src\scip\fileio.c" />
+    <ClCompile Include="src\scip\heur.c" />
+    <ClCompile Include="src\scip\heur_actconsdiving.c" />
+    <ClCompile Include="src\scip\heur_coefdiving.c" />
+    <ClCompile Include="src\scip\heur_crossover.c" />
+    <ClCompile Include="src\scip\heur_dins.c" />
+    <ClCompile Include="src\scip\heur_feaspump.c" />
+    <ClCompile Include="src\scip\heur_fixandinfer.c" />
+    <ClCompile Include="src\scip\heur_fracdiving.c" />
+    <ClCompile Include="src\scip\heur_guideddiving.c" />
+    <ClCompile Include="src\scip\heur_intdiving.c" />
+    <ClCompile Include="src\scip\heur_intshifting.c" />
+    <ClCompile Include="src\scip\heur_linesearchdiving.c" />
+    <ClCompile Include="src\scip\heur_localbranching.c" />
+    <ClCompile Include="src\scip\heur_mutation.c" />
+    <ClCompile Include="src\scip\heur_objpscostdiving.c" />
+    <ClCompile Include="src\scip\heur_octane.c" />
+    <ClCompile Include="src\scip\heur_oneopt.c" />
+    <ClCompile Include="src\scip\heur_pscostdiving.c" />
+    <ClCompile Include="src\scip\heur_rens.c" />
+    <ClCompile Include="src\scip\heur_rins.c" />
+    <ClCompile Include="src\scip\heur_rootsoldiving.c" />
+    <ClCompile Include="src\scip\heur_rounding.c" />
+    <ClCompile Include="src\scip\heur_shiftandpropagate.c" />
+    <ClCompile Include="src\scip\heur_shifting.c" />
+    <ClCompile Include="src\scip\heur_simplerounding.c" />
+    <ClCompile Include="src\scip\heur_subnlp.c" />
+    <ClCompile Include="src\scip\heur_trivial.c" />
+    <ClCompile Include="src\scip\heur_trysol.c" />
+    <ClCompile Include="src\scip\heur_twoopt.c" />
+    <ClCompile Include="src\scip\heur_undercover.c" />
+    <ClCompile Include="src\scip\heur_veclendiving.c" />
+    <ClCompile Include="src\scip\heur_zirounding.c" />
+    <ClCompile Include="src\scip\history.c" />
+    <ClCompile Include="src\scip\implics.c" />
+    <ClCompile Include="src\scip\interrupt.c" />
+    <ClCompile Include="src\scip\intervalarith.c" />
+    <ClCompile Include="src\scip\lp.c" />
+    <ClCompile Include="src\scip\mem.c" />
+    <ClCompile Include="src\scip\misc.c" />
+    <ClCompile Include="src\scip\nlp.c" />
+    <ClCompile Include="src\scip\nodesel.c" />
+    <ClCompile Include="src\scip\nodesel_bfs.c" />
+    <ClCompile Include="src\scip\nodesel_dfs.c" />
+    <ClCompile Include="src\scip\nodesel_estimate.c" />
+    <ClCompile Include="src\scip\nodesel_hybridestim.c" />
+    <ClCompile Include="src\scip\nodesel_restartdfs.c" />
+    <ClCompile Include="src\scip\paramset.c" />
+    <ClCompile Include="src\scip\presol.c" />
+    <ClCompile Include="src\scip\presol_boundshift.c" />
+    <ClCompile Include="src\scip\presol_dualfix.c" />
+    <ClCompile Include="src\scip\presol_implics.c" />
+    <ClCompile Include="src\scip\presol_inttobinary.c" />
+    <ClCompile Include="src\scip\presol_probing.c" />
+    <ClCompile Include="src\scip\presol_trivial.c" />
+    <ClCompile Include="src\scip\pricer.c" />
+    <ClCompile Include="src\scip\pricestore.c" />
+    <ClCompile Include="src\scip\primal.c" />
+    <ClCompile Include="src\scip\prob.c" />
+    <ClCompile Include="src\scip\prop.c" />
+    <ClCompile Include="src\scip\prop_pseudoobj.c" />
+    <ClCompile Include="src\scip\prop_rootredcost.c" />
+    <ClCompile Include="src\scip\prop_vbounds.c" />
+    <ClCompile Include="src\scip\reader.c" />
+    <ClCompile Include="src\scip\reader_ccg.c" />
+    <ClCompile Include="src\scip\reader_cip.c" />
+    <ClCompile Include="src\scip\reader_cnf.c" />
+    <ClCompile Include="src\scip\reader_fix.c" />
+    <ClCompile Include="src\scip\reader_fzn.c" />
+    <ClCompile Include="src\scip\reader_gms.c" />
+    <ClCompile Include="src\scip\reader_lp.c" />
+    <ClCompile Include="src\scip\reader_mps.c" />
+    <ClCompile Include="src\scip\reader_opb.c" />
+    <ClCompile Include="src\scip\reader_pip.c" />
+    <ClCompile Include="src\scip\reader_ppm.c" />
+    <ClCompile Include="src\scip\reader_rlp.c" />
+    <ClCompile Include="src\scip\reader_sol.c" />
+    <ClCompile Include="src\scip\reader_wbo.c" />
+    <ClCompile Include="src\scip\reader_zpl.c" />
+    <ClCompile Include="src\scip\relax.c" />
+    <ClCompile Include="src\scip\retcode.c" />
+    <ClCompile Include="src\scip\scip.c" />
+    <ClCompile Include="src\scip\scipdefplugins.c" />
+    <ClCompile Include="src\scip\scipshell.c" />
+    <ClCompile Include="src\scip\sepa.c" />
+    <ClCompile Include="src\scip\sepa_cgmip.c" />
+    <ClCompile Include="src\scip\sepa_clique.c" />
+    <ClCompile Include="src\scip\sepa_cmir.c" />
+    <ClCompile Include="src\scip\sepa_flowcover.c" />
+    <ClCompile Include="src\scip\sepa_gomory.c" />
+    <ClCompile Include="src\scip\sepa_impliedbounds.c" />
+    <ClCompile Include="src\scip\sepa_intobj.c" />
+    <ClCompile Include="src\scip\sepa_mcf.c" />
+    <ClCompile Include="src\scip\sepa_oddcycle.c" />
+    <ClCompile Include="src\scip\sepa_rapidlearning.c" />
+    <ClCompile Include="src\scip\sepa_redcost.c" />
+    <ClCompile Include="src\scip\sepa_strongcg.c" />
+    <ClCompile Include="src\scip\sepa_zerohalf.c" />
+    <ClCompile Include="src\scip\sepastore.c" />
+    <ClCompile Include="src\scip\set.c" />
+    <ClCompile Include="src\scip\sol.c" />
+    <ClCompile Include="src\scip\solve.c" />
+    <ClCompile Include="src\scip\stat.c" />
+    <ClCompile Include="src\tclique\tclique_branch.c" />
+    <ClCompile Include="src\tclique\tclique_coloring.c" />
+    <ClCompile Include="src\tclique\tclique_graph.c" />
+    <ClCompile Include="src\scip\tree.c" />
+    <ClCompile Include="src\scip\var.c" />
+    <ClCompile Include="src\scip\vbc.c" />
+    <ClCompile Include="src\xml\xmlparse.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\scip\branch.h" />
+    <ClInclude Include="src\scip\branch_allfullstrong.h" />
+    <ClInclude Include="src\scip\branch_fullstrong.h" />
+    <ClInclude Include="src\scip\branch_inference.h" />
+    <ClInclude Include="src\scip\branch_leastinf.h" />
+    <ClInclude Include="src\scip\branch_mostinf.h" />
+    <ClInclude Include="src\scip\branch_pscost.h" />
+    <ClInclude Include="src\scip\branch_random.h" />
+    <ClInclude Include="src\scip\branch_relpscost.h" />
+    <ClInclude Include="src\scip\buffer.h" />
+    <ClInclude Include="src\scip\clock.h" />
+    <ClInclude Include="src\scip\conflict.h" />
+    <ClInclude Include="src\scip\cons.h" />
+    <ClInclude Include="src\scip\cons_and.h" />
+    <ClInclude Include="src\scip\cons_binpack.h" />
+    <ClInclude Include="src\scip\cons_bounddisjunction.h" />
+    <ClInclude Include="src\scip\cons_conjunction.h" />
+    <ClInclude Include="src\scip\cons_countsols.h" />
+    <ClInclude Include="src\scip\cons_eqknapsack.h" />
+    <ClInclude Include="src\scip\cons_indicator.h" />
+    <ClInclude Include="src\scip\cons_integral.h" />
+    <ClInclude Include="src\scip\cons_invarknapsack.h" />
+    <ClInclude Include="src\scip\cons_knapsack.h" />
+    <ClInclude Include="src\scip\cons_linear.h" />
+    <ClInclude Include="src\scip\cons_logicor.h" />
+    <ClInclude Include="src\scip\cons_or.h" />
+    <ClInclude Include="src\scip\cons_orbitope.h" />
+    <ClInclude Include="src\scip\cons_quadratic.h" />
+    <ClInclude Include="src\scip\cons_setppc.h" />
+    <ClInclude Include="src\scip\cons_soc.h" />
+    <ClInclude Include="src\scip\cons_sos1.h" />
+    <ClInclude Include="src\scip\cons_sos2.h" />
+    <ClInclude Include="src\scip\cons_varbound.h" />
+    <ClInclude Include="src\scip\cons_xor.h" />
+    <ClInclude Include="src\scip\cutpool.h" />
+    <ClInclude Include="src\scip\debug.h" />
+    <ClInclude Include="src\scip\def.h" />
+    <ClInclude Include="src\scip\dialog.h" />
+    <ClInclude Include="src\scip\dialog_default.h" />
+    <ClInclude Include="src\scip\disp.h" />
+    <ClInclude Include="src\scip\disp_default.h" />
+    <ClInclude Include="src\scip\event.h" />
+    <ClInclude Include="src\scip\heur.h" />
+    <ClInclude Include="src\scip\heur_actconsdiving.h" />
+    <ClInclude Include="src\scip\heur_coefdiving.h" />
+    <ClInclude Include="src\scip\heur_crossover.h" />
+    <ClInclude Include="src\scip\heur_dins.h" />
+    <ClInclude Include="src\scip\heur_feaspump.h" />
+    <ClInclude Include="src\scip\heur_fixandinfer.h" />
+    <ClInclude Include="src\scip\heur_fracdiving.h" />
+    <ClInclude Include="src\scip\heur_guideddiving.h" />
+    <ClInclude Include="src\scip\heur_intdiving.h" />
+    <ClInclude Include="src\scip\heur_intshifting.h" />
+    <ClInclude Include="src\scip\heur_linesearchdiving.h" />
+    <ClInclude Include="src\scip\heur_localbranching.h" />
+    <ClInclude Include="src\scip\heur_mutation.h" />
+    <ClInclude Include="src\scip\heur_nlp.h" />
+    <ClInclude Include="src\scip\heur_objpscostdiving.h" />
+    <ClInclude Include="src\scip\heur_octane.h" />
+    <ClInclude Include="src\scip\heur_oneopt.h" />
+    <ClInclude Include="src\scip\heur_pscostdiving.h" />
+    <ClInclude Include="src\scip\heur_rens.h" />
+    <ClInclude Include="src\scip\heur_rins.h" />
+    <ClInclude Include="src\scip\heur_rootsoldiving.h" />
+    <ClInclude Include="src\scip\heur_rounding.h" />
+    <ClInclude Include="src\scip\heur_shifting.h" />
+    <ClInclude Include="src\scip\heur_simplerounding.h" />
+    <ClInclude Include="src\scip\heur_trivial.h" />
+    <ClInclude Include="src\scip\heur_trysol.h" />
+    <ClInclude Include="src\scip\heur_twoopt.h" />
+    <ClInclude Include="src\scip\heur_undercover.h" />
+    <ClInclude Include="src\scip\heur_veclendiving.h" />
+    <ClInclude Include="src\scip\heur_zirounding.h" />
+    <ClInclude Include="src\scip\history.h" />
+    <ClInclude Include="src\scip\implics.h" />
+    <ClInclude Include="src\scip\interrupt.h" />
+    <ClInclude Include="src\scip\intervalarith.h" />
+    <ClInclude Include="src\scip\lp.h" />
+    <ClInclude Include="src\scip\lpi.h" />
+    <ClInclude Include="src\scip\mem.h" />
+    <ClInclude Include="src\scip\misc.h" />
+    <ClInclude Include="src\scip\nodesel.h" />
+    <ClInclude Include="src\scip\nodesel_bfs.h" />
+    <ClInclude Include="src\scip\nodesel_dfs.h" />
+    <ClInclude Include="src\scip\nodesel_estimate.h" />
+    <ClInclude Include="src\scip\nodesel_hybridestim.h" />
+    <ClInclude Include="src\scip\nodesel_restartdfs.h" />
+    <ClInclude Include="src\scip\paramset.h" />
+    <ClInclude Include="src\scip\presol.h" />
+    <ClInclude Include="src\scip\presol_boundshift.h" />
+    <ClInclude Include="src\scip\presol_dualfix.h" />
+    <ClInclude Include="src\scip\presol_implics.h" />
+    <ClInclude Include="src\scip\presol_inttobinary.h" />
+    <ClInclude Include="src\scip\presol_probing.h" />
+    <ClInclude Include="src\scip\presol_trivial.h" />
+    <ClInclude Include="src\scip\pricer.h" />
+    <ClInclude Include="src\scip\pricestore.h" />
+    <ClInclude Include="src\scip\primal.h" />
+    <ClInclude Include="src\scip\prob.h" />
+    <ClInclude Include="src\scip\prop.h" />
+    <ClInclude Include="src\scip\prop_pseudoobj.h" />
+    <ClInclude Include="src\scip\prop_rootredcost.h" />
+    <ClInclude Include="src\scip\prop_vbounds.h" />
+    <ClInclude Include="src\scip\pub_branch.h" />
+    <ClInclude Include="src\scip\pub_conflict.h" />
+    <ClInclude Include="src\scip\pub_cons.h" />
+    <ClInclude Include="src\scip\pub_cutpool.h" />
+    <ClInclude Include="src\scip\pub_dialog.h" />
+    <ClInclude Include="src\scip\pub_disp.h" />
+    <ClInclude Include="src\scip\pub_event.h" />
+    <ClInclude Include="src\scip\pub_fileio.h" />
+    <ClInclude Include="src\scip\pub_heur.h" />
+    <ClInclude Include="src\scip\pub_implics.h" />
+    <ClInclude Include="src\scip\pub_lp.h" />
+    <ClInclude Include="src\scip\pub_message.h" />
+    <ClInclude Include="src\scip\pub_misc.h" />
+    <ClInclude Include="src\scip\pub_nodesel.h" />
+    <ClInclude Include="src\scip\pub_paramset.h" />
+    <ClInclude Include="src\scip\pub_presol.h" />
+    <ClInclude Include="src\scip\pub_pricer.h" />
+    <ClInclude Include="src\scip\pub_prop.h" />
+    <ClInclude Include="src\scip\pub_reader.h" />
+    <ClInclude Include="src\scip\pub_relax.h" />
+    <ClInclude Include="src\scip\pub_sepa.h" />
+    <ClInclude Include="src\scip\pub_sol.h" />
+    <ClInclude Include="src\scip\pub_tree.h" />
+    <ClInclude Include="src\scip\pub_var.h" />
+    <ClInclude Include="src\scip\reader.h" />
+    <ClInclude Include="src\scip\reader_ccg.h" />
+    <ClInclude Include="src\scip\reader_cip.h" />
+    <ClInclude Include="src\scip\reader_cnf.h" />
+    <ClInclude Include="src\scip\reader_fix.h" />
+    <ClInclude Include="src\scip\reader_fzn.h" />
+    <ClInclude Include="src\scip\reader_gms.h" />
+    <ClInclude Include="src\scip\reader_lp.h" />
+    <ClInclude Include="src\scip\reader_mps.h" />
+    <ClInclude Include="src\scip\reader_opb.h" />
+    <ClInclude Include="src\scip\reader_ppm.h" />
+    <ClInclude Include="src\scip\reader_rlp.h" />
+    <ClInclude Include="src\scip\reader_sol.h" />
+    <ClInclude Include="src\scip\reader_sos.h" />
+    <ClInclude Include="src\scip\reader_wbo.h" />
+    <ClInclude Include="src\scip\reader_zpl.h" />
+    <ClInclude Include="src\scip\relax.h" />
+    <ClInclude Include="src\scip\retcode.h" />
+    <ClInclude Include="src\scip\scip.h" />
+    <ClInclude Include="src\scip\scipdefplugins.h" />
+    <ClInclude Include="src\scip\scipshell.h" />
+    <ClInclude Include="src\scip\sepa.h" />
+    <ClInclude Include="src\scip\sepa_cgmip.h" />
+    <ClInclude Include="src\scip\sepa_clique.h" />
+    <ClInclude Include="src\scip\sepa_cmir.h" />
+    <ClInclude Include="src\scip\sepa_flowcover.h" />
+    <ClInclude Include="src\scip\sepa_gomory.h" />
+    <ClInclude Include="src\scip\sepa_impliedbounds.h" />
+    <ClInclude Include="src\scip\sepa_intobj.h" />
+    <ClInclude Include="src\scip\sepa_mcf.h" />
+    <ClInclude Include="src\scip\sepa_rapidlearning.h" />
+    <ClInclude Include="src\scip\sepa_redcost.h" />
+    <ClInclude Include="src\scip\sepa_strongcg.h" />
+    <ClInclude Include="src\scip\sepa_zerohalf.h" />
+    <ClInclude Include="src\scip\sepastore.h" />
+    <ClInclude Include="src\scip\set.h" />
+    <ClInclude Include="src\scip\sol.h" />
+    <ClInclude Include="src\scip\solve.h" />
+    <ClInclude Include="src\scip\stat.h" />
+    <ClInclude Include="src\scip\struct_branch.h" />
+    <ClInclude Include="src\scip\struct_buffer.h" />
+    <ClInclude Include="src\scip\struct_clock.h" />
+    <ClInclude Include="src\scip\struct_conflict.h" />
+    <ClInclude Include="src\scip\struct_cons.h" />
+    <ClInclude Include="src\scip\struct_cutpool.h" />
+    <ClInclude Include="src\scip\struct_dialog.h" />
+    <ClInclude Include="src\scip\struct_disp.h" />
+    <ClInclude Include="src\scip\struct_event.h" />
+    <ClInclude Include="src\scip\struct_heur.h" />
+    <ClInclude Include="src\scip\struct_history.h" />
+    <ClInclude Include="src\scip\struct_implics.h" />
+    <ClInclude Include="src\scip\struct_lp.h" />
+    <ClInclude Include="src\scip\struct_mem.h" />
+    <ClInclude Include="src\scip\struct_message.h" />
+    <ClInclude Include="src\scip\struct_misc.h" />
+    <ClInclude Include="src\scip\struct_nlpi.h" />
+    <ClInclude Include="src\scip\struct_nodesel.h" />
+    <ClInclude Include="src\scip\struct_paramset.h" />
+    <ClInclude Include="src\scip\struct_presol.h" />
+    <ClInclude Include="src\scip\struct_pricer.h" />
+    <ClInclude Include="src\scip\struct_pricestore.h" />
+    <ClInclude Include="src\scip\struct_primal.h" />
+    <ClInclude Include="src\scip\struct_prob.h" />
+    <ClInclude Include="src\scip\struct_prop.h" />
+    <ClInclude Include="src\scip\struct_reader.h" />
+    <ClInclude Include="src\scip\struct_relax.h" />
+    <ClInclude Include="src\scip\struct_scip.h" />
+    <ClInclude Include="src\scip\struct_sepa.h" />
+    <ClInclude Include="src\scip\struct_sepastore.h" />
+    <ClInclude Include="src\scip\struct_set.h" />
+    <ClInclude Include="src\scip\struct_sol.h" />
+    <ClInclude Include="src\scip\struct_stat.h" />
+    <ClInclude Include="src\scip\struct_tree.h" />
+    <ClInclude Include="src\scip\struct_var.h" />
+    <ClInclude Include="src\scip\struct_vbc.h" />
+    <ClInclude Include="src\tclique\tclique.h" />
+    <ClInclude Include="src\tclique\tclique_coloring.h" />
+    <ClInclude Include="src\tclique\tclique_def.h" />
+    <ClInclude Include="src\scip\tree.h" />
+    <ClInclude Include="src\scip\type_branch.h" />
+    <ClInclude Include="src\scip\type_buffer.h" />
+    <ClInclude Include="src\scip\type_clock.h" />
+    <ClInclude Include="src\scip\type_conflict.h" />
+    <ClInclude Include="src\scip\type_cons.h" />
+    <ClInclude Include="src\scip\type_cutpool.h" />
+    <ClInclude Include="src\scip\type_dialog.h" />
+    <ClInclude Include="src\scip\type_disp.h" />
+    <ClInclude Include="src\scip\type_event.h" />
+    <ClInclude Include="src\scip\type_heur.h" />
+    <ClInclude Include="src\scip\type_history.h" />
+    <ClInclude Include="src\scip\type_implics.h" />
+    <ClInclude Include="src\scip\type_interrupt.h" />
+    <ClInclude Include="src\scip\type_lp.h" />
+    <ClInclude Include="src\scip\type_lpi.h" />
+    <ClInclude Include="src\scip\type_mem.h" />
+    <ClInclude Include="src\scip\type_message.h" />
+    <ClInclude Include="src\scip\type_misc.h" />
+    <ClInclude Include="src\scip\type_nlpi.h" />
+    <ClInclude Include="src\scip\type_nodesel.h" />
+    <ClInclude Include="src\scip\type_paramset.h" />
+    <ClInclude Include="src\scip\type_presol.h" />
+    <ClInclude Include="src\scip\type_pricer.h" />
+    <ClInclude Include="src\scip\type_pricestore.h" />
+    <ClInclude Include="src\scip\type_primal.h" />
+    <ClInclude Include="src\scip\type_prob.h" />
+    <ClInclude Include="src\scip\type_prop.h" />
+    <ClInclude Include="src\scip\type_reader.h" />
+    <ClInclude Include="src\scip\type_relax.h" />
+    <ClInclude Include="src\scip\type_result.h" />
+    <ClInclude Include="src\scip\type_retcode.h" />
+    <ClInclude Include="src\scip\type_scip.h" />
+    <ClInclude Include="src\scip\type_sepa.h" />
+    <ClInclude Include="src\scip\type_sepastore.h" />
+    <ClInclude Include="src\scip\type_set.h" />
+    <ClInclude Include="src\scip\type_sol.h" />
+    <ClInclude Include="src\scip\type_stat.h" />
+    <ClInclude Include="src\scip\type_tree.h" />
+    <ClInclude Include="src\scip\type_var.h" />
+    <ClInclude Include="src\scip\type_vbc.h" />
+    <ClInclude Include="src\scip\var.h" />
+    <ClInclude Include="src\scip\vbc.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,10 @@
+60,61c60,61
+< /* static */ jmp_buf zpl_read_env;
+< /* static */ Bool    is_longjmp_ok = FALSE;
+---
+> static jmp_buf zpl_read_env;
+> static Bool    is_longjmp_ok = FALSE;
+84,86d83
+< #ifndef VERSION
+<   #define VERSION "Zimpl v2.0.4"
+< #endif

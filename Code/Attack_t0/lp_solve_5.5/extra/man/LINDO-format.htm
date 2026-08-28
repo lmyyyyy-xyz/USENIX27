@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>LINDO lp files</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<p><h1 align="left"><u>LINDO lp files</u></h1>
+					<p>The LINDO LP file format provides a facility for entering a problem in a
+						natural, algebraic LP formulation from the keyboard. The problem can be
+						modified and saved from within lpsolve. This procedure is one way to create a
+						file in a format that lpsolve can read. An alternative technique is to create a
+						similar file using a standard text editor and to read it into lpsolve.</p>
+
+					<P>The LINDO FILE format is provided as an input alternative to the MPS file format.
+						An LP format file may be easier to generate than an MPS file if your problem
+						already exists in an algebraic format or if you have an application that
+						generates the problem file more readily in algebraic format (such as a C
+						application).</P>
+
+					<p>Note that the LINDO FILE format is not the same as the lpsolve LP format.
+					   See <a href="lp-format.htm">LP file format</a> for a description about
+					   the native lpsolve lp format. To read/write this format from lpsolve, you need
+					   an XLI (see <a href="XLI.htm">External Language Interfaces</a>). The XLI for the LINDO
+					   format is called xli_LINDO.</p>
+
+                    <h3>Options</h3>
+                    <p>The XLI accepts no options at this time.</p>
+
+					<h3>Example</h3>
+
+<pre>
+lp_solve -rxli xli_LINDO input.lpt
+lp_solve -mps input.mps -wxli xli_LINDO output.lpt
+</pre>
+
+                    <h3>Syntax Rules of the LINDO FILE Format</h3>
+
+					<P>lpsolve will accept any problem saved in an ASCII file provided that it adheres
+						to the following syntax rules.
+					</P>
+
+<p>
+The MPS file format is a column-oriented format.
+If a row-oriented format is more convenient, then the LINDO file format is of interest.
+The list of rules is rather short and easy to learn.
+</p>
+
+<h2><i>Flow of Control</i></h2>
+
+<p>
+The objective function must always be at the start of the model and is initiated with any of the following keywords:
+</p>
+
+<blockquote>
+    <table border="0" width="280px">
+        <tr>
+            <td>
+                MAX</td>
+            <td>
+                MIN</td>
+        </tr>
+        <tr>
+            <td>
+                MAXIMIZE</td>
+            <td>
+                MINIMIZE</td>
+        </tr>
+        <tr>
+            <td>
+                MAXIMISE</td>
+            <td>
+                MINIMISE</td>
+        </tr>
+    </table>
+</blockquote>
+
+<p>
+The end of the objective function and the beginning of the constraints are signified with any of the following keywords:
+</p>
+
+<blockquote>
+    <table border="0" width="140px">
+        <tr>
+            <td>
+                SUBJECT TO</td>
+        </tr>
+        <tr>
+            <td>
+                SUCH THAT</td>
+        </tr>
+        <tr>
+            <td>
+                S.T.</td>
+        </tr>
+        <tr>
+            <td>
+                ST</td>
+        </tr>
+    </table>
+</blockquote>
+
+<p>
+The end of the constraints is signified with the word END.
+</p>
+
+<h2><i>Formatting</i></h2>
+
+<p>
+Variable names are limited to eight characters.
+Names must begin with an alphabetic character (A to Z), which may then be followed by up to seven additional characters.
+These additional characters may include anything with the exception of the following: ! ) + - = &lt; &gt;.
+As an example, the following names are valid:
+</p>
+
+<blockquote>
+    <table border="0" width="500px">
+        <tr>
+            <td>XYZ</td><td>MY_VAR</td><td>A12</td><td>SHIP.LA</td>
+        </tr>
+    </table>
+</blockquote>
+
+<p>
+whereas the following are not:
+</p>
+
+<blockquote>
+    <table border="0" width="500px">
+        <tr>
+            <td>THISONEISTOOLONG</td><td>A-HYPHEN</td><td>1INFRONT</td>
+        </tr>
+    </table>
+</blockquote>
+
+<p>
+The first example contains more than eight characters, the second contains a forbidden hyphen, and the last example does not begin with an alphabetic character.
+</p>
+
+<p>
+You may, optionally, name constraints in a model.
+Constraint names must follow the same conventions as variable names.
+To name a constraint, you must start the constraint with its name terminated with a right parenthesis.
+After the right parenthesis, you enter the constraint as before. As an example, the following constraint is given the name <i>XBOUND</i>:
+</p>
+
+<blockquote>
+    <pre>
+    XBOUND)&nbsp;X &lt; 10</pre>
+</blockquote>
+
+<p>
+Only five operators are recognized: plus (+), minus (-), greater than (&gt;), less than (&lt;), and equals (=).
+When you enter the strict inequality operators greater than (&gt;) and less than (&lt;), they will be interpreted as the loose inequality operators greater-than-or-equal-to () and less-than-or-equal-to (), respectively.
+This is because many keyboards do not have the loose inequality operators.
+Even for systems having the loose operators, they will not be recognized.
+However, if you prefer, you may enter "&gt;=" (and "&lt;=") in place of "&gt;" (and "&lt;").
+</p>
+
+<p>
+Parentheses as indicators of a preferred order of precedence are not accepted.
+All operations are ordered from left to right.
+</p>
+
+<p>
+Comments may be placed anywhere in a model.
+A comment is denoted by an exclamation mark.
+Anything following an exclamation mark on the current line will be considered a comment.
+For example:
+</p>
+
+<blockquote>
+    <pre>
+    MAX 10 STD + 15 DLX   ! Max profit
+    SUBJECT TO
+    ! Here are our factory capacity constraints
+    ! for Standard and Deluxe computers
+        STD &lt; 10
+        DLX &lt; 12
+    ! Here is the constraint on labor availability
+        STD + 2 DLX &lt; 16
+    END</pre>
+</blockquote>
+
+<p>
+Comments are allowed, but they will not be stored with the model.
+Therefore, if later an equivalent model will be written, the comments will be removed.
+</p>
+
+<p>
+Constraints and the objective function may be split over multiple lines or combined on single lines.
+You may split a line anywhere except in the middle of a variable name or a coefficient.
+The following would be mathematically equivalent to our example (although not quite as easy to read):
+</p>
+
+<blockquote>
+    <pre>
+    MAX
+        10
+        STD  + 15 DLX  SUBJECT TO
+    STD
+    &lt;
+    10
+    DLX &lt; 12  STD + 2
+    DLX &lt; 16 END</pre>
+</blockquote>
+
+<p>
+However, if the objective function appeared as follows:
+</p>
+
+<blockquote>
+    <pre>
+    MAX 10 ST
+    D + 1
+    5 DLX
+    SUBJECT TO</pre>
+</blockquote>
+
+<p>
+then an error would be returned because the variable <i>STD</i> is split between lines and the coefficient 15 is also.
+</p>
+
+<p>
+Only constant values--not variables--are permitted on the right-hand side of a constraint equation.
+Thus, an entry such as:
+</p>
+
+<blockquote>
+    <pre>
+    X &gt; Y</pre>
+</blockquote>
+
+<p>
+would be rejected. Such an entry could be written as:
+</p>
+
+<blockquote>
+    <pre>
+    X - Y &gt; 0</pre>
+</blockquote>
+
+<p>
+Conversely, only variables and their coefficients are permitted on the left-hand side of constraints.
+For instance, the constraint:
+</p>
+
+<blockquote>
+    <pre>
+    3X + 4Y - 10 = 0</pre>
+</blockquote>
+
+<p>
+is not permitted because of the constant term of -10 on the left-hand side.
+The constraint may be recast as:
+</p>
+
+<blockquote>
+    <pre>
+    3X + 4Y = 10</pre>
+</blockquote>
+
+<p>
+By default, all variables have lower bounds of zero and upper bounds of infinity.
+</p>
+
+<h2><i>Optional Modeling Statements</i></h2>
+
+<p>
+In addition to the three required model components of an objective function, variables, and constraints, a number of other optional modeling statements may appear in a model following the END statement.
+These statements and their functions appear in the table below:
+</p>
+
+<blockquote>
+    <table border="1" width="100%">
+    <tr>
+        <th align="left">Model Statement</th>
+        <th align="left">Function</th>
+    </tr>
+
+    <tr>
+        <td>FREE &lt;<i>Variable&gt;</i></td>
+        <td>Removes all bounds on &lt;<i>Variable&gt;</i>, allowing &lt;<i>Variable&gt;</i> to take on any real value, positive or negative.</td>
+    </tr>
+
+    <tr>
+        <td>GIN <i>&lt;Variable&gt;</i></td>
+        <td> Makes <i>&lt;Variable&gt;</i> a general integer (i.e., restricts it to the set of nonnegative integers).
+    </tr>
+
+    <tr>
+        <td>INT <i>&lt;Variable&gt;</i></td>
+        <td>Makes <i>&lt;Variable&gt;</i> binary (i.e., restricts it to be either 0 or 1).</td>
+    </tr>
+
+    <tr>
+        <td>SLB <i>&lt;Variable&gt;</i> <i>&lt;Value&gt;</i></td>
+        <td>Places a simple lower bound on <i>&lt;Variable&gt;</i> of <i>&lt;Value&gt;</i>.Use in place of constraints of form X = r.</td>
+    </tr>
+
+    <tr>
+        <td>SUB <i>&lt;Variable&gt;</i> <i>&lt;Value&gt;</i></td>
+        <td>Places a simple upper bound on <i>&lt;Variable&gt;</i> of <i>&lt;Value&gt;</i>.Use in place of constraints of form X = r.</td>
+    </tr>
+
+    <tr>
+        <td>TITLE &lt;<i>Title&gt;</i></td>
+        <td>Makes &lt;<i>Title&gt;</i> the title of the model.</td>
+    </tr>
+    </table>
+</blockquote>
+
+<p>
+Next, we will briefly illustrate the use of each of these statements.
+</p>
+
+<h3><i>FREE Statement</i></h3>
+
+<p>
+The default lower bound for a variable is 0.
+In other words, unless you specify otherwise, variables are not allowed to be negative.
+The FREE statement allows you to remove all bounds on a variable, so it may take on any real value, positive or negative.
+</p>
+
+<p>
+The following small example illustrates the use of the FREE statement:
+</p>
+
+<blockquote>
+    <pre>
+    MIN 5X + Y
+    ST
+        X+Y&gt;5
+        X-Y&gt;7
+    END
+    FREE Y</pre>
+</blockquote>
+
+<p>
+Had we not set <i>Y</i> to be a free variable in this example, the optimal solution of <i>X</i> = 6 and <i>Y </i>= -1 would not have been found.
+Instead, given the default lower bound of 0 on <i>Y</i>, the solution <i>X</i> = 7 and <i>Y</i> = 0 would be returned.
+</p>
+
+<h3><i>GIN Statement</i></h3>
+
+<p>
+By default, all variables are assumed to be continuous.
+In other words, unless told otherwise, variables are assumed to be any nonnegative fractional number.
+In many applications, fractional values may be of little use (e.g., 2.5 employees).
+In these instances, you will want to make use of the general integer statement, GIN.
+The GIN statement followed by a variable name restricts the value of the variable to the nonnegative integers (0,1,2,...).
+</p>
+
+<p>
+The following small example illustrates the use of the GIN statement:
+</p>
+
+<blockquote>
+    <pre>
+    MAX 11X + 10Y
+    ST
+        2X + Y &lt; 12
+        X - 3Y &gt; 1
+    END
+    GIN X
+    GIN Y</pre>
+</blockquote>
+
+<p>
+Had we not specified <i>X</i> and <i>Y</i> to be general integers in this model, the optimal solution of <i>X</i> = 6 and <i>Y</i> = 0 would not have been found.
+Instead, <i>X</i> and <i>Y</i> would have been treated as continuous and returned the solution of <i>X</i> = 5.29 and <i>Y</i> = 1.43.
+</p>
+
+<p>
+Note also that simply rounding the continuous solution to the nearest integer values does not yield the optimal solution in this example.
+In general, rounded continuous solutions may be nonoptimal and, at worst, infeasible.
+Based on this, one can imagine that it can be very time consuming to obtain the optimal solution to a model with many integer variables.
+In general, this is true, and you are best off utilizing the GIN feature only when absolutely necessary.
+</p>
+
+<h3><i>INT Statement</i></h3>
+
+<p>
+Using the INT statement restricts a variable to being either 0 or 1.
+These variables are often referred to as <i>binary variables</i>.
+In many applications, binary variables can be very useful in modeling all-or-nothing situations.
+Examples might include such things as taking on a fixed cost, building a new plant, or buying a minimum level of some resource to receive a quantity discount.
+</p>
+
+<p>
+The following small example illustrates the use of the INT statement:</p>
+
+<blockquote>
+    <pre>
+    MAX -100X + 20A + 12B
+    ST
+        A - 10X &lt; 0
+        A + B &lt; 11
+        B &lt; 7
+    END
+    INT X     !Make X 0/1</pre>
+</blockquote>
+
+<p>
+Had we not specified <i>X</i> to be binary in this example, a solution of <i>X</i> = .4, <i>A</i> = 4, and <i>B</i> = 7 for an objective value of 124 would not have been returned.
+Forcing <i>X</i> to be binary, you might guess that the optimal solution would be for <i>X</i> to be 0 because .4 is closer to 0 than it is to 1.
+If we round <i>X</i> to 0 and optimize for <i>A</i> and <i>B</i>, we get an objective of 84.
+In reality, a considerably better solution is obtained at <i>X</i> = 1, <i>A</i> = 10, and <i>B</i> = 1 for an objective of 112.
+</p>
+
+<p>
+In general, rounded continuous solutions may be nonoptimal and, at worst, infeasible.
+Based on this, one can imagine that it can be very time consuming to obtain the optimal solution to a model with many binary variables.
+In general, this is true and you are best off utilizing the INT feature only when absolutely necessary.
+</p>
+
+<h3><i>SUB and SLB Statements</i></h3>
+
+<p>
+If you do not specify otherwise, LINDO API assumes variables are continuous (bounded below by zero and unbounded from above).
+That is, variables can be any positive fractional number increasing indefinitely.
+In many applications, this assumption may not be realistic. Suppose your facilities limit the quantity produced of an item.
+In this case, the variable that represents the quantity produced is bounded from above.
+Or, suppose you want to allow for backordering in a system.
+An easy way to model this is to allow an inventory variable to go negative.
+In which case, you would like to circumvent the default lower bound of zero.
+The <i>SUB</i> and <i>SLB</i> statements are used to alter the bounds on a variable.
+<i>SLB</i> stands for Simple Lower Bound and is used to set lower bounds.
+Similarly, <i>SUB</i> stands for Simple Upper Bound and is used to set upper bounds.
+</p>
+
+<p>
+The following small example illustrates the use of the SUB and SLB:
+</p>
+
+<blockquote>
+    <pre>
+    MAX 20X + 30Y
+    ST
+        X + 2Y &lt; 120
+    END
+    SLB X 20
+    SUB X 50
+    SLB Y 40
+    SUB Y 70</pre>
+</blockquote>
+
+<p>
+In this example, we could have just as easily used constraints to represent the bounds.
+Specifically, we could have entered our small model as follows:
+</p>
+
+<blockquote>
+    <pre>
+    MAX 20X + 30X
+    ST
+        X + 2Y &lt; 120
+        X &gt; 20
+        X &lt; 50
+        Y &gt; 40
+        Y &lt; 70
+    END</pre>
+</blockquote>
+
+<p>
+This formulation would yield the same results, but there are two points to keep in mind.
+First, SUBs and SLBs are handled implicitly by the solver, and, therefore, are more efficient from a performance point of view than constraints.
+Secondly, SUBs and SLBs do not count against the constraint limit, allowing you to solve larger models within that limit.
+</p>
+
+<h3><i>TITLE Statement</i></h3>
+
+<p>
+This statement is used to associate a title with a model.
+The title may be any alphanumeric string of up to 74 characters in length.
+Unlike all the other statements that must appear after the END statement, the TITLE statement may appear before the objective or after the END statement of a model.
+</p>
+
+<p>
+Here is an example of a small model with a title:
+</p>
+
+<blockquote>
+    <pre>
+    TITLE Your Title Here
+    MAX 20X + 30Y
+    ST
+        X &lt; 50
+        Y &lt; 60
+        X + 2Y &lt; 120
+    END</pre>
+</blockquote>
+
+
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

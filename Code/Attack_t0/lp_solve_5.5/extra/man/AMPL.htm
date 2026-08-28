@@ -1,0 +1,616 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Using lpsolve from AMPL</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Using lpsolve from AMPL</u></h1>
+<h3>AMPL?</h3>
+<p>AMPL (A Mathematical Programming Language) is a high-level language for describing mathematical
+programs. AMPL allows a mathematical programming model to be specified independently of the data
+used for a specific instance of the model. AMPL's language for describing mathematical programs closely
+follows that used by humans to describe mathematical programs to each other. For this reason, modellers
+may spend more time improving the model and less time on the tedious details of data manipulation and
+problem solution.<br>
+To start, AMPL needs a mathematical
+programming model, which describes variables, objectives and relationships without referring to specific data.
+AMPL also needs an instance of the data, or a particular data set. The model and one (or more) data files are
+fed into the AMPL program. AMPL works like a compiler: the model and input are put into an intermediate
+file that can be read by a solver. The solver actually finds an optimal solution to the problem by reading
+in the intermediate file produced by AMPL and applying an appropriate algorithm. The solver outputs the
+solution as a text file, which can be viewed directly and cross-referenced with the variables and constraints
+specified in the model file.</p>
+
+<p>We will not discuss the specifics of AMPL here but instead refer the reader to
+<a href="http://www-personal.engin.umich.edu/~murty/510/ampl.pdf">AMPL (A Mathematical Programming Language) at the University of
+Michigan Documentation</a> and the AMPL website <A href="http://www.ampl.com" name=tex2html17>http://www.ampl.com</A>.
+</p>
+
+<h3>AMPL and lpsolve</h3>
+<p>One of the possible solvers that can be used by AMPL is lpsolve. However note that AMPL allows also defining
+non-linear models. These are not solvable by lpsolve because lpsolve can only handle MILP models. A message will
+be given if the AMPL model results in a model that cannot be handled by lpsolve.
+</p>
+
+<p>To make this possible, a driver program is needed: lpsolve(.exe).
+This program must be put in the AMPL directory and AMPL can call the lpsolve solver.
+The newer versions of the lpsolve(.exe) driver call lpsolve via the shared library (lpsolve55.dll under Windows
+and liblpsolve55.so under Unix/Linux). This has the advantage that the lpsolve driver program doesn't have to
+be recompiled when an update of lpsolve is provided. The shared library must be somewhere in the path.
+That is all.</p>
+
+<h3>Solve a model from AMPL via lpsolve</h3>
+<p>In the following text, ampl: before the AMPL commands is the AMPL prompt. Only the text after the : must be
+entered.
+</p>
+
+<p>To select the lpsolve solver, the following command must be executed in AMPL:</p>
+
+<pre>ampl: option solver lpsolve;</pre>
+
+<p>To solve the model, the following command must be executed in AMPL:</p>
+
+<pre>ampl: solve;</pre>
+
+<p>Options can be passed to lpsolve. For example to enable scaling, the following command must be executed in AMPL:</p>
+
+<pre>ampl: option lpsolve_options 'scale';</pre>
+
+<p>Multiple options can be specified by separating them with at least one space:</p>
+
+<pre>ampl: option lpsolve_options 'scale scalemode=7 verbose';</pre>
+
+<p>A list of all options is given at the end of this document.</p>
+
+<h3>An example</h3>
+<pre>ampl: model diet.mod;
+ampl: data diet.dat;
+ampl: option solver lpsolve;
+ampl: option lpsolve_options 'scale scalemode=7';
+ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: scale
+scalemode=7
+LP_SOLVE 5.5.2.14: optimal, objective 88.2
+1 simplex iterations
+</pre>
+
+<h3>solve_result_num</h3>
+<p>AMPL has a parameter that is used to indicate the outcome of the
+optimisation process. It is used as follows</p>
+
+<pre>ampl: display solve_result_num</pre>
+
+<p><TT>solve_result_num</TT> can take the values shown in following table which also presents a short
+explanation for each value.</p>
+<TABLE>
+<CAPTION>Interpretation of <TT>solve_result_num</TT>.</CAPTION>
+<TR>
+<TD>
+<TABLE cellPadding=3 align=center border=1 ID="Table1">
+<TR>
+<TD align=left>Value</TD>
+<TD align=left>Message</TD></TR>
+<TR>
+<TD align=left>0</TD>
+<TD align=left>the solution is optimal</TD></TR>
+<TR>
+<TD align=left>100</TD>
+<TD align=left>suboptimal solution</TD></TR>
+<TR>
+<TD align=left>200</TD>
+<TD align=left>infeasible problem</TD></TR>
+<TR>
+<TD align=left>300</TD>
+<TD align=left>unbounded problem</TD></TR>
+<TR>
+<TD align=left>500</TD>
+<TD align=left>solution status is unknown</TD></TR>
+<TR>
+<TD align=left>501</TD>
+<TD align=left>failure</TD></TR>
+<TR>
+<TD align=left>502</TD>
+<TD align=left>integer programming failure</TD></TR>
+</TABLE></TABLE>
+
+<h3>Restart</h3>
+This is also new with version 5. Before, when lpsolve was used from AMPL, the model was each time completely resolved
+at each AMPL solve command. The last base was not used to do further iterations. This is specific to AMPL because
+lpsolve is called as a seperate program each time a solve is done and to make restart possible the last base must be
+provided again to lpsolve to start from there again.
+From version 5 on this is now implemented by default. This means if a solve is done immediately after a previous
+solve that no iterations are needed and the solution can be given immediately. This can be shown via an example:
+<pre>ampl: model diet.mod;
+ampl: data diet.dat;
+ampl: option solver lpsolve;
+ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: optimal, objective 88.2
+3 simplex iterations
+</pre>
+<p>Note that 3 iterations were needed to solve the model.
+Now solve the model again:</p>
+<pre>ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: optimal, objective 88.2
+0 simplex iterations
+</pre>
+<p>Note now that no iterations are needed to solve the model. This because the result of the previous solve is
+used as a starting point for the new solve. It is even allowed to add or deleted variables and constraints in
+the model, lpsolve will still try to start from the last result to continue.</p>
+
+<p>If, for some reason, you don't want this and let lpsolve resolve the model from scratch, there are two
+possibilities to let lpsolve ignore the starting base. Either via an lpsolve option or an AMPL option.</p>
+
+<p>The lpsolve option that can be set is:</p>
+<pre>ampl: option lpsolve_options 'coldstart';
+</pre>
+
+<p>The AMPL option that can be set is:</p>
+<pre>ampl: option send_statuses 0;
+</pre>
+<br>
+One of both is enough.<br>
+<br>
+Now solve the model again:
+<pre>ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: coldstart
+LP_SOLVE 5.5.2.14: optimal, objective 88.2
+3 simplex iterations
+</pre>
+<br>
+Note that again 3 iterations are needed to solve the model.
+<p>Special considerations for integer models. From the moment that a model contains integer variables,
+the B&amp;B algorithm must be used to solve this. This algorithm must go trough a tree of possible solutions
+each time a solve is done. The last base of the best integer solution can not be used as a starting base for
+a resolve. This is not an lpsolve limitation, but a B&amp;B algorithm property...<br>
+For this reason, by default, AMPL doesn't provide a starting to the solver and solve is done from scratch.
+By default... However, a compromise can be implemented by the solver. And this is also done in lpsolve. Solving
+integer models is always started with solving the non-integer model. When this is done, the non-integer variables
+are made integer via the B&amp;B algorithm. lpsolve returns the base of the non-integer model and this base is
+used as a starting base for the model at the next solve. As said, this is a compromise because it results in
+a fast solve of the non-integer model, but the B&amp;B algorithm must still be executed. So even if no
+modifications are done to the model and solve is done again, there will be iterations needed by the B&amp;B
+algorithm to solve the integers. Because this must be explicitly implemented in the solver, AMPL doesn't
+provide the starting base by default for integer models. It must explicitly be activated:</p>
+
+<pre>ampl: option send_statuses 2;</pre>
+
+<p>Only then, lpsolve will get a starting base when there are integers.</p>
+
+<p>Example:</p>
+
+<pre>ampl: model multmip3.mod;
+ampl: data multmip3.dat;
+ampl: option solver lpsolve;
+ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: optimal, objective 235625
+1986 simplex iterations
+592 branch & bound nodes: depth 21
+</pre>
+
+<p>Note that 1986 iterations were needed to solve the model.
+Now solve the model again:</p>
+<pre>ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: optimal, objective 235625
+1986 simplex iterations
+592 branch & bound nodes: depth 21
+</pre>
+
+<p>The same as above. So no restart was done. Now activate the starting base for integer models and solve again:</p>
+
+<pre>ampl: option send_statuses 2;
+ampl: solve;
+</pre>
+
+<p>This gives as result:</p>
+
+<pre>LP_SOLVE 5.5.2.14: optimal, objective 235625
+1922 simplex iterations
+592 branch & bound nodes: depth 21
+</pre>
+
+<p>Note that less iterations are needed, but not 0 as in non-integer models. These are the iterations needed
+for the B&amp;B algorithm.</p>
+
+<h3>lpsolve options</h3>
+
+<p>lpsolve accepts a lot of options. Some options are just on/off switches and for there you just specify the
+option keyword (for example scale). Other options need a value and this is specified by an equal (=) sign
+after the option keyword and then the value (for example scalemode=7). Multiple options can be specified by
+separating them by a space (for example scale scalemode=7).
+</p>
+
+<p>These options can be displayed from the command line by entering the following:</p>
+
+<pre>
+lpsolve -=
+</pre>
+
+<p>Here is a list of the possible lpsolve options:</p>
+
+<pre>
+bb=...           branch-and-bound rule: one of
+  		    0 (default) for lowest indexed non-integer variable
+  		    1 for selection based on distance from the current bounds
+  		    2 for selection based on the largest current bound
+  		    3 for selection based on largest fractional value
+  		    4 for simple, unweighted pseudo-cost of a variable
+  		    5 this is an extended pseudo-costing strategy based on
+                      minimizing the number of integer infeasibilities
+  		    6 this is an extended pseudo-costing strategy based on
+                      maximizing the normal pseudo-cost divided by the
+                      number of infeasibilities
+  	       plus
+  		    8 for weight reverse mode
+                   16 when cauto is used, select the oposite direction that
+                      autoselect had chosen
+  		   32 for greedy mode
+  		   64 for pseudo cost mode
+  		  128 select the node that has already been selected before
+                      the most number of times
+  		  256 for randomize mode
+  		 1024 when mode 128 is selected, switch off this mode when
+                      a first solution is found
+  		 2048 for restart mode
+  		 4096 select the node that has been selected before the
+                      fewest number of times or not at all
+bfp=...          set basis factorization package
+cauto            in IPs, algorithm decides which branch being taken first
+cfirst           in IPs, take ceiling branch first
+coldstart        ignore starting base
+crash=...        determines a starting base: one of
+  		    0 (default) none
+  		    2 most feasible basis
+debug            debug mode
+degen            perturb degeneracies
+degenx=...       anti-degen handling: one of
+  		    0 (default) no anti-degeneracy handling
+  		    1 check if there are equality slacks in the basis and
+                      try to drive them out in order to reduce chance of
+                      degeneracy in Phase 1
+                    2 ColumnCheck
+                    4 Stalling
+                    8 NumFailure
+                   16 LostFeas
+                   32 Infeasible
+                   64 Dynamic
+                  128 During BB
+depth=...        set branch-and-bound depth limit
+dual             prefer the dual simplex for both phases
+eps=...          tolerance for rounding to integer
+epsb=...         minimum tolerance for the RHS
+epsd=...         minimum tolerance for reduced costs
+epsel=...        minimum tolerance for rounding values to zero
+epsp=...         value that is used as perturbation scalar for
+               degenerative problems
+f                specifies that branch-and-bound algorithm stops at first
+               found solution
+ga=...           specifies the absolute MIP gap for branch-and-bound
+gr=...           specifies the relative MIP gap for branch-and-bound
+improve=...      the iterative improvement level: one of
+  		    0 improve none
+  		    1 Running accuracy measurement of solved equations based on
+                      Bx=r (primal simplex), remedy is refactorization.
+  		    2 Improve initial dual feasibility by bound flips
+                      (highly recommended, and default)
+  		    4 Low-cost accuracy monitoring in the dual, remedy is refactorization
+                    8 By default there is a check for primal/dual feasibility at optimum
+                      only for the relaxed problem, this also activates the test at the node level
+n=...            specify which solution number to return
+o=...            specifies that branch-and-bound algorithm stops when
+               objective value is better than value
+objno=...        objective number: 0 = none, 1 (default) = first
+obound=...       a lower bound for the objective function
+               may speed up the calculations
+parse_only       parse input file but do not solve
+piv=...          simplex pivot rule: one of
+  		    0 select first
+  		    1 select according to Dantzig
+  		    2 (default) select Devex pricing from Paula Harris
+  		    3 select steepest edge
+piva             temporarily use first index if cycling is detected
+pivf             in case of Steepest Edge, fall back to DEVEX in primal
+pivla            scan entering/leaving columns alternatingly left/right
+pivll            scan entering/leaving columns left rather than right
+pivm             multiple pricing
+pivr             adds a small randomization effect to the selected pricer
+presolve         presolve problem before start optimizing
+presolvel        also eliminate linearly dependent rows
+presolver        if the phase 1 solution process finds that a constraint is
+               redundant then this constraint is deleted
+prim             prefer the primal simplex for both phases
+printsol=...     print solution: one of
+  		    0 (default) print nothing
+  		    1 only objective value
+  		    2 obj value+variables
+  		    3 obj value+variables+constraints
+  		    4 obj value+variables+constraints+duals
+  		    5 obj value+variables+constraints+duals+lp model
+  		    6 obj value+variables+constraints+duals+lp model+scales
+  		    7 obj value+variables+constraints+duals+lp model+scales+
+                      lp tableau
+prlp             print the LP
+psols            print (intermediate) feasible solutions
+psolsa           print (intermediate) feasible solutions (non-zeros)
+r=...            max nbr of pivots between a re-inversion of the matrix
+rparname=...     parameter file to read options from
+rparoptions=...  options parameter file
+scale            scale the problem
+scalemode=...    scale mode:  one of
+  		    1 for scale to convergence using largest absolute value
+  		    2 for scale based on the simple numerical range
+  		    3 (default) for numerical range-based scaling
+  		    4 for geometric scaling
+  		    7 for Curtis & Reid scaling
+  	       plus
+  		   16 for scale to convergence using logarithmic mean
+                      of all values
+  		   32 for also do Power scaling
+  		   64 to make sure that no scaled number is above 1
+  		  128 to scale integer variables
+simplexdd        set Phase1 Dual, Phase2 Dual
+simplexdp        set Phase1 Dual, Phase2 Primal
+simplexpd        set Phase1 Primal, Phase2 Dual
+simplexpp        set Phase1 Primal, Phase2 Primal
+timeout=...      timeout after sec seconds when not solution found
+trace            trace pivot selections
+trej=...         minimum pivot value
+verbose          verbose mode
+version          report version details
+wafter           write model after solve (usefull if presolve used)
+wantsol=...      solution report without -AMPL: sum of
+		1 ==> write .sol file
+		2 ==> print primal variable values
+		4 ==> print dual variable values
+		8 ==> do not print solution message
+wfmps=...        write to MPS file in free format
+wlp=...          write to LP filename
+wmps=...         write to MPS file in fixed format
+wparname=...     parameter file to write options to
+wparoptions=...  options parameter file
+wxli=...         write file with xli library
+wxliname=...     xli library
+wxliopt=...      options for xli library
+</pre>
+
+<h3>lpsolve command line options</h3>
+
+<p>Normally, the lpsolve program is called from AMPL. However the program can also be called stand-alone.
+When the command is invoked without an option or with the option -?, a list of the possible options is shown:</p>
+
+<pre>
+usage: lpsolve [options] stub [-AMPL] [&lt;assignment&gt; ...]
+
+Options:
+        --  {end of options}
+        -=  {show name= possibilities}
+        -?  {show usage}
+        -e  {suppress echoing of assignments}
+        -s  {write .sol file (without -AMPL)}
+        -v  {just show version}
+</pre>
+
+<p>stub and the -AMPL option is used when the program is called from AMPL.<br>
+The -v option shows the version of lpsolve.<br>
+The -= option shows all the options that can be passed to lpsolve from within AMPL.<br>
+These options can also be specified in an environment variable lpsolve_options.<br>
+<br>
+To call the lpsolve command to solve a model, you first must have a stub file that can be read by lpsolve.
+This stub file can be created by AMPL as follows:</p>
+
+<pre>
+ampl: model models\diet.mod;
+ampl: data models\diet.dat;
+ampl: write bdiet;
+ampl: quit
+</pre>
+
+<p>This created a binary file diet.nl. As an alternative the command write gdiet; can be used.
+This creates an ascii file that also can be read.
+However it is somewhat slower to read, especially when the models are larger.</p>
+
+<p>This creates a file diet.nl in the current directory. This file is the stub file needed by lpsolve:</p>
+
+<pre>
+lpsolve lpsolve diet.nl
+</pre>
+
+<p>This gives:</p>
+
+<pre>
+LP_SOLVE 5.5.2.14: optimal, objective 88.19999999999999
+3 simplex iterations
+</pre>
+
+<p>Options can be passed to lpsolve via the environment variable lpsolve_options:</p>
+
+<pre>
+set lpsolve_options=scale scalemode=7 verbose
+</pre>
+
+<p>Then the result of the previous lpsolve command is:</p>
+
+<pre>
+scale
+scalemode=7
+verbose
+Model name:  '' - run #1
+Objective:   Minimize(R0)
+
+Submitted:
+Model size:        4 constraints,       8 variables,           39 non-zeros.
+Constraints:       0 equality,          0 GUB,                  0 SOS.
+Variables:         0 integer,           0 semi-cont.,           0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+
+Optimal solution with dual simplex at iteration          1
+
+lp_solve solution         88.2 final at iteration        1,       0 nodes explor
+ed
+
+Excellent numeric accuracy ||*|| = 1.13687e-013
+
+ Memo: Largest [etaPFI v1.0] inv(B) had 0 NZ entries, 0.0x largest basis.
+      In the total iteration count 1, 0 (0.0%) were minor/bound swaps.
+      There were 0 refactorizations, 0 triggered by time and 0 by density.
+             ... on average 1.0 major pivots per refactorization.
+      Total solver time was 0.000 seconds.
+LP_SOLVE 5.5.2.14: optimal, objective 88.19999999999999
+1 simplex iterations
+</pre>
+
+<p>In this mode, the lpsolve option wantsol shows the solution:</p>
+
+<pre>
+set lpsolve_options=wantsol=2
+lpsolve diet.nl
+</pre>
+
+<p>This gives:</p>
+
+<pre>
+wantsol=2
+LP_SOLVE 5.5.2.14: optimal, objective 88.19999999999999
+3 simplex iterations
+
+variable  value
+_svar[1]  0
+_svar[2]  0
+_svar[3]  0
+_svar[4]  0
+_svar[5]  46.666666666666664
+_svar[6]  0
+_svar[7]  -3.552713678800501e-15
+_svar[8]  0
+</pre>
+
+<p>The -e option results in not echoing the options passed to lpsolve:</p>
+
+<pre>
+set lpsolve_options=wantsol=2
+lpsolve -e diet.nl
+</pre>
+
+<p>This gives:</p>
+
+<pre>
+LP_SOLVE 5.5.2.14: optimal, objective 88.19999999999999
+3 simplex iterations
+
+variable  value
+_svar[1]  0
+_svar[2]  0
+_svar[3]  0
+_svar[4]  0
+_svar[5]  46.666666666666664
+_svar[6]  0
+_svar[7]  -3.552713678800501e-15
+_svar[8]  0
+</pre>
+
+<p>lpsolve options can also be passed at the command line, they don't overrule the lpsolve_options environment variable, they are added:</p>
+
+<pre>
+set lpsolve_options=wantsol=2
+lpsolve diet.nl "verbose scale"
+</pre>
+
+<p>This gives:</p>
+
+<pre>
+wantsol=2
+verbose
+scale
+Model name:  '' - run #1
+Objective:   Minimize(R0)
+
+Submitted:
+Model size:        4 constraints,       8 variables,           39 non-zeros.
+Constraints:       0 equality,          0 GUB,                  0 SOS.
+Variables:         0 integer,           0 semi-cont.,           0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+
+Optimal solution with dual simplex at iteration          1
+
+lp_solve solution         88.2 final at iteration        1,       0 nodes explor
+ed
+
+Excellent numeric accuracy ||*|| = 1.13687e-013
+
+ Memo: Largest [etaPFI v1.0] inv(B) had 0 NZ entries, 0.0x largest basis.
+      In the total iteration count 1, 0 (0.0%) were minor/bound swaps.
+      There were 0 refactorizations, 0 triggered by time and 0 by density.
+             ... on average 1.0 major pivots per refactorization.
+      Total solver time was 0.000 seconds.
+LP_SOLVE 5.5.2.14: optimal, objective 88.19999999999997
+1 simplex iterations
+
+variable  value
+_svar[1]  0
+_svar[2]  0
+_svar[3]  0
+_svar[4]  0
+_svar[5]  46.66666666666666
+_svar[6]  0
+_svar[7]  0
+_svar[8]  0
+</pre>
+
+<a name="Compile_the_AMPL_driver"></a>
+<h3>Compile the AMPL driver</h3>
+
+<p>Besides the specific lpsolve files, you also need the AMPL solvers files that must be linked with it.
+These AMPL solvers files can be downloaded from various locations. The easiest way is via
+<a href="http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers">http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers</a>.
+untar them in directory lp_solve_5.5/extra/AMPL. This will put the files in lp_solve_5.5/extra/AMPL/solvers.
+Then in the solvers directory, gunzip all the files with extension .gz.<br>
+Then, still in the solvers directory, execute the appropriate Makefile.<br>
+For example under Windows:<br>
+nmake /f makefile.vc<br>
+Under Unix this would be:<br>
+make -f makefile.u<br>
+This will generate amplsolv.lib under Windows and amplsolver.a under Unix systems.
+However, Under windows, you must first create a file details.c by hand. It must contain the following single line:<br>
+char sysdetails_ASL[] = "MS VC++ 6.0";<br>
+See README for more information how to build the AMPL solvers files.
+</p>
+
+<p>Then install the files from archive lp_solve_5.5_AMPL_source.tar.gz<br>
+When this is done, goto the lpsolve directory and execute the appropriate makefile.
+There are two possibilities: generate a driver that links lpsolve statically and one that links lpsolve dynamically.
+When linked dynamically, the lpsolve dll or shared library is used at runtime. When linked statically, the lpsolve static
+library is linked at compile time with the AMPL lpsolve driver. For example:<br>
+nmake /f makefile5dyn.vc<br>
+Under Unix this would be:<br>
+make -f makefile5dyn.u<br>
+This will generate lpsolve.exe (Windows) or lpsolve (Unix). Put this in the AMPL directory.
+</p>
+	</BODY>
+</html>

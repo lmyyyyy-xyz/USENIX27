@@ -1,0 +1,7 @@
+:
+src=$*
+if [ "$src" = "" ]
+then src="hash.cpp octave.cpp lpsolve.cpp"
+fi
+mkoctfile -c -s -I../../.. -I/usr/include/octave -Iwin32 -DOCTAVE -DWIN32 $src
+mkoctfile -L/bin *.o -o octlpsolve.oct

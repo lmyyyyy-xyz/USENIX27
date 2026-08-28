@@ -1,0 +1,17 @@
+function example5()
+  echo example5 on;
+
+  use sqlpsolve;
+
+  f = [143 60 195];
+  A = [120 210 150.75; 110 30 125; 1 1 1];
+  b = [15000; 4000; 75];
+  lp = lp_maker(f, A, b, [-1; -1; -1], [], [], [], 1, 0);
+  solvestat = sqlpsolve('solve', lp)
+  format bank
+  obj = sqlpsolve('get_objective', lp)
+  format short
+  x = sqlpsolve('get_variables', lp)
+  sqlpsolve('delete_lp', lp);
+
+  echo example5 off;

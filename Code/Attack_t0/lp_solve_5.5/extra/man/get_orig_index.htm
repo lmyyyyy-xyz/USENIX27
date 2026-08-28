@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>get_orig_index</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_orig_index</h1>
+					<p>Returns the original row/column where a constraint/variable was before presolve.</p>
+					<p><b>int get_orig_index(lprec </b>*<i>lp</i>, <b>int </b><i>lp_index</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_orig_index</b> returns the original row/column where a constraint/variable was before presolve.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>lp_index</i></p>
+					<p class="indent">constraint or column number. If <i>lp_index</i> is between 1 and <A href="get_Nrows.htm">get_Nrows</A> then the index is a constraint (row) number. If <i>lp_index</i> is between 1+<A href="get_Nrows.htm">get_Nrows</A> and <A href="get_Nrows.htm">get_Nrows</A> + <A href="get_Ncolumns.htm">get_Ncolumns</A> then the index is a column number.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_orig_index</b> function returns the original row/column where a constraint/variable was before presolve.<br>
+						Note that the number of constraints (<A href="get_Nrows.htm">get_Nrows</A>) and columns (<A href="get_Ncolumns.htm">get_Ncolumns</A>) can change when a presolve is done or when
+						negative variables are split in a positive and a negative part. <b>get_orig_index</b> returns the original position of the constraint/variable. If <i>lp_index</i> is not a legal index, the return value is 0.<br>
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int index;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  index = get_orig_index(lp, 1); /* Will return 1 */
+
+  set_presolve(lp, PRESOLVE_COLS);
+  solve(lp);
+
+  index = get_orig_index(lp, 1); /* Will return 0 */
+
+  delete_lp(lp);
+  return(0);
+}
+</CODE></pre>
+					<p><A href="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p><b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A href="get_lp_index.htm">get_lp_index</A>, <A HREF="get_Ncolumns.htm">get_Ncolumns</A>, <A href="get_Norig_columns.htm">get_Norig_columns</A>, <A href="get_Nrows.htm">get_Nrows</A>, <A HREF="get_Norig_rows.htm">get_Norig_rows</A>, <A HREF="get_Lrows.htm">get_Lrows</A>, <A HREF="get_lp_index.htm">get_lp_index</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

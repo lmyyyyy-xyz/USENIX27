@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</h1>
+					<p>
+						Write an mps model.</p>
+					<p><b>unsigned char write_MPS(lprec </b>*<i>lp</i><b>, FILE </b>*<i>stream</i><b>);</b></p>
+					<p><b>unsigned char write_freeMPS(lprec </b>*<i>lp</i><b>, FILE </b>*<i>stream</i><b>);</b></p>
+					<P><B>unsigned char write_mps(lprec </B>*<i>lp</i><b>, char </b>*<I>filename</I><B>);</B></P>
+					<P><B>unsigned char write_freemps(lprec </B>*<i>lp</i><b>, char </b>*<I>filename</I><B>);</B></P>
+                                        <P><B>unsigned char MPS_writefileex(lprec </B>*<i>lp</i><b>, int </b><i>typeMPS</I><B>, void </b>*<I>userhandle</I><B>, (void *userhandle, char *buf) </b><i>write_modeldata_routine</i><b>);</B></P>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						The routines return TRUE (1) if the operation was
+						successful. A return value of FALSE (0) indicates an error.<br>
+						Note that row entry mode must be off, else this function also fails. See <A HREF="set_add_rowmode.htm">set_add_rowmode</A>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>stream</i></p>
+					<p class="indent">
+						Pointer to <b>FILE</b> structure.</p>
+					<P class="dt"><I>filename</I></P>
+					<P class="indent">
+					Filename to write the mps model to.
+                                        <P class="dt"><I>typeMPS</I></P>
+					<P class="indent">
+					type of the MPS file. Can be one of the following values:</p>
+					    <TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>MPSFIXED&nbsp;(1)</TD>
+								<TD>Fixed MPS format</TD>
+							</TR>
+							<TR>
+								<TD>MPSFREE&nbsp;(2)</TD>
+								<TD>Free MPS format</TD>
+							</TR>
+						</TABLE>
+					<P class="dt"><I>write_modeldata_routine</I></P>
+					<P class="indent">
+					Routine to write the MPS model to. The routine has following definition:<br>
+                                        typedef int (__WINAPI write_modeldata_func)(void *userhandle, char *buf);<br>
+                                          userhandle is the second parameter passed to write_lp_ex<br>
+                                          buf is a shrunk of data.
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						The <b>write_mps</b>, <b>write_freemps</b>, <B>write_MPS</B>, <B>write_freeMPS</B> functions write the model to <i>filename</i>.
+						<B>write_MPS</B>, <B>write_freeMPS</B> need a file pointer to an already opened file. <B>write_mps</B>, <B>write_freemps</B>
+						accept the name of the file. The latter function will generally be more
+						convenient. MPS_writefileex writes the model via a user defined routine.</P>
+						When stream or filename are NULL, then output is written to output set by
+						<A href="set_output.htm">set_outputstream, set_outputfile</A>. By default this is stdout.
+					<P>
+						The model in the file will be in <a href="mps-format.htm">mps-format</a>.
+						The write_free* routines write files in free MPS format.
+						The other routines write files in fixed MPS format.
+					</P>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  write_mps(lp, "model.mps");
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,<A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="write_lp.htm">write_lp,
+							write_LP, write_lpex</A>, <A HREF="write_XLI.htm">read_lp, read_LP</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

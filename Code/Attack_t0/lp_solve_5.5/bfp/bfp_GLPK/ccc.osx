@@ -1,0 +1,42 @@
+:
+# glpk is needed to compile this library. See at ftp://prep.ai.mit.edu/pub/gnu/glpk/
+
+# Tested with glpk 4.2 and 4.7 and 4.13
+
+# Location where glpk is located.
+glpkdir=/glpk/glpk-4.13
+
+if [ -f ${glpkdir}/src/glprng.c ]
+then glpk1=${glpkdir}/src/glprng.c
+fi
+glpk="${glpkdir}/src/glpinv.c ${glpkdir}/src/glplib1a.c ${glpkdir}/src/glplib2.c ${glpk1} ${glpkdir}/src/glpluf.c"
+
+src="../../colamd/colamd.c ../../shared/commonlib.c lp_glpkLU.c ../../lp_utils.c ${glpk}"
+
+c=${CC:-cc}
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("osx%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+opts='-O3 -DINTEGERTIME'
+
+$c -s -c $opts -I.. -I../.. -I../../colamd -I../../shared -I. -I${glpkdir}/include -DRoleIsExternalInvEngine -DINVERSE_ACTIVE=INVERSE_GLPKLU $src
+libtool -static -o libbfp_GLPK.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+
+opts="$opts -fPIC -fno-common"
+so="-dynamiclib"
+
+$c -s -c $opts -I.. -I../.. -I../../colamd -I../../shared -I. -I${glpkdir}/include -DRoleIsExternalInvEngine -DINVERSE_ACTIVE=INVERSE_GLPKLU $src
+$c $so libbfp_GLPK.a -compatibility_version 5.5.0 -current_version 5.5.0 -o bin/$PLATFORM/libbfp_GLPK.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm
+
+rm *.o >/dev/null

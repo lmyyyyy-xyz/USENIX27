@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>free_lp</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>free_lp</h1>
+					<p>
+						Deletes an lprec structure and initialise the plp variable.</p>
+					<p>
+						<b>void free_lp(lprec </b>**<i>plp</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						None</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>plp</i></p>
+					<p class="indent">
+						lprec structure to delete. After the call, *plp will be set to NULL.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>free_lp</b> function frees all memory allocated to the lp structure and
+						initialises the *plp variable.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  /* Model created */
+
+  /*
+  .
+  .
+  .
+  */
+
+  free_lp(&amp;lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="make_lp.htm">make_lp</A>,
+						<A HREF="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

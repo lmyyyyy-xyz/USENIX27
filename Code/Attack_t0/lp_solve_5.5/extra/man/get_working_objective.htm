@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_working_objective</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_working_objective</h1>
+					<p>Returns the value of the objective function.</p>
+					<p><b>REAL get_working_objective(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_working_objective</b> returns the current value of the objective while
+						solving the model.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_working_objective</b> function returns the current value of the
+						objective while solving the model.<br>
+						This value can be retrieved while solving in a callback function.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int msgfunction(lprec *lp, void *userhandle, char *buf)
+{
+
+ printf("%f\n", get_working_objective(lp));
+
+ return(0);
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_msgfunc(lp, msgfunction, NULL, 0);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="get_working_objective.htm">get_working_objective</a>,
+						<a href="is_feasible.htm">is_feasible</a>, <a href="get_variables.htm">get_variables,
+							get_ptr_variables</a>, <a href="get_constraints.htm">get_constraints,
+							get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_primal_solution.htm">get_primal_solution,
+							get_ptr_primal_solution, get_var_primalresult</a>, <a href="get_sensitivity_rhs.htm">
+							get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution,
+							get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex,
+							get_ptr_sensitivity_objex</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

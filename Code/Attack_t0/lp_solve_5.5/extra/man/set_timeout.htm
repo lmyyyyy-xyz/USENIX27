@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>set_timeout</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_timeout</h1>
+					<p>Set a timeout.</p>
+					<p><b>void set_timeout(lprec </b>*<i>lp</i><b>, long </b><i>sectimeout</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_timeout</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>sectimeout</i></p>
+					<p class="indent">The number of seconds after which a timeout occurs. If zero, then
+						no timeout will occur.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_timeout</b> function sets a timeout in seconds. The <A href="solve.htm">solve</A>
+						and <A href="lag_solve.htm">lag_solve</A> functions may not last longer than
+						this time or the routines return with a timeout. The default timeout is 0, resulting in no timeout.<br>
+						If a timout occurs, but there was already an integer solution found (that is possibly not the best),
+						then <A href="read_lp.htm">solve</A> will return SUBOPTIMAL. If there was no integer solution found yet
+						or there are no integers or the solvers is still in the first phase where a REAL optimal solution is
+						searched for, then <A href="read_lp.htm">solve</A> will return TIMEOUT.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_timeout(lp, 600); /* sets a timeout of 600 seconds (10 minutes) */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_timeout.htm">get_timeout</A>, <A HREF="time_elapsed.htm">time_elapsed</A>, <A HREF="solve.htm">solve</A>,
+						<A HREF="lag_solve.htm">lag_solve</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

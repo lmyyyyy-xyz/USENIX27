@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_primal_solution, get_ptr_primal_solution, get_var_primalresult</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_primal_solution, get_ptr_primal_solution, get_var_primalresult</h1>
+					<p>Returns the solution of the model.</p>
+					<p><b>unsigned char get_primal_solution(lprec </b>*<i>lp</i><b>, REAL </b>*<i>pv</i><b>);</b></p>
+					<p><b>unsigned char get_ptr_primal_solution(lprec </b>*<i>lp</i><b>, REAL </b>**<i>ptr_pv</i><b>);</b></p>
+					<p><b>REAL get_var_primalresult(lprec </b>*<i>lp</i><b>, int </b><i>index</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_primal_solution, get_ptr_primal_solution</b> return TRUE (1) if the
+						operation was successful. A return value of FALSE (0) indicates an error.<br>
+						<b>get_var_primalresult</b> returns the value for <i>index</i>.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>pv</i></p>
+					<p class="indent">An array that will contain the value of the objective function
+						(element 0), values of the constraints (elements 1 till Nrows), and the values
+						of the variables (elements Nrows+1 till Nrows+NColumns).</p>
+					<p class="dt"><i>ptr_pv</i></p>
+					<p class="indent">The address of a pointer that will point to an array that will
+						contain the value of the objective function (element 0), values of the
+						constraints (elements 1 till Nrows), and the values of the variables (elements
+						Nrows+1 till Nrows+NColumns).</p>
+					<p class="dt"><i>index</i></p>
+					<p class="indent">index of the constraint/variable.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_primal_solution</b>, <b>get_ptr_primal_solution</b>, <b>get_var_primalresult</b>
+						functions retrieve the values of the objective function, constraints and
+						variables.<br>
+						These values are only valid after a successful <A href="solve.htm">solve</A> or <A href="lag_solve.htm">
+							lag_solve</A>. Function <b>get_primal_solution</b> needs an array that is
+						already dimensioned with 1+<A href="get_Nrows.htm">get_Nrows</A> + <A href="get_Ncolumns.htm">
+							get_Ncolumns</A> elements. <b>get_ptr_primal_solution</b> returns a pointer
+						to an array already dimensioned by lp_solve. Element 0 is the value of the
+						objective function, elements 1 till Nrows the values of the constraints and
+						elements Nrows+1 till Nrows+NColumns the values of the variables.
+						<i>get_var_primalresult</i> requires no array.
+						<i>index</i> is the array element number of the above functions and returns the value for
+						this array element.<br>
+						Special considerations when presolve was done.  When <A href="set_presolve.htm">set_presolve</A>
+						is called before <A href="solve.htm">solve</A>, then presolve can have deleted both rows
+						and columns from the model because they could be eliminated.
+						This influences <b>get_primal_solution</b> and <b>get_ptr_primal_solution</b>. These
+						functions only report the values of the remaining variables and constraints. However
+						<b>get_var_primalresult</b> returns all values, also the deleted ones by presolve.
+						So <i>index</i> is the original index number as known by the caller.
+					</p>
+					<p>Note that <b>get_ptr_primal_solution</b> returns a pointer to memory allocated and maintained
+					   by lp_solve. Be careful what you do with it. Don't modify its contents or free the memory.
+					   Unexpected behaviour would occur. Also note that this memory pointer is only guaranteed to
+					   remain constant until a next lp_solve API call is done. You should call this function again
+					   to make sure you have again the correct pointer. Otherwise, this pointer could point to invalid
+					   memory. This should not be a problem since this call is very efficient.</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL pv[1+2+3], *ptr_pv;
+
+  /* Create a new LP model */
+  lp = make_lp(3, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  solve(lp);
+
+  get_primal_solution(lp, pv);
+  get_ptr_primal_solution(lp, &amp;ptr_pv);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="is_feasible.htm">is_feasible</a>, <A HREF="get_objective.htm">
+							get_objective</A>, <A HREF="get_working_objective.htm">get_working_objective</A>, <a href="get_variables.htm">get_variables, get_ptr_variables</a>,
+						<a href="get_constraints.htm">get_constraints, get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_sensitivity_rhs.htm">
+							get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution,
+							get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex,
+							get_ptr_sensitivity_objex</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

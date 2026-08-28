@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Sensitivity</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Sensitivity</u></h1>
+					<p>Sensitivity or post-optimal analysis is extra information that is provided about 
+						the current optimal solution. <b>lp_solve</b> provides a substantial amount of 
+						sensitivity information. Several API calls are available to retrieve the 
+						sensitivity: <A href="get_sensitivity_obj.htm">get_sensitivity_obj, 
+							get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</A>,
+						<A href="get_sensitivity_rhs.htm">get_sensitivity_rhs, get_ptr_sensitivity_rhs, 
+							get_dual_solution, get_ptr_dual_solution, get_var_dualresult</A>. The 
+						lp_solve program doesn't show the sensitivity by default. So to see the 
+						sensitivity information, use the -S4 option. The best way to explain this is 
+						via an example.</p>
+					<pre>
+min: +COLONE +3 COLTWO +6.24 COLTHREE +0.1 COLFOUR;
+THISROW: +78.26 COLTWO +2.9 COLFOUR &gt;= 92.3;
+THATROW: +0.24 COLONE +11.31 COLTHREE &lt;= 14.8;
+LASTROW: +12.68 COLONE +0.08 COLTHREE +0.9 COLFOUR &gt;= 4;
+COLONE &gt;= 28.6;
+COLFOUR &gt;= 18.00;
+COLFOUR &lt;= 48.98;
+</pre>
+					<p>The solution of this model is (with the -S4 option):</p>
+					<pre>
+Value of objective function: 31.7828
+
+Actual values of the variables:
+COLONE               28.6
+COLTWO               0
+COLTHREE             0
+COLFOUR              31.8276
+
+Actual values of the constraints:
+THISROW              92.3
+THATROW              6.864
+LASTROW              391.293
+
+Objective function limits:
+                              From            Till          FromValue
+COLONE                              0          1e+030         -1e+030
+COLTWO                       2.698621          1e+030       0.5123946
+COLTHREE                            0          1e+030       0.7016799
+COLFOUR                             0       0.1111679         -1e+030
+
+Dual values with from - till limits:
+                          Dual value          From            Till
+THISROW                   0.03448276             52.2         142.042
+THATROW                            0          -1e+030          1e+030
+LASTROW                            0          -1e+030          1e+030
+COLONE                             1        -1.943598        61.66667
+COLTWO                     0.3013793       -0.6355993       0.5123946
+COLTHREE                        6.24         -4841.16       0.7016799
+COLFOUR                            0          -1e+030          1e+030
+</pre>
+					<p>
+						First look at 'Objective function limits' (via API obtained by <A href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex, 
+							get_ptr_sensitivity_objex</A>). There is a list of all variables with for 
+						each variable 3 values. <i>From</i>, <i>Till</i> and <i>FromValue</i>. <i>From - 
+							Till</i> gives the limits where between the objective value may vary so 
+						that the solution stays the same. For example, variable COLFOUR has a <i>From</i>
+						value of 0 and a <i>Till</i> value of 0.1111679. The coefficient in the objective function of 
+						this variable is 0.1. This means 
+						that as this coefficient varies between 0 and 0.1111679, the solution 
+						doesn't change. The values for the variables and the constraints will remain 
+						unchanged as long as the objective coefficient stays in this range. The objective function value 
+						will vary of course and also the sensitivity information of the other 
+						variables, but the solution will stay the same if only the objective coefficient value for this variable is changed.
+						When the objective coefficient of variable 
+						COLFOUR is above 0.1111679 then the solution will change. The <i>FromValue</i> is 
+						only meaningful if the variable has a value of 0 (rejected). This is the value 
+						that this variable becomes when the <i>From</i> (minimization) or <i>Till</i> (maximization) 
+						value is reached. For example, the variable COLTWO that has an amount of 0 will 
+						become 0.5123946 if the coefficient in the objective function of COLTWO reaches 2.698621. Note that you only 
+						get information about this variable. There is no information what the values 
+						will be of the other variables. In a blending example where the coefficients of 
+						the objective function are generally the prices of ingredients this 
+						information tells you at what point a price may change to have the same 
+						composition and the FromValue says at what value a relected ingredient will be taken when
+						the price lowers till the lower range value.</p>
+					<P>Another piece of information are the Dual values with the <i>from - till</i> limits. 
+						This is provided for both the constraints and the variables. The information is 
+						the same for both. For example, constraint THISROW has a dual value of 
+						0.03448276 with a <i>From</i> value of 52.2 and a <i>Till</i> value of 142.042. 
+						This means that the Dual value specifies how much the objective function will 
+						vary if the constraint value is incremented by one unit. This implies that 
+						there is only a non-zero dual value if the constraint is active. Constraint 
+						THATROW for example is not active because the constraint is &lt;= 14.8, but its 
+						value is only 6.864. However constraint THISROW is &gt;= 92.3 and its value is 
+						also 92.3, thus active. If the constraint is changed to 93.3 (+1), then the 
+						objective value will be the current value + change * dual value = 31.7828 + 1 * 
+						0.03448276 = 31.81728. However this is only true for the range <i>From - Till</i>, which 
+						means that the dual value stays only the same as long as the constraint lies 
+						between the <i>From - Till</i> limits. The moment that you are outside of these limits, 
+						the dual value will change. The dual value gives a very good indication how 
+						much this restriction costs. If the dual value is very high then this constraint 
+						is very influential on the objective function and if you are able to change 
+						it a bit then the solution will be much better. Also the sign of the dual 
+						value has a meaning. A positive value means that as the restriction becomes 
+						larger, the objective value will be larger, and as it becomes more negative, 
+						the objective value will be smaller. Also note that changes in the 
+						restrictions, even between the limits, <b>can</b> cause the solution to change. 
+						The from - till limits only say that the cost will remain the same, nothing 
+						less, nothing more.
+					</P>
+					<h4 align="left"><u>Inaccurate sensitivity analysis in a model with integer variables</u></h4>
+					<A NAME="Inacurate_Sensitivity_Integer"></A>The sensitivity analysis doesn't 
+					take the integer restrictions in account. This is almost impossible since it 
+					would ask too much calculation time. In particular the <i>from - till</i> limits 
+					on both the objective function and the dual values are trustworthy. They only 
+					apply for the current solution without the integer restrictions. Keep this in 
+					mind. The dual values are correct.
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

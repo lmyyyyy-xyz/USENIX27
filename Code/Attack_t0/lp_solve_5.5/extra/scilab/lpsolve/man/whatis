@@ -1,0 +1,3 @@
+lp_maker -  Makes mixed integer linear programming problems  @lp_maker
+lp_solve - Solves mixed integer linear programming problems (max)  @lp_solve
+sclpsolve - Interface to the lp_solve 5.5 toolkit.  @sclpsolve

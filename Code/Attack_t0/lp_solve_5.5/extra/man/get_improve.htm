@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_improve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_improve</h1>
+					<p>Returns the iterative improvement level.</p>
+					<p><b>int get_improve(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_improve</b> returns the iterative improvement level. Can by any of the
+						following values:</p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>IMPROVE_NONE (0)</TD>
+							<TD>improve none</TD>
+						</TR>
+						<TR>
+							<TD>IMPROVE_SOLUTION (1)</TD>
+							<TD>Running accuracy measurement of solved equations based on Bx=r (primal simplex), remedy is refactorization.</TD>
+						</TR>
+						<TR>
+							<TD>IMPROVE_DUALFEAS (2)</TD>
+							<TD>Improve initial dual feasibility by bound flips (highly recommended, and default)</TD>
+						</TR>
+						<TR>
+							<TD>IMPROVE_THETAGAP (4)</TD>
+							<TD>Low-cost accuracy monitoring in the dual, remedy is refactorization</TD>
+						</TR>
+						<TR>
+							<TD>IMPROVE_BBSIMPLEX (8)</TD>
+							<TD>By default there is a check for primal/dual feasibility at optimum only for the relaxed problem, this also activates the test at the node level</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>improve</i></p>
+					<p class="indent">
+						<br>
+					</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The default is IMPROVE_DUALFEAS + IMPROVE_THETAGAP (6).
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int improve;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  improve = get_improve(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_improve.htm">set_improve</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

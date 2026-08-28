@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Free variables</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>free variables</u></h1>
+					<P align="left">Free variables are variables that have no lower or upper bound.
+                                        By default, variables don't have an upper bound, but they do have a lower bound of zero.
+                                        So they can only take positive values. Free variables can also become negative until -infinite.
+                                        </P>
+					<P align="left">
+						lp_solve supports free variables since a long time.
+                                                Internally, these variables are split in a positive and negative part. So the result of using free
+                                                variables is that the number of columns increases. However this is transparent to the user.
+                                                The API call <A HREF="set_unbounded.htm">set_unbounded</A> can be used to define a variable as free.</P>
+					<P align="left">In the mps format, free variables can be specified in the
+						BOUNDS section. See <a href="mps-format.htm">mps-format</a>.
+						<br>
+						<br>
+						Example:
+					</P>
+					<pre>
+NAME
+ROWS
+ N  R0
+ L  R1
+ G  R2
+ G  R3
+ G  R4
+COLUMNS
+    x1        R0        -1.000000000   R1        1.0000000000
+    x1        R2        2.0000000000   R3        -1.000000000
+    x2        R0        -2.000000000   R1        1.0000000000
+    x2        R2        -1.000000000   R3        3.0000000000
+    x3        R0        4.0000000000   R4        1.0000000000
+    x4        R0        3.0000000000   R4        1.0000000000
+RHS
+    RHS       R1        5.0000000000   R4        0.5000000000
+BOUNDS
+<FONT color=red> FR BND       x2</FONT>
+ UP BND       x3        10.000000000
+ LO BND       x3        1.1000000000
+<FONT color=red> FR BND       x4</FONT>
+ENDATA
+</pre>
+					The red lines specify that variables x2 and x4 are free variables.
+
+                                        <P align="left">In the lp format, free variables can be specified in the
+						free section. See <a href="lp-format.htm">lp-format</a>.
+                                                <br>
+                                                <br>
+						Example:
+					</P>
+					<pre>
+max: x1 + 2x2 - 4x3 -3x4;
+x1 + x2 &lt;= 5;
+2x1 - x2 &gt;= 0;
+-x1 + 3x2 &gt;= 0;
+x3 + x4 &gt;= .5;
+x3 &gt;= 1.1;
+x3 &lt;= 10;
+<FONT color=red>
+free x2, x4;
+</FONT>
+</pre>
+					<PRE>The red line specifies that variables x2 and x4 are free variables. The solution of this model is:</PRE>
+					<pre>
+Value of objective function: 5.73333
+
+Actual values of the variables:
+x1                        1.66667
+x2                        3.33333
+x3                            1.1
+x4                           -0.6
+</pre>
+					<P align="left">
+					As can be seen, the value of x4 is -0.6, a negative value.
+                                        If the variable would not be set as free, it would not be negative.
+                                        </P>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

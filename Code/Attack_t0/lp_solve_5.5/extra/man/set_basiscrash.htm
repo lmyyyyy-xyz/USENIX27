@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_basiscrash</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_basiscrash</h1>
+					<p>
+						Determines a starting base.</p>
+					<p>
+						<b>void set_basiscrash(lprec </b>*<i>lp</i><b>, int </b><i>mode</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						None</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>mode</i></p>
+					<p class="indent">Specifies which basis crash mode is used. Can by any of the
+						following values:</p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" border="1">
+						<TR>
+							<TD>CRASH_NONE (0)</TD>
+							<TD>No basis crash</TD>
+						</TR>
+<!--
+						<TR>
+							<TD>CRASH_NONBASICBOUNDS (1)</TD>
+                            <TD>&nbsp;</TD>
+						</TR>
+-->
+						<TR>
+							<TD>CRASH_MOSTFEASIBLE (2)</TD>
+                            <TD>Most feasible basis</TD>
+						</TR>
+						<TR>
+							<TD>CRASH_LEASTDEGENERATE (3)</TD>
+                            <TD>Construct a basis that is in some measure the "least degenerate"</TD>
+						</TR>
+					</TABLE>
+					<p class="label">
+						<b>Remarks</b></p>
+
+					<p>
+						The <b>set_basiscrash</b> function specifies which basis crash mode must be used.
+						Default is CRASH_NONE.
+					</p>
+
+					<p>When no base crash is done (the default), the initial basis from which
+					lp_solve starts to solve the model is the basis containing all slack or
+					artificial variables that is automatically associates with each constraint.</p>
+
+					<p>When base crash is enabled, a heuristic ``crash procedure'' is executed
+					before the first simplex iteration to quickly choose a basis matrix that has
+					fewer artificial variables. This procedure tends to reduce the number of
+					iterations to optimality since a number of iterations are skipped. lp_solve
+					starts iterating from this basis until optimality.</p>
+
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  /* Model created */
+
+  set_basiscrash(lp, CRASH_MOSTFEASIBLE);
+
+  delete_lp(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_basiscrash.htm">get_basiscrash</A>, <A HREF="default_basis.htm">
+							default_basis</A>, <A HREF="read_basis.htm">read_basis</A>, <A HREF="write_basis.htm">write_basis</A>, <a href="guess_basis.htm">guess_basis</a>, <A HREF="get_basis.htm">get_basis</A>, <A HREF="set_basis.htm">
+							set_basis</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

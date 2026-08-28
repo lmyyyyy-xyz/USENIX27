@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_status</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>get_status</h1>
+					<p>
+						Returns an extra status after a call to a function.</p>
+					<p>
+						<b>int get_status(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						Extra status which indicates type of problem after call to function.</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>get_status</b> function returns an extra status after a call to a function.
+						Some functions return FALSE when they have failed. To have more information on the
+						reason of the failure, this routine can be used to get an extended error code.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int spx_status;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  /* Model created */
+
+  /*
+  .
+  .
+  .
+  */
+
+  spx_status = get_status(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="free_lp.htm">free_lp</A>, <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Absolute values</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1><u>Absolute values</u></h1>
+
+					<h3><u>Constraints</u></h3>
+
+					<P>Linear constraints are of the form:</P>
+<pre>a1 x1 + a2 x2 + a3 x3 + ... &lt;= maximum
+a1 x1 + a2 x2 + a3 x3 + ... &gt;= minimum</pre>
+
+					<P>Where minimum and maximum are constants.</P>
+
+					<P>lp_solve can only handle these kind of Linear equations.
+					So what if absolute values must be formulated:</P>
+
+<pre>abs(a1 x1 + a2 x2 + a3 x3) = 0
+abs(a1 x1 + a2 x2 + a3 x3) &lt;= maximum
+abs(a1 x1 + a2 x2 + a3 x3) &gt;= minimum</pre>
+
+					<h4><u>= 0 (or &lt;= 0)</u></h4>
+
+					<p>This is the easiest case. If abs(X) must be equal to zero, then this can only be fulfilled
+					if X is zero. So the condition can also be written as:</p>
+
+<pre>a1 x1 + a2 x2 + a3 x3 = 0</pre>
+
+					<h4><u>&lt;= maximum</u></h4>
+
+					<p>This is a bit more complicated, but still quite easy.</p>
+
+					<p>Let's first represent a1 x1 + a2 x2 + a3 x3 by X. So the condition becomes:</p>
+
+<pre>abs(X) &lt;= maximum</pre>
+
+					<p>What is in fact abs(X) ?</p>
+
+					<p>It is X if X is positive or 0 and it is -X if X is negative.</p>
+
+					<p>This also implies that maximum is always bigger than or equal to zero. Else the constraint
+					would always be impossible (mathematical impossible with real numbers).</p>
+
+					<p>The geometric representation of this is:</p>
+
+<pre>----+===============+----
+-maximum    0    +maximum</pre>
+
+					<p>The section between -maximum and +maximum fulfils the constraint.</p>
+
+					<p>So if X is positive, the restriction becomes:</p>
+
+<pre>&nbsp;X &lt;= maximum</pre>
+
+					<p>If X is negative, the restriction becomes:</p>
+
+<pre>-X &lt;= maximum</pre>
+
+					<p>And the fortunate thing is that if we need the one restriction that the other is always redundant.
+					If X is positive, then -X is negative and thus always less than maximum (which is always positive, remember) and thus the second equation is then redundant.
+					If X is negative, then it is always less than maximum (which is always positive, remember) and thus the first equation is then redundant.
+					This can also be seen easily from the graphical representation.
+					So just add the following two equations:</p>
+
+<pre>&nbsp;X &lt;= maximum
+-X &lt;= maximum</pre>
+
+					<p>And the abs(X) &lt;= maximum condition is fulfilled.</p>
+
+					<p>And what if the condition is</p>
+
+<pre>abs(X) + Y &lt;= maximum</pre>
+
+					<p>With Y any linear combination.</p>
+
+					<p>It is easy to see that the same reasoning can be used to become:</p>
+
+<pre>&nbsp;X + Y &lt;= maximum
+-X + Y &lt;= maximum</pre>
+
+					<p>With the original definition of X this becomes:</p>
+
+<pre>&nbsp;a1 x1 + a2 x2 + a3 x3 + Y &lt;= maximum
+-a1 x1 - a2 x2 - a3 x3 + Y &lt;= maximum
+</pre>
+
+                                        <b><u>Special case 1</u></b>
+<pre>
+abs(x1) + abs(x2) + ... &lt;= maximum;
+</pre>
+
+                                        First consider each abs(xi) value. From above, consider the following:
+
+<pre>
+xiabs &gt;= xi;
+xiabs &gt;= -xi;
+</pre>
+
+                                        This makes xiabs &gt;= abs(xi)<br>
+                                        Greater than or equal, but as is, not for sure equal.<br>
+                                        However, in combination
+                                        with other constraints, this can become equal. If following constraint
+                                        is added, and when active, then each xiabs will represent the absolute value of xi:
+
+<pre>
+x1abs + x2abs + ... &lt;= maximum;
+</pre>
+
+                                        So, for each abs(xi) variable in the constraint, add a new variable xiabs
+                                        and add two extra constraints for it. Then replace abs(xi) by xiabs in the
+                                        constraint and the condition is fulfilled.<br>
+                                        Note that the objective may be minimization or maximization, it doesn't matter.<br>
+                                        Note that the variables may have an extra coefficient, but not negative!
+                                        If the sign would be negative, then xiabs will not have the intention to
+                                        become as small as possible, but as large as possible and the result would be that
+                                        xiabs would not be equal to abs(xi). It could become larger.<br>
+                                        <br>
+                                        Example:
+
+<pre>
+max: x1 + 2x2 - 4x3 -3x4;
+x1 + x2 &lt;= 5;
+2x1 - x2 &gt;= 0;
+-x1 + 3x2 &gt;= 0;
+x3 + x4 &gt;= .5;
+x3 &gt;= 1.1;
+x3 &lt;= 10;
+
+abs(x2) + abs(x4) &lt;= 1.5; /* Note that this is not a valid expression. It will be converted. */
+
+free x2, x4;
+</pre>
+
+                                        The converted model becomes:
+
+<pre>
+max: x1 + 2x2 - 4x3 -3x4;
+x1 + x2 &lt;= 5;
+2x1 - x2 &gt;= 0;
+-x1 + 3x2 &gt;= 0;
+x3 + x4 &gt;= .5;
+x3 &gt;= 1.1;
+x3 &lt;= 10;
+
+x2abs &gt;= x2;
+x2abs &gt;= -x2;
+
+x4abs &gt;= x4;
+x4abs &gt;= -x4;
+
+x2abs + x4abs &lt;= 1.5;
+
+free x2, x4;
+</pre>
+
+                                        The result is:
+
+<pre>
+Value of objective function: 2.6
+
+Actual values of the variables:
+x1                           3.75
+x2                           1.25
+x3                            1.1
+x4                          -0.25
+x2abs                        1.25
+x4abs                        0.25
+</pre>
+
+					<h4><u>&gt;= minimum</u></h4>
+
+					<p>Let's first represent a1 x1 + a2 x2 + a3 x3 by X. So the condition becomes:</p>
+
+<pre>abs(X) &gt;= minimum</pre>
+
+					<p>What is in fact abs(X) ?</p>
+
+					<p>It is X if X is positive or 0 and it is -X if X is negative.</p>
+
+					<p>This also implies that minimum should always be bigger than zero. Else the constraint
+					would always be fulfilled and there is no point in having the constraint.</p>
+
+					<p>The geometric representation of this is:</p>
+
+<pre>====+---------------+====
+-minimum    0    +minimum</pre>
+
+					<p>The section <b>not</b> between -minimum and +minimum fulfils the constraint.</p>
+
+					<p>So if X is positive, the restriction becomes:</p>
+
+<pre>&nbsp;X &gt;= minimum</pre>
+
+					<p>If X is negative, the restriction becomes:</p>
+
+<pre>-X &gt;= minimum</pre>
+
+					<p>Unfortunately, the trick as for a maximum cannot be used here.
+					If X is positive, then -X is not greater than minimum, in contrary ...</p>
+
+					<p>It can also be seen from the graphical representation that this restriction is discontinue.
+					This has as effect that it is not possible to convert this into a set of linear equations.
+					</p>
+
+					<p>A possible approach to overcome this is making use of integer variables. In particular by
+					using a binary variable B:</p>
+
+<pre>&nbsp;X + M * B &gt;= minimum
+-X + M * (1 - B) &gt;= minimum</pre>
+
+					<p>M is a large enough constant. See later.<br>
+					   The binary variable B takes care of the discontinuity. It can be either 0 or 1.
+					   With M large enough, this makes one or the other constraint obsolete.</p>
+
+					<p>If B is 0, then the equations can be written as:</p>
+
+<pre>&nbsp;X &gt;= minimum
+-X + M &gt;= minimum</pre>
+
+					<p>So in this case, the restriction X &gt;= minimum is active. X must be positive and larger than minimum.
+					   With M large enough, the second constraint is always fulfilled.</p>
+
+					<p>If B is 1, then the equations can be written as:</p>
+
+<pre>&nbsp;X + M &gt;= minimum
+-X &gt;= minimum</pre>
+
+					<p>So in this case, the restriction -X &gt;= minimum is active. X must be negative and -X be larger than minimum.
+					   With M large enough, the first constraint is always fulfilled.</p>
+
+					<p>It is important to use a realistic value for M. Don't use for example 1e30 for it.
+					   This creates numerical instabilities and even if not then tolerances will give problem.
+					   Because of tolerances, B may not be zero, but actually for example 1e-20.
+					   This multiplied with 1e30 gives not zero, but 1e10!
+					   This results in X + 1e10 &gt;= minimum instead of X &gt;= minimum. Not what was
+					   mathematically formulated!</p>
+
+					<p>So how big must M be?<br>
+					   Well, we can make a prediction.<br>
+					   Either -X + M &gt;= minimum (X &gt;= minimum) or X + M &gt;= minimum (X &lt;= -minimum) must always be TRUE.<br>
+					   That comes to -abs(X) + M &gt;= minimum.<br>
+					   Or M &gt;= minimum + abs(X)</p>
+
+					<p>If we can predict how large X can become (absolutely), then we can predict a maximum value needed for M for this
+					to work. If abs(X) cannot be larger than maximum, then M can be minimum+maximum.</p>
+
+					<p>In most cases, it is possible to determine a reasonable upper bound for X.</p>
+
+					<p>In lp-format, the needed equations are:</p>
+
+<pre>X + M * B &gt;= minimum;
+X + M * B &lt;= M - minimum;
+
+B &lt;= 1;
+
+int B;</pre>
+
+                    <p>And what if the condition is</p>
+
+<pre>abs(X) + Y &gt;= minimum</pre>
+
+					<p>With Y any linear combination.</p>
+
+					<p>It is easy to see that the same reasoning can be used to become:</p>
+
+<pre>&nbsp;X + M * B + Y &gt;= minimum
+-X + M * (1 - B) + Y &gt;= minimum</pre>
+
+					<p>With M &gt;= minimum - Y + abs(X)</p>
+
+					<p>In lp-format:</p>
+
+<pre>X + M * B + Y &gt;= minimum;
+X + M * B - Y &lt;= M - minimum
+
+B &lt;= 1;
+
+int B;</pre>
+
+					<h3><u>Objective function</u></h3>
+
+					<p>The objective function is of the form:</p>
+
+<pre>min or max: a1 x1 + a2 x2 + a3 x3 + ...</pre>
+
+					<p>What if there is an absolute value in the objective:</p>
+
+<pre>abs(a1 x1 + a2 x2 + a3 x3) + a4 x4 + a5 x5</pre>
+
+					<p>Let's first represent a1 x1 + a2 x2 + a3 x3 by X and a4 x4 + a5 x5 by Y.
+					Then the objective becomes:</p>
+
+<pre>abs(X) + Y</pre>
+
+					<p>Depending on the sign before the abs and the objective direction, there is an easy and a harder way to solve this.</p>
+
+					<h4><u>minimization and sign is positive or maximization and sign is negative.</u></h4>
+
+<pre>min: abs(X) + Y
+or
+max: -abs(X) + Y</pre>
+
+					<p>In these two situations, abs(X) will be as small as possible, ideally zero. We can use that fact.
+					   Add one variable X' and two constraints to the model:</p>
+
+<pre>&nbsp;X &lt;= X'
+-X &lt;= X'</pre>
+
+					<p>And replace in the objective abs(X) with X':</p>
+
+<pre>min: X' + Y
+or
+max: -X' + Y</pre>
+
+					<p>That is all. So how does this work? There are 3 cases to consider:</p>
+
+					<h5>X &gt; 0</h5>
+
+					<p>In this case, -X is negative and the second constraint -X &lt;= X' is always fulfilled because X' is implicitly &gt;= 0.
+					   The first constraint X &lt;= X' is however different. Because X is positive, X' must be at least as large as X.
+					   But because X' is in the objective in such a way that is tends to be as small as possible,
+					   X' will be equal to X. So X' is abs(X) in this case.</p>
+
+					<h5>X &lt; 0</h5>
+
+					<p>In this case, X is negative and the first constraint X &lt;= X' is always fulfilled because X' is implicitly &gt;= 0.
+					   The second constraint -X &lt;= X' is however different. Because X is negative (-X positive), X' must be at least as large as -X.
+					   But because X' is in the objective in such a way that is tends to be as small as possible,
+					   X' will be equal to -X. So X' is abs(X) in this case.</p>
+
+					<h5>X = 0</h5>
+
+					<p>In this case, both constraints are always fulfilled because X' is implicitly &gt;= 0.
+					   Because X' is in the objective in such a way that is tends to be as small as possible,
+					   X' will be equal to X, in this case 0. So X' is abs(X).</p>
+
+					<p>So in all cases, X' equals abs(X)</p>
+
+					<p>With the original definition of X and Y this becomes:</p>
+
+<pre>min: X' + a4 x4 + a5 x5
+or
+max: -X' + a4 x4 + a5 x5
+
+&nbsp;a1 x1 + a2 x2 + a3 x3 &lt;= X'
+-a1 x1 - a2 x2 - a3 x3 &lt;= X'</pre>
+
+					<h4><u>minimization and sign is negative or maximization and sign is positive.</u></h4>
+
+<pre>min: -abs(X) + Y
+or
+max: abs(X) + Y</pre>
+
+					<p>This is a different story. abs(X) now tends to be as large as possible.
+					   So the previous trick cannot be used now.</p>
+
+					<p>A possible approach to overcome this is making use of integer variables. In particular by
+					using a binary variable B and adding a variable X'. Add following constraints to the model:</p>
+
+<pre>&nbsp;X + M * B &gt;= X'
+-X + M * (1 - B) &gt;= X'
+&nbsp;X &lt;= X'
+-X &lt;= X'
+</pre>
+
+					<p>And replace in the objective abs(X) with X':</p>
+
+<pre>min: -X' + Y
+or
+max: X' + Y</pre>
+
+					<p>That is all. So how does this work? In fact this is a combination of a maximum and minimum
+					   constraint on an absolute expression. X' represents the absolute expression and is used in the objective.</p>
+
+					<p>M is a large enough constant. See later.<br>
+					   The binary variable B can be either 0 or 1.
+					   With M large enough, this makes one or the other constraint obsolete.</p>
+
+					<p>If B is 0, then the equations can be written as:</p>
+
+<pre>&nbsp;X &gt;= X'
+-X + M &gt;= X'
+&nbsp;X &lt;= X'
+-X &lt;= X'</pre>
+
+					<p>So in this case, the restriction X &gt;= X' is active. X must be positive and larger than X'.
+					   With M large enough, the second constraint is always fulfilled.
+					   The third constraint says that X &lt;= X'.
+					   The forth constraint is always fulfilled.
+					   In fact the first and third constraint have as result that X' equals X, which is positive in this case.</p>
+
+					<p>If B is 1, then the equations can be written as:</p>
+
+<pre>&nbsp;X + M &gt;= X'
+-X &gt;= X'
+&nbsp;X &lt;= X'
+-X &lt;= X'</pre>
+
+					<p>So in this case, the restriction -X &gt;= X' is active. X must be negative and -X be larger than X'.
+					   With M large enough, the first constraint is always fulfilled.
+					   The third constraint is always fulfilled.
+					   The forth constraint says that -X &lt; X'.
+					   In fact the second and forth constraint have as result that X' equals -X, which is positive in this case.</p>
+
+					<p>It is important to use a realistic value for M. Don't use for example 1e30 for it.
+					   This creates numerical instabilities and even if not then tolerances will give problem.
+					   Because of tolerances, B may not be zero, but actually for example 1e-20.
+					   This multiplied with 1e30 gives not zero, but 1e10!
+					   This results in X + 1e10 &gt;= X' instead of X &gt;= X'. Not what was
+					   mathematically formulated!</p>
+
+					<p>So how big must M be?<br>
+					   Well, we can make a prediction.<br>
+					   Either -X + M &gt;= X' (X &gt;= X') or X + M &gt;= X' (X &lt;= -X') must always be TRUE.<br>
+					   That comes to -abs(X) + M &gt;= X'.<br>
+					   or -abs(X) + M &gt;= abs(X).<br>
+					   Or M &gt;= 2 * abs(X)</p>
+
+					<p>If we can predict how large X can become (absolutely), then we can predict a maximum value needed for M for this
+					to work. If abs(X) cannot be larger than maximum, then M can be 2 * maximum.</p>
+
+					<p>In most cases, it is possible to determine a reasonable upper bound for X.</p>
+
+					<p>In lp-format, the needed equations are:</p>
+
+<pre>max: X' + Y;
+
+&nbsp;X + M * B - X' &gt;= 0;
+&nbsp;X + M * B + X' &lt;= M;
+&nbsp;X &lt;= X'
+-X &lt;= X'
+
+B &lt;= 1;
+
+int B;</pre>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

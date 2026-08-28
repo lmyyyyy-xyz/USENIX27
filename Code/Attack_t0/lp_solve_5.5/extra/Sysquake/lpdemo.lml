@@ -1,0 +1,166 @@
+% Script to demonstrate use of the lp_solve toolkit
+
+function lpdemo()
+  echo lpdemo on;
+
+  use sqlpsolve;
+
+  clc;
+  lp=sqlpsolve('make_lp',0,4);
+  sqlpsolve('add_constraint',lp,[3, 2, 2, 1],LPSOLVE_EQ,4);
+  sqlpsolve('add_constraint',lp,[0, 4, 3, 1],LPSOLVE_GE,3);
+  sqlpsolve('set_obj_fn',lp,[2, 3, -2, 3]);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  fgetl(0);
+
+  % Change a single element, and maximize
+
+  clc;
+  sqlpsolve('set_mat',lp,2,1,0.5);
+  sqlpsolve('set_maxim',lp);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  fgetl(0);
+
+  % Change RHS
+
+  clc;
+  sqlpsolve('set_rh',lp,1,7.45);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  fgetl(0);
+
+  % Set var 4 to an integer
+
+  clc;
+  sqlpsolve('set_int',lp,4,1)
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  fgetl(0);
+
+  % Put in lower and upper bounds
+
+  clc;
+  sqlpsolve('set_lowbo',lp,2,2);
+  sqlpsolve('set_upbo',lp,4,5.3);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  fgetl(0);
+
+  % Delete a constraint
+
+  clc;
+  sqlpsolve('del_constraint',lp,1);
+  sqlpsolve('add_constraint',lp,[1, 2, 1, 4],LPSOLVE_EQ,8);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  sqlpsolve('delete_lp',lp)
+  fgetl(0);
+
+  %%%%%%%%%%%%%
+
+  % More examples
+
+  % ex1.lp from the lp_solve distribution
+
+  clc;
+  lp=sqlpsolve('make_lp',2,2);
+  sqlpsolve('set_mat',lp,[2, 1;-4, 4]);
+  sqlpsolve('set_obj_fn',lp,[-1, 2]);
+  sqlpsolve('set_int',lp,[1,1]);
+  sqlpsolve('set_rh_vec',lp,[5, 5]);
+  sqlpsolve('set_maxim',lp);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  sqlpsolve('delete_lp',lp);
+  fgetl(0);
+
+  % Example 2
+
+  clc;
+  f = [50, 100];
+  A = [10, 5;4, 10; 1, 1.5];
+  b = [2500, 2000, 450];
+  e = [-1, -1, -1];
+
+  [m,n] = size(A);
+  lp=sqlpsolve('make_lp',m,n);
+  sqlpsolve('set_obj_fn',lp,f);
+  sqlpsolve('set_mat',lp,A);
+  sqlpsolve('set_rh_vec',lp,b);
+  sqlpsolve('set_maxim',lp);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  sqlpsolve('delete_lp',lp);
+  fgetl(0);
+
+  % Example 3
+
+  clc;
+
+  f = -[40, 36];
+  vub = [8, 10];
+  A = [5, 3];
+  b = [45];
+  e = 1;
+
+  [m,n] = size(A);
+  lp=sqlpsolve('make_lp',m,n);
+  sqlpsolve('set_obj_fn',lp,f);
+  sqlpsolve('set_mat',lp,A);
+  sqlpsolve('set_rh_vec',lp,b);
+  sqlpsolve('set_constr_type',lp,1,2);
+  sqlpsolve('set_upbo',lp,1,8);
+  sqlpsolve('set_upbo',lp,2,10);
+  sqlpsolve('set_maxim',lp);
+  result=sqlpsolve('solve',lp)
+  obj=sqlpsolve('get_objective', lp)
+  x=sqlpsolve('get_variables', lp)
+  sqlpsolve('delete_lp',lp);
+  fgetl(0);
+
+  % L1 Data fitting example with integer constraint on the intercept
+
+  % Generate data
+
+  clc;
+  n = 40;
+  t = (0:n-1)';
+  y = 3.5 -.2*t;
+  y = y + 0.5*randn(size(y));
+
+  m = [ones(n,1),t(:)];
+  a = [m,-m,eye(n)];
+  f = -[sum(m),sum(-m),2*ones(1,n)];
+  e = ones(n,1);
+
+  vub = [10, 10, 10, 10, 5*ones(1,n)];
+
+  [v,x] = lp_solve(f,a,y,e,[],vub,[1,3])
+
+  disp('Press any key to continue.');
+  fgetl(0);
+
+  clc;
+  % Now solve bigger problem
+
+  n = 200;
+  m = 100;
+  a = rand(m,n);
+  idx = find(a<0.8);
+  a(idx) = zeros(length(idx),1);
+  z = rand(n,1);
+  b = a*z;
+
+  [v,x] = lp_solve(-ones(1,n),a,b,zeros(m,1))
+
+  echo lpdemo off;

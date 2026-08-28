@@ -1,0 +1,23 @@
+clear
+gtitle("Solution space and objective")
+mlmode
+X = 0.1:0.05:38;
+Y1 = (15000. - 120*X)/210;
+Y2 = max((4000 - 110.*X)./30, 0);
+Y3 = max(75 - X, 0.);
+Ytop = min(min(Y1, Y2), Y3);
+omatrix
+bar(X, Ytop)
+
+mlmode meshgrid.m
+[U, V] = meshgrid(0:1:40, 0:1:80);
+Ur = U.row(1)
+Vc = V.col(1)
+Z = 143.*U + 60.*V
+levels = (0:1:11)*1000.
+contour(Z', levels, Ur', Vc');
+
+x = {[1, 1], [110, 30]} \ {75, 4000}
+print "x = ", x
+P = [143, 60] * x
+print "Profit, P = ", P

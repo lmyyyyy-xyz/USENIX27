@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Linear programming basics</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Linear programming basics</u></h1>
+
+                                        <p>A short explanation is given what Linear programming is and some basic knowledge you need to know.
+                                        </p>
+                                        <p>A linear programming problem is mathematically formulated as follows:
+                                        </p>
+<ul>
+<li>A <b>linear function to be maximized or minimized</b></li>
+</ul>
+<dl>
+
+<dd>e.g.<br>
+ maximize c1 x1 + c2 x2</dd>
+</dl>
+<ul>
+<li><b>Problem constraints</b> of the following form</li>
+</ul>
+<dl>
+<dd>e.g.<br>
+ a11 x1 + a12 x2 &lt;= b1<br>
+ a21 x1 + a22 x2 &lt;= b2<br>
+ a31 x1 + a32 x2 &lt;= b3
+
+</dd>
+</dl>
+
+<ul>
+<li><b>Default lower bounds of zero</b> on all variables.</li>
+</ul>
+
+<p>The problem is usually expressed in matrix form, and then becomes:</p>
+
+<pre>
+     maximize     C<sup>T</sup> x
+     subject to   A x &lt;= B
+                  x &gt;= 0
+</pre>
+
+<p>So a linear programming model consists of one objective which is a <b>linear</b> equation that must be maximized or minimized.
+Then there are a number of <b>linear</b> inequalities or constraints.
+</p>
+
+<p>c<sup>T</sup>, A and B are constant matrixes. x are the variables (unknowns).
+All of them are real, continue values.
+</p>
+
+<p>Note the default lower bounds of zero on all variables x. People tend to forget this build-in default.
+If no negative (or negative infinite) lower bound is explicitely set on variables, they can and will take only positive (zero included) values.
+</p>
+
+<p>The inequalities can be &lt;=, &gt;= or =<br>
+Because all numbers are real values, &lt;= is the same as &lt and &gt;= is the same as &gt;
+</p>
+
+<p>Also note that both objective function and constraints must be linear equations.
+   This means that no variables can be multiplied with each other.</p>
+
+<p>This formulation is called the <i>Standard form</i>. It is the usual and most intuitive form of describing a linear programming problem.
+</p>
+
+<p>Example:</p>
+<pre>
+     minimize     3 x1 - x2
+     subject to    -x1 + 6 x2 - x3   + x4 &gt;= -3
+                         7 x2      + 2 x4  =  5
+                    x1 +   x2 + x3         =  1
+                                x3 +   x4 &lt;=  2
+</pre>
+
+<p>Sometimes, these problems are formulated in the <i>canonical</i> form.
+All inequalities are converted to equalities by adding an extra variable where needed:
+</p>
+
+<pre>
+     maximize     C<sup>T</sup> x
+     subject to   A x = B
+                  x &gt;= 0
+</pre>
+
+<p>Above example can then be written as:</p>
+
+<pre>
+     minimize     3 x1 - x2
+     subject to    -x1 + 6 x2 - x3   + x4 - s = -3
+                         7 x2      + 2 x4     =  5
+                    x1 +   x2 + x3            =  1
+                                x3 +   x4 + t =  2
+</pre>
+
+<p>So everywhere an equality was specified, an extra variable is introduced and subtracted (if it was &gt;) or added (if it was &lt;) to the constraint.
+These variables also only take positive (or zero) values only. These extra variables are called <i>slack</i> or <i>surplus</i> variables.
+</p>
+
+<p>lp_solve add's these variables automatically to its internal structure. The formulator doesn't have to do it and it is
+even better not to. There will be fewer variables in the model and thus quicker to solve.
+</p>
+
+<p>See <a href="formulate.htm">Formulation of an lp problem in lpsolve</a> for a practical example.</p>
+
+<p>
+The right hand side (RHS), the B-vector, must be a constant matrix. Some people see this as a problem, but it isn't
+The RHS can always be brought to the left by a simple operation:
+</p>
+
+<pre>
+     A x &lt;= B
+</pre>
+
+Is equal to:
+
+<pre>
+     A x - B &lt;= 0
+</pre>
+
+So if B is not constant, just do that.
+
+<p>
+Basic mathematics also states that if a constraint is multiplied by a negative constant, that the inequality changes from direction.
+For example:
+</p>
+
+<pre>
+     5 x1 - 2 x2 &gt;= 3
+</pre>
+
+If multiplied by -1, it becomes:
+
+<pre>
+    -5 x1 + 2 x2 &lt;= -3
+</pre>
+
+<p>If the objective is multiplied by -1, then maximization becomes minimization and the other way around.
+For example:
+</p>
+
+<pre>
+    minimize     3 x1 - x2
+</pre>
+
+Can also be written as:
+
+<pre>
+    maximize     -3 x1 + x2
+</pre>
+
+<p>The result will be the same, but changed from sign.</p>
+
+<h4>Bounds</h4>
+<p>Minima and maxima on single variables are special cases of restrictions. They are called bounds.
+The optimization algorithm can handle these bounds more effeciently than other restrictions. They consume less
+memory and the algorithm is faster with them.
+As already specified, there is by default an implicit lower bound of zero on each variable.
+Only when explicitly another lower bound is set, the default of 0 is overruled. This other bound can be negative also.
+There is no default upper bound on variables. Almost all solvers support bounds on variables. So does lp_solve.
+</p>
+
+<h4>Ranges</h4>
+<p>Frequently, it happens that on the same equation a less than and a greater than restriction must be set.
+Instead of adding two extra restrictions to the model, it is more performant and less memory consument to
+only add one restiction with either the less than or greater than restriction and put the other inequality on that
+same constraint by means of a range. Not all solvers support this feature but lp_solve does.
+</p>
+
+<h4>Integer and binary variables</h4>
+<p>By default, all variables are real. Sometimes it is required that one or more variables must be integer.
+It is not possible to just solve the model as is and then round to the nearest solution. At best, this result will
+maybe furfill all constraints, but you cannot be sure of. As you cannot be sure of the fact that this is the most
+optimal solution. Problems with integer variables are called integer or descrete programming problems. If all variables
+are integer it is called a pure integer programming problem, else it is a mixed integer programming problem.
+A special case of integer variables are binary variables. These are variables that can only take 0 or 1 as value.
+They are used quite frequently to program discontinue conditions. lp_solve can handle integer and binary variables.
+Binary variables are defined as integer variables with a maximum (upper bound) of 1 on them.
+See <a href="integer.htm">integer variables</a> for a description on them.
+</p>
+
+<h4>Semi-continuous variables</h4>
+<p>Semi-continuous variables are variables that must take a value between their minimum and maximum or zero.
+So these variables are treated the same as regular variables, except that a value of zero is also accepted,
+even if there is a minimum bigger than zero is set on the variable.
+See <a href="semi-cont.htm">semi-continuous variables</a> for a description on them.
+</p>
+
+<h4>Special ordered sets (SOS)</h4>
+<p>A specially ordered set of degree N is a collection of variables where at most N variables may be non-zero.
+The non-zero variables must be contiguous (neighbours) sorted by the ascending value of their respective unique weights.
+In lp_solve, specially ordered sets may be of any cardinal type 1, 2, and higher, and may be overlapping.
+The number of variables in the set must be equal to, or exceed the cardinal SOS order.
+See <a href="SOS.htm">Special ordered sets (SOS)</a> for a description on them.
+</p>
+
+<p>lp_solve uses the simplex algorithm to solve these problems.
+To solve the integer restrictions, the branch and bound (B&amp;B) method is used.
+</p>
+
+<h1 align="left"><u>Other resources</u></h1>
+<p>Another <b>very usefull</b> and free paper about linear programming fundamentals and advanced features 
+plus several problems being discussed and modeled is <a href="http://dashoptimization.com/home/downloads/book/booka4.pdf" target="_blank">Applications of optimization with Xpress-MP</a>.
+It describes linear programming and modeling with the commercial solver Xpress-MP, but is as usefull for other solvers like lp_solve. In case that this link would not work anymore,
+try <a href="http://www.google.be/search?hl=nl&as_qdr=all&q=%22Applications+of+optimization+with+Xpress-MP%22+%22Developing+Linear+and+Integer+Programming+models%22+%22Application+examples%22+filetype%3Apdf&btnG=Zoeken&meta=" target="_blank">this</a> via google search.
+</p>
+
+
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

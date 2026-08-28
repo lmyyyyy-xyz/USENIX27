@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_mat</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_mat</h1>
+					<p>
+						Set a single element in the matrix.</p>
+					<p>
+						<b>unsigned char set_mat(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>, int </b><i>column</i><b>, REAL </b><i>value</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>set_mat</b> returns TRUE (1) if the operation was successful. A return value
+						of FALSE (0) indicates an error.<br>
+						Note that row entry mode must be off, else this function also fails. See <A HREF="set_add_rowmode.htm">set_add_rowmode</A>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>row</i></p>
+					<p class="indent">
+						Row number of the matrix. Must be between 0 and number of rows in the lp. Row 0
+						is objective function.</p>
+					<p class="dt">
+						<i>column</i></p>
+					<p class="indent">
+						Column number of the matrix. Must be between 1 and number of columns in the lp.</p>
+					<p class="dt">
+						<i>value</i></p>
+					<p class="indent">
+						Value to be set for row <i>row</i>, column <i>column</i>.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>set_mat</b> function sets a value in the matrix. If there was already a
+						value for this element, it is replaced and if there was no value, it is added.<br>
+						This function is not efficient if many values are to be set. Consider to use <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="set_row.htm">set_row, set_rowex</A>, <A HREF="set_obj_fn.htm">set_obj_fn, set_obj_fnex,
+							str_set_obj_fn, set_obj</A>, <A HREF="add_column.htm">add_column, add_columnex,
+							str_add_column</A>, <A HREF="set_column.htm">set_column, set_columnex</A>.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(2, 3);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_mat(lp, 1, 2, 3.1415927);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="set_row.htm">set_row, set_rowex</A>, <A HREF="set_obj_fn.htm">
+							set_obj_fn, set_obj_fnex, str_set_obj_fn</A>, <A HREF="add_column.htm">add_column,
+							add_columnex, str_add_column</A>, <A HREF="set_column.htm">set_column, set_columnex</A>, <A HREF="get_column.htm">get_column, get_columnex</A>, <A HREF="get_row.htm">
+							get_row, get_rowex</A>, <A HREF="get_mat.htm">get_mat</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

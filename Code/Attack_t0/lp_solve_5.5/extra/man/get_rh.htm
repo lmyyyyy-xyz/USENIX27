@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_rh</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>get_rh</h1>
+					<p>
+						Gets the value of the right hand side (RHS) vector (column 0) for one row.</p>
+					<p>
+						<b>REAL get_rh(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>get_rh</b> returns the value of the RHS for the specified row. If row is out
+						of range it returns 0. If no previous value was set, then it also returns 0,
+						the default RHS value.<br>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>row</i></p>
+					<p class="indent">
+						The row for which the RHS value must be retrieved. Must be between 0 and number
+						of rows in the lp.</p>
+					<p class="dt">
+						<i>value</i></p>
+					<p class="indent">
+						The value of the RHS.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>get_rh</b> function returns the value of the RHS vector (column 0) for
+						the specified row.<br>
+						Note that <i>row</i> can also be 0 with this function. In that case it returns
+						the initial value of the objective function.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL a;
+
+  /* Create a new LP model */
+  lp = make_lp(2, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  a = get_rh(lp, 1); /* will return 0 since no value was previously set */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_rh.htm">set_rh</A>, <A HREF="set_rh_vec.htm">set_rh_vec,
+							str_set_rh_vec</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="get_column.htm">get_column, get_columnex</A>, <A HREF="add_column.htm">
+							add_column, add_columnex, str_add_column</A>, <A HREF="set_column.htm">set_column, set_columnex</A>,
+						<A HREF="get_row.htm">get_row, get_rowex</A>, <A HREF="get_mat.htm">get_mat</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

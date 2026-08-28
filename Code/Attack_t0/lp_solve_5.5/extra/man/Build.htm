@@ -1,0 +1,533 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Calling the lpsolve API from your application</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Calling the lpsolve API from your application</u></h1>
+					<p>There are two ways to call the lpsolve API from an application:
+					</p>
+					<ul>
+						<li>Dynamically</li>
+						<li>Statically</li>
+					</ul>
+
+					<p>Dynamically means that the lpsolve code is dynamically linked to your code. This means that
+					it is linked to your program when the executable is started or even only when you make calls
+					to the lpsolve library. The lpsolve library is then not linked with the executable and is
+					provided in a separate file. Under Windows this is a dll (lpsolve55.dll), under Unix/Linux
+					this is a shared library (liblpsolve55.so). You must distribute this separate library with
+					your program to make it work. The library must be located on a place that can be found by
+					the program. There are several advantages of this way of working. Almost all programming
+					languages have a way to call dynamic libraries or even can only call libraries that way.
+					One example is VB6. Another advantage is that it is easier to update the package. The program
+					doesn't have to be recompiled/relinked. You only have to provide a new lpsolve library.
+					</p>
+
+					<p>Statically means that the lpsolve code is statically linked to the code. This means
+					that the program does not need extra files to be able to call lpsolve since the
+					code is already contained in the executable. The executable will thus be larger. This can
+					only be done if you have the source code of your program and you can recompile it and link
+					it with the lpsolve code. Not all programming languages have the possibility to statically link
+					code. For example VB6 does not have a way to do that. The advantage of this way
+					of calling the lpsolve library is that you don't have to provide extra files with your
+					executable since the library is already in the exe. The disadvantage is that you must recompile
+					(or at least link) the program with the lpsolve code when an update of lpsolve is needed.
+					There are two ways to link your application with lpsolve. The first way is
+					add the needed lpsolve source code to the project and compile it together as one unit. This is
+					most probably only possible when the code is also written in C/C++ (however not always since for
+					example .NET allows to link for example C# code with C code). The disadvantage of this
+					way of working is that you have to revise your project when you use a new version of lpsolve since
+					there could be files added or removed in the lpsolve package. Also you may have to
+					define some defines. A better way of working is making use of the lpsolve library. Under
+					DOS/Windows this is called liblpsolve55.lib (liblpsolve55d.lib in debug mode),
+					under Unix/Linux liblpsolve55.a. The advantages are
+					that other languages (like Pascal) can also link with such a library, your project is not
+					overloaded with the lpsolve source files and also not unimportant, the linker only takes the
+					code from the library that you really use resulting in a smaller executable. One disadvantage
+					is that you cannot debug and step trough the lpsolve code then, if you would want to do that.
+					</p>
+
+					<p>So what method to choose to call lpsolve from your application?</p>
+
+					<ol>
+					  <li><a href="#Dynamically link your application with lpsolve">Dynamically link your application with lpsolve</a>
+						<ol>
+						  <li><a href="#Implicit linking with the lpsolve dynamic library">Implicit linking with the lpsolve dynamic library</a></li>
+						  <li><a href="#Explicit linking with the lpsolve dynamic library">Explicit linking with the lpsolve dynamic library</a></li>
+						</ol>
+					  </li>
+					  <li><a href="#Statically link your application with lpsolve">Statically link your application with lpsolve</a>
+						<ol>
+						  <li><a href="#Implicit linking with the lpsolve static library">Implicit linking with the lpsolve static library</a></li>
+						  <li><a href="#Link your code with the lpsolve source code">Link your code with the lpsolve source code</a></li>
+						</ol>
+					  </li>
+					</ol>
+
+					<a name="Dynamically link your application with lpsolve"></a>
+					<h4><u>Dynamically link your application with lpsolve</u></h4>
+
+					  <p>lpsolve is separated from the application. So there are two separate compilations. One
+					  of the application and one of the lpsolve library. Most people will not compile the
+					  lpsolve library themselves since it is provided for several popular platforms.
+					  The files are in <b>lp_solve_5.5.2.14_dev.zip</b> for Windows and <b>lp_solve_5.5_dev.gz</b> for Linux.
+					  Therefore it
+					  is first explained how to access the lpsolve library in your application. This depends
+					  on the OS and the calling language. The most common are described here.</p>
+
+					  There are two ways of linking a dynamic library to the application: Implicit and Explicit
+					  linking. It depends on the programming language which way of linking is supported. Some
+					  support only one of the two, some can do both ways.
+
+					  <table><tr><td width=20></td><td>
+						<a name="Implicit linking with the lpsolve dynamic library"></a>
+						<h5><u>Implicit linking with the lpsolve dynamic library</u></h5>
+
+						<p>With Implicit Linking, the shared library file gets loaded into memory as soon as we
+						execute the client program. If implicitly linked, the library is not removed from memory unless
+						the application is terminated. However, if there are other applications in memory that are
+						using the library, it is not removed from memory till the last of these applications is terminated.</p>
+
+						<p>If Implicit Linking is used, a link (or import) library must be provided to the linker to resolve
+						the symbols. In the code, the function calls are made as if all symbols are available.</p>
+
+						<a name="Explicit linking with the lpsolve dynamic library"></a>
+						<h5><u>Explicit linking with the lpsolve dynamic library</u></h5>
+
+						<p>If we want, we can defer the loading of the library till the time a call to the exported function
+						in the library is not made. This is known as Explicit Linking. Explicit linking is more appropriate for
+						interpreted languages such as Visual Basic, but it can also be used from C/C++ if we need to.</p>
+
+						<p>If Explicit Linking is used, the library is explicitly loaded in memory via a special API
+						call and the routines are also explicitly called via API calls. It should be clear that
+						Explicit linking requires more coding than Implicit linking, but it allows you do load the
+						library only when you need it and even decide at runtime from which library to call the routines.</p>
+					  </td></tr></table>
+
+					  <p>Some may see Implicit linking as 'early binding' and Explicit linking as 'late binding'.
+					  Although it is not exactly the same, the analogy is true. Just like 'early binding', with
+					  Implicit linking, the symbols are resolved and checked at compile (actually link) time.
+					  There is strong type checking and less chance to pass wrong arguments. Just like 'late binding',
+					  with Explicit linking, the symbols are resolved and checked at runtime. The type checking is
+					  loose and there is chance that wrong parameters are passed to the function with possible
+					  disastrous results. But with the flexibility to dynamically load and call functions.<br>
+					  For Windows, there is a good article explaining all this: <a href="http://iaci.unq.edu.ar/materias/Inst_avanz/web/..%5CDll%5CDLLs%20for%20Beginners.pdf">DLLs for Beginners</a></p>
+
+					  <table ID="Table3"><tr><td width=20></td><td>
+					  <h5>WINDOWS: Call the lpsolve dll from C/C++</h5>
+
+					  <table ID="Table6"><tr><td width=20></td><td>
+
+					  <p>Microsoft Visual C/C++ and GNU gcc support both Implicit and Explicit linking.
+					  In both cases, some header files are also needed. They are included with the archive
+					  where the libraries are also in <b>lp_solve_5.5.2.14_dev.zip</b> and <b>lp_solve_5.5_dev.gz</b>.
+					  Only lp_lib.h must be included in your source code. The other header files are included
+					  by this master include file.</p>
+
+					  <h6>Implicit linking</h6>
+
+					  <p>In implicit linking, the linker matches the symbols of the library via a .lib file (the import library).
+					  Note the extension of the file. This is the same as for a static library. This may be confusing. There is
+					  a big difference between a static library and an import library. It is unfortunate that Microsoft has used
+					  the same extension for both. A static library contains code and it is statically linked to the executable.
+					  An import library only contains symbol definitions so that the linker can resolve the symbols. An import
+					  library will thus be much smaller in size than a static library.
+					  This file is provided with the lpsolve dll and is called <b>lpsolve55.lib</b> (both in archive <b>lp_solve_5.5.2.14_dev.zip</b>).
+					  It depends on the environment and the version how to
+					  do this. Via the link.exe command, this is done by just specifying the lpsolve55.lib file at
+					  the command line. Via the .NET environment, this can be done via:
+					  Project, Properties, Linker, Input, Additional Dependencies. Optionally it is possible to
+					  also specify a link path via Project, Properties, Linker, General, Additional Library Directories.
+					  In Visual studio 6, this can be done via:
+					  Project, Settings, Link, Category General, Object/library modules. Optionally it is possible to
+					  also specify a link path via Project, Settings, Link, Category Input, Additional library path.<br>
+					  After this is done, the lpsolve functions can be called just like the lpsolve functions are linked
+					  to the program.</p>
+
+					  <p>Example:</p>
+
+					  <pre>
+#include &lt;stdio.h&gt;
+
+#include "lp_lib.h"
+
+main()
+{
+  lprec *lp;
+
+  lp = make_lp(0,4);
+
+  /* ... */
+
+  delete_lp(lp);
+}</pre>
+
+					  <h6>Explicit linking</h6>
+
+					  <p>In explicit linking we don't use the .lib file. Instead we call the Win32 <B>LoadLibrary( )</B>
+					  function, specifying the DLL's pathname as a parameter. The <B>LoadLibrary( )</B> function returns
+					  an HINSTANCE parameter. This parameter is used in a call to the <B>GetProcAddress( )</B>
+					  function to fetch the address of the function to be called. This address is a pointer to a
+					  function. Through this pointer the function is finally called. As can be seen in the following
+					  example, this requires some extra coding.<br>
+					  <br>
+					  Example:</p>
+
+					  <pre>
+#include &lt;stdio.h&gt;
+
+#include "lp_lib.h"
+
+main()
+{
+  lprec *lp;
+  HINSTANCE lpsolve;
+  make_lp_func *_make_lp;
+  delete_lp_func *_delete_lp;
+
+  lpsolve = LoadLibrary("lpsolve55.dll");
+
+  if (lpsolve == NULL) {
+    printf("Unable to load lpsolve shared library\n");
+    return(FALSE);
+  }
+  _make_lp = (make_lp_func *) GetProcAddress(lpsolve, "make_lp");
+  _delete_lp = (delete_lp_func *) GetProcAddress(lpsolve, "delete_lp");
+
+  lp = _make_lp(0,4);
+
+  /* ... */
+
+  _delete_lp(lp);
+
+  FreeLibrary(lpsolve);
+}</pre>
+
+					  <p>Note that the prototype definitions of the lpsolve functions (ex make_lp_func) are already
+					  defined in lp_lib.h. This same code also works with the Windows gnu gcc compiler. The only thing
+					  that must be done at compile time is defining the WIN32 macro. This will make sure that the
+					  calling convention will be __stdcall as required.</p>
+
+					  <p>The C demo example (<b>lp_solve_5.5_c.tar.gz</b>) demonstrates both implicit and explicit linking.</p>
+
+					  <p>The following batch/script files can be used to compile the demo's from the command line:</p>
+
+					  <table border=1>
+						<tr>
+						  <td valign="top">cvc6.bat</td>
+						  <td>Compile the demo with the Microsoft Visual C compiler.
+						      It generates demoi.exe, demoe.exe, demos.exe.
+						      These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.</td>
+						</tr>
+						<tr>
+						  <td valign="top">cgcc.bat</td>
+						  <td>Compile the demo with the GNU gcc compiler.
+						      It generates demoi.exe, demoe.exe, demos.exe.
+						      These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.
+						      Also note that the lpsolve55.dll file must also be compiled with gcc for this to work.</td>
+						</tr>
+					  </table>
+
+					  <p>The following VC.NET project files can be used to compile the demo's from the IDE:</p>
+
+					  <table border=1 ID="Table13">
+						<tr>
+						  <td valign="top">DemoDynamicImplicit.sln, DemoDynamicImplicit.vcproj</td>
+						  <td>Generates a Dynamic Implicit linked exe.</td>
+						</tr>
+						<tr>
+						  <td valign="top">DemoDynamicExplicit.sln, DemoDynamicExplicit.vcproj</td>
+						  <td>Generates a Dynamic Explicit linked exe.</td>
+						</tr>
+					  </table>
+
+                      </td></tr></table>
+                      </td></tr></table>
+
+                      <p></p>
+
+					  <table ID="Table4"><tr><td width=20></td><td>
+					  <h5>WINDOWS: Call the lpsolve dll from VB (also VBS Excel, Word, Access)</h5>
+
+					  <table ID="Table7"><tr><td width=20></td><td>
+					  These environments support only Explicit linking. However it is much easier than in C.
+					  Via a DECLARE statement, the API routines are declared and can immediately be called.
+					  The LoadLibrary/GetProcAddress API calls are done by VB and are invisible to you. To make things even easier, a class
+					  file is made to access the lpsolve library. It is called lpsolve55.cls. See the VB/Excel demos
+					  to see how it works (<b>lp_solve_5.5_vb.zip</b>, <b>lp_solve_5.5_excel.zip</b>).
+					  </td></tr></table>
+					  </td></tr></table>
+
+  					  <p></p>
+
+					  <table ID="Table5"><tr><td width=20></td><td>
+					  <h5>WINDOWS: Call the lpsolve dll from VB.NET, C#</h5>
+
+  					  <table ID="Table8"><tr><td width=20></td><td>
+					  <p>This is analogue as for VB. These environments probably also allow to use implicit linking, but
+					  this is not investigated. The demos use implicit linking. There is a class library made to call the lpsolve library.
+					  It is called lpsolve55.vb and lpsolve55.cs<br>
+					  See the demos for how it works (<b>lp_solve_5.5_vb.net.zip</b> and <b>lp_solve_5.5_cs.net.zip</b>).</p>
+					  </td></tr></table>
+					  </td></tr></table>
+
+					  <p></p>
+
+					  <table ID="Table9"><tr><td width=20></td><td>
+					  <h5>LINUX/UNIX: Call the lpsolve shared library from C/C++</h5>
+
+  					  <table ID="Table10"><tr><td width=20></td><td>
+					  Not yet documented. See <b>lp_solve_5.5_c.tar.gz</b><br>
+					  <br>
+					  <table border=1 ID="Table12">
+						<tr>
+						  <td valign="top">ccc</td>
+						  <td>Compile the demo under Linux/Unix.
+						      It generates demoi, demoe, demos.
+						      These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.
+						  </td>
+						</tr>
+					  </table>
+					  </td></tr></table>
+					  </td></tr></table>
+
+					<a name="Statically link your application with lpsolve"></a>
+					<h4><u>Statically link your application with lpsolve</u></h4>
+
+					  <p>lpsolve is linked with the application. The application is most likely a C/C++
+					  application. It must at least be a programming environment with a linker such
+					  that the lpsolve code can be linked with your code. Some header files are also needed.
+					  They are included with the archive
+					  where the libraries are also in <b>lp_solve_5.5.2.14_dev.zip</b> and <b>lp_solve_5.5_dev.gz</b>.
+					  Only lp_lib.h must be included in your source code. The other header files are included
+					  by this master include file.</p>
+
+					  <p>There are two ways to link lpsolve statically with your application: Implicit linking
+					  with the lpsolve static library and link your code with the lpsolve source code.
+
+					  <table ID="Table11"><tr><td width=20></td><td>
+						<a name="Implicit linking with the lpsolve static library"></a>
+						<h5><u>Implicit linking with the lpsolve static library</u></h5>
+
+						<p>The lpsolve code is in a library file. The files are in <b>lp_solve_5.5.2.14_dev.zip</b> for Windows and <b>lp_solve_5.5_dev.gz</b> for Linux.
+						Under Windows with the Microsoft compiler, this is in a .lib file.
+						Under Unix and under Windows with the cygwin gcc compiler, this is in a .a file.
+						Note for the Microsoft compiler the extension of the file. This is the same as for a dynamic library with implicit linking.
+						This may be confusing. There is
+						a big difference between a static library and an import library. It is unfortunate that Microsoft has used
+						the same extension for both. A static library contains code and it is statically linked to the executable.
+						An import library only contains symbol definitions so that the linker can resolve the symbols. An import
+						library will thus be much smaller in size than a static library.<br>
+						The static library file is provided with the lpsolve distribution and is called <b>liblpsolve55.lib</b> (<b>liblpsolve55d.lib</b> for debugging) for the
+						Microsoft compiler and <b>liblpsolve55.a</b> under Linux and with the cygwin gnu compiler under Windows.
+						It depends on the environment and the version how to link the static library with your code.
+						For Linux and with the cygwin gnu compiler, just specify the .a file to the compile command line:<br>
+						<br>
+						<code>cc pgr.c liblpsolve55.a</code><br>
+						<br>
+						For the Microsoft visual C compiler it can be done as follows: Via the link.exe command this is done by just
+						specifying the liblpsolve55.lib file at the command line. Via the .NET environment, this can be done via:
+						Project, Properties, Linker, Input, Additional Dependencies. Optionally it is possible to
+						also specify a link path via Project, Properties, Linker, General, Additional Library Directories.
+						In Visual studio 6, this can be done via:
+						Project, Settings, Link, Category General, Object/library modules. Optionally it is possible to
+						also specify a link path via Project, Settings, Link, Category Input, Additional library path.<br>
+						After this is done, the lpsolve functions can be called just like the lpsolve functions are linked
+						to the program.</p>
+
+					  <p>Example:</p>
+
+					  <pre>
+#include &lt;stdio.h&gt;
+
+#include "lp_lib.h"
+
+main()
+{
+  lprec *lp;
+
+  lp = make_lp(0,4);
+
+  /* ... */
+
+  delete_lp(lp);
+}</pre>
+
+						<p>The C demo example (<b>lp_solve_5.5_c.tar.gz</b>) demonstrates static linking.
+						The following batch/script files can be used to compile the demo's from the command line:
+						</p>
+
+						<table border=1 ID="Table2">
+						  <tr>
+							<td valign="top">cvc6.bat</td>
+							<td>Compile the demo with the Microsoft Visual C compiler.
+								It generates demoi.exe, demoe.exe, demos.exe.
+								These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.
+								Note that the static linked version is much larger than the dynamic linked versions.</td>
+						  </tr>
+						  <tr>
+							<td valign="top">cgcc.bat</td>
+							<td>Compile the demo with the GNU gcc compiler.
+								It generates demoi.exe, demoe.exe, demos.exe.
+								These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.
+								Note that the static linked version is much larger than the dynamic linked versions.
+								Also note that the lpsolve55.dll file must also be compiled with gcc for this to work.</td>
+						  </tr>
+						  <tr>
+							<td valign="top">ccc</td>
+							<td>Compile the demo under Linux/Unix.
+								It generates demoi, demoe, demos.
+								These are Dynamic Implicit linked, Dynamic Explicit linked and Static linked versions of the same demo.
+								Note that the static linked version is much larger than the dynamic linked versions.</td>
+						  </tr>
+						</table>
+
+						<p>The following VC.NET project files can be used to compile the demo from the IDE:</p>
+
+						<table border=1 ID="Table14">
+						  <tr>
+							<td valign="top">DemoStaticImplicit.sln, DemoStaticImplicit.vcproj</td>
+							<td>Generates a Static linked exe.</td>
+						  </tr>
+						</table>
+
+						<a name="Link your code with the lpsolve source code"></a>
+						<h5><u>Link your code with the lpsolve source code</u></h5>
+
+						<p>The lpsolve source code is linked with your code. The lpsolve source
+						code is contained in archive <b>lp_solve_5.5_source.tar.gz</b>.
+						This is the most complex method and should only be used when the others don't work.</p>
+
+						<p>One note in advance. Your C/C++ compiler must know 64 bit integers.
+						Most today compilers support this trough the data type long long.
+						lp_solve uses a define LLONG for this. If your compiler doesn't support long long, but
+						it supports 64 bit integers trough another name, then you can define LLONG to this
+						type at the compiler command line. For example -DLLONG=int64.
+                                                Also some older (versions of) compilers only support long long via an additional switch.
+                                                For example previous gcc compilers need the switch -std=c99 at the gcc compile command
+                                                to enable ISO C99. Without this switch a warning is given like
+                                                "warning: ISO C90 does not support `long long'".</p>
+
+						<p>The following source files must at least be added to your project:</p>
+
+<pre>
+bfp/bfp_LUSOL/lp_LUSOL.c
+bfp/bfp_LUSOL/LUSOL/lusol.c
+colamd/colamd.c
+ini.c
+shared/commonlib.c
+shared/mmio.c
+shared/myblas.c
+lp_crash.c
+lp_Hash.c
+lp_lib.c
+lp_matrix.c
+lp_MDO.c
+lp_mipbb.c
+lp_MPS.c
+lp_params.c
+lp_presolve.c
+lp_price.c
+lp_pricePSE.c
+lp_report.c
+lp_scale.c
+lp_simplex.c
+lp_SOS.c
+lp_utils.c
+lp_wlp.c
+</pre>
+
+						<p>All header (.h) files from lpsolve must be accessible. Most compilers use the directive
+						-Ipath with path the location to the header files. Note that the colamd, bfp and bfp/bfp_etaPFI directories
+						also contain header files that must be included.<br><br>
+						If you also need the lp parser to read an lp model (<A href="read_lp.htm">read_lp, read_LP</A>)
+						then you must also include the files lp_rlp.c and yacc_read.c and define the symbol PARSER_LP.
+						Most compilers use the directive -DPARSER_LP to do that. If you forget to define this symbol
+						then the linker will give a link error saying that the symbols read_lp, read_LP are already
+						defined. Also define the symbol YY_NEVER_INTERACTIVE (-DYY_NEVER_INTERACTIVE). This to disable the
+						interactive mode of the lex parser and remove the dependency on isatty() routine which not
+						available in all environments.</p>
+
+						<p>Note that lp_rlp.c, lp_rlp.h may give you some warnings when they are compiled.
+						This is 'normal'. These files are not human-written, but generated from yacc/bison/lex tools from the
+						corresponding .y and .l files. These tools don't seem to care much in generating code that is fully
+						Ansi compliant and without warnings. Normally they can be ignored.</p>
+
+						<p>Note that there are more .c files in the lpsolve directory. You don't have to (even may not) include
+						these in your project also. This because there files are either automatically included by the
+						other source files or are needed for other functionality.
+						</p>
+
+						<p>With the Windows Microsoft compiler, the compilation command could be:</p>
+
+						<code>
+						cl -Ic:\lp_solve_5.5 -Ic:\lp_solve_5.5\bfp -Ic:\lp_solve_5.5\bfp\bfp_etaPFI -Ic:\lp_solve_5.5\colamd /Zp8 -DWIN32 %src% -o MyExe.exe
+						</code>
+
+						<p>With the Windows gnu compiler, the command could be:</p>
+
+						<code>
+						gcc -Ic:\lp_solve_5.5 -DBFP_CALLMODEL=__stdcall %src% -o MyExe.exe
+						</code>
+
+						<p>Under Unix/Linux, the command could be:</p>
+
+						<code>
+						cc -I/lp_solve_5.5 -I/lp_solve_5.5/bfp -I/lp_solve_5.5/bfp/bfp_etaPFI -I/lp_solve_5.5/colamd $src -o MyExe.exe -lm -ldl
+						</code>
+
+						<p>%src% / $src is an environment variable containing all source files (above lpsolve source files plus your sources).
+						Note the /Zp8 option with the Windows c compiler.
+						This is also important. It ensures 8-bit alignment. This is required when you make use of the BPF functionality
+						(see <a href="BFP.htm">Basis Factorization Packages</a>) and the XLI functionality (see <a href="XLI.htm">External Language Interfaces</a>).
+						It doesn't matter which calling convention is used.
+						__cdecl or __stdcall or any other calling convention is ok, even if you make use of the BFP functionality.
+						Note the -DBFP_CALLMODEL=__stdcall option with the non-Microsoft compiler. This
+						is to define a macro for the BFP to make sure its routines are called via the __stdcall calling convention.
+						This is required if you want to make use of the BFP functionality. If your compiler doesn't
+						provide a way to specify the __stdcall calling convention, then you can drop this, but the
+						BFP functionality will then probably not work (even crash). With the Microsoft compiler this option
+						doesn't have to be specified because it is automatically set by the lpsolve header files via
+						the WIN32 macro. Under Unix/Linux the -lm option must be added to link with the math library and
+						the option -ldl is used to link with the shared library. Not all Unix systems have this
+						functionality. In that case you can drop the -ldl option but then you have to add
+						-DLoadInverseLib=0 -DLoadLanguageLib=0 in which case you will not be able to use the BFP
+						functionality (see <a href="BFP.htm">Basis Factorization Packages</a>) and also not the
+						XLI functionality (see <a href="XLI.htm">External Language Interfaces</a>).</p>
+
+						<p>The compiler commands to compile the package with also the lp (lpsolve and CPLEX) parser functionality:<br>
+						With the Windows Microsoft compiler, the command could be:</p>
+
+						<code>cl -Ic:\lp_solve_5.5 -Ic:\lp_solve_5.5\bfp -Ic:\lp_solve_5.5\bfp\bfp_etaPFI -Ic:\lp_solve_5.5\colamd /Zp8 -DWIN32 -DYY_NEVER_INTERACTIVE -DPARSER_LP %src% -o MyExe.exe</code>
+
+						<p>With the Windows gnu compiler, the command could be:</p>
+
+						<code>gcc -Ic:\lp_solve_5.5 -Ic:\lp_solve_5.5\bfp -Ic:\lp_solve_5.5\bfp\bfp_etaPFI -Ic:\lp_solve_5.5\colamd -DBFP_CALLMODEL=__stdcall -DYY_NEVER_INTERACTIVE -DPARSER_LP %src% -o MyExe.exe</code>
+
+						<p>Under Unix/Linux, the command could be:</p>
+
+						<code>cc -I/lp_solve_5.5 -I/lp_solve_5.5/bfp -I/lp_solve_5.5/bfp/bfp_etaPFI -I/lp_solve_5.5/colamd -DYY_NEVER_INTERACTIVE -DPARSER_LP $src -o MyExe.exe -lm -ldl</code>
+
+						<p>And for Unix/Linux without the possibility to use the BFP and XLI functionality:</p>
+
+						<code>cc -I/lp_solve_5.5 -I/lp_solve_5.5/bfp -I/lp_solve_5.5/bfp/bfp_etaPFI -I/lp_solve_5.5/colamd -DYY_NEVER_INTERACTIVE -DPARSER_LP -DLoadInverseLib=0 -DLoadLanguageLib=0 $src -o MyExe.exe -lm</code>
+
+						<p>Note that I used here the command prompt commands to compile the sources. It is of course also possible
+						to use the graphical interfaces with their project files to build it. The principle stays however the same.</p>
+
+						<p>In the lp_solve folder, there are also some batch/script files to build the lp_solve application.
+						This may be a good start to begin. Note that lp_solve.c is here the application. It only contains this one source file.
+						Or you could also look at the demo program in the demo directory. Here the application is demo.c</p>
+					 </td></tr></table>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

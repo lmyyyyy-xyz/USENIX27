@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_outputstream, set_outputfile</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_outputstream, set_outputfile</h1>
+					<p>
+						Defines the output when lp_solve has something to report.</p>
+					<p>
+						<b>void set_outputstream(lprec </b>*<i>lp</i><b>, FILE </b>*<i>stream</i><b>);</b></p>
+					<p>
+						<b>unsigned char set_outputfile(lprec </b>*<i>lp</i><b>, char </b>*<i>filename</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>set_outputstream</b> has no return value.</p>
+					<b>set_outputfile</b> returns TRUE (1) if the file could be opened, else FALSE
+					(0).
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>stream</i></p>
+					<p class="indent">The stream to print the results to. If NULL, then output is
+						stdout again.</p>
+					<p class="dt"><i>filename</i></p>
+					<p class="indent">The file to print the results to. If NULL, then output is
+						stdout again. If "", then output is ignored. It doesn't go to the console or to a file then.
+                                                This is usefull in combination with <A href="put_logfunc.htm">put_logfunc</A> to redirect output to somewhere
+                                                completely different.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>set_outputstream</b>, <b>set_outputfile</b> functions define the output
+						when lp_solve has something to report.<br>
+						This is done at the same time as something is reported via <A href="put_logfunc.htm">put_logfunc</A>.
+						The default reporting output is screen (stdout). If <b>set_outputstream</b> is called to change output to another
+						stream, then be aware that the stream is <b>not</b> closed automatically when <A HREF="delete_lp.htm">delete_lp</A>
+						is called. Output must be set again to stdout (or NULL) to close this handle or the handle must
+						be closed by the application via a call to fclose afterwards. This allows the application to still
+						print to the stream even after the lp structure is cleaned up. If <b>set_outputfile</b> is called to change output
+						to the specified file, then the file is automatically closed when <A HREF="delete_lp.htm">delete_lp</A> is called.
+						Note that this was not the case in previous versions of lp_solve.
+                                                If filename is "", then output is ignored. It doesn't go to the console or to a file then.
+                                                This is usefull in combination with <A href="put_logfunc.htm">put_logfunc</A> to redirect output to somewhere
+                                                completely different.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_outputfile(lp, "log.txt");
+
+  /*
+  .
+  .
+  .
+  */
+
+  delete_lp(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A href="put_logfunc.htm">put_logfunc</A>, <A HREF="print_lp.htm">print_lp</A>, <A HREF="print_objective.htm">
+							print_objective</A>, <A HREF="print_solution.htm">print_solution</A>, <A HREF="print_constraints.htm">
+							print_constraints</A>, <A HREF="print_duals.htm">print_duals</A>, <A HREF="print_scales.htm">
+							print_scales</A>, <A HREF="print_tableau.htm">print_tableau</A>, <A HREF="print_str.htm">print_str</A>, <A HREF="print_debugdump.htm">print_debugdump</A>,
+                                                        <A HREF="write_lp.htm">write_lp, write_LP</A>, <A HREF="write_mps.htm">write_mps, write_freemps,
+							write_MPS, write_freeMPS</A>, <A HREF="write_basis.htm">write_basis</A>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

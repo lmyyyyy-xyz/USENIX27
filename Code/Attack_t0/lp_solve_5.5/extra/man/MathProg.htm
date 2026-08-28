@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>GNU MathProg</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>GNU MathProg</u></h1>
+                                        <p>GNU MathProg is a modeling language intended for describing linear mathematical programming models.
+                                           <br>
+                                           Model descriptions written in the GNU MathProg language consist of a set of statements and data blocks
+                                           constructed by the user.
+                                        </p>
+
+                                        <p>See <a href="http://gnuwin32.sourceforge.net/downlinks/glpk-doc-zip.php">http://gnuwin32.sourceforge.net/downlinks/glpk-doc-zip.php</a> for a complete description of this modeling language.</p>
+
+                                        <p>GNU MathProg is part of the GLPK solver.
+                                           See <a href="http://www.gnu.org/software/glpk/glpk.html">http://www.gnu.org/software/glpk/glpk.html</a>
+                                           and <a href="http://gnuwin32.sourceforge.net/packages/glpk.htm">http://gnuwin32.sourceforge.net/packages/glpk.htm</a>
+                                           for the homepage of it.<br>
+                                           Note that MathProg is a subset of the AMPL modeling language. See <a href="AMPL.htm">Using lpsolve from AMPL</a>.<br>
+                                           The XLI used by lp_solve to read these models is derived from this code.<br>
+                                           <br>
+                                           lp_solve can read/write and solve these MathProg models directly via the xli_MathProg XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).
+                                           It reads such a model in above format and can solve it then.<br>
+                                           <br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_MathProg <a href="#Diet1.mod">Diet1.mod</a>
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 88.2
+
+Actual values of the variables:
+Buy[BEEF]                       0
+Buy[CHK]                        0
+Buy[FISH]                       0
+Buy[HAM]                        0
+Buy[MCH]                  46.6667
+Buy[MTL]                        0
+Buy[SPG]                        0
+Buy[TUR]                        0
+</pre>
+
+                                        <p>MathProg has also the possibility to have the model and data in two separate files.
+                                           lp_solve can handle this also. For example:</p>
+<pre>
+lp_solve -rxli xli_MathProg <a href="#diet.mod">diet.mod</a> -rxlidata <a href="#diet.dat">diet.dat</a>
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 88.2
+
+Actual values of the variables:
+Buy[BEEF]                       0
+Buy[CHK]                        0
+Buy[FISH]                       0
+Buy[HAM]                        0
+Buy[MCH]                  46.6667
+Buy[MTL]                        0
+Buy[SPG]                        0
+Buy[TUR]                        0
+</pre>
+
+                                        <h4>Generating MathProg models</h4>
+
+                                        <p>The XLI can also create a MathProg model, however it doesn't use the strength of the language.
+                                        Constraints are written out line per line. But it can be a starter.
+                                        For example:</p>
+
+<pre>
+lp_solve <a href="#model.lp">model.lp</a> -wxli xli_MathProg model.mod
+</pre>
+
+                                        <p>This gives as model.mod:</p>
+<pre>
+/* Variable definitions */
+var x &gt;= 0;
+var y &gt;= 0;
+
+/* Objective function */
+maximize obj: +143*x +60*y;
+
+/* Constraints */
+R1: +120*x +210*y &lt;= 15000;
+R2: +110*x +30*y &lt;= 4000;
+R3: +x +y &lt;= 75;
+</pre>
+
+                                        <h4>API</h4>
+                                        <p>Use the lpsolve API call <a href="read_XLI.htm">read_XLI</a> to read a model
+                                           and <a href="write_XLI.htm">write_XLI</a> to write a model.
+                                           See also <a href="XLI.htm">External Language Interfaces</a>.
+                                        </p>
+
+                                        <h4>IDE</h4>
+                                        <p>Also from within the IDE, this XLI can be used. However, some entries
+                                           must be added in LpSolveIDE.ini (in the folder where the IDE is installed).
+                                        </p>
+                                        <p>In the [XLI] section the following must be added:</p>
+<pre>
+lib1=xli_MathProg
+</pre>
+                                        <p>And a new section for the MathProg XLI must also be added:</p>
+<pre>
+[xli_MathProg]
+extension=.mod
+language=MATHPROG
+</pre>
+                                        <p>Then make sure that the xli_MathProg.dll is available for the IDE.
+                                           This must be done by placing this dll in the IDE folder or in the
+                                           Windows system32 folder.</p>
+
+                                        <h4>Example models/data</h4>
+
+<a name="Diet1.mod"></a>
+                                        <h5>Diet1.mod</h5>
+<pre>
+set NUTR;
+set FOOD;
+
+param cost {FOOD} &gt; 0;
+param f_min {FOOD} &gt;= 0;
+param f_max {j in FOOD} &gt;= f_min[j];
+
+param n_min {NUTR} &gt;= 0;
+param n_max {i in NUTR} &gt;= n_min[i];
+
+param amt {NUTR,FOOD} &gt;= 0;
+
+var Buy {j in FOOD} &gt;= f_min[j], &lt;= f_max[j];
+
+minimize total_cost:  sum {j in FOOD} cost[j] * Buy[j];
+
+subject to diet {i in NUTR}:
+   n_min[i] &lt;= sum {j in FOOD} amt[i,j] * Buy[j] &lt;= n_max[i];
+
+
+data;
+
+set NUTR := A B1 B2 C ;
+set FOOD := BEEF CHK FISH HAM MCH MTL SPG TUR ;
+
+param:   cost  f_min  f_max :=
+  BEEF   3.19    0     100
+  CHK    2.59    0     100
+  FISH   2.29    0     100
+  HAM    2.89    0     100
+  MCH    1.89    0     100
+  MTL    1.99    0     100
+  SPG    1.99    0     100
+  TUR    2.49    0     100 ;
+
+param:   n_min  n_max :=
+   A      700   10000
+   C      700   10000
+   B1     700   10000
+   B2     700   10000 ;
+
+param amt (tr):
+           A    C   B1   B2 :=
+   BEEF   60   20   10   15
+   CHK     8    0   20   20
+   FISH    8   10   15   10
+   HAM    40   40   35   10
+   MCH    15   35   15   15
+   MTL    70   30   15   15
+   SPG    25   50   25   15
+   TUR    60   20   15   10 ;
+end;
+</pre>
+
+<a name="diet.mod"></a>
+                                        <h5>diet.mod</h5>
+<pre>
+set NUTR;
+set FOOD;
+
+param cost {FOOD} &gt; 0;
+param f_min {FOOD} &gt;= 0;
+param f_max {j in FOOD} &gt;= f_min[j];
+
+param n_min {NUTR} &gt;= 0;
+param n_max {i in NUTR} &gt;= n_min[i];
+
+param amt {NUTR,FOOD} &gt;= 0;
+
+var Buy {j in FOOD} &gt;= f_min[j], &lt;= f_max[j];
+
+minimize total_cost:  sum {j in FOOD} cost[j] * Buy[j];
+
+subject to diet {i in NUTR}:
+   n_min[i] &lt;= sum {j in FOOD} amt[i,j] * Buy[j] &lt;= n_max[i];
+</pre>
+
+<a name="diet.dat"></a>
+                                        <h5>diet.dat</h5>
+
+<pre>
+set NUTR := A B1 B2 C ;
+set FOOD := BEEF CHK FISH HAM MCH MTL SPG TUR ;
+
+param:   cost  f_min  f_max :=
+  BEEF   3.19    0     100
+  CHK    2.59    0     100
+  FISH   2.29    0     100
+  HAM    2.89    0     100
+  MCH    1.89    0     100
+  MTL    1.99    0     100
+  SPG    1.99    0     100
+  TUR    2.49    0     100 ;
+
+param:   n_min  n_max :=
+   A      700   10000
+   C      700   10000
+   B1     700   10000
+   B2     700   10000 ;
+
+param amt (tr):
+           A    C   B1   B2 :=
+   BEEF   60   20   10   15
+   CHK     8    0   20   20
+   FISH    8   10   15   10
+   HAM    40   40   35   10
+   MCH    15   35   15   15
+   MTL    70   30   15   15
+   SPG    25   50   25   15
+   TUR    60   20   15   10 ;
+</pre>
+
+<a name="model.lp"></a>
+                                        <h5>model.lp</h5>
+
+<pre>
+/* model.lp */
+
+max: 143 x + 60 y;
+
+120 x + 210 y &lt;= 15000;
+110 x + 30 y &lt;= 4000;
+x + y &lt;= 75;
+</pre>
+
+                             </TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

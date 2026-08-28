@@ -1,0 +1,517 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Special Ordered Sets</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" id="Table1" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1 align="left"><u>Special Ordered Sets (SOS)</u></h1>
+					<H3 style="FONT-SIZE: 12pt; MARGIN: 6pt 6.5pt 2pt 5.75pt; TEXT-ALIGN: left" align="left"><B><FONT style="FONT-WEIGHT: bold; FONT-SIZE: 9pt; FONT-FAMILY: 'Arial'" size="1">Special
+								Ordered Sets of Type One</FONT></B></H3>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">A
+						</FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								Special Ordered Set of type One</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							(SOS1) is defined to be a set of variables for which not more than one member
+							from the set may be non-zero in a feasible solution. All such sets are mutually
+							exclusive of each other, the members are not subject to any other discrete
+							conditions and are grouped together consecutively in the data.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">The
+							normal use of an SOS1 is to represent a set of mutually exclusive alternatives
+							ordered in increasing values of size, cost or some other suitable units
+							appropriate to the context of the model. This representation is a discrete
+							programming extension of the separable programming model. There is a strong
+							implied assumption that a non-linear function represented in this way is single
+							valued over the range of its argument.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Consider
+							a function g(y) represented by the points P</FONT><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-FAMILY: 'Arial'" size="1">1</FONT></SUB><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,...,P</FONT><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-FAMILY: 'Arial'" size="1">K</FONT></SUB><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							as shown in figure 2.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1"></FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><IMG height="353" alt="image\img00341.gif" src="SpecialOrderedSetsOfTypeOne_files/img00341.gif"
+							width="548" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+						</FONT>
+					</P>
+					<P style="MARGIN: 4pt 36pt 0pt 72pt; TEXT-INDENT: -72pt; TEXT-ALIGN: center" align="center"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Figure
+							2</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left">&nbsp;</P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Given
+							the tabulated coordinates </FONT><IMG height="22" alt="image\img00342.gif" src="SpecialOrderedSetsOfTypeOne_files/img00342.gif"
+							width="76" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+						</FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								k=1,...,K</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+							the function </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								g(y)</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							may be represented as</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 6pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00343.gif" src="SpecialOrderedSetsOfTypeOne_files/img00343.gif"
+							width="277" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> &nbsp;&nbsp;&nbsp;&nbsp;(1)</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">where</FONT></P>
+					<P style="MARGIN: 6pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00344.gif" src="SpecialOrderedSetsOfTypeOne_files/img00344.gif"
+							width="256" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> &nbsp;&nbsp;&nbsp;&nbsp;(2)</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 6pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00345.gif" src="SpecialOrderedSetsOfTypeOne_files/img00345.gif"
+							width="288" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> &nbsp;&nbsp;&nbsp;&nbsp;(3)</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">The
+							discrete function can take only one of the </FONT><IMG height="18" alt="image\img00346.gif" src="SpecialOrderedSetsOfTypeOne_files/img00346.gif"
+							width="17" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							possible values weighted by the variables </FONT><IMG height="22" alt="image\img00347.gif" src="SpecialOrderedSetsOfTypeOne_files/img00347.gif"
+							width="18" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+							of which only one can be non-zero, and that must have the value one.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">This
+							requirement could be expressed by restricting each </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								x</FONT></I><I><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-STYLE: italic; FONT-FAMILY: 'Arial'"
+									size="1">k</FONT></SUB></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							to be a binary variable but the alternative of defining them collectively as a
+							special ordered set of type one, which is a direct statement of their nature,
+							leads to a more efficient solution process.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">The
+							weighting variables </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								x</FONT></I><I><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-STYLE: italic; FONT-FAMILY: 'Arial'"
+									size="1">k</FONT></SUB></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							are called </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								special ordered set type one variables</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							and the rows (1), (2), and (3) are called </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								function rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+						</FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								reference rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							and </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								convexity rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							respectively. Should the SOS1's not represent a modelling of discrete, separable
+							variables then none of these rows need actually exist, but there is an
+							advantage to the system if it is aware of the reference rows at least.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><br>
+					</P>
+					<H3 style="FONT-SIZE: 12pt; MARGIN: 6pt 6.5pt 2pt 5.75pt; TEXT-ALIGN: left" align="left"><B><FONT style="FONT-WEIGHT: bold; FONT-SIZE: 9pt; FONT-FAMILY: 'Arial'" size="1"></FONT></B></H3>
+					<H3 style="FONT-SIZE: 12pt; MARGIN: 6pt 6.5pt 2pt 5.75pt; TEXT-ALIGN: left" align="left"><B><FONT style="FONT-WEIGHT: bold; FONT-SIZE: 9pt; FONT-FAMILY: 'Arial'" size="1">Special
+								Ordered Sets of Type Two</FONT></B></H3>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">A
+						</FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								Special Ordered Set of type Two</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							(SOS2) is a set of consecutive variables in which not more than two adjacent
+							members may be non-zero in a feasible solution. All such sets are mutually
+							exclusive of each other, the members are not subject to any other discrete
+							conditions and each set is grouped together consecutively in the data.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">SOS2s
+							were introduced to make it easier to find global optimum solutions to problems
+							containing piecewise linear approximations to a non-linear function of a single
+							argument (as in classical Separable Programming). The overall problem has an
+							otherwise LP or an IP structure except for such non-linear functions.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Consider
+							the function </FONT><IMG height="22" alt="image\img00348.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00348.gif"
+							width="37" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							illustrated in Figure 3 as a piecewise linear function in one variable defined
+							over the closed intervals </FONT><IMG height="23" alt="image\img00349.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00349.gif"
+							width="162" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+							where the coordinates </FONT><IMG height="23" alt="image\img00350.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00350.gif"
+							width="152" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+							represent points P</FONT><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-FAMILY: 'Arial'" size="1">1</FONT></SUB><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,...,P</FONT><I><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-STYLE: italic; FONT-FAMILY: 'Arial'"
+									size="1">K</FONT></SUB></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left">&nbsp;</P>
+					<P style="MARGIN: 4pt 36pt 0pt 72pt; TEXT-INDENT: -72pt; TEXT-ALIGN: center" align="center"><IMG height="353" alt="image\img00351.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00351.gif"
+							width="548" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+						</FONT>
+					</P>
+					<P style="MARGIN: 4pt 36pt 0pt 72pt; TEXT-INDENT: -72pt; TEXT-ALIGN: center" align="center"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Figure
+							3</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left">&nbsp;</P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Any
+							point </FONT><IMG height="18" alt="image\img00352.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00352.gif"
+							width="14" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							in the closed interval </FONT><IMG height="22" alt="image\img00353.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00353.gif"
+							width="62" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							may be written as</FONT></P>
+					<P style="MARGIN: 6pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: center" align="center"><IMG height="22" alt="image\img00354.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00354.gif"
+							width="126" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> </FONT>
+					</P>
+					<P style="MARGIN: 0pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">where
+						</FONT>
+					</P>
+					<P style="MARGIN: 6pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: center" align="center"><IMG height="22" alt="image\img00355.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00355.gif"
+							width="188" border="0"><FONT style="FONT-SIZE: 12pt" size="3">.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Similarly,
+							as </FONT><IMG height="22" alt="image\img00356.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00356.gif"
+							width="37" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							is linear in the interval, it can be written as</FONT></P>
+					<P style="MARGIN: 6pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: center" align="center"><IMG height="22" alt="image\img00357.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00357.gif"
+							width="202" border="0"><FONT style="FONT-SIZE: 12pt" size="3">.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">This
+							leads to the representation of </FONT><IMG height="22" alt="image\img00358.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00358.gif"
+							width="37" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							using a set of weighting variables, </FONT><IMG height="23" alt="image\img00359.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00359.gif"
+							width="100" border="0"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+							by the equality</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 6pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00360.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00360.gif"
+							width="283" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> &nbsp;&nbsp;&nbsp;&nbsp;(4)</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">where</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 6pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00361.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00361.gif"
+							width="270" border="0"><FONT style="FONT-SIZE: 12pt" size="3"> &nbsp;&nbsp;&nbsp;&nbsp;(5)</FONT></P>
+					<P style="MARGIN: 0pt 6.5pt 6pt 5.75pt; TEXT-ALIGN: left" align="left"><FONT style="FONT-SIZE: 12pt" size="3">&nbsp;&nbsp;</FONT><IMG height="22" alt="image\img00362.gif" src="SpecialOrderedSetsOfTypeTwo_files/img00362.gif"
+							width="288" border="0"><FONT style="FONT-SIZE: 12pt" size="3">.&nbsp;&nbsp;&nbsp;&nbsp;(6)</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">Plus
+							the added condition that not more than two adjacent variables can be non-zero
+							at any one time.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left"><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">The
+							weighting variables x</FONT><SUB><FONT style="FONT-SIZE: 10pt; VERTICAL-ALIGN: sub; FONT-FAMILY: 'Arial'" size="1">k</FONT></SUB><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							are called the </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								special ordered set type two variables</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							and the rows (4), (5), and (6) are called </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								function rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">,
+						</FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								reference rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							and the </FONT><I><FONT style="FONT-SIZE: 10pt; FONT-STYLE: italic; FONT-FAMILY: 'Arial'" size="1">
+								convexity rows</FONT></I><FONT style="FONT-SIZE: 10pt; FONT-FAMILY: 'Arial'" size="1">
+							respectively, as in equations (1), (2) and (3) of Topic "Special Ordered Sets
+							of Type One". Should the SOS2's not represent separable functions then none of
+							these rows need actually exist, but there is an advantage to the system if it
+							is aware of the reference rows at least.</FONT></P>
+					<P style="MARGIN: 4pt 6.5pt 0pt 5.75pt; TEXT-ALIGN: justify" align="left">&nbsp;</P>
+					<H3 style="FONT-SIZE: 12pt; MARGIN: 6pt 6.5pt 2pt 5.75pt; TEXT-ALIGN: left" align="left"><B><FONT style="FONT-WEIGHT: bold; FONT-SIZE: 9pt; FONT-FAMILY: 'Arial'" size="1"></FONT></B></H3>
+					The lp_solve implementation of SOS is the following:
+					<P>A specially ordered set of degree N is a collection of variables where at most N
+						variables may be non-zero. The non-zero variables must be contiguous
+						(neighbours) sorted by the ascending value of their respective unique weights.
+						In lp_solve, specially ordered sets may be of any cardinal type 1, 2, and
+						higher, and may be overlapping. The number of variables in the set must be
+						equal to, or exceed the cardinal SOS order.</P>
+					<P>
+						lp_solve supports Special Ordered Sets via the API interface, in the MPS format
+						and in the lp format (from release 4.0.1.11).</P>
+					<P>Below is a representation of a SOS in an MPS file, where each SOS is defined in
+						its own SOS section, which should follow the BOUNDS section.
+					</P>
+					<pre>
+0        1         2         3         4
+<U>1234567890123456789012345678901234567890</U>
+SOS
+ Sx CaseName  SOSName.  SOSpriority.
+    CaseName  VarName1  VarWeight1..
+    CaseName  VarName2  VarWeight2..
+
+    CaseName  VarNameN  VarWeightN..
+</pre>
+
+					<p>
+					x at the second line, position 3, defines is the order of the SOS. Due to
+					limitations in the MPS format, N is restricted to the 1..9 range. Each SOS
+					should be given a unique name, SOSName. lp_solve does not currently use case
+					names for SOS'es and the CaseName could be any non-empty value.
+					</p>
+					
+					<P>Below is a representation of a SOS in an lp file.
+					</P>
+<pre>
+sos
+SOS: VarName1: VarWeight1, VarName2: VarWeight2, ..., VarNameN: VarWeightN &lt;= 1: SOSpriority;
+</pre>
+
+<p>In the lp format, the VarWeights are optional:</p>
+
+<pre>
+sos
+SOS: VarName1, VarName2, ..., VarNameN &lt;= 1: SOSpriority;
+</pre>
+
+<p>In that case, the order of the variables define the VarWeights. So above is equal to:</p>
+
+<pre>
+sos
+SOS: VarName1: 1, VarName2: 2, ..., VarNameN: N &lt;= 1: SOSpriority;
+</pre>
+
+<p>Also the SOSpriority is optional. In that case the order in which the SOS constraints are specified give them a priority.</p>
+
+                    <p>The SOSpriority
+					value determines the order in which multiple SOS'es are analysed in lp_solve.</p>
+					
+					<p>VarWeight determines the adjacency of the variables. This is an importand piece of information.
+					Remember that the SOS definition defines that the non-zero variables must be adjacent. The VarWeight
+					values define this adjencency.
+					</P>
+					
+					<p>SOS1 Example:</p>
+					<pre>
+ROWS
+ L  c1
+ L  c2
+ N  COST
+COLUMNS
+    x1        c1                 -1.   c2                  1.
+    x1        COST               -1.
+    x2        c1                 -1.   COST               -1.
+    x3        c1                  1.   c2                  1.
+    x3        COST               -3.
+    x4        c1                  1.   c2                 -3.
+    x4        COST               -2.
+    x5        COST               -2.
+RHS
+    RHS       c1                 30.   c2                 30.
+BOUNDS
+ UP COLBND    x1                 40.
+ UP COLBND    x2                  1.
+ UP COLBND    x5                  1.
+<FONT color=red>SOS
+ S1 SOS       SOS                 1.
+    SOS       x1                  1.
+    SOS       x2                  2.
+    SOS       x3                  3.
+    SOS       x4                  4.
+    SOS       x5                  5.</FONT>
+ENDATA
+
+
+In lp format:
+
+min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+c1: -x1 -x2 +x3 +x4 &lt;= 30;
+c2: +x1 +x3 -3 x4 &lt;= 30;
+x1 &lt;= 40;
+x2 &lt;= 1;
+x5 &lt;= 1;
+
+<FONT color=red>sos
+SOS: x1,x2,x3,x4,x5 &lt;= 1;</FONT>
+</pre>
+					<P>The SOS definition says that either x1 or x2 or x3 or x4 or x5 may be taken.
+					   It also says that x1 is adjacent to x2 which is adjacent to x3 which is adjacent to x4 which is adjacent to x5.</P>
+					The solution is:
+					<pre>
+Value of objective function: -90
+
+Actual values of the variables:
+x1                   0
+x2                   0
+x3                   30
+x4                   0
+x5                   0
+</pre>
+					<p>SOS2 Example:</p>
+					<pre>
+ROWS
+ L  c1
+ L  c2
+ N  COST
+COLUMNS
+    x1        c1                 -1.   c2                  1.
+    x1        COST               -1.
+    x2        c1                 -1.   COST               -1.
+    x3        c1                  1.   c2                  1.
+    x3        COST               -3.
+    x4        c1                  1.   c2                 -3.
+    x4        COST               -2.
+    x5        COST               -2.
+RHS
+    RHS       c1                 30.   c2                 30.
+BOUNDS
+ UP COLBND    x1                 40.
+ UP COLBND    x2                  1.
+ UP COLBND    x5                  1.
+SOS
+ S2 SOS       SOS                 1.
+    SOS       x1                  1.
+    SOS       x2                  2.
+    SOS       x3                  3.
+    SOS       x4                  4.
+    SOS       x5                  5.
+ENDATA
+
+
+In lp format:
+
+min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+c1: -x1 -x2 +x3 +x4 &lt;= 30;
+c2: +x1 +x3 -3 x4 &lt;= 30;
+x1 &lt;= 40;
+x2 &lt;= 1;
+x5 &lt;= 1;
+
+sos
+SOS: x1,x2,x3,x4,x5 &lt;= 2;
+</pre>
+					<P>The SOS definition says that two consecutive variables from x1, x2, x3, x4, x5 may be taken.
+					   It also says that x1 is adjacent to x2 which is adjacent to x3 which is adjacent to x4 which is adjacent to x5.</P>
+					The solution is:
+					<pre>
+Value of objective function: -91
+
+Actual values of the variables:
+x1                   0
+x2                   1
+x3                   30
+x4                   0
+x5                   0
+</pre>
+					<p>SOS3 Example:</p>
+					<pre>
+ROWS
+ L  c1
+ L  c2
+ N  COST
+COLUMNS
+    x1        c1                 -1.   c2                  1.
+    x1        COST               -1.
+    x2        c1                 -1.   COST               -1.
+    x3        c1                  1.   c2                  1.
+    x3        COST               -3.
+    x4        c1                  1.   c2                 -3.
+    x4        COST               -2.
+    x5        COST               -2.
+RHS
+    RHS       c1                 30.   c2                 30.
+BOUNDS
+ UP COLBND    x1                 40.
+ UP COLBND    x2                  1.
+ UP COLBND    x5                  1.
+SOS
+ S3 SOS       SOS                 1.
+    SOS       x1                  1.
+    SOS       x2                  2.
+    SOS       x3                  3.
+    SOS       x4                  4.
+    SOS       x5                  5.
+ENDATA
+
+
+In lp format:
+
+min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+c1: -x1 -x2 +x3 +x4 &lt;= 30;
+c2: +x1 +x3 -3 x4 &lt;= 30;
+x1 &lt;= 40;
+x2 &lt;= 1;
+x5 &lt;= 1;
+
+sos
+SOS: x1,x2,x3,x4,x5 &lt;= 3;
+</pre>
+					<P>The SOS definition says that three consecutive variables from x1, x2, x3, x4, x5 may be taken.
+					   It also says that x1 is adjacent to x2 which is adjacent to x3 which is adjacent to x4 which is adjacent to x5.</P>
+					The solution is:
+					<pre>
+Value of objective function: -93.75
+
+Actual values of the variables:
+x1                   0
+x2                   1
+x3                   30.75
+x4                   0.25
+x5                   0
+</pre>
+					<p>SOS4 Example:</p>
+					<pre>
+ROWS
+ L  c1
+ L  c2
+ N  COST
+COLUMNS
+    x1        c1                 -1.   c2                  1.
+    x1        COST               -1.
+    x2        c1                 -1.   COST               -1.
+    x3        c1                  1.   c2                  1.
+    x3        COST               -3.
+    x4        c1                  1.   c2                 -3.
+    x4        COST               -2.
+    x5        COST               -2.
+RHS
+    RHS       c1                 30.   c2                 30.
+BOUNDS
+ UP COLBND    x1                 40.
+ UP COLBND    x2                  1.
+ UP COLBND    x5                  1.
+SOS
+ S4 SOS       SOS                 1.
+    SOS       x1                  1.
+    SOS       x2                  2.
+    SOS       x3                  3.
+    SOS       x4                  4.
+    SOS       x5                  5.
+ENDATA
+
+
+In lp format:
+
+min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+c1: -x1 -x2 +x3 +x4 &lt;= 30;
+c2: +x1 +x3 -3 x4 &lt;= 30;
+x1 &lt;= 40;
+x2 &lt;= 1;
+x5 &lt;= 1;
+
+sos
+SOS: x1,x2,x3,x4,x5 &lt;= 4;
+</pre>
+					<P>The SOS definition says that four consecutive variables from x1, x2, x3, x4, x5 may be taken.
+					   It also says that x1 is adjacent to x2 which is adjacent to x3 which is adjacent to x4 which is adjacent to x5.</P>
+					The solution is:
+					<pre>
+Value of objective function: -233.75
+
+Actual values of the variables:
+x1                   40
+x2                   1
+x3                   50.75
+x4                   20.25
+x5                   0
+</pre>
+					<p>SOS5 Example:</p>
+					<pre>
+ROWS
+ L  c1
+ L  c2
+ N  COST
+COLUMNS
+    x1        c1                 -1.   c2                  1.
+    x1        COST               -1.
+    x2        c1                 -1.   COST               -1.
+    x3        c1                  1.   c2                  1.
+    x3        COST               -3.
+    x4        c1                  1.   c2                 -3.
+    x4        COST               -2.
+    x5        COST               -2.
+RHS
+    RHS       c1                 30.   c2                 30.
+BOUNDS
+ UP COLBND    x1                 40.
+ UP COLBND    x2                  1.
+ UP COLBND    x5                  1.
+SOS
+ S5 SOS       SOS                 1.
+    SOS       x1                  1.
+    SOS       x2                  2.
+    SOS       x3                  3.
+    SOS       x4                  4.
+    SOS       x5                  5.
+ENDATA
+
+
+In lp format:
+
+min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+c1: -x1 -x2 +x3 +x4 &lt;= 30;
+c2: +x1 +x3 -3 x4 &lt;= 30;
+x1 &lt;= 40;
+x2 &lt;= 1;
+x5 &lt;= 1;
+
+sos
+SOS: x1,x2,x3,x4,x5 &lt;= 5;
+</pre>
+					<P>The SOS definition says that five consecutive variables from x1, x2, x3, x4, x5 may be taken.
+					   It also says that x1 is adjacent to x2 which is adjacent to x3 which is adjacent to x4 which is adjacent to x5.</P>
+					The solution is:
+					<pre>
+Value of objective function: -235.75
+
+Actual values of the variables:
+x1                   40
+x2                   1
+x3                   50.75
+x4                   20.25
+x5                   1
+</pre>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

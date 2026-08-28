@@ -1,0 +1,313 @@
+function [obj, x, duals, stat] = lp_solve(f, a, b, e, vlb, vub, xint, scalemode, keep)
+%LP_SOLVE  Solves mixed integer linear programming problems.
+%
+%  SYNOPSIS: [obj,x,duals,stat] = lp_solve(f,a,b,e,vlb,vub,xint,scalemode,keep)
+%
+%     solves the MILP problem
+%
+%             max v = f'*x
+%               a*x <> b
+%                 vlb <= x <= vub
+%                 x(int) are integer
+%
+%  ARGUMENTS: The first four arguments are required:
+%
+%           f: n vector of coefficients for a linear objective function.
+%           a: m by n matrix representing linear constraints.
+%           b: m vector of right sides for the inequality constraints.
+%           e: m vector that determines the sense of the inequalities:
+%                     e(i) = -1  ==> Less Than
+%                     e(i) =  0  ==> Equals
+%                     e(i) =  1  ==> Greater Than
+%         vlb: n vector of lower bounds. If empty or omitted,
+%              then the lower bounds are set to zero.
+%         vub: n vector of upper bounds. May be omitted or empty.
+%        xint: vector of integer variables. May be omitted or empty.
+%   scalemode: scale flag. Off when 0 or omitted.
+%        keep: Flag for keeping the lp problem after it's been solved.
+%              If omitted, the lp will be deleted when solved.
+%
+%  OUTPUT: A nonempty output is returned if a solution is found:
+%
+%         obj: Optimal value of the objective function.
+%           x: Optimal value of the decision variables.
+%       duals: solution of the dual problem.
+
+  if nargin == 0
+          help lp_solve;
+          return;
+  end
+
+  [m,n] = size(a);
+  lp = sqlpsolve('make_lp', m, n);
+  sqlpsolve('set_verbose', lp, 3);
+  sqlpsolve('set_mat', lp, a);
+  sqlpsolve('set_rh_vec', lp, b);
+  sqlpsolve('set_obj_fn', lp, f);
+  sqlpsolve('set_maxim', lp); % default is solving minimum lp.
+
+  for i = 1:length(e)
+    if e(i) < 0
+          con_type = 1;
+    elseif e(i) == 0
+          con_type = 3;
+    else
+          con_type = 2;
+    end
+    sqlpsolve('set_constr_type', lp, i, con_type);
+  end
+
+  if nargin > 4
+    for i = 1:length(vlb)
+      sqlpsolve('set_lowbo', lp, i, vlb(i));
+    end
+  end
+
+  if nargin > 5
+    for i = 1:length(vub)
+      sqlpsolve('set_upbo', lp, i, vub(i));
+    end
+  end
+
+  if nargin > 6
+    for i = 1:length(xint)
+      sqlpsolve('set_int', lp, xint(i), 1);
+    end
+  end
+
+  if nargin > 7
+    if scalemode ~= 0
+      sqlpsolve('set_scaling', lp, scalemode);
+    end
+  end
+
+  result=sqlpsolve('solve', lp);
+  if result == 0 | result == 1 | result == 11 | result == 12
+  %  [obj, x, duals, stat] = sqlpsolve('get_solution', lp), result;
+    [obj, x, duals] = sqlpsolve('get_solution', lp);
+    stat = result;
+  else
+    obj = [];
+    x = [];
+    duals = [];
+    stat = result;
+  end
+
+  if nargin < 9
+    sqlpsolve('delete_lp', lp);
+  end
+
+function lp_handle = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+%LP_MAKER  Makes mixed integer linear programming problems.
+%
+%  SYNOPSIS: lp_handle = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+%     make the MILP problem
+%       max v = f'*x
+%         a*x <> b
+%           vlb <= x <= vub
+%           x(int) are integer
+%
+%  ARGUMENTS: The first four arguments are required:
+%           f: n vector of coefficients for a linear objective function.
+%           a: m by n matrix representing linear constraints.
+%           b: m vector of right sides for the inequality constraints.
+%           e: m vector that determines the sense of the inequalities:
+%                     e(i) < 0  ==> Less Than
+%                     e(i) = 0  ==> Equals
+%                     e(i) > 0  ==> Greater Than
+%         vlb: n vector of non-negative lower bounds. If empty or omitted,
+%              then the lower bounds are set to zero.
+%         vub: n vector of upper bounds. May be omitted or empty.
+%        xint: vector of integer variables. May be omitted or empty.
+%   scalemode: Autoscale flag. Off when 0 or omitted.
+%    setminim: Set maximum lp when this flag equals 0 or omitted.
+%
+%  OUTPUT: lp_handle is an integer handle to the lp created.
+
+  if nargin == 0
+          help lp_maker;
+          return;
+  end
+
+  [m,n] = size(a);
+  lp_handle = sqlpsolve('make_lp', m, n);
+  sqlpsolve('set_verbose', lp_handle, 3);
+  sqlpsolve('set_mat', lp_handle, a);
+  sqlpsolve('set_rh_vec', lp_handle, b);
+  sqlpsolve('set_obj_fn', lp_handle, f);
+  sqlpsolve('set_maxim', lp_handle); % default is solving minimum lp.
+
+  for i = 1:length(e)
+    if e(i) < 0
+          con_type = 1;
+    elseif e(i) == 0
+          con_type = 3;
+    else
+          con_type = 2;
+    end
+    sqlpsolve('set_constr_type', lp_handle, i, con_type);
+  end
+
+  if nargin > 4
+    for i = 1:length(vlb)
+      sqlpsolve('set_lowbo', lp_handle, i, vlb(i));
+    end
+  end
+
+  if nargin > 5
+    for i = 1:length(vub)
+      sqlpsolve('set_upbo', lp_handle, i, vub(i));
+    end
+  end
+
+  if nargin > 6
+    for i = 1:length(xint)
+      sqlpsolve('set_int', lp_handle, xint(i), 1);
+    end
+  end
+
+  if nargin > 7
+    if scalemode ~= 0
+      sqlpsolve('set_scaling', lp_handle, scalemode);
+    end
+  end
+
+  if nargin > 8
+    if setminim ~= 0
+      sqlpsolve('set_minim', lp_handle);
+    else
+      sqlpsolve('set_maxim', lp_handle);
+    end
+  end
+
+public
+
+define LPSOLVE_ANTIDEGEN_BOUNDFLIP = 512;
+define LPSOLVE_ANTIDEGEN_COLUMNCHECK = 2;
+define LPSOLVE_ANTIDEGEN_DURINGBB = 128;
+define LPSOLVE_ANTIDEGEN_DYNAMIC = 64;
+define LPSOLVE_ANTIDEGEN_FIXEDVARS = 1;
+define LPSOLVE_ANTIDEGEN_INFEASIBLE = 32;
+define LPSOLVE_ANTIDEGEN_LOSTFEAS = 16;
+define LPSOLVE_ANTIDEGEN_NONE = 0;
+define LPSOLVE_ANTIDEGEN_NUMFAILURE = 8;
+define LPSOLVE_ANTIDEGEN_RHSPERTURB = 256;
+define LPSOLVE_ANTIDEGEN_STALLING = 4;
+define LPSOLVE_BRANCH_AUTOMATIC = 2;
+define LPSOLVE_BRANCH_DEFAULT = 3;
+define LPSOLVE_BRANCH_CEILING = 0;
+define LPSOLVE_BRANCH_FLOOR = 1;
+define LPSOLVE_CRASH_LEASTDEGENERATE = 3;
+define LPSOLVE_CRASH_MOSTFEASIBLE = 2;
+define LPSOLVE_CRASH_NONE = 0;
+define LPSOLVE_CRITICAL = 1;
+define LPSOLVE_DEGENERATE = 4;
+define LPSOLVE_DETAILED = 5;
+define LPSOLVE_EQ = 3;
+define LPSOLVE_FEASFOUND = 12;
+define LPSOLVE_FR = 0;
+define LPSOLVE_FULL = 6;
+define LPSOLVE_GE = 2;
+define LPSOLVE_IMPORTANT = 3;
+define LPSOLVE_IMPROVE_BBSIMPLEX = 8;
+define LPSOLVE_IMPROVE_DUALFEAS = 2;
+define LPSOLVE_IMPROVE_NONE = 0;
+define LPSOLVE_IMPROVE_SOLUTION = 1;
+define LPSOLVE_IMPROVE_THETAGAP = 4;
+define LPSOLVE_INFEASIBLE = 2;
+define LPSOLVE_Infinite = 1e+030;
+define LPSOLVE_LE = 1;
+define LPSOLVE_MSG_LPFEASIBLE = 8;
+define LPSOLVE_MSG_LPOPTIMAL = 16;
+define LPSOLVE_MSG_MILPBETTER = 512;
+define LPSOLVE_MSG_MILPEQUAL = 256;
+define LPSOLVE_MSG_MILPFEASIBLE = 128;
+define LPSOLVE_MSG_PRESOLVE = 1;
+define LPSOLVE_NEUTRAL = 0;
+define LPSOLVE_NODE_AUTOORDER = 8192;
+define LPSOLVE_NODE_BRANCHREVERSEMODE = 16;
+define LPSOLVE_NODE_BREADTHFIRSTMODE = 4096;
+define LPSOLVE_NODE_DEPTHFIRSTMODE = 128;
+define LPSOLVE_NODE_DYNAMICMODE = 1024;
+define LPSOLVE_NODE_FIRSTSELECT = 0;
+define LPSOLVE_NODE_FRACTIONSELECT = 3;
+define LPSOLVE_NODE_GAPSELECT = 1;
+define LPSOLVE_NODE_GREEDYMODE = 32;
+define LPSOLVE_NODE_GUBMODE = 512;
+define LPSOLVE_NODE_PSEUDOCOSTMODE = 64;
+define LPSOLVE_NODE_PSEUDOCOSTSELECT = 4;
+define LPSOLVE_NODE_PSEUDONONINTSELECT = 5;
+define LPSOLVE_NODE_PSEUDORATIOSELECT = 6;
+define LPSOLVE_NODE_RANDOMIZEMODE = 256;
+define LPSOLVE_NODE_RANGESELECT = 2;
+define LPSOLVE_NODE_RCOSTFIXING = 16384;
+define LPSOLVE_NODE_RESTARTMODE = 2048;
+define LPSOLVE_NODE_STRONGINIT = 32768;
+define LPSOLVE_NODE_USERSELECT = 7;
+define LPSOLVE_NODE_WEIGHTREVERSEMODE = 8;
+define LPSOLVE_NOFEASFOUND = 13;
+define LPSOLVE_NOMEMORY = -2;
+define LPSOLVE_NORMAL = 4;
+define LPSOLVE_NUMFAILURE = 5;
+define LPSOLVE_OPTIMAL = 0;
+define LPSOLVE_PRESOLVED = 9;
+define LPSOLVE_PRESOLVE_BOUNDS = 262144;
+define LPSOLVE_PRESOLVE_COLDOMINATE = 16384;
+define LPSOLVE_PRESOLVE_COLFIXDUAL = 131072;
+define LPSOLVE_PRESOLVE_COLS = 2;
+define LPSOLVE_PRESOLVE_DUALS = 524288;
+define LPSOLVE_PRESOLVE_ELIMEQ2 = 256;
+define LPSOLVE_PRESOLVE_IMPLIEDFREE = 512;
+define LPSOLVE_PRESOLVE_IMPLIEDSLK = 65536;
+define LPSOLVE_PRESOLVE_KNAPSACK = 128;
+define LPSOLVE_PRESOLVE_LINDEP = 4;
+define LPSOLVE_PRESOLVE_MERGEROWS = 32768;
+define LPSOLVE_PRESOLVE_NONE = 0;
+define LPSOLVE_PRESOLVE_PROBEFIX = 2048;
+define LPSOLVE_PRESOLVE_PROBEREDUCE = 4096;
+define LPSOLVE_PRESOLVE_REDUCEGCD = 1024;
+define LPSOLVE_PRESOLVE_REDUCEMIP = 64;
+define LPSOLVE_PRESOLVE_ROWDOMINATE = 8192;
+define LPSOLVE_PRESOLVE_ROWS = 1;
+define LPSOLVE_PRESOLVE_SENSDUALS = 1048576;
+define LPSOLVE_PRESOLVE_SOS = 32;
+define LPSOLVE_PRICER_DANTZIG = 1;
+define LPSOLVE_PRICER_DEVEX = 2;
+define LPSOLVE_PRICER_FIRSTINDEX = 0;
+define LPSOLVE_PRICER_STEEPESTEDGE = 3;
+define LPSOLVE_PRICE_ADAPTIVE = 32;
+define LPSOLVE_PRICE_AUTOPARTIAL = 256;
+define LPSOLVE_PRICE_HARRISTWOPASS = 4096;
+define LPSOLVE_PRICE_LOOPALTERNATE = 2048;
+define LPSOLVE_PRICE_LOOPLEFT = 1024;
+define LPSOLVE_PRICE_MULTIPLE = 8;
+define LPSOLVE_PRICE_PARTIAL = 16;
+define LPSOLVE_PRICE_PRIMALFALLBACK = 4;
+define LPSOLVE_PRICE_RANDOMIZE = 128;
+define LPSOLVE_PRICE_TRUENORMINIT = 16384;
+define LPSOLVE_PROCBREAK = 11;
+define LPSOLVE_PROCFAIL = 10;
+define LPSOLVE_SCALE_COLSONLY = 1024;
+define LPSOLVE_SCALE_CURTISREID = 7;
+define LPSOLVE_SCALE_DYNUPDATE = 256;
+define LPSOLVE_SCALE_EQUILIBRATE = 64;
+define LPSOLVE_SCALE_EXTREME = 1;
+define LPSOLVE_SCALE_GEOMETRIC = 4;
+define LPSOLVE_SCALE_INTEGERS = 128;
+define LPSOLVE_SCALE_LOGARITHMIC = 16;
+define LPSOLVE_SCALE_MEAN = 3;
+define LPSOLVE_SCALE_NONE = 0;
+define LPSOLVE_SCALE_POWER2 = 32;
+define LPSOLVE_SCALE_QUADRATIC = 8;
+define LPSOLVE_SCALE_RANGE = 2;
+define LPSOLVE_SCALE_ROWSONLY = 512;
+define LPSOLVE_SCALE_USERWEIGHT = 31;
+define LPSOLVE_SEVERE = 2;
+define LPSOLVE_SIMPLEX_DUAL_DUAL = 10;
+define LPSOLVE_SIMPLEX_DUAL_PRIMAL = 6;
+define LPSOLVE_SIMPLEX_PRIMAL_DUAL = 9;
+define LPSOLVE_SIMPLEX_PRIMAL_PRIMAL = 5;
+define LPSOLVE_SUBOPTIMAL = 1;
+define LPSOLVE_TIMEOUT = 7;
+define LPSOLVE_UNBOUNDED = 3;
+define LPSOLVE_USERABORT = 6;

@@ -1,0 +1,109 @@
+81,92d80
+< #if !defined INLINE
+< 
+< #if defined __cplusplus
+<   #define INLINE inline
+< #elif defined _WIN32 || defined WIN32
+<   #define INLINE _inline
+< #else
+<   #define INLINE
+< #endif
+< 
+< #endif
+< 
+96c84
+< INLINE Bool code_is_valid(const CodeNode* node)
+---
+> inline Bool code_is_valid(const CodeNode* node)
+325c313
+< static INLINE void code_free_value(const CodeNode* node)
+---
+> static inline void code_free_value(const CodeNode* node)
+440c428
+< static INLINE CodeNode* code_check_type(CodeNode* node, CodeType expected)
+---
+> static inline CodeNode* code_check_type(CodeNode* node, CodeType expected)
+475c463
+< INLINE CodeNode* code_eval(CodeNode* node)
+---
+> inline CodeNode* code_eval(CodeNode* node)
+489c477
+< INLINE CodeNode* code_get_child(const CodeNode* node, int no)
+---
+> inline CodeNode* code_get_child(const CodeNode* node, int no)
+499c487
+< INLINE const Numb* code_get_numb(CodeNode* node)
+---
+> inline const Numb* code_get_numb(CodeNode* node)
+504c492
+< INLINE const char* code_get_strg(CodeNode* node)
+---
+> inline const char* code_get_strg(CodeNode* node)
+509c497
+< INLINE const char* code_get_name(CodeNode* node)
+---
+> inline const char* code_get_name(CodeNode* node)
+514c502
+< INLINE const Tuple* code_get_tuple(CodeNode* node)
+---
+> inline const Tuple* code_get_tuple(CodeNode* node)
+519c507
+< INLINE const Set* code_get_set(CodeNode* node)
+---
+> inline const Set* code_get_set(CodeNode* node)
+524c512
+< INLINE const IdxSet* code_get_idxset(CodeNode* node)
+---
+> inline const IdxSet* code_get_idxset(CodeNode* node)
+529c517
+< INLINE const Entry* code_get_entry(CodeNode* node)
+---
+> inline const Entry* code_get_entry(CodeNode* node)
+534c522
+< INLINE const Term* code_get_term(CodeNode* node)
+---
+> inline const Term* code_get_term(CodeNode* node)
+539c527
+< INLINE int code_get_size(CodeNode* node)
+---
+> inline int code_get_size(CodeNode* node)
+544c532
+< INLINE Bool code_get_bool(CodeNode* node)
+---
+> inline Bool code_get_bool(CodeNode* node)
+549c537
+< INLINE const List* code_get_list(CodeNode* node)
+---
+> inline const List* code_get_list(CodeNode* node)
+554c542
+< INLINE VarClass code_get_varclass(CodeNode* node)
+---
+> inline VarClass code_get_varclass(CodeNode* node)
+559c547
+< INLINE ConType code_get_contype(CodeNode* node)
+---
+> inline ConType code_get_contype(CodeNode* node)
+564c552
+< INLINE const RDef* code_get_rdef(CodeNode* node)
+---
+> inline const RDef* code_get_rdef(CodeNode* node)
+569c557
+< INLINE const RPar* code_get_rpar(CodeNode* node)
+---
+> inline const RPar* code_get_rpar(CodeNode* node)
+574c562
+< INLINE unsigned int code_get_bits(CodeNode* node)
+---
+> inline unsigned int code_get_bits(CodeNode* node)
+579c567
+< INLINE Symbol* code_get_symbol(CodeNode* node)
+---
+> inline Symbol* code_get_symbol(CodeNode* node)
+584c572
+< INLINE Define* code_get_define(CodeNode* node)
+---
+> inline Define* code_get_define(CodeNode* node)
+589c577
+< INLINE const Bound* code_get_bound(CodeNode* node)
+---
+> inline const Bound* code_get_bound(CodeNode* node)

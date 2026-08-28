@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_preferdual</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_preferdual</h1>
+					<p>Sets the desired combination of primal and dual simplex algorithms.</p>
+					<p><b>void set_preferdual(lprec </b>*<i>lp</i><b>, unsigned char </b><i>dodual</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_preferdual</b> has no return value.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>dodual</i></p>
+					<p class="indent">
+						When TRUE, the simplex strategy is set to SIMPLEX_DUAL_DUAL.<br>
+						When FALSE, the simplex strategy is set to SIMPLEX_PRIMAL_PRIMAL.<br>
+						See also <A href="get_simplextype.htm">get_simplextype</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_preferdual</b> function sets the desired combination of primal and dual simplex algorithms.<br>
+					set_preferdual with <i>dodual</i> = TRUE is a shortcut for <A href="set_simplextype.htm">set_simplextype</A>(SIMPLEX_DUAL_DUAL)<br>
+					set_preferdual with <i>dodual</i> = FALSE is a shortcut for <A href="set_simplextype.htm">set_simplextype</A>(SIMPLEX_PRIMAL_PRIMAL)<br>
+					The default is SIMPLEX_DUAL_PRIMAL (6).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_preferdual(lp, TRUE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_simplextype.htm">get_simplextype</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

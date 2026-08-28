@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>set_epsint</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_epsint</h1>
+					<p>Specifies the tolerance that is used to determine whether a floating-point number
+						is in fact an integer.</p>
+					<p><b>void set_epsint(lprec </b>*<i>lp</i><b>, REAL </b><i>epsint</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_epsint</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>epsint</i></p>
+					<p class="indent">The tolerance that is used to determine whether a floating-point
+						number is in fact an integer.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_epsint</b> function specifies the tolerance that is used to determine
+						whether a floating-point number is in fact an integer. This is only used when
+						there is at least one integer variable and the branch and bound algorithm is
+						used to make variables integer.<br>
+						Integer variables are internally in the algorithm also stored as floating
+						point. Therefore a tolerance is needed to determine if a value is to be considered
+						as integer or not. If the absolute value of the variable minus the closed
+						integer value is less than <i>epsint</i>, it is considered
+      as integer. For example if a variable has the value 0.9999999 and epsint
+      is 0.000001 then it is considered integer because abs(0.9999999 - 1) =
+
+						        0.0000001 and this is less
+						than 0.000001<br>
+						The default value for <i>epsint</i> is 1e-7<br>
+						So by changing epsint you determine how close a value must approximate the
+						nearest integer. Changing this tolerance value to for example 0.001 will
+						generally result in faster solving times, but your solution is less integer.<BR>
+						So it is a compromise.<BR>
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_epsint(lp, 1.0e-3); /* sets epsint to 0.001 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_epsint.htm">get_epsint</A>, <A href="set_infinite.htm">set_infinite</A>, <A href="is_infinite.htm">is_infinite</A>,
+							<A href="get_infinite.htm">get_infinite</A>, <A href="set_epsb.htm">set_epsb</A>,
+							<A href="get_epsb.htm">get_epsb</A>, <A href="set_epsd.htm">set_epsd</A>, <A href="get_epsd.htm">
+								get_epsd</A>, <A href="set_epsel.htm">set_epsel</A>, <A href="get_epsel.htm">get_epsel</A>, <A href="get_epspivot.htm">get_epspivot</A>, <A href="set_epspivot.htm">set_epspivot</A>, <A href="set_epsperturb.htm">set_epsperturb</A>, <A href="get_epsperturb.htm">get_epsperturb</A>, <A HREF="set_mip_gap.htm">set_mip_gap</A>, <A HREF="get_mip_gap.htm">get_mip_gap</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

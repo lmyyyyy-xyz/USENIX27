@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_Norig_columns</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_Norig_columns</h1>
+					<p>Returns the number of original columns (variables) in the lp.</p>
+					<p><b>int get_Norig_columns(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_Norig_columns</b> returns the number of original columns (variables) in 
+						the lp.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_Norig_columns</b> function returns the number of original columns 
+						(variables) in the lp.<br>
+						Note that the number of columns (<A href="get_Ncolumns.htm">get_Ncolumns</A>) 
+						can change when a presolve is done or when negative variables are split in a 
+						positive and a negative part. <b>get_Norig_columns</b> does not change and thus 
+						returns the original number of columns in the lp.<br>
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int Norig_columns;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  Norig_columns = get_Norig_columns(lp); /* Will return 1 */
+
+  set_presolve(lp, PRESOLVE_COLS);
+  solve(lp);
+
+  Norig_columns = get_Norig_columns(lp); /* Will return 1 */
+
+  delete_lp(lp);
+  return(0);
+}
+</CODE></pre>
+					<p><A href="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p><b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, 
+							read_LP</A>, <A href="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_Ncolumns.htm">get_Ncolumns</A>, <A href="get_Nrows.htm">
+							get_Nrows</A>, <A HREF="get_Norig_rows.htm">get_Norig_rows</A>, <A href="get_orig_index.htm">
+							get_orig_index</A>, <A href="get_lp_index.htm">get_lp_index</A>, <A HREF="get_Lrows.htm">
+							get_Lrows</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

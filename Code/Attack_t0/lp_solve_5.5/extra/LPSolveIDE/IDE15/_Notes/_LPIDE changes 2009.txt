@@ -1,0 +1,41 @@
+lpsolveIDE changes  March 24, 2009  William Patton.
+
+lpsolve.pas
+        remove duplicate definition of function resize_lp().    
+lpoject.pas  
+        change scaleType Linear to scaleType None (Linear) to match lp_solve NONE bit.  
+        TLPSolver.LoadFromStrings()  change to always use _tmpfile 
+                - for Largeaddressaware and MSVCRT8 and 9 dll issues.
+        The IDE is still 32-bit due to the turboDelphi 2006 win32 target.
+        
+Params.dfm &.pas 
+        finish hookup of lp_solve Read, Write, Reset Params stubs.
+        choose extension lpi for the files. Default to current source file path and filename..
+        Default [IDElast] section name for read write. Combo box shows other section headers.
+
+dlgAbout.dfm & .pas    
+        remove mad except reference - default windows erro trap is good enough..
+        
+dlgStatistics.dfm  & .pas  
+        wider and extra right side empty field so MAX shows normally
+
+main.dfm and .pas       
+        remove madExcept.  
+        Resize the initial screen size and splitter so final solution shows in messages.
+        Add HelpMenu online link to sourceforge reference.
+        replace Help OCX call with shellexecute open call for .chm access. 
+                //  external 'HHCTRL.OCX' name 'HtmlHelpA';
+        Revise OptionsMenu to attach Param file menus.
+        Add node count to status bar - shows node for MIP progress.
+        Scale NONE rather than Linear.    sNone       : ScaleTypeOption.Hint := 'Linear scaling (none)';
+
+LpSolveIDE.dpr   
+        remove madExcept.       
+
+LpSolveIDE.bdsproj  
+        change version annotation and all comment with sorceforge link.
+          <VersionInfoKeys Name="FileVersion">5.5.0.15</VersionInfoKeys>
+
+        
+Aug 22, 2009 
+    delete backup files and make zip of source tree, including Virtual Trees, Synedit and XPmenu.

@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Using lpsolve from R</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Using lpsolve from R</u></h1>
+<a name="R"></a>
+<h3>R?</h3>
+<P> R is a language and environment for
+statistical computing and graphics.  It is a <a
+href="http://www.gnu.org" target="_top">GNU
+project</a> which is similar to the S language and environment which
+was developed at Bell Laboratories (formerly AT&amp;T, now Lucent
+Technologies) by John Chambers and colleagues.  R can be considered as
+a different implementation of S. There are some important differences,
+but much code written for S runs unaltered under R.
+</P>
+
+<P>
+R provides a wide variety of statistical (linear and nonlinear
+modelling, classical statistical tests, time-series analysis,
+classification, clustering, ...) and graphical techniques, and is
+highly extensible.  The S language is often the vehicle of choice for
+research in statistical methodology, and R provides an Open Source
+route to participation in that activity.
+</P>
+
+<P>
+One of R's strengths is the ease with which well-designed
+publication-quality plots can be produced, including mathematical
+symbols and formulae where needed.  Great care has been taken over the
+defaults for the minor design choices in graphics, but the user
+retains full control.
+</P>
+
+<p>R is available as Free Software under the terms of the <a
+href="http://www.gnu.org" target="_top">Free Software Foundation</a>'s
+GNU General Public License in source code
+form. It compiles and runs on a wide variety of UNIX platforms and
+similar systems (including FreeBSD and Linux), Windows and MacOS.
+</P>
+
+<H2>The R environment</H2>
+
+<P>
+R is an integrated suite of software facilities for data
+manipulation, calculation and graphical display.  It includes
+</P>
+
+<UL>
+<LI>an effective data handling and storage facility,
+
+<LI>a suite of operators for calculations on arrays, in particular matrices,
+
+<LI>a large, coherent, integrated collection of intermediate tools for data
+analysis,
+
+<LI>graphical facilities for data analysis and display either
+on-screen or on hardcopy, and
+
+<LI>a well-developed, simple and effective programming language which
+includes conditionals, loops, user-defined recursive functions and
+input and output facilities.
+
+</UL>
+
+<P>
+The term "environment" is intended to characterize it as a fully
+planned and coherent system, rather than an incremental accretion of
+very specific and inflexible tools, as is frequently the case with other
+data analysis software.
+</P>
+
+<P>
+R, like S, is designed around a true computer language, and it allows
+users to add additional functionality by defining new functions. Much
+of the system is itself written in the R dialect of S, which makes it
+easy for users to follow the algorithmic choices made. For
+computationally-intensive tasks, C, C++ and Fortran code can be linked
+and called at run time. Advanced users can write C code to manipulate
+R objects directly.
+</P>
+
+<P>
+Many users think of R as a statistics system.  We prefer to think of
+it of an environment within which statistical techniques are
+implemented.  R can be extended (easily) via <EM>packages</EM>. There
+are about eight packages supplied with the R distribution and many
+more are available through the CRAN family of Internet sites covering
+a very wide range of modern statistics.
+</P>
+
+<p>We will not discuss the specifics of R here but instead refer the reader to the
+<a href="http://www.r-project.org/">R</a> website. Also see <a href="http://cran.r-project.org/doc/manuals/R-intro.html">An Introduction to R</a>
+</p>
+
+<a name="R_and_lpsolve"></a>
+<h3>R and lpsolve</h3>
+
+<p>lpsolve is callable from R via an extension or module. As such, it looks like lpsolve is fully integrated
+with R. Matrices can directly be transferred between R and lpsolve in both directions. The complete interface
+is written in C so it has maximum performance.
+</p>
+
+<p>There are currently two R packages based on lp_solve. Both packages are available from <a href="http://cran.r-project.org/">CRAN</a>.
+</p>
+
+<p>
+The <i>lpSolve</i> R package is the first implementation of an interface of lpsolve to R.
+It provides high-level functions for solving general linear/integer problems, assignment problems and transportation problems.
+The following link contains the version of the driver: <a href="http://cran.r-project.org/web/packages/lpSolve/index.html">lpSolve: Interface to Lp_solve v. 5.5 to solve linear/integer programs</a>.
+It does not contain the lpsolve API. Only the higher level calls.
+Documentation for this interface can be found on: <a href="http://rweb.stat.umn.edu/R/library/lpSolve/html/00Index.html">Interface to Lp_solve v. 5.5 to solve linear/integer programs</a><br>
+This driver is written and maintained by <a href="mailto:buttrey@nps.edu">Sam Buttrey</a>.
+</p>
+
+<p>The <i>lpSolveAPI</i> R package is a second implementation of an interface of lpsolve to R.
+It provides an R API mirroring the lp_solve C API and hence provides a great deal more functionality but has a steeper learning curve.
+The R interface to lpsolve contains its own documentation.
+See <a href="http://lpsolve.r-forge.r-project.org/">An R interface to the lp_solve library</a> for the driver.<br>
+This driver is written and maintained by <a href="mailto:kjell.konis@epfl.ch">Kjell Konis</a>.
+</p>
+
+<a name="Installing_the_lpsolve_driver_in_R"></a>
+<h3>Installing the lpsolve driver in R</h3>
+<p>How to install the driver depends on the environment.
+</p>
+
+<h5>Windows</h5>
+<p>In the RGui menu, there is a menu item 'Packages'. From there a package can be installed from a CRAN mirror or from a local zip file.
+</p>
+
+<h5>R command line</h5>
+<p>
+Packages can also be installed from the R command line. This is a more general approach that will work under all environments.<br>
+Installing the package takes a single command:
+</p>
+
+<p>
+<!--
+<pre>
+  &gt; install.packages("lpSolve", repos = "http://r-forge.r-project.org")
+</pre>
+-->
+
+The lpSolve R package:
+</p>
+
+<pre>
+  &gt; install.packages("lpSolve")
+</pre>
+
+and to install the lpSolveAPI package use the command:
+<pre>
+  &gt; install.packages("lpSolveAPI")
+</pre>
+
+
+<h5>Note</h5>
+
+<p>
+The <tt>&gt;</tt> shown before each R command is the R prompt.  Only the text after <tt>&gt;</tt> must be entered.
+</p>
+
+<a name="Loading_the_lpsolve_driver_in_R"></a>
+<h3>Loading the lpsolve driver in R</h3>
+Installing the package is not enough. It must also loaded in the R memory space before it can be used.
+This can be done with the following command:
+
+<pre>
+  &gt; library(lpSolveAPI)
+</pre>
+
+Or
+
+<pre>
+  &gt; library("lpSolveAPI", character.only=TRUE)
+</pre>
+
+
+<h3>Getting Help</h3>
+
+<p>
+Documentation is provided for each function in the lpSolve package using R's built-in help system.  For example, the command
+</p>
+
+<pre>
+  &gt; ?add.constraint
+</pre>
+
+will display the documentation for the <tt>add.constraint</tt> function.
+
+<h3>Building and Solving Linear Programs Using the lpSolve R Package</h3>
+
+<p>
+This implementation provides the functions <tt>lp</tt>, <tt>lp.assign</tt>, <tt>lp.object</tt>, <tt>lp.transport</tt> and <tt>print.lp</tt>.  These functions allow a linear program (and transport and assignment problems) to be defined and solved using a single command.
+</p>
+
+<p>
+For more information enter:
+</p>
+
+<pre>
+  &gt; ?lp
+</pre>
+
+<pre>
+  &gt; ?lp.assign
+</pre>
+
+<pre>
+  &gt; ?lp.object
+</pre>
+
+<pre>
+  &gt; ?lp.transport
+</pre>
+
+<pre>
+  &gt; ?print.lp
+</pre>
+
+<p>See also <a href="http://rweb.stat.umn.edu/R/library/lpSolve/html/00Index.html">Interface to Lp_solve v. 5.5 to solve linear/integer programs</a>
+</p>
+
+<h3>Building and Solving Linear Programs Using the lpSolveAPI R Package</h3>
+
+<p>
+This implementation provides an API for building and solving linear programs that mimics the lp_solve C API.  This approach allows much greater flexibility but also has a few caveats.  The most important is that the <i>lpSolve linear program model objects</i> created by <tt>make.lp</tt> and <tt>read.lp</tt> are not actually R objects but external pointers to lp_solve 'lprec' structures.  R does not know how to deal with these structures.  In particular, R cannot duplicate them.  Thus one must never assign an existing lpSolve linear program model object in R code.
+</p>
+
+<p>To load the library, enter:
+</p>
+
+<pre>
+  &gt; library(lpSolveAPI)
+</pre>
+
+<p>
+Consider the following example.  First we create an empty model x.
+</p>
+
+<pre>
+  &gt; x &lt;- make.lp(2, 2)
+</pre>
+
+Then we assign x to y.
+
+<pre>
+  &gt; y &lt;- x
+</pre>
+
+Next we set some columns in x.
+
+<pre>
+  &gt; set.column(x, 1, c(1, 2))
+  &gt; set.column(x, 2, c(3, 4))
+</pre>
+
+<p>
+And finally, take a look at y.
+</p>
+
+<pre>
+  &gt; y
+  Model name:
+              C1    C2
+  Minimize     0     0
+  R1           1     3  free  0
+  R2           2     4  free  0
+  Type      Real  Real
+  upbo       Inf   Inf
+  lowbo        0     0
+</pre>
+
+The changes we made in x appear in y as well.  Although x and y are two distinct objects in R, they both refer to the <b>same</b> lp_solve 'lprec' structure.
+
+<p>
+The safest way to use the lpSolve API is inside an R function - do not return the lpSolve linear program model object.
+</p>
+
+<h5>Learning by Example</h5>
+
+<pre>
+  &gt; lprec &lt;- make.lp(0, 4)
+  &gt; set.objfn(lprec, c(1, 3, 6.24, 0.1))
+  &gt; add.constraint(lprec, c(0, 78.26, 0, 2.9), "&gt;=", 92.3)
+  &gt; add.constraint(lprec, c(0.24, 0, 11.31, 0), "&lt;=", 14.8)
+  &gt; add.constraint(lprec, c(12.68, 0, 0.08, 0.9), "&gt;=", 4)
+  &gt; set.bounds(lprec, lower = c(28.6, 18), columns = c(1, 4))
+  &gt; set.bounds(lprec, upper = 48.98, columns = 4)
+  &gt; RowNames &lt;- c("THISROW", "THATROW", "LASTROW")
+  &gt; ColNames &lt;- c("COLONE", "COLTWO", "COLTHREE", "COLFOUR")
+  &gt; dimnames(lprec) &lt;- list(RowNames, ColNames)</pre>
+
+Lets take a look at what we have done so far.
+
+<pre>
+  &gt; lprec  # or equivalently print(lprec)
+  Model name:
+              COLONE    COLTWO  COLTHREE   COLFOUR
+  Minimize         1         3      6.24       0.1
+  THISROW          0     78.26         0       2.9  &gt;=  92.3
+  THATROW       0.24         0     11.31         0  &lt;=  14.8
+  LASTROW      12.68         0      0.08       0.9  &gt;=     4
+  Type          Real      Real      Real      Real
+  upbo           Inf       Inf       Inf     48.98
+  lowbo         28.6         0         0        18
+</pre>
+
+Now lets solve the model.
+
+<pre>
+  &gt; solve(lprec)
+  [1] 0
+
+  &gt; get.objective(lprec)
+  [1] 31.78276
+
+  &gt; get.variables(lprec)
+  [1] 28.60000  0.00000  0.00000 31.82759
+
+  &gt; get.constraints(lprec)
+  [1]  92.3000   6.8640 391.2928
+</pre>
+
+<p>
+Note that there are some commands that return an answer.  For the accessor functions (generally named get.*) the output should be clear.  For other functions (e.g., <tt>solve</tt>), the interpretation of the returned value is described in the documentation.  Since <tt>solve</tt> is generic in R, use the command
+</p>
+
+<pre>
+  &gt; ?solve.lpExtPtr
+</pre>
+
+to view the appropriate documentation.  The assignment functions (generally named set.*) also have a return value - often a logical value indicating whether the command was successful - that is returned invisibly.  Invisible values can be assigned but are not echoed to the console.  For example,
+
+<pre>
+  &gt; status &lt;- add.constraint(lprec, c(12.68, 0, 0.08, 0.9), "&gt;=", 4)
+  &gt; status
+  [1] TRUE
+</pre>
+
+indicates that the operation was successful.  Invisible values can also be used in flow control.
+
+<h5>Cleaning up</h5>
+
+<p>To free up resources and memory, the R command rm() must be used.<br>
+For example:</p>
+
+<pre>
+  &gt; rm(lprec)
+</pre>
+
+<p>See also <a href="MATLAB.htm">Using lpsolve from MATLAB</a>,
+            <a href="O-Matrix.htm">Using lpsolve from O-Matrix</a>,
+            <a href="Sysquake.htm">Using lpsolve from Sysquake</a>,
+            <a href="Octave.htm">Using lpsolve from Octave</a>,
+            <a href="FreeMat.htm">Using lpsolve from FreeMat</a>,
+            <a href="Euler.htm">Using lpsolve from Euler</a>,
+            <a href="Python.htm">Using lpsolve from Python</a>,
+            <a href="Sage.htm">Using lpsolve from Sage</a>,
+            <a href="PHP.htm">Using lpsolve from PHP</a>,
+            <a href="Scilab.htm">Using lpsolve from Scilab</a>
+            <a href="MSF.htm">Using lpsolve from Microsoft Solver Foundation</a>
+</p>
+
+	</BODY>
+</html>

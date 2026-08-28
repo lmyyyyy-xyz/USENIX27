@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_upbo</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_upbo</h1>
+					<p>Set the upper bound of a variable.</p>
+					<p><b>unsigned char set_upbo(lprec </b>*<i>lp</i><b>, int </b><i>column</i><b>, REAL </b><i>value</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_upbo</b> returns TRUE (1) if the operation was successful. A return value
+						of FALSE (0) indicates an error.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>column</i></p>
+					<p class="indent">The column number of the variable on which the bound must be set.
+						It must be between 1 and the number of columns in the lp.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_upbo</b> function sets an upper bound on the variable identified by <i>column</i>.<br>
+						Setting a bound on a variable is the way to go instead of adding an extra
+						constraint (row) to the model. Setting a bound doesn't increase the model size
+						that means that the model stays smaller and will be solved faster.<br>
+						The default upper bound of a variable is infinity (well not quite. It is a very big number, the value of <A HREF="get_infinite.htm">get_infinite</A>).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_upbo(lp, 1, 1.0);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_upbo.htm">get_upbo</A>, <A HREF="set_lowbo.htm">set_lowbo</A>,
+						<A HREF="get_lowbo.htm">get_lowbo</A>, <A HREF="set_bounds.htm">set_bounds</A>, <A HREF="set_unbounded.htm">set_unbounded</A>, <A HREF="is_unbounded.htm">is_unbounded</A>, <A HREF="is_negative.htm">is_negative</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

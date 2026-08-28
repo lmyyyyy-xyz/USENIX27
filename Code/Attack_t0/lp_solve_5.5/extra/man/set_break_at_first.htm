@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_break_at_first</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_break_at_first</h1>
+					<p>Specifies if the branch-and-bound algorithm stops at first found solution.</p>
+					<p><b>void set_break_at_first(lprec </b>*<i>lp</i><b>, unsigned char </b><i>break_at_first</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_break_at_first</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, 
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>break_at_first</i></p>
+					<p class="indent">TRUE or FALSE. Stop branch-and-bound algorithm at first found 
+						solution or not.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_break_at_first</b> function specifies if the branch-and-bound 
+						algorithm stops at the first found solution or not. Stopping at the first found 
+						solution can be useful if you are only interested for a solution, but not 
+						necessarily (and most probably) the most optimal solution.<br>
+						The default is not (FALSE) stop at first found solution.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_break_at_first(lp, TRUE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, 
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="is_break_at_first.htm">is_break_at_first</A>, <A HREF="set_break_at_value.htm">
+							set_break_at_value</A>, <A HREF="get_break_at_value.htm">get_break_at_value</A>,
+						<A HREF="set_obj_bound.htm">set_obj_bound</A>, <A HREF="get_obj_bound.htm">get_obj_bound</A>,
+						<A HREF="set_mip_gap.htm">set_mip_gap</A>, <A HREF="get_mip_gap.htm">get_mip_gap</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

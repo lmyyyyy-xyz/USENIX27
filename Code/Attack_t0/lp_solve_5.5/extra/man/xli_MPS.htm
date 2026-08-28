@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>MPS XLI (xli_MPS)</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>MPS XLI (xli_MPS)</u></h1>
+
+<p>lp_solve supports the MPS format natively via API calls
+<a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a>,
+<a href="write_mps.htm">write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</a>,
+<a href="read_basis.htm">read_basis</a>,
+<a href="write_basis.htm">write_basis</a>
+</p>
+
+<p>This accoring to the following <a href="mps-format.htm">MPS format</a></p>
+
+<p>Two issues are addressed in above document:</p>
+
+<h4>Objective constant</h4>
+
+<p>
+The objective can have a constant. This optional constant is specified in the RHS section.
+There are 2 interpretations of this constant. Some solvers see this as the constant that would be
+really in the RHS and when brought into the objective (LHS), it is negated.
+Other solvers, as lp_solve natively does, use the specified value in the MPS file
+as the value for the objective and don't negate it.<br />
+This XLI allows lp_solve to interprete the constant as the other solvers do, ie negate it.<br />
+This via the option -negobjconst
+</p>
+
+<h4>Integer/binary variables</h4>
+<p>
+   A mixed integer program requires the specification of which variables
+   are required to be integer.  Markers are used to indicate the start
+   and end of a group of integer variables.  The start marker has its
+   name in field 2, 'MARKER' in field 3, and 'INTORG' in field 5.  The
+   end marker has its name in field 2, 'MARKER' in field 3, and 'INTEND'
+   in field 5.  These markers are placed in the COLUMNS section.
+   When there are BOUNDS on the variables, then these are used as lower
+   and upper bound of these integer variables and there is no confusion
+   possible. Even a lower bound of 0 is already enough. In that case, if
+   there is no upper bound, infinite is used.
+   However there is an interpretation problem if there are no bounds at
+   all on these variables. Some solvers then use 0 as lower bound and 1
+   as upper bound. So the variables are treated as binary variables.
+   That is the original IBM interpretation.
+   Other solvers, like lp_solve by default, use the default bounds on variables in
+   that case. That is 0 as lower bound and infinite as upper bound.
+   When lp_solve writes an MPS file, it will write the default lower
+   bound of 0 if there are no lower/upper bounds set on the variable. As
+   such, there is no confusion.
+   However when lp_solve reads an MPS file and there are no bounds on
+   variables between INTORG/INTEND, by default it interpretes the variables as
+   integer and not binary as some other solvers do. That could result
+   in another solution than expected.<br />
+   This XLI allows lp_solve to interprete these integer variables as binary as
+   in the original ibm specification.<br />
+   This via the option -ibm
+</p>
+
+<h4>Free format</h4>
+<p>This XLI also supports the free format via the option -free</p>
+
+<h4>Basis</h4>
+<p><a href="read_basis.htm">read_basis</a> and <a href="write_basis.htm">write_basis</a> allow to read and
+write a basis in MPS format as described in <a href="bas-format.htm">MPS bas file format</a>.
+This XLI also allows to read and write a basis in this format. This via the option -bas. This can be combined
+with option -free to read/write in a free format.
+</p>
+<p>Reading and writing the basis with this XLI is a bit awkward. This because these operations must be done
+at a different moment than reading and writing of a model file.</p>
+
+<p>Reading the basis must be done after reading
+the model, but before solve. The read routine of the XLI cannot be used for reading the basis
+because reading creates a new lp structure. Therefore, the write function of the XLI is (mis)used.
+With the <a href="lp_solve.htm">lp_solve command</a> line program, this can be done as follows:
+</p>
+
+<pre>lp_solve lpfile -wxli xli_MPS.dll basfile -wxliopt "-free"</pre>
+
+<p>Writing the basis must be done after solve. Therefore, the write function of the XLI is again
+used, but now with the results parameter on TRUE as if the results of a model must be written.
+This is also a bit of a misuse of the XLI, but it must be done to be sure that it is done after solve.
+With the <a href="lp_solve.htm">lp_solve command</a> line program, this can be done as follows:
+</p>
+
+<pre>lp_solve lpfile -wxlisol xli_MPS.dll basfile -wxlisolopt "-free"</pre>
+
+<h4>Options summary</h4>
+
+<pre>
+  -free          Read/write in free format.
+  -ibm           Interprete integer variables as in the original ibm specifications
+  -negobjconst   Negate the objective constant.
+  -bas           Read/write a basis file
+</pre>
+
+
+                               </TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

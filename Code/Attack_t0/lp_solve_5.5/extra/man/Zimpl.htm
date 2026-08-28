@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Zimpl</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Zimpl</u></h1>
+                                        <p>Zimpl is a language to translate the mathematical model of a problem into a linear or (mixed-) integer mathematical program expressed in .lp or .mps file format which can be read and (hopefully) solved by a LP or MIP solver.</p>
+
+                                        <p>See <a href="http://www.zib.de/koch/zimpl/">http://www.zib.de/koch/zimpl/</a> for the home page of this tool and examples.</p>
+
+                                        <p>On the above page, a command line tool is provided to read a model written in the Zimpl language and it creates a CPLEX lp file.
+                                           lp_solve is able to read this generated CPLEX lp file via the xli_CPLEX XLI driver, but that would require an extra step.<br>
+                                           lp_solve can read/write and solve these Zimpl models directly via the xli_Zimpl XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).
+                                           It reads such a model in above format and can solve it then.<br>
+                                           Also note that the XLI driver depends on an external dll: zlib1.dll. When it cannot be found on the system, an appropriate
+                                           message will be given. This dll must be in a directory specified by the Path environment variable. A common place
+                                           is c:\windows\system32. The dll is distributed with the package. The latest version can be found at <a href="http://www.zlib.net/">http://www.zlib.net/</a><br>
+                                           <br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_Zimpl <a href="#chvatal_diet.zpl">chvatal_diet.zpl</a>
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 97
+
+Actual values of the variables:
+x$Oatmeal                       4
+x$Chicken                       0
+x$Eggs                          0
+x$Milk                          5
+x$Pie                           2
+x$Pork                          0
+</pre>
+
+                                        <h4>Options</h4>
+                                        <p>The XLI accepts several options:</p>
+
+                                        <pre>
+  -b             Enable Bison (Lex parser) debugging output.
+  -D name=value  Sets the parameter name to the specified value.
+                 This is equivalent with having this line in the ZIMPL program: param name:=val.
+  -f             enable flex debugging output.
+  -n cm|cn|cf    name column make/name/full
+  -O             Try to reduce the generated LP by doing some presolve analysis.
+  -s seed        Positive seed number for the random number generator.
+  -v[0-5]        Set the verbosity level. 0 is quiet, 1 is default, 2 is verbose, 3 and 4 are chatter, and 5 is debug.
+  -V             show version info
+</pre>
+                                        <p>These options are the same as the stand-alone zimpl program.</p>
+
+                                        <p>The <a href="lp_solve.htm">lp_solve command</a> line program can provide these parameters via the -rxliopt argument.<br>
+                                           <br>
+                                           For example:</p>
+
+<pre>
+lp_solve -rxli xli_Zimpl <a href="#chvatal_diet.zpl">chvatal_diet.zpl</a> -rxliopt "-v0 -O"
+</pre>
+
+                                        <h4>Generating ZIMPL models</h4>
+
+                                        <p>The XLI can also create a ZIMPL model, however it doesn't use the strength of the language.
+                                        Constraints are written out line per line. But it can be a starter.
+                                        For example:</p>
+
+<pre>
+lp_solve <a href="#model.lp">model.lp</a> -wxli xli_Zimpl model.zpl
+</pre>
+
+                                        <p>This gives as model.zpl:</p>
+<pre>
+# Variable definitions
+var x &gt;= 0;
+var y &gt;= 0;
+
+# Objective function
+maximize obj: +143*x +60*y;
+
+# Constraints
+subto R1: +120*x +210*y &lt;= 15000;
+subto R2: +110*x +30*y &lt;= 4000;
+subto R3: +x +y &lt;= 75;
+</pre>
+
+                                        <h4>API</h4>
+                                        <p>Use the lpsolve API call <a href="read_XLI.htm">read_XLI</a> to read a model
+                                           and <a href="write_XLI.htm">write_XLI</a> to write a model.
+                                           See also <a href="XLI.htm">External Language Interfaces</a>.
+                                        </p>
+
+
+                                        <h4>IDE</h4>
+                                        <p>Also from within the IDE, this XLI can be used. However, some entries
+                                           must be added in LpSolveIDE.ini (in the folder where the IDE is installed).
+                                        </p>
+                                        <p>In the [XLI] section the following must be added:</p>
+<pre>
+lib5=xli_ZIMPL
+</pre>
+                                        <p>And a new section for the ZIMPL XLI must also be added:</p>
+<pre>
+[xli_ZIMPL]
+extension=.zpl
+language=ZIMPL
+</pre>
+                                        <p>Then make sure that the xli_ZIMPL.dll is available for the IDE.
+                                           This must be done by placing this dll in the IDE folder or in the
+                                           Windows system32 folder.</p>
+
+                                        <h4>Example models</h4>
+
+<a name="chvatal_diet.zpl"></a>
+                                        <h5>chvatal_diet.zpl</h5>
+
+<pre>
+# $Id: chvatal_diet.zpl,v 1.2 2003/10/02 08:20:12 bzfkocht Exp $
+#
+# From V. Chvatal: Linear Programming
+# Chapter 1, Page 3ff.
+#
+# A diet problem
+#
+set Food      := { "Oatmeal", "Chicken", "Eggs", "Milk", "Pie", "Pork" };
+set Nutrients := { "Energy", "Protein", "Calcium" };
+set Attr      := Nutrients + {"Servings", "Price"};
+
+param needed[Nutrients] := &lt;"Energy"&gt; 2000, &lt;"Protein"&gt; 55, &lt;"Calcium"&gt; 800;
+
+param data[Food * Attr] :=
+           | "Servings", "Energy", "Protein", "Calcium", "Price" |
+|"Oatmeal" |         4 ,     110 ,        4 ,        2 ,      3  |
+|"Chicken" |         3 ,     205 ,       32 ,       12 ,     24  |
+|"Eggs"    |         2 ,     160 ,       13 ,       54 ,     13  |
+|"Milk"    |         8 ,     160 ,        8 ,      284 ,      9  |
+|"Pie"     |         2 ,     420 ,        4 ,       22 ,     20  |
+|"Pork"    |         2 ,     260 ,       14 ,       80 ,     19  |;
+#                          (kcal)        (g)        (mg)  (cents)
+
+var x[&lt;f&gt; in Food] integer &gt;= 0 &lt;= data[f, "Servings"];
+
+minimize cost: sum &lt;f&gt; in Food : data[f, "Price"] * x[f];
+
+subto need :
+  forall &lt;n&gt; in Nutrients do
+    sum &lt;f&gt; in Food : data[f, n] * x[f] &gt;= needed[n];
+</pre>
+
+<a name="model.lp"></a>
+                                        <h5>model.lp</h5>
+
+<pre>
+/* model.lp */
+
+max: 143 x + 60 y;
+
+120 x + 210 y &lt;= 15000;
+110 x + 30 y &lt;= 4000;
+x + y &lt;= 75;
+</pre>
+
+
+                               </TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

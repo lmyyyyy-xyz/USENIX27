@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>MPS bas file format</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>MPS bas file format</u></h1>
+
+<P>
+The MPS format can also be used to specify some predefined basis for an
+LP problem, i.e. to specify which rows and columns are basic and which
+are non-basic.</p>
+
+<p>
+As in the MPS format, a number of fields are defined on fixed column positions:
+</p>
+<pre>
+Field:    1           2          3         4         5         6
+Columns:  2-3        5-12      15-22     25-36     40-47     50-61
+</pre>
+
+<P>
+The order of a basis file in the MPS format is:
+</p>
+
+<ul>
+	<li>NAME indicator card;</li>
+	<li>data cards (can appear in arbitrary order);</li>
+	<li>ENDATA indicator card.</li>
+</ul>
+
+<p>
+Any line with an asterisk (*) in Column 1 is treated as a comment.
+</p>
+
+<p>
+The NAME card can have anything you want, starting in column 15.<br>
+lp_solve sets the number of iterations, the number of rows and number of columns of the model to the <code>NAME</code> record.
+</p>
+
+<p>
+The eight character names used to specify variables and constraints
+entities are fixed format. Names are not automatically justified,
+so blanks are treated just like other characters. For example "ROW1    "
+is not the same as " ROW1   ". (Note that some optimisers do not permit
+blanks in names.) No case conversion is performed, so "row1    " is
+different from "ROW1    ".
+</p>
+
+<P>
+Each data card specifies either a pair "basic column--non-basic row"
+or a non-basic column. All the data cards have the following format.
+</p>
+
+<P>
+'<code>XL</code>' in the field 1 means that a column, whose name is given in
+the field 2, is basic, and a row, whose name is given in the field 3,
+is non-basic and placed on its lower bound.</p>
+
+<P>
+'<code>XU</code>' in the field 1 means that a column, whose name is given in
+the field 2, is basic, and a row, whose name is given in the field 3,
+is non-basic and placed on its upper bound.</p>
+
+<P>
+'<code>LL</code>' in the field 1 means that a column, whose name is given in
+the field 3, is non-basic and placed on its lower bound.</p>
+
+<P>
+'<code>UL</code>' in the field 1 means that a column, whose name is given in
+the field 3, is non-basic and placed on its upper bound.</p>
+
+<P>
+The field 2 contains a column name.</p>
+
+<P>
+If the indicator given in the field 1 is '<code>XL</code>' or '<code>XU</code>',
+the field 3 contains a row name. Otherwise, if the indicator is
+'<code>LL</code>' or '<code>UL</code>', the field 3 is not used and should be empty.</p>
+
+<P>
+The field 4, 5, and 6 are not used and should be empty.</p>
+
+<Table Border="3" ID="Table1">
+<tr><th align=left><b>Value</b></th><th align=left><b>Status</b></th></tr>
+<tr><td><code>XU</code></td><td>Variable 1 is basic; variable 2 is nonbasic at its upper bound</td></tr>
+<tr><td><code>XL</code></td><td>Variable 1 is basic; variable 2 is nonbasic at its lower bound</td></tr>
+<tr><td><code>UL</code></td><td>Variable 1 is nonbasic and is at its upper bound</td></tr>
+<tr><td><code>LL</code></td><td>Variable 1 is nonbasic and is at its lower bound</td></tr>
+</Table>
+
+<p>
+Field 1: Indicator specifying status of the named variables in Fields 2 and 3.</p>
+<p>
+Field 2: Variable 1 identifier</p>
+<p>
+Field 3: Variable 2 identifier (ignored if Field 1 is <code>UL</code> or <code>LL</code>)</p>
+<p>
+Variable 1 specifies a structural variable identifier which has entered
+the basis. By convention, this structural variable must displace one of
+the row variables. Variable 2 is a row variable that has left the
+basis. No relationship between structural variables entering the basis
+and row variables leaving the basis is implied within the BAS file.</p>
+
+<P>
+A basis file in the MPS format acts like a patch: it doesn't specify
+a basis completely, instead that it is just shows in what a given basis
+differs from the "standard" basis, where all rows (auxiliary variables)
+are assumed to be basic and all columns (structural variables) are
+assumed to be non-basic.</p>
+
+<p>
+A basis defines a list of basic structural variables and row variables.
+A <em>structural variable</em> is one of the variables (columns) defined in the MPS problem file.
+A <em>row variable</em> is actually the slack, surplus, or artificial variable associated with
+a row. The total number of basic variables-both structural and row-is
+equal to the number of rows in the constraint matrix. Additionally, the
+number of basic structural variables is equal to the number of nonbasic
+row variables. By convention, an MPS basis file is built on the
+assumption that all row variables are basic and that all structural
+variables are nonbasic with values at their lower bound. The data
+records in a BAS file list structural and row variables that violate
+this assumption. This convention minimizes the size of the BAS file.
+</p>
+
+<P>
+Example:
+</P>
+
+<PRE>
+*000000001111111111222222222233333333334444444444555555555566
+*234567890123456789012345678901234567890123456789012345678901
+NAME          TESTPROB Iterations 0 Rows 3 Cols 3
+ XL ZTHREE    LIM2
+ UL XONE
+ENDATA
+</PRE>
+	</BODY>
+</HTML>

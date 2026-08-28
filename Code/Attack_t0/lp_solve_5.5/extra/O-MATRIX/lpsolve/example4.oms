@@ -1,0 +1,8 @@
+f = [143, 60];
+A = {[120, 210], [110, 30], [1, 1]};
+b = {15000, 4000, 75};
+lp = lp_maker(f, A, b, [-1, -1, -1], [], [], [], 1, 0);
+solvestat = omlpsolve("solve", lp)
+omlpsolve("get_objective", lp)
+omlpsolve("get_variables", lp)
+omlpsolve("delete_lp", lp);

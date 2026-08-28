@@ -1,0 +1,23 @@
+:
+#src='lpsolve.c freemat.c hash.c'
+src='lpsolve.c freemat.c'
+c=${CC:-cc}
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("osx%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+$c -s -c -I../.. -O3 -DINTEGERTIME -fPIC -fno-common -DFREEMAT -DNODEBUG $src
+#FreeMat aparently uses the .so extension rather than the standard .dylib extension on Mac OS X
+$c -dynamiclib -compatibility_version 5.5.0 -current_version 5.5.0 -o bin/$PLATFORM/fmlpsolve.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm ../../lpsolve55/bin/$PLATFORM/liblpsolve55.dylib
+
+rm *.o 2>/dev/null

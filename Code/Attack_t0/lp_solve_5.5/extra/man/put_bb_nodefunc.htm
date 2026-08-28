@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>put_bb_nodefunc</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>put_bb_nodefunc</h1>
+					<p>Allows to set a user function that specifies which non-integer variable to select next to make integer in the B&amp;B solve.</p>
+					<p><b>void put_bb_nodefunc(lprec </b>*<i>lp</i><b>, lphandleint_intfunc </b><i>newnode</i><b>, void </b>*<i>bbnodehandle</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>put_bb_nodefunc</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>newnode</i></p>
+					<p class="indent">The node selection routine.<br>
+						<br>
+						typedef int (__WINAPI lphandleint_intfunc)(lprec *lp, void *bb_nodehandle, int vartype);<br>
+						<br>The routine must return the node (column number) to make integer.
+						    vartype is at this moment always equal to BB_INT (1).<br>
+						    When 0 is returned then it indicates that all variables are integer.<br>
+						    When a negative value is returned, lp_solve will determine the next variable to
+						    make integer as if the routine is not set.
+						<br>
+						Note the __WINAPI attribute. This is important under Windows. It ensures __stdcall calling
+						convention which is required.
+					</p>
+					<p class="dt"><i>bb_nodehandle</i></p>
+					<p class="indent">A parameter that will be provided to the node selection routine.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>Allows to set a user function that specifies which non-integer variable to select next to make integer in the B&amp;B solve.
+					Via this routine the user can implement his own rule to select the next non-integer variable to make integer.
+					This overrules the setting of <A HREF="set_bb_rule.htm">set_bb_rule</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int __WINAPI nodefunction(lprec *lp, void *bb_nodehandle, int vartype)
+{
+ int node = -1;
+
+ /* determine node to make integer */
+
+ return(node);
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_bb_nodefunc(lp, nodefunction, NULL);
+
+  solve(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_bb_rule.htm">set_bb_rule</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

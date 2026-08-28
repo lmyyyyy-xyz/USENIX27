@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Infeasible models</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<p><h1 align="left"><u>Infeasible models</u></h1>
+					<p>
+A linear program is infeasible if there exists no solution that satisfies all of 
+the constraints -- in other words, if no <I>feasible</I> solution can be 
+constructed. Since any real operation that you are modelling must remain within 
+the constraints of reality, infeasibility most often indicates an error of some 
+kind. Simplex-based LP software like lp_solve efficiently detects when no feasible solution is 
+possible.</p>
+
+<P>The source of infeasibility is often difficult to track down. It may stem 
+from an error in specifying some of the constraints in your model, or from some 
+wrong numbers in your data. It can be the result of a combination of factors, 
+such as the demands at some customers being too high relative to the supplies at 
+some warehouses.</p>
+
+<P>Upon detecting infeasibility, LP codes typically show you the most recent 
+infeasible solution that they have encountered. Sometimes this solution provides 
+a good clue as to the source of infeasibility. If it fails to satisfy certain 
+capacity constraints, for example, then you would do well to check whether the 
+capacity is sufficient to meet the demand; perhaps a demand number has been 
+mistyped, or an incorrect expression for the capacity has been used in the 
+capacity constraint, or the model simply lacks any provision for coping with 
+increasing demands. More often, unfortunately, LP codes respond to an infeasible 
+problem by returning a meaninglessly infeasible solution, such as one that 
+violates material balances. lp_solve is behaving also as such.</p>
+
+<p>lp_solve currently doesn't provide analysis routines to detect infeasible constraints
+however that doesn't mean that it stops there.
+</p>
+
+<P>A useful approach is to forestall meaningless infeasibilities by 
+explicitly modelling those sources of infeasibility that you view as realistic. 
+As a simple example, you could add a new "slack" variable on each capacity 
+constraint, having a very high penalty cost. Then infeasibilities in your 
+capacities would be signalled by positive values for these slacks at the optimal 
+solution, rather than by a mysterious lack of feasibility in the linear program 
+as a whole. Modelling approaches that use this technique are called sometimes "elastic programming"
+or "elastic filter".</p>
+
+<p>So in practice, if a constraint is a &lt; constraint, add a variable to the model and give it for that
+constraint a -1 coefficient for that variable. In the objective you give it a relative large cost.
+If a constraint is a &gt; constraint, add a variable to the model and give it for that
+constraint a +1 coefficient for that variable. In the objective you give it a relative large cost.
+If a constraint is an equal constraint, add two variables to the model and give it for that
+constraint respectively a -1 and +1 coefficient for that variable. In the objective you give them a relative large cost.
+Or you only add one variable and give it an -infinite lower bound.
+</p>
+
+<p>This will result in an automatic relaxation of the constraint(s) when needed (if that constraint would make the model
+infeasible). To make sure that these added variables only get non-zero values when the constraint is violating,
+the value in the objective must be relative large. Like that this variable gets a penalty cost and it will only become
+non-zero when really needed. Note that the signs of these objective coefficients must be positive when minimizing and
+negative when maximizing. Don't make these costs too big also because that introduces instabilities. If none of these added variables have a non-zero value then the model was initially feasible.
+When at least one is non-zero then the original model is infeasible. Note that the objective value will then not be very
+useful. However you could subtract the cost * value of all these variables from the objective to obtain the objective
+value of the relaxed model.
+</p>
+
+<p>Note that a model can also become infeasible because of bounds set on variables. Above approach doesn't relax these.</p>
+
+<h4>Example:</h4>
+
+<pre>
+min: x + y;
+c1: x &gt;= 6;
+c2: y &gt;= 6;
+c3: x + y &lt;= 11;
+</pre>
+
+<p>This model is clearly infeasible. Now introduce extra variables to locate the infeasibility:</p>
+
+<pre>
+min: x + y + 1000 e1 + 1000 e2 + 1000 e3;
+c1: x + e1 &gt;= 6;
+c2: y + e2 &gt;= 6;
+c3: x + y - e3 &lt;= 11;
+</pre>
+
+<p>The result of this model is:</p>
+
+<pre>
+Value of objective function: 1011
+
+Actual values of the variables:
+x                               5
+y                               6
+e1                              1
+e2                              0
+e3                              0
+</pre>
+
+<p>With this simple example model, multiple solutions were possible. Here, the first constraint was relaxed
+since e1 is non-zero. Only this one constraint had to be relaxed to make the model feasible. The objective
+value of 1011 isn't saying very much. However if we subtract 1000 e1 + 1000 e2 + 1000 e3 from it, then it becomes 11 which is
+the value of the original objective function (x + y).</p>
+
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

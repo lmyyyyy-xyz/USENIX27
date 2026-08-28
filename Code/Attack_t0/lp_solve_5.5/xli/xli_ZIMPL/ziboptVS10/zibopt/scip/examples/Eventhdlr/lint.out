@@ -1,0 +1,8 @@
+
+--- Module:   src/cmain.c (C)
+         _
+#include "scip/scipshell.h"
+src/cmain.c  27  Warning 451: Header file '../../src/scip/scipshell.h'
+    repeatedly included but does not have a standard include guard
+
+--- Module:   src/event_bestsol.c (C)

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Basis Factorization Packages</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Basis Factorization Packages</u></h1>
+					<p>Basis Factorization Package (shortened as BFP) is a unique lp_solve feature.
+					Considerable effort has been put in this new feature and we have big expectations for this.
+					BFP is a generic interface model and users can develop their own implementations based on
+					the provided templates.
+					We are very interested in providing as many different BFPs as possible to the community.
+					</p>
+					<p>
+					Until version 4, lp_solve always used the product form of the inverse (etaPFI) to perform
+					its matrix pivot changes. However there are other methods
+					like LU decomposition. Each method has its advantages and disadvantages. Some
+					are faster/slower, other are numerical more/less stable. The speed and
+					stability of a solver depends considerably on the BFP. One model will be solved
+					better with one BFP and another with another BFP.<br>
+					The following is a personal comment on the different BFPs by <a href="mailto:kjell.eikland@broadpark.no">Kjell Eikland</a>:<br><br>
+					"Personally, I go for numerical robustness and size capability LUSOL is the one to beat.
+					The LUSOL code has tremendous features for tackling even the toughest models, balancing
+					accuracy and fill-in to a phenomenal extent.  I have experimented with a maximum update
+					limit before refactorization of 1500, and even at that level LUSOL was much more reliable
+					than etaPFI! LUSOL does extremely well with some classes of very tough models, such as the
+					PILOT models. For simple, not too large network-like models with little fill-in, etaPFI
+					can be extremely fast and maintain accuracy if the numerics are not too bad. etaPFI v2 is
+					typically both faster and numerically more robust and can handle much more challenging
+					models than v1.  The main reason is that v2 typically has quite a bit less fill-in and
+					better pivot management, which automatically leads to better speed and accuracy.
+					GLPK has an LU implementation model that is conceptually/numerically inferior to LUSOL,
+					but updating and btran can be faster. For medium size models of a higher than average
+					toughness, GLPK is definitely a good choice. However, in my experience GLPK is not robust
+					from the perspective of memory management. With some unusually hard models prone to
+					fill-in it simply bombs, which is not good in a production environment. Accuracy management
+					is limited to refactorization (just like etaPFI)."
+					</p>
+					<p>lp_solve version 5.5 has the LUSOL engine built in as default.
+					In addition two other BFPs are included for both Windows and Linux:
+					bfp_LUSOL.dll, bfp_etaPFI.dll for Windows and libbfp_LUSOL.so, libbfp_etaPFI.so for Linux.
+					The standalone bfp_etaPFI is v2.0 and includes
+					advanced column ordering using the COLAMD library, as well as better pivot management for
+					stability.  For complex models, however, the LU factorization approach is much better, and
+					lp_solve now includes LUSOL as one of the most stable engines available anywhere.  LUSOL was
+					originally developed by Prof. Saunders at Stanford, and it has now been ported to C
+					and enhanced by <a href="mailto:kjell.eikland@broadpark.no">Kjell Eikland</a>.</p>
+					<p>These BFPs are not statically linked, but are dynamically loaded
+					when requested (except for the default LUSOL engine). It is even possible for people to write their own BFP.
+					Under Windows, a BFP is provided as DLL (bfp_*.dll), under UNIX/LINUX as a dynamic linked
+					library (libbfp_*.so).<br>
+					To change the BFP with lp_solve, use the option -bfp &lt;filename&gt;. Via the API,
+					use <a href="set_BFP.htm">set_BFP</a>. filename is the name
+					of the dynamic linked library. It is possible to provide a path to this name to be sure
+					that the BFP from the specified location is used. If no path is given, then it depends on the
+					OS where it will be searched.</p>
+					<p>Under Windows, the following search order is used:</p>
+					<ol>
+						<li>Current directory.</li>
+						<li>A semi-colon-separated (;) list of directories in the user's PATH environment variable.</li>
+					</ol>
+					<p>Under Unix/Linux, following search order is used:</p>
+					<ol>
+						<li>A colon-separated (:) list of directories in the user's LD_LIBRARY_PATH environment variable.</li>
+						<li>The list of libraries specified in /etc/ld.so.cache (which is generated from /etc/ld.so.conf).</li>
+						<li>/lib, followed by /usr/lib. Note the order here; this is the reverse of the order used by the old a.out loader.
+						The old a.out loader, when loading a  program, first searched /usr/lib, then /lib (see the man page ld.so(8)).
+						This shouldn't normally matter, since a library should only be in one or the other directory (never both),
+						and different libraries with the same name are a disaster waiting to happen.</li>
+					</ol>
+					<p>Under Unix/Linux it is standard that a library has the lib prefix and a .so postfix.
+					Under Windows there is no prefix and a .dll postfix.<br>
+					To make the calling structure for BFPs uniform across different types of OS,
+					lp_solve automatically adds the prefix and postfix if not provided.
+					So the following commands are valid for both Windows and Unix/Linux:</p>
+					<p>
+					lp_solve -bfp bfp_LUSOL input.lp<br>
+					lp_solve -bfp ./bfp_LUSOL input.lp
+					</p>
+					<p>The latter makes sure that the BFP is searched in the current directory, especially for Unix/Linux.
+					</p>
+					<p>A third BFP based on GLPK may be included later, but license issues must first be resolved. In
+					the interim, you may experiment with the working sample BFP interface files for GLPK.</p>
+					<p>If you compile BFPs yourself, make sure that under Windows, you use __stdcall convention and
+					use 8 byte alignments.  This is needed for the BFPs to work correctly with the general
+					distribution of lp_solve and also to make sharing BFPs as uncomplicated as possible.
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

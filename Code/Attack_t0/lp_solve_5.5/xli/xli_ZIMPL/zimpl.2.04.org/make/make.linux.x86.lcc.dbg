@@ -1,0 +1,5 @@
+#--- $Id: make.linux.x86.intel.dbg,v 1.5 2003/09/28 11:08:56 bzfkocht Exp $
+CC		=	lcc -Dinline="" -D_POSIX_C_SOURCE=2
+CPPFLAGS	+=	-DFREEMEM 
+CFLAGS		=	-g -n -A -A
+LDFLAGS         =       -lgmp -lz -lm

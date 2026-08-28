@@ -1,0 +1,91 @@
+begin # Begin blocking entire file for automatic inclusion
+
+#LP_MAKER  Makes mixed integer linear programming problems.
+#
+#  SYNOPSIS: lp_handle = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+#     make the MILP problem
+#       max v = f'*x
+#         a*x <> b
+#           vlb <= x <= vub
+#           x(int) are integer
+#
+#  ARGUMENTS: The first four arguments are required:
+#           f: n vector of coefficients for a linear objective function.
+#           a: m by n matrix representing linear constraints.
+#           b: m vector of right sides for the inequality constraints.
+#           e: m vector that determines the sense of the inequalities:
+#                     e(i) < 0  ==> Less Than
+#                     e(i) = 0  ==> Equals
+#                     e(i) > 0  ==> Greater Than
+#         vlb: n vector of non-negative lower bounds. If empty or omitted,
+#              then the lower bounds are set to zero.
+#         vub: n vector of upper bounds. May be omitted or empty.
+#        xint: vector of integer variables. May be omitted or empty.
+#   scalemode: Autoscale flag. Off when 0 or omitted.
+#    setminim: Set maximum lp when this flag equals 0 or omitted.
+#
+#  OUTPUT: lp_handle is an integer handle to the lp created.
+
+function lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim) begin
+
+if nargin == 0 then begin
+#        help lp_solve;
+        return
+end
+
+[m,n] = size(a);
+lp_handle = omlpsolve("make_lp", m, n);
+omlpsolve("set_verbose", lp_handle, 3);
+omlpsolve("set_mat", lp_handle, a);
+omlpsolve("set_rh_vec", lp_handle, b);
+omlpsolve("set_obj_fn", lp_handle, f);
+omlpsolve("set_maxim", lp_handle); # default is solving minimum lp.
+
+for i = 1 to max(size(e)) begin
+  if e(i) < 0 then begin
+        con_type = 1
+  end else if e(i) == 0 then begin
+        con_type = 3
+  end else begin
+        con_type = 2
+  end
+  omlpsolve("set_constr_type", lp_handle, i, con_type);
+end
+
+if nargin > 4 then begin
+  for i = 1 to max(size(vlb)) begin
+    omlpsolve("set_lowbo", lp_handle, i, vlb(i));
+  end
+end
+
+if nargin > 5 then begin
+  for i = 1 to max(size(vub)) begin
+    omlpsolve("set_upbo", lp_handle, i, vub(i));
+  end
+end
+
+if nargin > 6 then begin
+  for i = 1 to max(size(xint)) begin
+    omlpsolve("set_int", lp_handle, xint(i), 1);
+  end
+end
+
+if nargin > 7 then begin
+  if scalemode <> 0 then begin
+    omlpsolve("set_scaling", lp_handle, scalemode);
+  end
+end
+
+if nargin > 8 then begin
+  if setminim <> 0 then begin
+    omlpsolve("set_minim", lp_handle);
+  end else begin
+    omlpsolve("set_maxim", lp_handle);
+  end
+end
+
+return lp_handle
+
+end
+
+end # End blocking entire file for automatic inclusion

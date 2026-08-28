@@ -1,0 +1,3 @@
+CPPFLAGS	+=	-DFREEMEM -D__NO_MATH_INLINES 
+CFLAGS		=	-O0 -g -fident $(GCCWARN)
+LDFLAGS		=	-Bstatic -lgmp -lz -lm

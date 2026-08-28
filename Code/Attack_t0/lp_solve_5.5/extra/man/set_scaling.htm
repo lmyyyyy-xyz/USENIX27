@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_scaling</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_scaling</h1>
+					<p>Specifies which scaling algorithm must be used.</p>
+					<p><b>void set_scaling(lprec </b>*<i>lp</i><b>, int </b><i>scalemode</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_scaling</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>scalemode</i></p>
+					<p class="indent">Specifies which scaling algorithm must be used. Can by any of the
+						following values:<br>
+						<br>
+						<TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>SCALE_NONE&nbsp;(0)</TD>
+								<TD>No scaling</TD>
+							</TR>
+							<TR>
+								<TD>SCALE_EXTREME&nbsp;(1)</TD>
+								<TD>Scale to convergence using largest absolute value</TD>
+							</TR>
+							<TR>
+								<TD>SCALE_RANGE&nbsp;(2)</TD>
+								<TD>Scale based on the simple numerical range</TD>
+							</TR>
+							<TR>
+								<TD>SCALE_MEAN&nbsp;(3)</TD>
+								<TD>Numerical range-based scaling</TD>
+							</TR>
+							<TR>
+								<TD>SCALE_GEOMETRIC (4)</TD>
+								<TD>Geometric scaling</TD>
+							</TR>
+							<TR>
+								<TD>SCALE_CURTISREID (7)</TD>
+								<TD>Curtis-reid scaling</TD>
+							</TR>
+						</TABLE>
+					<p>
+						Additionally, the value can be OR-ed with any combination of one of the
+						following values:</p>
+					<TABLE id="Table4" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>SCALE_QUADRATIC (8)</TD>
+                            <TD>&nbsp;</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_LOGARITHMIC (16)</TD>
+							<TD>Scale to convergence using logarithmic mean of all values</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_USERWEIGHT (31)</TD>
+							<TD>User can specify scalars</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_POWER2 (32)</TD>
+							<TD>also do Power scaling</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_EQUILIBRATE&nbsp;(64)</TD>
+							<TD>Make sure that no scaled number is above 1</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_INTEGERS (128)</TD>
+							<TD>also&nbsp;scaling integer variables</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_DYNUPDATE (256)</TD>
+							<TD>dynamic update</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_ROWSONLY (512)</TD>
+							<TD>scale only rows</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_COLSONLY (1024)</TD>
+							<TD>scale only columns</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_scaling</b> function specifies which scaling algorithm must be
+						used. This can influence numerical stability considerably. It is advisable to
+						always use some sort of scaling.<br>
+						<i>set_scaling</i> must be called before <A HREF="solve.htm">solve</A> is
+						called.<br>
+						SCALE_EXTREME, SCALE_RANGE, SCALE_MEAN, SCALE_GEOMETRIC, SCALE_CURTISREID are
+						the possible scaling algorithms. SCALE_QUADRATIC, SCALE_LOGARITHMIC,
+						SCALE_USERWEIGHT, SCALE_POWER2, SCALE_EQUILIBRATE, SCALE_INTEGERS are possible
+						additional scaling parameters.<br>
+						SCALE_POWER2 results in creating a scalar of power 2. May improve stability.<br>
+						SCALE_INTEGERS results also in scaling Integer columns. Default they are not
+						scaled.<br>
+						SCALE_DYNUPDATE is new from version 5.1.1.0<br>
+						It has always been so that scaling is done only once on the original model. If a solve
+						is done again (most probably after changing some data in the model), the scaling factors
+						aren't computed again. The scalars of the original model are used. This is not always
+						good, especially if the data has changed considerably. One way to solve this was/is call
+						<a href="unscale.htm">unscale</a> before a next solve. In that case, scale factors are recomputed.<br>
+						From version 5.1.1.0 on, there is another
+						way to make sure that scaling factors are recomputed and this is by settings SCALE_DYNUPDATE. In
+						that case, the scaling factors are recomputed also when a restart is done. Note
+						that they are then always recalculated with each solve, even when no change was made to the model, or
+						a change that doesn't influence the scaling factors like changing the RHS (Right Hand Side) values
+						or the bounds/ranges. This can influence performance. It is up to you to decide
+						if scaling factors must be recomputed or not for a new solve, but by default it still isn't so.
+						It is possible to set/unset this flag at each next solve and it is even allowed to choose
+						a new scaling algorithm between each solve. Note that the scaling done by the SCALE_DYNUPDATE is incremental
+						and the resulting scalars are typically different from scalars recomputed from scratch.<br>
+						The default is SCALE_GEOMETRIC + SCALE_EQUILIBRATE + SCALE_INTEGERS (196).
+					</p>
+					<p>Also see <A href="scaling.htm">scaling</A> for a description about scaling.</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_scaling(lp, CURTISREIDSCALE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_scaling.htm">get_scaling</A>, <A HREF="is_integerscaling.htm">is_integerscaling</A>, <A HREF="is_scalemode.htm">is_scalemode</A>, <A HREF="is_scaletype.htm">is_scaletype</A>
+							</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

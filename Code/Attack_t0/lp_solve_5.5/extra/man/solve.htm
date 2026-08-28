@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>solve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>solve</h1>
+					<p>
+						solve the model.</p>
+					<p>
+						<b>int solve(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p></p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD width="30%">NOMEMORY (-2)</TD>
+							<TD>Out of memory</TD>
+						</TR>
+						<TR>
+							<TD>OPTIMAL (0)</TD>
+							<TD>An optimal solution was obtained</TD>
+						</TR>
+						<TR>
+							<TD>SUBOPTIMAL (1)</TD>
+							<TD>The model is sub-optimal. Only happens if there are integer variables and there is already an integer solution found. The solution is not guaranteed the most optimal one.<br>
+							<ul>
+							<li>A timeout occured (set via set_timeout or with the -timeout option in lp_solve)</li>
+							<li>set_break_at_first was called so that the first found integer solution is found (-f option in lp_solve)</li>
+							<li>set_break_at_value was called so that when integer solution is found that is better than the specified value that it stops (-o option in lp_solve)</li>
+							<li>set_mip_gap was called (-g/-ga/-gr options in lp_solve) to specify a MIP gap</li>
+							<li>An abort function is installed (put_abortfunc) and this function returned TRUE</li>
+							<li>At some point not enough memory could not be allocated
+							</ul>
+							</TD>
+						</TR>
+						<TR>
+							<TD>INFEASIBLE (2)</TD>
+							<TD>The model is infeasible</TD>
+						</TR>
+						<TR>
+							<TD>UNBOUNDED (3)</TD>
+							<TD>The model is unbounded</TD>
+						</TR>
+						<TR>
+							<TD>DEGENERATE (4)</TD>
+							<TD>The model is degenerative</TD>
+						</TR>
+						<TR>
+							<TD>NUMFAILURE (5)</TD>
+							<TD>Numerical failure encountered</TD>
+						</TR>
+						<TR>
+							<TD>USERABORT (6)</TD>
+							<TD>The abort routine returned TRUE. See <A href="put_abortfunc.htm">put_abortfunc</A></TD>
+						</TR>
+						<TR>
+							<TD>TIMEOUT (7)</TD>
+							<TD>A timeout occurred. A timeout was set via <A href="set_timeout.htm">set_timeout</A></TD>
+						</TR>
+						<TR>
+							<TD>PRESOLVED (9)</TD>
+							<TD>The model could be solved by presolve. This can only happen if presolve is active via <A href="set_presolve.htm">set_presolve</A></TD>
+						</TR>
+						<TR>
+							<TD>ACCURACYERROR (25)</TD>
+							<TD>Accuracy error encountered</TD>
+						</TR>
+					</TABLE>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>solve</b> function solves the model. <b>solve</b> can be called more
+						than once. Between calls, the model may be modified in every way. Restrictions
+						may be changed, matrix values may be changed and even rows and/or columns may
+						be added or deleted.<br>
+					    If <A href="set_timeout.htm">set_timeout</A> was called before solve with a non-zero timeout
+					    and a timout occurs, and there was already an integer solution found (that is possibly not the best),
+						then solve will return SUBOPTIMAL. If there was no integer solution found yet
+						or there are no integers or the solvers is still in the first phase where a REAL optimal solution is
+						searched for, then solve will return TIMEOUT.<br>
+						If <A href="set_presolve.htm">set_presolve</A> was called before solve, then it can happen that
+						presolve eliminates all rows and columns such that the solution is known by presolve. In that
+						case, no solve is done. This also means that values of constraints and sensitivity are unknown.
+						solve will return PRESOLVED in this case.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int ret;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  ret = solve(lp);
+
+  delete_lp(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="lag_solve.htm">lag_solve</A>, <A HREF="get_statustext.htm">statustext</A>, <a href="is_feasible.htm">is_feasible</a>,
+						<A HREF="get_objective.htm">get_objective</A>, <A HREF="get_working_objective.htm">get_working_objective</A>, <a href="get_variables.htm">get_variables,
+							get_ptr_variables</a>, <a href="get_constraints.htm">get_constraints,
+							get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_primal_solution.htm">get_primal_solution,
+							get_ptr_primal_solution, get_var_primalresult</a>,
+							<a href="get_sensitivity_rhs.htm">get_sensitivity_rhs,
+							get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex,
+							get_ptr_sensitivity_objex</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

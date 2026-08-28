@@ -1,0 +1,16 @@
+78c78
+< static int (_cdecl subset_cmp)(const void* a, const void* b)
+---
+> static int subset_cmp(const void* a, const void* b)
+96c96
+< static int (_cdecl order_cmp)(const void* a, const void* b)
+---
+> static int order_cmp(const void* a, const void* b)
+304c304
+< static int (_cdecl subset_idx_cmp)(const void* a, const void* b)
+---
+> static int subset_idx_cmp(const void* a, const void* b)
+326c326
+< static int (_cdecl order_idx_cmp)(const void* a, const void* b)
+---
+> static int order_idx_cmp(const void* a, const void* b)

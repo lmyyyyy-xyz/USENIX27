@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Using lpsolve from Sage</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Using lpsolve from Sage</u></h1>
+<a name="Sage"></a>
+<h3>Sage?</h3>
+<p>Sage is free, open-source math software that supports research and
+teaching in algebra, geometry, number theory, cryptography,
+numerical computation, and related areas. Both the Sage development
+model and the technology in Sage itself are distinguished by an
+extremely strong emphasis on openness, community, cooperation, and
+collaboration: we are building the car, not reinventing the wheel.
+The overall goal of Sage is to create a viable, free, open-source
+alternative to Maple, Mathematica, Magma, and MATLAB.</p>
+
+<p>We will not discuss the specifics of Sage here but instead refer the reader to the
+<a href="http://sagemath.org/">Sage</a> website.
+Also see <a href="http://sagemath.org/doc/tutorial/">Sage Tutorial</a>, <a href="http://www.sagemath.org/doc-pdf/tut.pdf">Sage Tutorial (pdf)</a>,
+<a href="http://sagemath.org/tour.html">Sage Feature Tour</a>
+and <a href="http://sage.math.washington.edu/home/tkosan/newbies_book/">Sage For Newbies</a>.
+</p>
+
+<a name="Sage_and_lpsolve"></a>
+<h3>Sage and lpsolve</h3>
+
+<p>The primary implementation language of Sage is Python. Sage is build on top of Python.
+See <a href="http://www.sagemath.org/doc/tutorial/afterword.html">Sage afterword</a>.<br>
+Because there is already a link from lpsolve to Python (see <a href="Python.htm">Using lpsolve from Python</a>),
+the link from Sage to lpsolve is in fact quite easy and ready available. Nothing special must be done except for installing
+the lpsolve Python driver.<br>
+lpsolve is callable from Sage via this Python extension or module. As such, it looks like lpsolve is fully integrated
+with Sage. Matrices can directly be transferred between Sage and lpsolve in both directions. The complete interface
+is written in C so it has maximum performance. The whole lpsolve API is implemented with some extra's specific for
+Sage (especially for matrix support). So you have full control to the complete lpsolve functionality via the lpsolve
+Sage driver.
+
+If you find that this involves too much work to solve an lp model then you can also work via higher-level
+script files that can make things a lot easier. See further in this article.
+</p>
+
+<p>Sage is ideally suited to handle linear programming problems.
+These are problems in which you have a quantity, depending linearly on several variables,
+that you want to maximize or minimize subject to several constraints that are expressed
+as linear inequalities in the same variables. If the number of variables and the number
+of constraints are small, then there are numerous mathematical techniques for solving a
+linear programming problem.
+Indeed these techniques are often taught in high school or university level
+courses in finite mathematics. But sometimes these numbers are high, or even if low,
+the constants in the linear inequalities or the object expression for the quantity
+to be optimised may be numerically complicated in which case a software package like
+Sage is required to effect a solution.</p>
+
+<a name="Installation"></a>
+<h3>Installation</h3>
+
+<p>To make this possible, the Python driver program is needed.
+This driver must be put in a directory known to Sage and Sage can call the lpsolve solver.<br>
+How this can be done can be read in the Python documentation: <a href="Python.htm">Using lpsolve from Python</a>.</p>
+
+<p>There is only one thing that must be considered: Sage comes with its own version of Python.
+So not the Python version that is already installed on the system (/usr/bin/python and /usr/lib/pythonx.y/*) is used, but a Python
+version in a subdirectory of the sage installation.
+For example /sage-3.4-linux-Ubuntu_8.10-i686-Linux/local/bin and /sage-3.4-linux-Ubuntu_8.10-i686-Linux/local/lib/pythonx.y/*
+</p>
+
+<p>The consequence is that the lpsolve Python driver must also be installed on that place.
+The same installation files as for Python can be used, but they must be installed on the sage directory.<br>
+For example /sage-3.4-linux-Ubuntu_8.10-i686-Linux/local/lib/python2.5/site-packages.
+There lpsolve55.so, lp_solve.py, lp_solve.pyc, lp_maker.py, lp_maker.pyc and lpsolve55-5.5.0.6-py2.5.egg-info must reside after the installation.<br>
+See also <a href="Python.htm#Install_the_lpsolve_driver">Install the lpsolve driver</a> for the installation of these files.</p>
+
+<a name="Solve_an_lp_model_from_Sage_via_lpsolve"></a>
+<h3>Solve an lp model from Sage via lpsolve</h3>
+See <a href="Python.htm">Using lpsolve from Python</a>. Everything that is written there also applies to sage.<br>
+Note however that the prompt is different.<br>
+<br>
+Under Python the prompt is &gt;&gt;&gt;<br>
+Under Sage the prompt is sage:<br>
+<br>
+That is the only difference.
+</p>
+
+<p>Sage also has a web interface called Sage Notebook. Also in this application lpsolve can be called in the same way.<p>
+
+<p>Also note that you can enter the command load "filename" with filename a .py Python file with commands.
+The lpsolve examples (example1.py, ...) can be loaded and executed from the sage prompt as such.</p>
+
+<p>See also <a href="MATLAB.htm">Using lpsolve from MATLAB</a>,
+            <a href="O-Matrix.htm">Using lpsolve from O-Matrix</a>,
+            <a href="Sysquake.htm">Using lpsolve from Sysquake</a>,
+            <a href="Scilab.htm">Using lpsolve from Scilab</a>,
+            <a href="Octave.htm">Using lpsolve from Octave</a>,
+            <a href="FreeMat.htm">Using lpsolve from FreeMat</a>,
+            <a href="Euler.htm">Using lpsolve from Euler</a>,
+            <a href="Python.htm">Using lpsolve from Python</a>,
+            <a href="PHP.htm">Using lpsolve from PHP</a>,
+            <a href="R.htm">Using lpsolve from R</a>,
+            <a href="MSF.htm">Using lpsolve from Microsoft Solver Foundation</a>
+</p>
+	</BODY>
+</html>

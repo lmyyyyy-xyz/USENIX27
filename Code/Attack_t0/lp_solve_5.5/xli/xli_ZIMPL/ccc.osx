@@ -1,0 +1,61 @@
+:
+
+# zimpl is needed to compile this library. See at http://www.zib.de/koch/zimpl/
+
+ZIMPL_MAJORVERSION=2
+ZIMPL_MINORVERSION=06
+
+# Location where zimpl is located.
+zimpldir=./zimpl.2.06
+zlib=/zlib-1.2.3
+gmp=/gmp-4.1.4
+
+zimpl="$zimpldir/src/bound.c $zimpldir/src/code.c $zimpldir/src/conname.c $zimpldir/src/define.c $zimpldir/src/elem.c $zimpldir/src/entry.c $zimpldir/src/gmpmisc.c $zimpldir/src/hash.c $zimpldir/src/heap.c $zimpldir/src/metaio.c $zimpldir/src/idxset.c $zimpldir/src/inst.c $zimpldir/src/iread.c $zimpldir/src/list.c $zimpldir/src/load.c $zimpldir/src/local.c $zimpldir/src/mmlparse.c $zimpldir/src/mmlscan.c $zimpldir/src/mshell.c $zimpldir/src/numbgmp.c $zimpldir/src/prog.c $zimpldir/src/rathumwrite.c $zimpldir/src/ratlpfwrite.c $zimpldir/src/ratlpstore.c $zimpldir/src/ratmpswrite.c $zimpldir/src/ratmstwrite.c $zimpldir/src/ratordwrite.c $zimpldir/src/ratpresolve.c $zimpldir/src/ratsoswrite.c $zimpldir/src/rdefpar.c $zimpldir/src/set4.c $zimpldir/src/setempty.c $zimpldir/src/setlist.c $zimpldir/src/setmulti.c $zimpldir/src/setprod.c $zimpldir/src/setpseudo.c $zimpldir/src/setrange.c $zimpldir/src/source.c $zimpldir/src/stmt.c $zimpldir/src/symbol.c $zimpldir/src/term.c $zimpldir/src/tuple.c $zimpldir/src/vinst.c $zimpldir/src/xlpglue.c $zimpldir/src/zimpllib.c"
+if [ -f $zimpldir/src/strstore.c ]
+then zimpl="$zimpl $zimpldir/src/strstore.c"
+fi
+if [ -f $zimpldir/src/strstore2.c ]
+then zimpl="$zimpl $zimpldir/src/strstore2.c"
+fi
+if [ -f $zimpldir/src/ratrlpwrite.c ]
+then zimpl="$zimpl $zimpldir/src/ratrlpwrite.c"
+fi
+if [ -f $zimpldir/src/random.c ]
+then zimpl="$zimpl $zimpldir/src/random.c"
+fi
+if [ -f $zimpldir/src/blkmem.c ]
+then zimpl="$zimpl $zimpldir/src/blkmem.c"
+fi
+
+zimpl="$zimpl extra/extra.c extra/regerror.c extra/finite.c"
+zimpl="$zimpl /c/regexp2.d/lib/regex.c /c/regexp2.d/lib/regexp.c"
+
+src="../../shared/commonlib.c lp_ZIMPL.c xli_ZIMPL.c $zimpl"
+
+c=${CC:-cc}
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("osx%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+opts='-O3 -DINTEGERTIME'
+
+$c -s -c $opts -D"_cdecl=" -D"__cdecl=" -DVERSION=\"$ZIMPL_MAJORVERSION.$ZIMPL_MINORVERSION\" -DZIMPL_MAJORVERSION=$ZIMPL_MAJORVERSION -DZIMPL_MINORVERSION=$ZIMPL_MINORVERSION -I.. -I../.. -I../../shared -Iextra -I. -I/c/regexp2.d/lib -I$zlib -I$gmp -I$zimpldir/src -DNDEBUG -DRoleIsExternalLanguageEngine -D"LANGUAGE_ACTIVE=LANGUAGE_ZIMPL" -DZLIB_DLL -D"ZEXPORT=" -DSTDC_HEADERS=1 -DHAVE_STRING_H=1 -DREGEX_MALLOC -DANSI_PROTOTYPES=1 $src
+libtool -static -o libxli_ZIMPL.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+
+opts="$opts -fPIC -fno-common"
+so="-dynamiclib"
+
+$c -s -c $opts -D"_cdecl=" -D"__cdecl=" -DVERSION=\"$ZIMPL_MAJORVERSION.$ZIMPL_MINORVERSION\" -DZIMPL_MAJORVERSION=$ZIMPL_MAJORVERSION -DZIMPL_MINORVERSION=$ZIMPL_MINORVERSION -I.. -I../.. -I../../colamd -I../../shared -Iextra -I. -I/c/regexp2.d/lib -I$zlib -I$gmp -I$zimpldir/src -DNDEBUG -DRoleIsExternalLanguageEngine -D"LANGUAGE_ACTIVE=LANGUAGE_ZIMPL" -DZLIB_DLL -D"ZEXPORT=" -DSTDC_HEADERS=1 -DHAVE_STRING_H=1 -DREGEX_MALLOC -DANSI_PROTOTYPES=1 $src
+$c $so libxli_ZIMPL.a -compatibility_version 5.5.0 -current_version 5.5.0 -o bin/$PLATFORM/libxli_ZIMPL.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm
+
+rm *.o >/dev/null

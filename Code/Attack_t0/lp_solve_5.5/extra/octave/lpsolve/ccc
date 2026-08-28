@@ -1,0 +1,7 @@
+:
+src=$*
+if [ "$src" = "" ]
+then src="hash.cpp octave.cpp lpsolve.cpp"
+fi
+mkoctfile -c -s -I../../.. -DOCTAVE $src
+mkoctfile *.o -o octlpsolve.oct

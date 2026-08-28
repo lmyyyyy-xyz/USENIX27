@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XLI_lp", "XLI_lp.vcproj", "{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug fortify|Win32 = Debug fortify|Win32
+		Debug fortify|x64 = Debug fortify|x64
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug fortify|Win32.ActiveCfg = Debug fortify|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug fortify|Win32.Build.0 = Debug fortify|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug fortify|x64.ActiveCfg = Debug fortify|x64
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug fortify|x64.Build.0 = Debug fortify|x64
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug|Win32.Build.0 = Debug|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug|x64.ActiveCfg = Debug|x64
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Debug|x64.Build.0 = Debug|x64
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Release|Win32.ActiveCfg = Release|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Release|Win32.Build.0 = Release|Win32
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Release|x64.ActiveCfg = Release|x64
+		{60F936AB-86F4-465D-8E74-0A7ACCDC88B8}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

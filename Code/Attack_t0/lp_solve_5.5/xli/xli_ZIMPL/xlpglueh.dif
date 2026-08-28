@@ -1,0 +1,4 @@
+43c43
+< extern Lps *    xlp_alloc(const char* name);
+---
+> extern void     xlp_alloc(const char* name);

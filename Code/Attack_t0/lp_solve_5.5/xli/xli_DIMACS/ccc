@@ -1,0 +1,39 @@
+:
+src='lp_Dimacs.c lp_network.c'
+
+opts='-O3'
+opts=''
+
+if [ "$PLATFORM" = "RS6000" ]
+then opts="$opts"
+     so="-bM:SRE -bE:../xli_lpsolve.exp"
+     #so="$so -e _nostart"
+     so="$so -bnoentry"
+elif [ "$PLATFORM" = "SCO_UNIX" ]
+then
+     opts='-O0'
+     so="-G -dy"
+     opts="$opts -DNOLONGLONG $so"
+else opts="$opts -fpic"
+     so="-shared -Wl,-soname,libxli_DIMACS.so"
+fi
+
+c=${CC:-cc}
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("ux%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+$c -s -c $opts -I.. -I../.. -I../../shared -I. -DYY_NEVER_INTERACTIVE $src
+$c $so -o bin/$PLATFORM/libxli_DIMACS.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm
+
+rm *.o >/dev/null

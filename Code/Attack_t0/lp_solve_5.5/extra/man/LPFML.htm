@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>LPFML</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>LPFML</u></h1>
+                                        <p>LPFML is a modeling format in XML structure. It started as its own project but is now part of the bigger COIN-OR OSlL project</p>
+
+                                        <p>See <a href="https://www.coin-or.org/OS/OSlL.html">https://www.coin-or.org/OS/OSlL.html</a> for the home page of this tool and examples.</p>
+
+                                        <p>lp_solve can read/write and solve these LPFML models directly via the xli_LPFML XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).</p>
+
+                                        <h4>Reading LPFML models</h4>
+                                           It reads such a model in above format and can solve it then.<br>
+                                           <br>
+					   For example:
+
+<pre>
+lp_solve -rxli xli_LPFML <a href="#parinc.xml">parinc.xml</a>
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 7667.94172245
+
+Actual values of the variables:
+x1                        539.984
+x2                        252.011
+</pre>
+
+                                        <h5>Options</h5>
+                                        <p>none</p>
+
+                                        <h4>Generating LPFML models</h4>
+
+                                        <p>The XLI can also create a LPFML model.</p>
+
+                                        <p>For example:</p>
+
+<pre>
+lp_solve <a href="#model.lp">model.lp</a> -wxli xli_LPFML model.xml
+</pre>
+
+                                        <p>This gives as model.xml:</p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8" standalone="no" ?&gt;
+&lt;mathProgram xmlns="http://FML/lpfml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://FML/lpfml.xsd
+ lpfml.xsd"&gt;
+
+  &lt;linearProgramDescription&gt;
+    &lt;source&gt;&lt;/source&gt;
+    &lt;maxOrMin&gt;max&lt;/maxOrMin&gt;
+    &lt;numberRows&gt;4&lt;/numberRows&gt;
+    &lt;numberVars&gt;2&lt;/numberVars&gt;
+  &lt;/linearProgramDescription&gt;
+
+  &lt;linearProgramData&gt;
+    &lt;rows&gt;
+      &lt;row rowName="cutanddye" rowUB="630"/&gt;
+      &lt;row rowName="sewing" rowUB="600"/&gt;
+      &lt;row rowName="finishing" rowUB="708"/&gt;
+      &lt;row rowName="inspectandpack" rowUB="135"/&gt;
+    &lt;/rows&gt;
+    &lt;columns&gt;
+      &lt;col colName="x1" colType="C" objVal="10"/&gt;
+      &lt;col colName="x2" colType="C" objVal="9"/&gt;
+    &lt;/columns&gt;
+    &lt;amatrix&gt;
+      &lt;sparseMatrix&gt;
+        &lt;pntANonz&gt;
+          &lt;el&gt;4&lt;/el&gt;
+          &lt;el&gt;8&lt;/el&gt;
+        &lt;/pntANonz&gt;
+        &lt;rowIdx&gt;
+          &lt;el&gt;0&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;2&lt;/el&gt;
+          &lt;el&gt;3&lt;/el&gt;
+          &lt;el&gt;0&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;2&lt;/el&gt;
+          &lt;el&gt;3&lt;/el&gt;
+        &lt;/rowIdx&gt;
+        &lt;nonz&gt;
+          &lt;el&gt;0.7&lt;/el&gt;
+          &lt;el&gt;0.5&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;0.1&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;0.8333&lt;/el&gt;
+          &lt;el&gt;0.6667&lt;/el&gt;
+          &lt;el&gt;0.25&lt;/el&gt;
+        &lt;/nonz&gt;
+      &lt;/sparseMatrix&gt;
+    &lt;/amatrix&gt;
+  &lt;/linearProgramData&gt;
+
+&lt;/mathProgram&gt;
+</pre>
+                                        <h5>Options</h5>
+                                        <p>The XLI accepts several options:</p>
+
+                                        <pre>
+  -b64
+  -comp          Compress.
+  -can           Canonical.
+</pre>
+
+
+                                        <h4>API</h4>
+                                        <p>Use the lpsolve API call <a href="read_XLI.htm">read_XLI</a> to read a model
+                                           and <a href="write_XLI.htm">write_XLI</a> to write a model.
+                                           See also <a href="XLI.htm">External Language Interfaces</a>.
+                                        </p>
+
+
+                                        <h4>IDE</h4>
+                                        <p>Also from within the IDE, this XLI can be used. However, some entries
+                                           must be added in LpSolveIDE.ini (in the folder where the IDE is installed).
+                                        </p>
+                                        <p>In the [XLI] section the following must be added:</p>
+<pre>
+lib4=xli_LPFML
+</pre>
+                                        <p>And a new section for the LPFML XLI must also be added:</p>
+<pre>
+[xli_LPFML]
+extension=.xml
+language=XML
+</pre>
+                                        <p>Then make sure that the xli_LPFML.dll is available for the IDE.
+                                           This must be done by placing this dll in the IDE folder or in the
+                                           Windows system32 folder. There are also 2 extra dlls needed:
+                                           Xalan-C_1_6_0.dll and xerces-c_2_3_0.dll.
+                                           It is advised to put these in the system32 folder</p>
+
+                                        <h4>Example models</h4>
+
+<a name="parinc.xml"></a>
+                                        <h5>parinc.xml</h5>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- Sample XML file generated by XMLSPY v5 U (http://www.xmlspy.com)--&gt;
+&lt;!-- $Id: parinc.xml,v 1.8 2003/08/08 19:50:04 kipp Exp $ --&gt;
+&lt;mathProgram xmlns="http://FML/lpfml.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://FML/lpfml.xsd
+http://gsbkip.uchicago.edu/fml/testproblems/lpfml.xsd"&gt;
+
+	&lt;linearProgramDescription&gt;
+		&lt;source&gt;Par Inc. Problem from Anderson, Sweeny, and Williams&lt;/source&gt;
+	&lt;maxOrMin&gt;max&lt;/maxOrMin&gt;
+		&lt;objConstant&gt;0.&lt;/objConstant&gt;
+		&lt;numberRows&gt;4&lt;/numberRows&gt;
+		&lt;numberVars&gt;2&lt;/numberVars&gt;
+	&lt;/linearProgramDescription&gt;
+	&lt;linearProgramData&gt;
+		&lt;rows&gt;
+			&lt;row rowName="cutanddye"  rowUB="630" /&gt;
+			&lt;row rowName="sewing" rowUB="600"/&gt;
+			&lt;row rowName="finishing" rowUB="708"/&gt;
+			&lt;row rowName="inspectandpack" rowUB="135" /&gt;
+		&lt;/rows&gt;
+		&lt;columns&gt;
+			&lt;col objVal="10.0" colName="x1" colType="C" colLB="0.0" /&gt;
+			&lt;col objVal="9" colName="x2" colType="C" colLB="0.0" /&gt;
+		&lt;/columns&gt;
+		&lt;amatrix&gt;
+			&lt;sparseMatrix&gt;
+				&lt;pntANonz&gt;
+					&lt;el&gt;4&lt;/el&gt;
+					&lt;el&gt;8&lt;/el&gt;
+				&lt;/pntANonz&gt;
+				&lt;rowIdx&gt;
+					&lt;el&gt;0&lt;/el&gt;
+					&lt;el&gt;1&lt;/el&gt;
+					&lt;el&gt;2&lt;/el&gt;
+					&lt;el&gt;3&lt;/el&gt;
+					&lt;el&gt;0&lt;/el&gt;
+					&lt;el&gt;1&lt;/el&gt;
+					&lt;el&gt;2&lt;/el&gt;
+					&lt;el&gt;3&lt;/el&gt;
+				&lt;/rowIdx&gt;
+				&lt;nonz&gt;
+					&lt;el&gt;.7&lt;/el&gt;
+					&lt;el&gt;.5&lt;/el&gt;
+					&lt;el&gt;1.0&lt;/el&gt;
+					&lt;el&gt;0.1&lt;/el&gt;
+					&lt;el&gt;1.0&lt;/el&gt;
+					&lt;el&gt;0.8333&lt;/el&gt;
+					&lt;el&gt;0.6667&lt;/el&gt;
+					&lt;el&gt;0.25&lt;/el&gt;
+				&lt;/nonz&gt;
+			&lt;/sparseMatrix&gt;
+		&lt;/amatrix&gt;
+	&lt;/linearProgramData&gt;
+	&lt;linearProgramSolution&gt;
+		&lt;primalSolution&gt;
+			&lt;sol idx="1" name="x1" val="540"/&gt;
+			&lt;sol idx="2" name="x2" val="252"/&gt;
+		&lt;/primalSolution&gt;
+		&lt;dualSolution&gt;
+			&lt;sol idx="1" name="cutanddye" val="4.37457"/&gt;
+			&lt;sol idx="3" name="finishing" val="6.9378"/&gt;
+		&lt;/dualSolution&gt;
+		&lt;optimalValue&gt;7667.94&lt;/optimalValue&gt;
+		&lt;status statusId="optimalSolutionFound"&gt;Put in here any other status message desired&lt;/status&gt;
+		&lt;solverMessage&gt;This was solved using LINDO from LINDO Systems, Inc.&lt;/solverMessage&gt;
+	&lt;/linearProgramSolution&gt;
+&lt;/mathProgram&gt;
+</pre>
+
+<a name="model.lp"></a>
+                                        <h5>model.lp</h5>
+
+<pre>
+/* Objective function */
+max: +10 x1 +9 x2;
+
+/* Constraints */
+cutanddye: +0.7 x1 +x2 &lt;= 630;
+sewing: +0.5 x1 +0.8333 x2 &lt;= 600;
+finishing: +x1 +0.6667 x2 &lt;= 708;
+inspectandpack: +0.1 x1 +0.25 x2 &lt;= 135;
+</pre>
+
+
+                               </TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

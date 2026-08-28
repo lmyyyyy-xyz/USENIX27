@@ -1,0 +1,15 @@
+[OPTIONS]
+Auto Index=Yes
+Compatibility=1.1 or later
+Compiled file=lp_solve_5.5.2.14.chm
+Contents file=lp_solve.hhc
+Default topic=Intro.htm
+Display compile progress=No
+Full-text search=Yes
+Index file=lp_solve.hhk
+Language=0x409 English (United States)
+Title=lp_solve reference guide (5.5.2.14)
+
+
+[INFOTYPES]
+

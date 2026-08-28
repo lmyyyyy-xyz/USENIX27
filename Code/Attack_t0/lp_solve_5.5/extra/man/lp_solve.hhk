@@ -1,0 +1,1217 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Introduction">
+		<param name="Local" value="Intro.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Quick start">
+		<param name="Local" value="quickstart.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Linear programming basics">
+		<param name="Local" value="LPBasics.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lpsolve distributed files">
+		<param name="Local" value="distribution.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Download">
+		<param name="Local" value="download.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Formulation of an lp model in lpsolve">
+		<param name="Local" value="formulate.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lp_solve API reference">
+		<param name="Local" value="lp_solveAPIreference.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_column">
+		<param name="Local" value="add_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_columnex">
+		<param name="Local" value="add_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_constraint">
+		<param name="Local" value="add_constraint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_constraintex">
+		<param name="Local" value="add_constraint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_lag_con">
+		<param name="Local" value="add_lag_con.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="add_SOS">
+		<param name="Local" value="add_SOS.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="column_in_lp">
+		<param name="Local" value="column_in_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="copy_lp">
+		<param name="Local" value="copy_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="default_basis">
+		<param name="Local" value="default_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="del_column">
+		<param name="Local" value="del_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="del_constraint">
+		<param name="Local" value="del_constraint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="delete_lp">
+		<param name="Local" value="delete_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="dualize_lp">
+		<param name="Local" value="dualize_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="free_lp">
+		<param name="Local" value="free_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_anti_degen">
+		<param name="Local" value="get_anti_degen.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_accuracy">
+		<param name="Local" value="get_accuracy.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_basis">
+		<param name="Local" value="get_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_basiscrash">
+		<param name="Local" value="get_basiscrash.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_bb_depthlimit">
+		<param name="Local" value="get_bb_depthlimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_bb_floorfirst">
+		<param name="Local" value="get_bb_floorfirst.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_bb_rule">
+		<param name="Local" value="get_bb_rule.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_bounds_tighter">
+		<param name="Local" value="get_bounds_tighter.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_break_at_value">
+		<param name="Local" value="get_break_at_value.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_break_numeric_accuracy">
+		<param name="Local" value="get_break_numeric_accuracy.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_col_name">
+		<param name="Local" value="get_col_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_column">
+		<param name="Local" value="get_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_columnex">
+		<param name="Local" value="get_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_constr_type">
+		<param name="Local" value="get_constr_type.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_constr_value">
+		<param name="Local" value="get_constr_value.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_constraints">
+		<param name="Local" value="get_constraints.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_dual_solution">
+		<param name="Local" value="get_sensitivity_rhs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epsb">
+		<param name="Local" value="get_epsb.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epsd">
+		<param name="Local" value="get_epsd.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epsel">
+		<param name="Local" value="get_epsel.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epsint">
+		<param name="Local" value="get_epsint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epsperturb">
+		<param name="Local" value="get_epsperturb.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_epspivot">
+		<param name="Local" value="get_epspivot.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_improve">
+		<param name="Local" value="get_improve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_infinite">
+		<param name="Local" value="get_infinite.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_lambda">
+		<param name="Local" value="get_lambda.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_lowbo">
+		<param name="Local" value="get_lowbo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_lp_index">
+		<param name="Local" value="get_lp_index.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_lp_name">
+		<param name="Local" value="get_lp_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_Lrows">
+		<param name="Local" value="get_Lrows.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_mat">
+		<param name="Local" value="get_mat.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_max_level">
+		<param name="Local" value="get_max_level.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_maxpivot">
+		<param name="Local" value="get_maxpivot.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_mip_gap">
+		<param name="Local" value="get_mip_gap.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_nameindex">
+		<param name="Local" value="get_nameindex.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_Ncolumns">
+		<param name="Local" value="get_Ncolumns.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_negrange">
+		<param name="Local" value="get_negrange.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_nonzeros">
+		<param name="Local" value="get_nonzeros.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_Norig_columns">
+		<param name="Local" value="get_Norig_columns.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_Norig_rows">
+		<param name="Local" value="get_Norig_rows.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_Nrows">
+		<param name="Local" value="get_Nrows.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_obj_bound">
+		<param name="Local" value="get_obj_bound.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_objective">
+		<param name="Local" value="get_objective.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_orig_index">
+		<param name="Local" value="get_orig_index.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_origcol_name">
+		<param name="Local" value="get_col_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_origrow_name">
+		<param name="Local" value="get_row_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_pivoting">
+		<param name="Local" value="get_pivoting.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_presolve">
+		<param name="Local" value="get_presolve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_presolveloops">
+		<param name="Local" value="get_presolveloops.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_primal_solution">
+		<param name="Local" value="get_primal_solution.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_print_sol">
+		<param name="Local" value="get_print_sol.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_constraints">
+		<param name="Local" value="get_constraints.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_dual_solution">
+		<param name="Local" value="get_sensitivity_rhs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_lambda">
+		<param name="Local" value="get_lambda.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_primal_solution">
+		<param name="Local" value="get_primal_solution.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_sensitivity_obj">
+		<param name="Local" value="get_sensitivity_obj.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_sensitivity_objex">
+		<param name="Local" value="get_sensitivity_obj.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_sensitivity_rhs">
+		<param name="Local" value="get_sensitivity_rhs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_ptr_variables">
+		<param name="Local" value="get_variables.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_rh">
+		<param name="Local" value="get_rh.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_rh_range">
+		<param name="Local" value="get_rh_range.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_row">
+		<param name="Local" value="get_row.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_rowex">
+		<param name="Local" value="get_row.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_row_name">
+		<param name="Local" value="get_row_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_scalelimit">
+		<param name="Local" value="get_scalelimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_scaling">
+		<param name="Local" value="get_scaling.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_sensitivity_obj">
+		<param name="Local" value="get_sensitivity_obj.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_sensitivity_objex">
+		<param name="Local" value="get_sensitivity_obj.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_sensitivity_rhs">
+		<param name="Local" value="get_sensitivity_rhs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_simplextype">
+		<param name="Local" value="get_simplextype.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_solutioncount">
+		<param name="Local" value="get_solutioncount.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_solutionlimit">
+		<param name="Local" value="get_solutionlimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_status">
+		<param name="Local" value="get_status.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_statustext">
+		<param name="Local" value="get_statustext.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_timeout">
+		<param name="Local" value="get_timeout.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_total_iter">
+		<param name="Local" value="get_total_iter.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_total_nodes">
+		<param name="Local" value="get_total_nodes.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_upbo">
+		<param name="Local" value="get_upbo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_var_branch">
+		<param name="Local" value="get_var_branch.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_var_dualresult">
+		<param name="Local" value="get_sensitivity_rhs.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_var_primalresult">
+		<param name="Local" value="get_primal_solution.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_var_priority">
+		<param name="Local" value="get_var_priority.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_variables">
+		<param name="Local" value="get_variables.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_verbose">
+		<param name="Local" value="get_verbose.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="get_working_objective">
+		<param name="Local" value="get_working_objective.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="guess_basis">
+		<param name="Local" value="guess_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="has_BFP">
+		<param name="Local" value="has_BFP.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="has_XLI">
+		<param name="Local" value="has_XLI.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_add_rowmode">
+		<param name="Local" value="is_add_rowmode.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_anti_degen">
+		<param name="Local" value="is_anti_degen.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_binary">
+		<param name="Local" value="is_binary.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_break_at_first">
+		<param name="Local" value="is_break_at_first.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_constr_type">
+		<param name="Local" value="is_constr_type.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_debug">
+		<param name="Local" value="is_debug.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_feasible">
+		<param name="Local" value="is_feasible.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_unbounded">
+		<param name="Local" value="is_unbounded.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_infinite">
+		<param name="Local" value="is_infinite.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_int">
+		<param name="Local" value="is_int.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_integerscaling">
+		<param name="Local" value="is_integerscaling.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_lag_trace">
+		<param name="Local" value="is_lag_trace.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_maxim">
+		<param name="Local" value="is_maxim.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_nativeBFP">
+		<param name="Local" value="is_nativeBFP.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_nativeXLI">
+		<param name="Local" value="is_nativeXLI.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_negative">
+		<param name="Local" value="is_negative.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_obj_in_basis">
+		<param name="Local" value="is_obj_in_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_piv_mode">
+		<param name="Local" value="is_piv_mode.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_piv_rule">
+		<param name="Local" value="is_piv_rule.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_presolve">
+		<param name="Local" value="is_presolve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_scalemode">
+		<param name="Local" value="is_scalemode.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_scaletype">
+		<param name="Local" value="is_scaletype.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_semicont">
+		<param name="Local" value="is_semicont.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_SOS_var">
+		<param name="Local" value="is_SOS_var.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_trace">
+		<param name="Local" value="is_trace.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="is_use_names">
+		<param name="Local" value="is_use_names.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lag_solve">
+		<param name="Local" value="lag_solve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lp_solve_version">
+		<param name="Local" value="lp_solve_version.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="make_lp">
+		<param name="Local" value="make_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="MPS_writefileex">
+		<param name="Local" value="write_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_constraints">
+		<param name="Local" value="print_constraints.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_debugdump">
+		<param name="Local" value="print_debugdump.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_duals">
+		<param name="Local" value="print_duals.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_lp">
+		<param name="Local" value="print_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_objective">
+		<param name="Local" value="print_objective.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_scales">
+		<param name="Local" value="print_scales.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_solution">
+		<param name="Local" value="print_solution.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_str">
+		<param name="Local" value="print_str.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="print_tableau">
+		<param name="Local" value="print_tableau.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="put_abortfunc">
+		<param name="Local" value="put_abortfunc.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="put_bb_branchfunc">
+		<param name="Local" value="put_bb_branchfunc.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="put_bb_nodefunc">
+		<param name="Local" value="put_bb_nodefunc.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="put_logfunc">
+		<param name="Local" value="put_logfunc.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="put_msgfunc">
+		<param name="Local" value="put_msgfunc.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_basis">
+		<param name="Local" value="read_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_LP">
+		<param name="Local" value="read_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_lp">
+		<param name="Local" value="read_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_MPS">
+		<param name="Local" value="read_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_mps">
+		<param name="Local" value="read_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_freeMPS">
+		<param name="Local" value="read_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_freemps">
+		<param name="Local" value="read_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_params">
+		<param name="Local" value="read_params.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="read_XLI">
+		<param name="Local" value="read_XLI.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="reset_basis">
+		<param name="Local" value="reset_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="reset_params">
+		<param name="Local" value="reset_params.htm">
+		</OBJECT>
+ 	<LI> <OBJECT type="text/sitemap">
+ 		<param name="Name" value="resize_lp">
+ 		<param name="Local" value="resize_lp.htm">
+ 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_add_rowmode">
+		<param name="Local" value="set_add_rowmode.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_anti_degen">
+		<param name="Local" value="set_anti_degen.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_basis">
+		<param name="Local" value="set_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_basiscrash">
+		<param name="Local" value="set_basiscrash.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_basisvar">
+		<param name="Local" value="set_basisvar.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_bb_depthlimit">
+		<param name="Local" value="set_bb_depthlimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_bb_floorfirst">
+		<param name="Local" value="set_bb_floorfirst.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_bb_rule">
+		<param name="Local" value="set_bb_rule.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_BFP">
+		<param name="Local" value="set_BFP.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_XLI">
+		<param name="Local" value="set_XLI.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_binary">
+		<param name="Local" value="set_binary.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_bounds">
+		<param name="Local" value="set_bounds.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_bounds_tighter">
+		<param name="Local" value="set_bounds_tighter.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_break_at_first">
+		<param name="Local" value="set_break_at_first.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_break_at_value">
+		<param name="Local" value="set_break_at_value.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_break_numeric_accuracy">
+		<param name="Local" value="set_break_numeric_accuracy.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_column">
+		<param name="Local" value="set_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_columnex">
+		<param name="Local" value="set_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_col_name">
+		<param name="Local" value="set_col_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_constr_type">
+		<param name="Local" value="set_constr_type.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_debug">
+		<param name="Local" value="set_debug.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epsb">
+		<param name="Local" value="set_epsb.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epsd">
+		<param name="Local" value="set_epsd.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epsel">
+		<param name="Local" value="set_epsel.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epsint">
+		<param name="Local" value="set_epsint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epsperturb">
+		<param name="Local" value="set_epsperturb.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epspivot">
+		<param name="Local" value="set_epspivot.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_epslevel">
+		<param name="Local" value="set_epslevel.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_unbounded">
+		<param name="Local" value="set_unbounded.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_improve">
+		<param name="Local" value="set_improve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_infinite">
+		<param name="Local" value="set_infinite.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_int">
+		<param name="Local" value="set_int.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_lag_trace">
+		<param name="Local" value="set_lag_trace.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_lowbo">
+		<param name="Local" value="set_lowbo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_lp_name">
+		<param name="Local" value="set_lp_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_mat">
+		<param name="Local" value="set_mat.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_maxim">
+		<param name="Local" value="set_maxim.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_maxpivot">
+		<param name="Local" value="set_maxpivot.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_minim">
+		<param name="Local" value="set_minim.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_mip_gap">
+		<param name="Local" value="set_mip_gap.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_negrange">
+		<param name="Local" value="set_negrange.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_obj">
+		<param name="Local" value="set_obj_fn.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_obj_bound">
+		<param name="Local" value="set_obj_bound.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_obj_fn">
+		<param name="Local" value="set_obj_fn.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_obj_fnex">
+		<param name="Local" value="set_obj_fn.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_obj_in_basis">
+		<param name="Local" value="set_obj_in_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_outputfile">
+		<param name="Local" value="set_output.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_outputstream">
+		<param name="Local" value="set_output.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_pivoting">
+		<param name="Local" value="set_pivoting.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_preferdual">
+		<param name="Local" value="set_preferdual.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_presolve">
+		<param name="Local" value="set_presolve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_print_sol">
+		<param name="Local" value="set_print_sol.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_rh">
+		<param name="Local" value="set_rh.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_rh_range">
+		<param name="Local" value="set_rh_range.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_rh_vec">
+		<param name="Local" value="set_rh_vec.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_row">
+		<param name="Local" value="set_row.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_rowex">
+		<param name="Local" value="set_row.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_row_name">
+		<param name="Local" value="set_row_name.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_scalelimit">
+		<param name="Local" value="set_scalelimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_scaling">
+		<param name="Local" value="set_scaling.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_semicont">
+		<param name="Local" value="set_semicont.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_sense">
+		<param name="Local" value="set_sense.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_simplextype">
+		<param name="Local" value="set_simplextype.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_solutionlimit">
+		<param name="Local" value="set_solutionlimit.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_timeout">
+		<param name="Local" value="set_timeout.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_trace">
+		<param name="Local" value="set_trace.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_upbo">
+		<param name="Local" value="set_upbo.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_use_names">
+		<param name="Local" value="set_use_names.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_var_branch">
+		<param name="Local" value="set_var_branch.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_var_weights">
+		<param name="Local" value="set_var_weights.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="set_verbose">
+		<param name="Local" value="set_verbose.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="solve">
+		<param name="Local" value="solve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="str_add_column">
+		<param name="Local" value="add_column.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="str_add_constraint">
+		<param name="Local" value="add_constraint.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="str_add_lag_con">
+		<param name="Local" value="add_lag_con.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="str_set_obj_fn">
+		<param name="Local" value="set_obj_fn.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="str_set_rh_vec">
+		<param name="Local" value="set_rh_vec.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="time_elapsed">
+		<param name="Local" value="time_elapsed.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="unscale">
+		<param name="Local" value="unscale.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_basis">
+		<param name="Local" value="write_basis.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_LP">
+		<param name="Local" value="write_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_lp">
+		<param name="Local" value="write_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_lpex">
+		<param name="Local" value="write_lp.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_MPS">
+		<param name="Local" value="write_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_mps">
+		<param name="Local" value="write_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_freeMPS">
+		<param name="Local" value="write_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_freemps">
+		<param name="Local" value="write_mps.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_params">
+		<param name="Local" value="write_params.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="write_XLI">
+		<param name="Local" value="write_XLI.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Calling the lpsolve API from your application">
+		<param name="Local" value="Build.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="integer variables">
+		<param name="Local" value="integer.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="free variables">
+		<param name="Local" value="free.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="semi-continuous variables">
+		<param name="Local" value="semi-cont.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="special ordered sets">
+		<param name="Local" value="SOS.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ratio's">
+		<param name="Local" value="ratio.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="absolute values">
+		<param name="Local" value="absolute.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="scaling">
+		<param name="Local" value="scaling.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="sensitivity">
+		<param name="Local" value="sensitivity.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Presolve">
+		<param name="Local" value="Presolve.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Infeasible models">
+		<param name="Local" value="Infeasible.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Basis Factorization Packages">
+		<param name="Local" value="BFP.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="External Language Interfaces">
+		<param name="Local" value="XLI.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DIMACS minimum cost flow problems">
+		<param name="Local" value="DIMACS_mcf.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DIMACS maximum flow problems">
+		<param name="Local" value="DIMACS_maxf.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DIMACS minimum assignment problems">
+		<param name="Local" value="DIMACS_asn.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="GNU MathProg">
+		<param name="Local" value="MathProg.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Zimpl">
+		<param name="Local" value="Zimpl.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="CPLEX lp files">
+		<param name="Local" value="CPLEX-format.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Xpress lp files">
+		<param name="Local" value="Xpress-format.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="LINDO lp files">
+		<param name="Local" value="LINDO-format.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="LPFML">
+		<param name="Local" value="LPFML.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="mps file format">
+		<param name="Local" value="mps-format.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lp file format">
+		<param name="Local" value="lp-format.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="mps bas file format">
+		<param name="Local" value="bas-format.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lp_solve command">
+		<param name="Local" value="lp_solve.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="LPSolve IDE">
+		<param name="Local" value="IDE.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Java">
+		<param name="Local" value="Java.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from AMPL">
+		<param name="Local" value="AMPL.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from MATLAB">
+		<param name="Local" value="MATLAB.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from O-Matrix">
+		<param name="Local" value="O-Matrix.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Sysquake">
+		<param name="Local" value="Sysquake.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Scilab">
+		<param name="Local" value="Scilab.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Octave">
+		<param name="Local" value="Octave.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from FreeMat">
+		<param name="Local" value="FreeMat.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Euler">
+		<param name="Local" value="Euler.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Python">
+		<param name="Local" value="Python.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Sage">
+		<param name="Local" value="Sage.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from PHP">
+		<param name="Local" value="PHP.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from R">
+		<param name="Local" value="R.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Using lpsolve from Microsoft Solver Foundation">
+		<param name="Local" value="MSF.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changes from version 4 to version 5.1">
+		<param name="Local" value="changes5.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+                <param name="Name" value="Changes from version 5.1 to version 5.5">
+		<param name="Local" value="changes55.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Frequently Asked Questions">
+		<param name="Local" value="FAQ.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="lp_solve Google group">
+		<param name="Local" value="https://groups.google.com/g/lp_solve">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Linear Programming FAQ">
+		<param name="Local" value="http://www-unix.mcs.anl.gov/otc/Guide/faq/linear-programming-faq.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="GNU LESSER GENERAL PUBLIC LICENSE">
+		<param name="Local" value="LGPL.htm">
+		</OBJECT>
+        <LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Usefull links">
+		<param name="Local" value="links.htm">
+		</OBJECT>
+</UL>
+</BODY></HTML>

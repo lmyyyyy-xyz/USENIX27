@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Changes from version 5.1 to version 5.5</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>Changes from version 5.1 to version 5.5</h1>
+					<h3>Main features and changes to v5.5 compared to v5.1</h3>
+
+					<p>
+					Why a jump from version numbers 5.1 to 5.5 ? This is done to indicate that this
+					is more than just another update. The solver engine was revised and optimised in such
+					a way that performance has improved considerably. Numerical stability is also better resulting
+					in more models that can be solved. The LUSOL bfp is now also the default. In the past, the
+					etaPFI bfp package was the default, but for larger models this leads faster to numerical
+					instabilities and performance problems.</p>
+
+					<p>Overall, the v5.5 code is faster and more robust than v5.1. This robustness is for
+					example proven by the fact that many more models can now be solved even without
+					scaling.</p>
+
+					<p>The API hasn't changed very much. There are a couple of new routines and one routine has an extra argument.
+					   Some constants got new values.</p>
+					<ul>
+					    <li>
+							Fundamental internal change to the solver engine resulting in better performance
+							and numerical stability. Both the LP solver and the B&amp;B solvers are enhanced.</li>
+						<li>
+							Optimised MILP branch truncation, with reduced cost fixing.</li>
+						<li>
+							LUSOL bfp is now the default.</li>
+						<li>
+							Presolve is improved in functionality and performance.</li>
+						<li>
+							Better handling of degeneracy, with more options.</li>
+						<li>
+							Store and read options from a file make it easier to set options.<br>
+							See <A href="read_params.htm">read_params</A> and <A href="write_params.htm">write_params</A></li>
+						<li>
+							Partial pricing for the primal simplex now works.</li>
+						<li>
+							Full support for xli_ZIMPL v2.0.3.</li>
+						<li>
+							The objective function is no longer stored as part of the constraint matrix.</li>
+						<li>
+							Dual-long step code is in place, but not fully activated yet.</li>
+						<li>
+							General code cleanup.</li>
+						<li>
+							Added OBJSENSE and OBJNAME headers in the free MPS format (See <a href="mps-format.htm">MPS file format</a>).</li>
+						<li>
+							The MathProg xli driver has now the ability to generate a model.</li>
+						<li>
+							New API routines, see further.</li>
+					</ul>
+
+					<p>Note the store and read options from a file. This can be a very nice new feature.
+					lp_solve has a lot of options and with this new addition it is much easier to set these
+					options. People can start looking for the best options that work for their models very easily and
+					it could help to find even better default options.</p>
+
+					<h4>Changed API calls</h4>
+					<ul>
+						<li>
+							<a href="get_basis.htm">get_basis</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>void</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_total_iter.htm">get_total_iter</a>
+							<ul>
+								<li>
+									Return value is now <b>long long</b> instead of <b>long</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_total_nodes.htm">get_total_nodes</a>
+							<ul>
+								<li>
+									Return value is now <b>long long</b> instead of <b>long</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_abortfunc.htm">put_abortfunc</a>
+							<ul>
+								<li>
+									Argument <i>newctrlc</i> is now from type <b>lphandle_intfunc</b> instead of <b>ctrlcfunc</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_logfunc.htm">put_logfunc</a>
+							<ul>
+								<li>
+									Argument <i>newlog</i> is now from type <b>lphandlestr_func</b> instead of <b>logfunc</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_msgfunc.htm">put_msgfunc</a>
+							<ul>
+								<li>
+									Argument <i>newmsg</i> is now from type <b>lphandleint_func</b> instead of <b>msgfunc</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_anti_degen.htm">set_anti_degen</a>
+							<ul>
+								<li>
+									New constants are added: <i>ANTIDEGEN_RHSPERTURB</i>, <i>ANTIDEGEN_BOUNDFLIP</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_basiscrash.htm">set_basiscrash</a>
+							<ul>
+								<li>
+									New constant added: <i>CRASH_LEASTDEGENERATE</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bb_rule.htm">set_bb_rule</a>
+							<ul>
+							    <li>Constant <i>NODE_GUBMODE</i> was not documented.</li>
+								<li>
+									New constants are added: <i>NODE_RCOSTFIXING</i>, <i>NODE_STRONGINIT</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_improve.htm">set_improve</a> <b>(!)</b>
+							<ul>
+								<li>
+									Constants are deleted: <i>IMPROVE_FTRAN</i>, <i>IMPROVE_BTRAN</i>, <i>IMPROVE_SOLVE</i>, <i>IMPROVE_INVERSE</i>
+								</li>
+								<li>
+									New constants are added: <i>IMPROVE_SOLUTION</i>, <i>IMPROVE_DUALFEAS</i>, <i>IMPROVE_THETAGAP</i>, <i>IMPROVE_BBSIMPLEX</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_pivoting.htm">set_pivoting</a> <b>(!)</b>
+							<ul>
+								<li>
+									Constants are deleted: <i>PRICE_AUTOPARTIALCOLS</i>, <i>PRICE_AUTOPARTIALROWS</i>, <i>PRICE_AUTOMULTICOLS</i>, <i>PRICE_AUTOMULTIROWS</i>
+								</li>
+								<li>
+									New constants added: <i>PRICE_AUTOPARTIAL</i>, <i>PRICE_AUTOMULTIPLE</i>, <i>PRICE_HARRISTWOPASS</i>, <i>PRICE_TRUENORMINIT</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_presolve.htm">set_presolve</a> <b>(!)</b>
+							<ul>
+								<li>
+									There is a new third argument: <i>maxloops</i>
+								</li>
+								<li>
+									<i>PRESOLVE_DUALS</i> has a new value. Before it was 128, now it is 524288
+								</li>
+								<li>
+									<i>PRESOLVE_SENSDUALS</i> has a new value. Before it was 256, now it is 1048576
+								</li>
+								<li>
+									New constants are added: <i>PRESOLVE_KNAPSACK</i>, <i>PRESOLVE_ELIMEQ2</i>, <i>PRESOLVE_IMPLIEDFREE</i>, <i>PRESOLVE_REDUCEGCD</i>, <i>PRESOLVE_PROBEFIX</i>, <i>PRESOLVE_PROBEREDUCE</i>, <i>PRESOLVE_ROWDOMINATE</i>, <i>PRESOLVE_COLDOMINATE</i>, <i>PRESOLVE_MERGEROWS</i>, <i>PRESOLVE_IMPLIEDSLK</i>, <i>PRESOLVE_COLFIXDUAL</i>, <i>PRESOLVE_BOUNDS</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+					</ul>
+
+					<h4>New API calls</h4>
+					<ul>
+						<li>
+							<a href="copy_lp.htm">copy_lp</a>
+							<ul>
+								<li>
+									This routine existed before version 5, but was removed in version 5.0.
+									Now it exists again.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="dualize_lp.htm">dualize_lp</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_unbounded.htm">is_unbounded</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_free</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="is_use_names.htm">is_use_names</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_column.htm">get_columnex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_constr_value.htm">get_constr_value</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_presolveloops.htm">get_presolveloops</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_row.htm">get_rowex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_bb_branchfunc.htm">put_bb_branchfunc</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_bb_nodefunc.htm">put_bb_nodefunc</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="read_params.htm">read_params</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="reset_params.htm">reset_params</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_basisvar.htm">set_basisvar</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_epslevel.htm">set_epslevel</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_unbounded.htm">set_unbounded</a>
+														<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_free</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="set_use_names.htm">set_use_names</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="write_params.htm">write_params</a>
+							<p></p>
+						</li>
+					</ul>
+
+					<h4>Removed API calls</h4>
+					<ul>
+						<li>
+							<u>is_free</u>
+							<ul>
+								<li>
+									Use <a href="is_unbounded.htm">is_unbounded</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_free</u>
+							<ul>
+								<li>
+									Use <a href="set_unbounded.htm">set_unbounded</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+					</ul>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

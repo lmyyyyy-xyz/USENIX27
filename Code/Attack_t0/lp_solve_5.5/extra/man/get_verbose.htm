@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_verbose</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_verbose</h1>
+					<p>Returns the verbose level.</p>
+					<p><b>int get_verbose(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_verbose</b> returns the current verbose level. Can be one of the following values:</p>
+					<TABLE id="Table2" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>NEUTRAL (0)</TD>
+							<TD>Only some specific debug messages in de debug print routines are reported.</TD>
+						</TR>
+						<TR>
+							<TD>CRITICAL (1)</TD>
+							<TD>Only critical messages are reported. Hard errors like instability, out of memory, ...</TD>
+						</TR>
+						<TR>
+							<TD>SEVERE (2)</TD>
+							<TD>Only severe messages are reported. Errors.</TD>
+						</TR>
+						<TR>
+							<TD>IMPORTANT (3)</TD>
+							<TD>Only important messages are reported. Warnings and Errors.</TD>
+						</TR>
+						<TR>
+							<TD>NORMAL (4)</TD>
+							<TD>Normal messages are reported. This is the default.</TD>
+						</TR>
+						<TR>
+							<TD>DETAILED (5)</TD>
+							<TD>Detailed messages are reported. Like model size, continuing B&amp;B improvements, ...</TD>
+						</TR>
+						<TR>
+							<TD>FULL (6)</TD>
+							<TD>All messages are reported. Useful for debugging purposes and small models.</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_verbose</b> function returns the verbose level.<br>
+						lp_solve reports information back to the user. How much information is reported
+						depends on the verbose level. The default verbose level is NORMAL. lp_solve determines
+						how verbose a given message is. For example specifying a wrong row/column index
+						values is considered as a SEVERE error. <i>verbose</i> determines how much of
+						the lp_solve message are reported. All messages equal to and below the set
+						level are reported.<br>
+						The default reporting device is the console screen. It is possible to set a
+						used defined reporting routine via <A href="put_logfunc.htm">put_logfunc</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int verbose;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  verbose = get_verbose(lp); /* Will return 4 (NORMAL) */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_verbose.htm">set_verbose</A>, <A HREF="put_logfunc.htm">
+							put_logfunc</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

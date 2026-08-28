@@ -1,0 +1,23 @@
+:
+#src='lpsolve.c Sysquake.c hash.c'
+src='lpsolve.c Sysquake.c'
+c=gcc
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("osx%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+SYSQUAKEPATH="/Applications/Sysquake 4.1 Pro/Sysquake.app/Contents/Resources/include"
+
+$c -bundle -undefined suppress -Wl,-flat_namespace -o bin/$PLATFORM/sqlpsolveext.so -I../.. -I"$SYSQUAKEPATH" -DSYSQUAKE -DNODEBUG $src -lc -lm ../../lpsolve55/bin/$PLATFORM/liblpsolve55.dylib
+
+rm *.o 2>/dev/null

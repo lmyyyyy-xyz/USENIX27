@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Quick Start</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Quick Start</u></h1>
+
+					<p>lp_solve (or lpsolve) has allot of features in-house.
+					For a beginner, it can be difficult to determine where to start.
+					The distribution contains many files and to start with, you need only a couple of them.
+					As you learn the package you may need extras.
+					This text explains how to start with lp_solve.</p>
+
+					<a href="#Quick quick start">Skip the blabla, just give me a very quick start.</a>
+
+					<h3>How to call lp_solve</h3>
+
+					<p>Basically, lp_solve is a library, a set of routines, called the API that can be called from almost
+					any programming language to solve MILP problems. There are several ways to pass the data to the library:</p>
+					<ul>
+						<li>Via the API
+						<li>Via input files</li>
+						<li>Via an IDE</li>
+					</ul>
+					<h4>Via the API</h4>
+					The API is a set of routines that can be called from a programming language to build the model
+					in memory, solve it and return the results. There are many API routines to perform many possible
+					tasks and set several options. See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview.<br><br>
+
+					<h4>Via input files</h4>
+					<p>Standard, lp_solve supports several input files types.
+					The common known MPS format (see <a href="mps-format.htm">mps-format</a>) is supported by most solvers, but
+					it is not very readable for humans. Another format is the lp format (see <a href="lp-format.htm">lp-format</a>)
+					that is more readable. lp_solve has the unique ability to use user-written routines to input the model
+					(see <a href="XLI.htm">External Language Interface</a>).
+					See <a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a> and <a href="read_lp.htm">read_lp, read_LP</a> for
+					the API calls to read the model from file.<br>
+					<br>
+					There is also a driver program called lp_solve that uses the API to provide a command line application
+					to solve models. See <a href="lp_solve.htm">lp_solve</a> for its usage. With this program you don't
+					have to know anything of API or computer programming languages. You can just provide your model
+					via file to the program and it will solve the model and give you the result.</p>
+
+					<h4>Via an IDE</h4>
+					<p>Thanks to <a href="mailto:hgourvest@progdigy.com">Henri Gourvest</a>, there is now also an IDE program called LPSolve IDE that uses the API to provide a Windows application
+					to solve models. See <a href="IDE.htm">LPSolve IDE</a> for its usage. With this program you don't
+					have to know anything of API or computer programming languages. You can just provide your model
+					to the program and it will solve the model and give you the result.</p>
+
+					<p>As already stated, lp_solve can be called from many programming language. Among them are
+					C, C++, Pascal, Delphi, Java, VB, C#, VB.NET, Excel. But let this list not be a limitation.
+					Any programming language capable of calling external libraries (DLLs under Windows, Shared libraries (.so) under Unix/Linux)
+					can call lp_solve.</p>
+
+					<h3>Some key features of lp_solve</h3>
+					<ul>
+						<li>Mixed Integer Linear Programming (MILP) solver
+
+						<li>Basically no limit on model size
+
+						<li>It is free and with sources
+
+						<li>Supports Integer variables, Semi-continuous variables and Special Ordered Sets
+
+						<li>Can read model from MPS, LP or user written format
+
+						<li>Models can be build in-memory without the use of files
+
+						<li>Has a powerful API interface
+
+						<li>Easy callable from other programming languages
+
+						<li>Advanced pricing using Devex and Steepest Edge for both primal and dual simplexes
+
+						<li>Provides different scaling methods to make the model more numerical stable
+
+						<li>Has presolve capabilities to tighten constraints/make the model smaller and faster to solve
+
+						<li>Has a base crashing routine to determine a starting point
+
+						<li>Allows restart after making changes to the model. Solve continues from the last found solution
+
+						<li>Possible to select desired combinations of primal and dual phases 1 and 2
+
+						<li>Possible to set several solver parameters like tolerances
+
+						<li>Alternative (and faster) inverse/re-factorisation libraries are provided for. See <A href="BFP.htm">Basis Factorization Packages</A>
+						<li>Alternative model readers and writers possible via the XLI implementation. See <A href="XLI.htm">External Language Interfaces</A>
+						<li>Has the possibility to convert one model format to another format
+
+						<li>Provides post-optimal sensitivity analysis. See <A href="sensitivity.htm">Sensitivity</A>
+						<li>...</li>
+					</ul>
+
+					<h3>Quick quick start</h3>
+					<a name="Quick quick start"></a>
+
+					<h4>Formulating a problem</h4>
+
+					<p>If you don't know much about linear programming, first take a look at
+					<a href="formulate.htm">Formulation of an lp problem in lpsolve</a>.
+					Start with reading the first part where a practical example is presented until the point where the formulation is given in mathematical format,
+					then return to here. This practical example is used in the next presentations.</p>
+
+					<p>Another <b>very usefull</b> and free paper about linear programming fundamentals and advanced features
+					plus several problems being discussed and modeled is <a href="http://dashoptimization.com/home/downloads/book/booka4.pdf" target="_blank">Applications of optimization with Xpress-MP</a>.
+					It describes linear programming and modeling with the commercial solver Xpress-MP, but is as usefull for other solvers like lp_solve. In case that this link would not work anymore,
+					try <a href="http://www.google.be/search?hl=nl&as_qdr=all&q=%22Applications+of+optimization+with+Xpress-MP%22+%22Developing+Linear+and+Integer+Programming+models%22+%22Application+examples%22+filetype%3Apdf&btnG=Zoeken&meta=" target="_blank">this</a> via google search.
+					</p>
+
+					<h4>Solve a problem via the IDE</h4>
+
+					<p>The easiest way to start with lp_solve is via the IDE.
+					This only works under Windows. See <a href="IDE.htm">LPSolve IDE</a>.</p>
+
+					<h4>Solve a problem via the <a href="lp_solve.htm">lp_solve command</a> line program</h4>
+
+					<p>Another way to solve a model is via the <a href="lp_solve.htm">lp_solve command</a> line program.
+					This works on any platform, but is completely command-line driven.
+					Well known by Unix/Linux shell programmers and DOS box users.
+					See <a href="lp_solve.htm">lp_solve command</a>.</p>
+
+					<h4>solve a problem via the API</h4>
+
+					<p>Programmers want to call lp_solve in a totally different way.
+					They want to call lp_solve as a library directly from their programming language.
+					This is what is called the API (Application Programming Interface).
+					See <A HREF="Build.htm">Calling the lpsolve API from your application</A> and
+					<A HREF="formulate.htm#Construct%20the%20model%20from%20a%20Programming%20Language">Construct the model from a Programming Language</A>.
+					An overview of the complete API can be found on: <A HREF="lp_solveAPIreference.htm">lp_solve API reference</A>.
+					</p>
+
+					<h4>Compile the source code yourself</h4>
+
+					<p>The distribution contains precompiled libraries/binaries for Windows and Linux.
+					   However lp_solve can be compiled on other platforms also. You may also to make
+					   modifications to it and then you have to recompile also, even on the precompiled
+					   platforms. See <A HREF="Build.htm">Calling the lpsolve API from your application</A>.
+					   In this article it is both explained how to link your code to the library and how to
+					   compile the lp_solve code.
+					   </p>
+
+					<h4>Basis Factorization Packages</h4>
+
+					<p>Alternative inverse/re-factorization libraries can be used by lp_solve.
+					   This is a feature for the more experienced users of lp_solve.
+					   See <a href="BFP.htm">Basis Factorization Packages</a> for more information.
+					   The sources of these packages are in the lp_solve_5.5.2.14_bfp_*_source.tar.gz archives.
+					   The binaries are in the lp_solve_5.5.2.14_exe* archive.</p>
+
+					<h4>External Language Interfaces</h4>
+
+					<p>Alternative model readers and writers possible via the XLI implementation.
+					   Models expressed in format files other than lp or MPS format can also be read or written
+					   by lp_solve via this unique feature. See <a href="XLI.htm">External Language Interfaces</a>
+					   for more information.
+					   The sources of these packages are in the lp_solve_5.5.2.14_xli_*_source.tar.gz archives.
+					   The binaries are in the lp_solve_5.5.2.14_exe* archive.</p>
+
+					<h4>Calling lp_solve from higher level Mathematical languages.</h4>
+					   lp_solve can be called from <a href="AMPL.htm">AMPL</a>, <a href="MATLAB.htm">MATLAB</a>, <a href="O-Matrix.htm">O-Matrix</a>, <a href="Sysquake.htm">Sysquake</a>, <a href="Scilab.htm">Scilab</a>, <a href="Octave.htm">Octave</a>, <a href="FreeMat.htm">FreeMat</a>, <a href="Euler.htm">Euler</a>, <a href="Python.htm">Python</a>, <a href="Sage.htm">Sage</a>, <a href="PHP.htm">PHP</a>, <a href="R.htm">R</a>, <a href="MSF.htm">Microsoft Solver Foundation</a>.
+
+					<p>You now have a pretty good idea what lp_solve is about.</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

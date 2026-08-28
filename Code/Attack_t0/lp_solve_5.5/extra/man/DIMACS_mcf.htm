@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>DIMACS minimum cost flow problems</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>DIMACS minimum cost flow problems</u></h1>
+                                        <p>DIMACS (Center for Discrete Mathematics and Theoretical Computer Science (see <a href="http://dimacs.rutgers.edu/">http://dimacs.rutgers.edu/</a>))
+                                           has formulated some 'challenges' for some specific problem instances (see <a href="http://dimacs.rutgers.edu/Challenges/">http://dimacs.rutgers.edu/Challenges/</a>).
+                                           One of these challenges is network flows and matching - the first DIMACS implementation challenge.</p>
+
+                                        <p>One of these network flows are minimum cost flow problems:<br><br>
+
+                                           Given a directed network with upper and lower capacities on each of its arcs, and given a set of external flows
+                                           (positive or negative) that need to be routed through this network, find the minimal cost routing of the given flows
+                                           through this network. Here, the cost per unit of flow on each arc is assumed to be known.</p>
+
+                                        <h3>Network Structure </h3>
+
+                                        <ul>
+                                        <li>
+                                          A network is a directed graph with <i> n </i> nodes and <i> m </i> arcs.
+                                        </li><li>
+                                          Nodes are identified by integers 1...<i>n</i>.
+
+                                        </li><li>
+                                          Graphs do not have to be symmetric: if an arc <i>(v,w)</i> is in the graph,
+                                          the reverse arc <i>(w,v)</i> does not have to be in the graph.
+                                        </li><li>
+                                          Parallel arcs are not allowed.
+                                        </li><li>
+                                          Self-loops are not allowed.
+                                        </li><li>
+                                          Arc capacities are 32-bit signed integers.
+
+                                        </li><li>
+                                          The source and the sink are distinct.
+                                        </li><li>
+                                          The sink may be unreachable from the source.
+                                        </ul>
+
+                                        <p>
+                                           There is a specific file format available for these kinds of problems:
+                                        </p>
+
+                                        <p>The DIMACS minimum-cost flow format requires that bounds on feasible arc flows be
+                                        integer-valued (the <tt>LOW</tt> and <tt>CAP</tt> fields described below). All
+                                        files contain only ASCII characters with information collected on each <i>line</i>,
+                                        as described below. A line is terminated with an end-of-line character. Fields in each
+                                        line are separated by at least one blank space. Each line begins with a one-character
+                                        designator to identify the line type. </p>
+
+<p>The following information makes up a DIMACS minimum-cost flow input file:</p>
+
+<ul>
+  <li>comment lines </li>
+  <li>problem line </li>
+  <li>node descriptors </li>
+  <li>arc descriptors </li>
+</ul>
+
+<p>As noted above, information is collected into <i>lines</i>, which begin with
+one-character designators. We describe each type of information line in turn.</p>
+
+<ol>
+  <li><b>Comment Lines</b>: Comment lines give human-readable information about the file and
+    are ignored by programs. Comment lines can appear anywhere in the file. Each comment line
+    begins with a lower-case character <tt>c</tt>. <pre>    c This is an example of a comment line.</pre>
+  </li>
+  <li><b>Problem Line</b>: There is one problem line per input file. The problem line must
+    appear before any node or arc descriptor lines. For minimum-cost flow network instances
+    the problem line has the following format: <pre>    p min NODES ARCS</pre>
+
+    <p>The lower-case character <tt>p</tt> signifies that this is a problem line. The
+    three-character problem designator <tt>min</tt> identifies the file as containing
+    specification information for a minimum-cost flow problem. The <tt>NODES</tt> field
+    contains an integer value specifying <i>n</i>, the number of nodes in the network. The <tt>ARCS</tt>
+    field contains an integer value specifying <i>m</i>, the number of arcs in the network. </p>
+
+  </li>
+  <li><b>Node Descriptors</b>: All node descriptor lines must appear before all arc descriptor
+    lines. For minimum-cost flow instances, the node descriptor lines describe supply and
+    demand nodes, but not transshipment nodes. That is, only nodes with nonzero node supply
+    values appear. There is one node descriptor line for each such node, with the following
+    format. <pre>    n ID FLOW</pre>
+    <p>The lower-case character <tt>n</tt> signifies that this is a node descriptor line. The <tt>ID</tt>
+    field gives a node identification number, an integer between 1 and <i>n</i>. The <tt>FLOW</tt>
+
+    field gives the amount of supply at node <tt>ID</tt>. </p>
+  </li>
+  <li><b>Arc Descriptors</b>: There is one arc descriptor line for each arc in the network.
+    For a minimum-cost flow instance, arc descriptor lines are of the following form. <pre>    a SRC DST LOW CAP COST</pre>
+    <p>The lower-case character <tt>a</tt> signifies that this is an arc descriptor line. For
+    a directed arc (<i>v,w</i>) the <tt>SRC</tt> field gives the identification number for the
+    source vertex <i>v</i>, and the <tt>DST</tt> field gives the destination vertex <i>w</i>.
+    Identification numbers are integers between 1 and <i>n</i>. The <tt>LOW</tt> field
+    specifies the minimum abount of flow that can be sent along arc (<i>v,w</i>), and the <tt>CAP</tt>
+
+    field gives the maximum amount of flow that can be sent along arc (<i>v,w</i>) in a
+    feasible flow. The <tt>COST</tt> field contains the per-unit cost of flow sent along arc (<i>v,w</i>).
+    </p>
+  </li>
+</ol>
+
+<h4>Input File Example :</h4>
+
+<p>The example network pictured here is followed by a corresponding DIMACS
+minimum-cost flow input file. Items listed in the lower-right of the graphic represent
+fields described above.</p>
+<p align="center">
+<img alt="Minimum Cost Flow model graph" border="1" vspace="10" SRC="dimacs_mcf.gif">
+</p>
+
+<pre>
+c This is a simple example file to demonstrate the DIMACS
+c input file format for minimum cost flow problems. The solution
+c vector is [2,2,2,0,4] with cost at 14.
+c
+c Problem line (nodes, links)
+p min 4 5
+c
+c Node descriptor lines (supply+ or demand-)
+n 1 4
+n 4 -4
+c
+c Arc descriptor lines (from, to, minflow, maxflow, cost)
+a 1 2 0 4 2
+a 1 3 0 2 2
+a 2 3 0 2 1
+a 2 4 0 3 3
+a 3 4 0 5 1
+c
+c End of file
+</pre>
+                                        <p>lp_solve can read/write and solve these models via the xli_DIMACS XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).
+                                           It reads such a model in above format and solves it via linear programming.
+                                           The xli can also generate a DIMACS formatted file.<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS mincostflow.net
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 14
+
+Actual values of the variables:
+C1                              2
+C2                              2
+C3                              2
+C4                              0
+C5                              4
+</pre>
+                                        <p>Also from within the IDE, this XLI can be used. However, some entries
+                                           must be added in LpSolveIDE.ini (in the folder where the IDE is installed).
+                                        </p>
+                                        <p>In the [XLI] section the following must be added:</p>
+<pre>
+lib6=xli_DIMACS
+</pre>
+                                        <p>And a new section for the DIMACS XLI must also be added:</p>
+<pre>
+[xli_DIMACS]
+extension=.net
+language=DIMACS
+</pre>
+                                        <p>Then make sure that the xli_DIMACS.dll is available for the IDE.
+                                           This must be done by placing this dll in the IDE folder or in the
+                                           Windows system32 folder.</p>
+
+<h4>Solution :</h4>
+
+                                        <p>The solution vector of above example is [2, 2, 2, 0, 4]<br>
+                                           This must be interpreted as follows:<br>
+                                           There are as many variables as there are arc descriptor lines in the input file and
+                                           they appear in the same order. So:<br><br>
+                                           C1 specifies how much flow there is for the first arc definition, in this case from 1 -&gt; 2<br>
+                                           C2 specifies how much flow there is for the second arc definition, in this case from 1 -&gt; 3<br>
+                                           C3 specifies how much flow there is for the third arc definition, in this case from 2 -&gt; 3<br>
+                                           C4 specifies how much flow there is for the fourth arc definition, in this case from 2 -&gt; 4<br>
+                                           C5 specifies how much flow there is for the fifth arc definition, in this case from 3 -&gt; 4<br>
+                                           <br>
+                                           This means there is a flow of 2 from node 1 to 2, a flow of 2 from node 1 to 3, a flow of 2 from node
+                                           2 to 3, a flow of 0 from node 2 to 4 and a flow of 4 from node 3 to 4.<br>
+                                           The value of the objective is the cost of the flow: 2 * 2 + 2 * 2 + 2 * 1 + 0 * 3 + 4 * 1 = 14
+
+<h4>Output :</h4>
+
+                                        <p>The solution of the model can also be written in a DIMACS format:</p>
+
+
+<ul>
+  <li>comment lines </li>
+  <li>solution lines </li>
+  <li>flow assignments </li>
+</ul>
+
+<p>For each network problem, the solution is an <i>integer-valued</i> flow assignment. The
+output file should list the solution and flow assignment for all arcs in the graph. As
+noted above, information is collected into <i>lines</i>, which begin with one-character
+designators. We describe each type of information line in turn.
+
+<OL>
+  <li><b>Comment Lines</b>: Comment lines give human-readable information about the file and
+    are ignored by programs. Comment lines can appear anywhere in the file. Each comment line
+    begins with a lower-case character <tt>c</tt>. <pre>    c This is an example of a comment line.</pre>
+  </li>
+  <LI>
+    <B> Solution line. </B>
+
+    The solution line contains the flow value and has the following format:
+    <pre>    s VALUE</pre>
+
+    <p>The lower-case character <tt>s</tt> signifies that this is a solution line.
+    The <tt>VALUE</tt> field
+    contains the value of the objective. </p>
+
+  <LI>
+    <B> Flow assignments. </B>
+    There is one flow assignment line for each arc in the input network.
+    These lines have the following format:
+
+    <pre>    f SRC DST FLOW</pre>
+
+    The lower-case character f signifies that this is a flow assignment line. For arc (u,v), the SRC and DST fields give v and w, respectively. The FLOW field gives the amount of flow assigned to arc (u,v).
+</OL>
+
+                                        <p>lp_solve can generate a solution file via the xli_DIMACS XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS mincostflow.net -wxlisol xli_DIMACS mincostflow.sol
+</pre>
+                                        <p>This generates the following solution contents:</p>
+<pre>
+c mincostflow.net
+c
+c Dimacs-format minimum cost flow result file
+c generated by lp_solve
+c
+c Solution
+s 14
+c
+c SRC DST FLOW
+f 1 2 2
+f 1 3 2
+f 2 3 2
+f 2 4 0
+f 3 4 4
+c
+c End of file
+</pre>
+
+                                        <p>lp_solve can also generate a solution file with only non-zero values.<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS mincostflow.net -wxlisol xli_DIMACS mincostflow.sol -wxlisolopt "-nz"
+</pre>
+                                        <p>This generates the following solution contents:</p>
+<pre>
+c mincostflow.net
+c
+c Dimacs-format minimum cost flow result file
+c generated by lp_solve
+c
+c Solution
+s 14
+c
+c Only non-zero flows are written
+c SRC DST FLOW
+f 1 2 2
+f 1 3 2
+f 2 3 2
+f 3 4 4
+c
+c End of file
+</pre>
+
+
+
+                                        <p>A testset of models can be found at <a href="http://elib.zib.de/pub/Packages/mp-testdata/mincost/">http://elib.zib.de/pub/Packages/mp-testdata/mincost/</a><br>
+                                           Also see the dimacs ftp site: <a href="ftp://dimacs.rutgers.edu/pub/netflow">ftp://dimacs.rutgers.edu/pub/netflow</a>
+                                        </p>
+
+                                        <p>
+                                                <b>See Also</b> <A HREF="DIMACS_maxf.htm">DIMACS maximum flow problems</A>,
+                                                                <A HREF="DIMACS_asn.htm">DIMACS assignment problems</A>
+                                        </p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

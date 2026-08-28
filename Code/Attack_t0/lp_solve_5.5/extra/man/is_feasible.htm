@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_feasible</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_feasible</h1>
+					<p>Checks if provided solution is a feasible solution.</p>
+					<p><b>unsigned char is_feasible(lprec </b>*<i>lp</i><b>, REAL *</b><i>values</i><b>, REAL </b><i>threshold</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_feasible</b> returns FALSE (0) or TRUE (1) that indicates if provided
+						solution is feasible.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>values</i></p>
+					<p class="indent">An array of row/column values that are checked against the bounds
+						and ranges.<br>
+						The array must have <A href="get_Nrows.htm">get_Nrows</A>+<A href="get_Ncolumns.htm">get_Ncolumns</A> elements. Element 0 is not used.</p>
+					<p class="dt"><i>threshold</i></p>
+					<p class="indent">A tolerance value. The values may differ that much. Recommended
+						to use <A href="get_epsint.htm">get_epsint</A> for this value.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>is_feasible</b> function checks if provided solution is a feasible
+						solution. All values of the <i>values</i> array must be between the bounds and
+						ranges to be a feasible solution.<br>
+						This value is only valid after a successful <A href="solve.htm">solve</A> or <A href="lag_solve.htm">
+							lag_solve</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL values[1+2];
+  unsigned char feasible;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  solve(lp);
+
+  values[0] = 0.0;
+  values[1] = 1.0;
+  values[2] = 2.0;
+  feasible = is_feasible(lp, values, 0); /* Will return TRUE */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="get_objective.htm">get_objective</a>, <A HREF="get_working_objective.htm">
+							get_working_objective</A>, <a href="get_variables.htm">get_variables,
+							get_ptr_variables</a>, <a href="get_constraints.htm">get_constraints,
+							get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_primal_solution.htm">get_primal_solution,
+							get_ptr_primal_solution, get_var_primalresult</a>, <a href="get_sensitivity_rhs.htm">
+							get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution,
+							get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex,
+							get_ptr_sensitivity_objex</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>External Language Interface</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>External Language Interfaces</u></h1>
+					<p>To facilitate the development of other model language interfaces, a
+					quite simple "eXternal Language Interface" (XLI) has been defined, which allows lp_solve
+					to be dynamically configured (at run-time) to use alternative means to read and
+					write the MIP model or write a solution file in a specific format.
+					lp_solve has several build-in interfaces to models: mps, lp.
+					XLI allows implementing a custom reader and writer for other model layouts and a solution layout.<br>
+					This feature again gives a unique flexibility and openness to the user and developer
+					community that we have quite some expectations for.<br>
+					If you write your own XLI, we would be glad if you would share your code with the lp_solve
+					community. We are very interested in providing as many different XLIs as possible to the
+					community.
+					</p>
+
+					<p>
+					Under Windows, an XLI is provided as DLL (xli_*.dll), under UNIX/LINUX as a dynamic linked
+					library (libxli_*.so). These libraries are loaded/linked at runtime with lp_solve.
+					</p>
+
+					<p>Under Unix/Linux it is standard that a library has the lib prefix and a .so postfix.<br>
+					For example libxli_MathProg.so<br>
+					Under Windows there is no prefix and the postfix is .dll<br>
+					For example xli_MathProg.dll</p>
+
+					<p>
+					To make the calling structure for XLIs uniform across different types of OS,
+					lp_solve automatically adds the prefix and postfix if not provided.
+					So for example under all platforms, the MathProg XLI may be referenced as xli_MathProg.
+					It is advised to call the XLIs as such.
+					</p>
+
+					<p>
+					To locate the XLI on the file system, the following search order is used if no path is provided:
+					</p>
+
+					<h5>Windows</h5>
+					<ol>
+						<li>Current directory.
+
+						<li>A semi-colon-separated (;) list of directories in the user's PATH environment variable.</li>
+					</ol>
+
+					<h5>Unix/Linux</h5>
+					<ol>
+						<li>A colon-separated (:) list of directories in the user's LD_LIBRARY_PATH environment variable.
+						<li>The list of libraries specified in /etc/ld.so.cache (which is generated from /etc/ld.so.conf).
+						<li>/lib, followed by /usr/lib. Note the order here; this is the reverse of the order used by the old a.out loader.
+						The old a.out loader, when loading a  program, first searched /usr/lib, then /lib (see the man page ld.so(8)).
+						This shouldn't normally matter, since a library should only be in one or the other directory (never both),
+						and different libraries with the same name are a disaster waiting to happen.</li>
+					</ol>
+
+					<p>Note again that this search path is only used if no path is specified for the XLI.</p>
+
+					<h4>Using an XLI with the lp_solve stand-alone program</h4>
+
+					<p>
+					The lp_solve program provides a way to specify an XLI for reading a model, an XLI for
+					writing the model and an XLI for writing the solution file. 
+					These can be different so that a model in one format can be converted to
+					another format. It is still possible to both read and write the models with the build-in
+					formats (mps, lp) and you can combine with the XLI.</p>
+
+					<h5>Read a model</h5>
+
+					<p>
+					With the lp_solve program, to set the XLI to read the model, use the option<br>
+					-rxli xliname filename
+					</p>
+
+					<p>
+					filename is the name (with optional path) of the model name to read. If no path is specified,
+					the file is read from the current directory.
+					</p>
+
+					<p>
+					Depending on the XLI, an optional data file name can be provided. Use the option<br>
+					-rxlidata datafilename
+					</p>
+
+					<p>
+					For example for the MathProg XLI, there is a possible optional
+					datafilename containing the data. Note that this name may not start with a minus sign (-)
+					</p>
+
+					<p>
+					Depending on the XLI, options can be provided to change the behaviour of the routine.
+					Use the option<br>
+					-rxliopt "options"
+					</p>
+
+					<p>
+					So the following commands are valid for both Windows and Unix/Linux:
+					</p>
+
+					<p>
+					lp_solve -rxli xli_MathProg input.mod -rxlidata input.dat<br>
+					lp_solve -rxli ./xli_MathProg input.mod -rxlidata input.dat
+					</p>
+
+					<p>
+					The latter makes sure that the XLI is searched in the current directory, especially for Unix/Linux.
+					</p>
+
+					<h5>Write a model</h5>
+
+					<p>
+					With the lp_solve program, to set the XLI to write the model, use the option<br>
+					-wxli xliname filename
+					</p>
+
+					<p>
+					filename is the name (with optional path) of the model name to write. If no path is specified,
+					the file is written in the current directory.
+					</p>
+
+					<p>
+					Depending on the XLI, options can be provided to change the behaviour of the routine.
+					Use the option<br>
+					-wxliopt "options"
+					</p>
+
+					<p>
+					So the following commands are valid for both Windows and Unix/Linux:
+					</p>
+
+					<p>
+					lp_solve input.lp -wxli xli_MathProg output.mod<br>
+					lp_solve input.lp -wxli ./xli_MathProg output.mod
+					</p>
+
+					<p>
+					The latter makes sure that the XLI is searched in the current directory, especially for Unix/Linux.
+					</p>
+					
+					<h5>Write a solution</h5>
+
+					<p>
+					With the lp_solve program, to set the XLI to write the solution, use the option<br>
+					-wxlisol xliname filename
+					</p>
+
+					<p>
+					filename is the name (with optional path) of the solution name to write. If no path is specified,
+					the file is written in the current directory.
+					</p>
+
+					<p>
+					Depending on the XLI, options can be provided to change the behaviour of the routine.
+					Use the option<br>
+					-wxlisolopt "options"
+					</p>
+
+					<p>
+					So the following commands are valid for both Windows and Unix/Linux:
+					</p>
+
+					<p>
+					lp_solve -rxli xli_DIMACS maxflow.net -wxlisol xli_DIMACS maxflow.sol<br>
+					lp_solve -rxli ./xli_MathProg maxflow.net -wxlisol xli_DIMACS maxflow.sol
+					</p>
+
+					<p>
+					The latter makes sure that the XLI is searched in the current directory, especially for Unix/Linux.
+					</p>
+
+					<h4>Using an XLI from the lpsolve API</h4>
+
+					<h5>Read a model</h5>
+
+					<p>
+					The <a href="read_XLI.htm">read_XLI</a> reads a model via an XLI.<br>
+					See the API call for its usage.</p>
+
+					<h5>Write a model</h5>
+
+					<p>
+					To write a model, two API calls are needed:
+					</p>
+
+					<p>
+					First use <a href="set_XLI.htm">set_XLI</a> to set the XLI library<br>
+					See the API call for its usage.</p>
+
+					<p>
+					Then use <a href="write_XLI.htm">write_XLI</a> to write the model.<br>
+					See the API call for its usage. Note that the last argument, <i>results</i> must FALSE.</p>
+					
+					<h5>Write a solution</h5>
+
+					<p>
+					To write a model, two API calls are needed:
+					</p>
+
+					<p>
+					First use <a href="set_XLI.htm">set_XLI</a> to set the XLI library<br>
+					See the API call for its usage.</p>
+
+					<p>
+					Then use <a href="write_XLI.htm">write_XLI</a> to write the model.<br>
+					See the API call for its usage. Note that the last argument, <i>results</i> must TRUE.</p>
+
+					<h4>Creating an XLI</h4>
+
+					<p>
+					This section is only for people who will create their own XLI because you have a model file type
+					that is not supported by lp_solve. The developers would appreciate it if you would make this XLI
+					public.
+					</p>
+
+					<p>To create your own XLI, you have to create a DLL/shared library that implements the following
+					routines:</p>
+					<table BORDER="1">
+					<tr><td>
+					<p><b>char * XLI_CALLMODEL xli_name(void)</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>xli_name</b> must return a string describing the XLI library.</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt">None</p>
+					</td></tr>
+					<tr><td></td></tr>
+                                        <tr><td></td></tr>
+					<tr><td>
+					<p>
+						<b>MYBOOL XLI_CALLMODEL xli_readmodel(lprec </b>*<i>lp</i><b>, char </B>*<I>model</I><b>, char </B>*<I>data</I><b>, char </B>*<I>options</I><b>, int </b><i>verbose</i><B>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						Must return TRUE or FALSE to indicate if successful (TRUE) or not (FALSE).</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						An initial lp structure created via <A HREF="make_lp.htm">make_lp</A>(0, 0).</p>
+					<P class="dt"><I>model</I></P>
+					<P class="indent">
+					Filename to read the model from.</p>
+					<P class="dt"><I>data</I></P>
+					<P class="indent">
+					Optional data to read data from. For example used by the MathProg XLI.</p>
+					<P class="dt"><I>options</I></P>
+					<P class="indent">Extra options that can be used by the reader.</p>
+					<P class="indent">
+						<i>verbose</i>
+					<p class="indent">The verbose level. Can be used to output more or less information while creating the model.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						This routine is called when the <a href="read_XLI.htm">read_XLI</a> API is called.<br>
+						Via the provided <i>lp</i> variable all lpsolve API routines can be accessed to create the model.<br>
+					    Note that xli_readmodel already provides an lp structure. You must use this one to build the model.
+					    The lp structure is created via <A HREF="make_lp.htm">make_lp</A>(0, 0). So it contains 0 rows
+					    and 0 columns.</P>
+					    <p></p>
+					</td></tr>
+                                        <tr><td></td></tr>
+                                        <tr><td></td></tr>
+					<tr><td>
+					<p>
+						<b>MYBOOL XLI_CALLMODEL xli_writemodel(lprec </b>*<i>lp</i><b>, char </B>*<I>filename</I><b>, char </B>*<I>options</I><B>, MYBOOL </b><i>results</i><B>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						Must return TRUE or FALSE to indicate if successful (TRUE) or not (FALSE).</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<P class="dt"><I>filename</I></P>
+					<P class="indent">
+					The <i>filename</i> argument of <a href="<write_XLI.htm">write_XLI</a>. Filename to write the model/solution to.</p>
+					<P class="dt"><I>options</I></P>
+					<P class="indent">The <i>options</i> argument of <a href="<write_XLI.htm">write_XLI</a>. Extra options that can be used by the writer.</p>
+					<P class="indent">
+						<i>results</i>
+					<p class="indent">The <i>results</i> argument of <a href="<write_XLI.htm">write_XLI</a>.
+					When FALSE, the XLI should create a model file and when TRUE is should create a solution file.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						This routine is called when the <a href="<write_XLI.htm">write_XLI</a> API is called.<br>
+						This routine must be used to write the model/solution.
+						Via the provided <i>lp</i> variable all lpsolve API routines can be accessed to do the job.</P>
+					</td></tr>
+					</table>
+					<p>lp_XLI1.c must be included at the beginning of the source file. This to include an extra
+					routine xli_compatible needed by the lpsolve library to check the compatibility.
+					</p>
+					<p>If you want to create XLIs yourself, make sure that under Windows,
+					you use 8 byte alignments. This is needed for the XLIs to work correctly with the general
+					distribution of lp_solve and also to make sharing XLIs as uncomplicated as possible. If not, it will likely crash.
+					It doesn't matter which calling convention is used to compile the library. The XLI_CALLMODEL directive
+					makes sure that the calling convention of the needed routines is always ok independent of the
+					calling convention specified in the project.<br>
+					Also under windows, a definition file must be added. If this is not done, it will not work.
+					The definition file should have extension .def and contain the following:</p>
+<pre>EXPORTS
+  xli_compatible           @1
+  xli_name                 @2
+  xli_readmodel            @3
+  xli_writemodel           @4
+</pre><p>
+                    The definition file must be added to the project. How to do this depends on the version.<br>
+                    For Visual Studio 6: Project, Add to Project, Files, Files of type: Definition files (.def) and
+                    choose the created .def file<br>
+                    For Visual Studio .NET: Project, Properties, Linker, Input, Module Definition file. There you enter the name (with optional path) of the .def file.
+					</p>
+					<h5>XLI prototype</h5>
+
+<pre>
+/* Generic include libraries */
+#include &lt;malloc.h&gt;
+#include &lt;string.h&gt;
+#include "lp_lib.h"
+#ifdef FORTIFY
+# include "lp_fortify.h"
+#endif
+
+/* Include routines common to language interface implementations */
+
+#include "lp_XLI1.c"
+
+char * XLI_CALLMODEL xli_name(void)
+{
+  return("XLI_xxx v1.0" );  /* return the name and version */
+}
+
+MYBOOL XLI_CALLMODEL xli_readmodel(lprec *lp, char *model, char *data, char *options, int verbose)
+{
+  MYBOOL status = FALSE;
+
+  /* implement the code here to read the model */
+
+  return(status); /* status says if the model could be read or not. TRUE is ok, FALSE is not ok */
+}
+
+MYBOOL XLI_CALLMODEL xli_writemodel(lprec *lp, char *filename, char *options, MYBOOL results)
+{
+  MYBOOL status = FALSE;
+
+  /* implement the code here to write the model */
+
+  return( status ); /* status says if the model could be written or not. TRUE is ok, FALSE is not ok */
+}</pre>
+                    <h5>Working example:</h5>
+demo.c:
+<pre>
+/*  Modularized external language interface module - w/interface for lp_solve v5.0+
+   ----------------------------------------------------------------------------------
+    Author:        Peter Notebaert
+    Contact:       lpsolve@peno.be
+    License terms: LGPL.
+
+    Template used:
+    Requires:
+
+    Release notes:
+    v1.0.0  28 June 2004        First implementation.
+
+   ---------------------------------------------------------------------------------- */
+
+/* Generic include libraries */
+#include &lt;malloc.h&gt;
+#include &lt;string.h&gt;
+#include "lp_lib.h"
+
+/* Include libraries for this language system */
+#include &lt;math.h&gt;
+
+#ifdef FORTIFY
+# include "lp_fortify.h"
+#endif
+
+/* Include routines common to language interface implementations */
+#include "lp_XLI1.c"
+
+char * XLI_CALLMODEL xli_name(void)
+{
+  return( "xli_demo v1.0" );
+}
+
+MYBOOL XLI_CALLMODEL xli_readmodel(lprec *lp, char *model, char *data, char *options, int verbose)
+{
+  MYBOOL status = FALSE;
+  REAL row[1+2]; /* must be 1 more then number of columns ! */
+
+  lp->add_columnex(lp, 0, NULL, NULL); /* add empty column */
+  lp->add_columnex(lp, 0, NULL, NULL); /* add empty column */
+  lp->set_add_rowmode(lp, TRUE);
+  row[1] = 1.0;
+  row[2] = 2.0;
+  lp->add_constraint(lp, row, GE, 3.0); /* constructs the row: +v_1 +2 v_2 >= 3 */
+  lp->set_add_rowmode(lp, FALSE);
+  status = TRUE;
+
+  return(status);
+}
+
+MYBOOL XLI_CALLMODEL xli_writemodel(lprec *lp, char *filename, char *options, MYBOOL results)
+{
+  if (!results)
+    return(lp->write_lp(lp, filename));
+  else {
+    lp->print_objective(lp);
+    lp->print_solution(lp, 1);
+    lp->print_constraints(lp, 1);
+    return(TRUE);
+  }
+}</pre>
+demo.def:
+<pre>
+EXPORTS
+  xli_compatible           @1
+  xli_name                 @2
+  xli_readmodel            @3
+  xli_writemodel           @4
+</pre>
+						<p>This example is not very practical. It is only useful for demonstration purposes.
+						Let's assume that the name of this library is xli_demo.<br>
+						xli_readmodel creates the model. It doesn't even read from a file in this example.
+						xli_writemodel uses <A href="write_lp.htm">write_lp</A> to write the model to filename and
+						some print_* functions to print the solution.</p>
+						<p>This XLI can be called from lp_solve via the following syntax:</p>
+                        <pre>lp_solve -S0 -rxli xli_demo "" -wxli xli_demo output.txt -wxlisol xli_demo ""</pre>
+						<p>An empty ("") filename is provided because it isn't used by this demo.
+						This command will create a file output.txt with contents:</p>
+<pre>/* Objective function */
+min: ;
+
+/* Constraints */
++C1 +2 C2 >= 3;
+</pre>
+                        <p>Because we didn't provide the option -parse_only, the model is also solved.
+                        However the lp_solve option -S0 disables showing the results.
+                        Results are generated via the -wxlisol option:</p>
+<pre>Value of objective function: 0
+
+Actual values of the variables:
+C1                              3
+C2                              0
+
+Actual values of the constraints:
+R1                              3</pre>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

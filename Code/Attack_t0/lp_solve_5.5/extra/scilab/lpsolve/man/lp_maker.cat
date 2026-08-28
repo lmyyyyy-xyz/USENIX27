@@ -1,0 +1,55 @@
+lp_maker          Scilab Group          Scilab Function            lp_maker
+   
+  
+NAME
+   lp_maker -  Makes mixed integer linear programming problems
+  
+CALLING SEQUENCE
+  [lp_handle] = lp_maker(f,a,b,e)
+  [lp_handle] = lp_maker(f,a,b,e,vlb)
+  [lp_handle] = lp_maker(f,a,b,e,vlb,vub)
+  [lp_handle] = lp_maker(f,a,b,e,vlb,vub,xint)
+  [lp_handle] = lp_maker(f,a,b,e,vlb,vub,xint,scalemode)
+  [lp_handle] = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+   
+  
+PARAMETERS
+ f          : full column vector (objective), size n
+            
+ a          : sparse or full real matrix, m x n (constraints)
+            
+ b          : full column vector (RHS), size m
+            
+ e          : full column vector of row status (integer -1, 0, 1), size m
+            
+ vlb        : full column vector of lower bounds, size n
+            
+ vub        : full column vector of upper bounds, size n
+            
+ xint       : vector of integer variables. May be omitted or empty.
+            
+ scalemode  : integer, scale flag. Off when 0 or omitted.
+            
+ setminim   : Set maximum lp when this flag equals 0 or omitted
+            
+ lp_handle  : integer handle to the lp created
+            
+DESCRIPTION
+ Makes mixed integer linear programming problems.
+           max v = f'*x
+           s.t. a*x ~ b
+                  x between vlb and vub
+                  x(int) are integer
+ 
+EXAMPLE
+ 
+ f = [  2.00     3.00    -2.00     3.00 ];
+ a = sparse( [ 3.00     2.00     2.00     1.00;
+               0.00     4.00     3.00     1.00]);
+ b = [ 4; 3];
+ e = [-1;1];
+ 
+ [lp_handle] = lp_maker(f,a,b,e);
+ 
+SEE ALSO
+ sclpsolve, lp_solve

@@ -1,0 +1,16 @@
+[General]
+Name=LpSolveIDE
+Project=1
+[Classes]
+Count=11
+Class0="TMainForm","TForm","main","19","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\main.pas"
+Class1="TViewXliExtension","TAction","main","458","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\main.pas"
+Class2="TNewXliExtension","TAction","main","470","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\main.pas"
+Class3="TLPHighlighter","TSynCustomHighlighter","LPHighlighter","36","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\LPHighlighter.pas"
+Class4="TTextSearchDialog","TForm","dlgSearchText","11","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\dlgSearchText.pas"
+Class5="TTextReplaceDialog","TTextSearchDialog","dlgReplaceText","47","C:\Program Files\Borland\Delphi6\Source\synedit\Demos\SearchReplaceDemo\dlgReplaceText.pas"
+Class6="TConfirmReplaceDialog","TForm","dlgConfirmReplace","11","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\dlgConfirmReplace.pas"
+Class7="TGotoLineForm","TForm","dlgGotoLine","9","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\dlgGotoLine.pas"
+Class8="TStatisticsForm","TForm","dlgStatistics","9","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\dlgStatistics.pas"
+Class9="TAboutForm","TForm","dlgAbout","9","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\dlgAbout.pas"
+Class10="TResultArray","","ResultArray","6","D:\developpement\lp_solve\Version5\delphi\LPSolveIDE\ResultArray.pas"

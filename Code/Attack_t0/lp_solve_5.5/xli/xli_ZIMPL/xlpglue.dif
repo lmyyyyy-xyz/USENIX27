@@ -1,0 +1,7 @@
+45c45
+< Lps *xlp_alloc(const char* name)
+---
+> void xlp_alloc(const char* name)
+50,51d49
+<    
+<    return lp ;

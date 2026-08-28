@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>resize_lp</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>resize_lp</h1>
+					<p>
+						Allocate memory for the specified size.</p>
+					<p>
+						<b>unsigned char resize_lp(lprec </b>*<i>lp</i><b>, int </b><i>rows</i><b>, int </b><i>columns</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						Returns TRUE if succeeded, FALSE if not.</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>rows</i></p>
+					<p class="indent">
+						Allocate memory for this amount of rows.</p>
+					<p class="dt">
+						<i>columns</i></p>
+					<p class="indent">
+						Allocate memory for this amount of columns.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>resize_lp</b> function deletes the last rows/columns of the model if the new number
+						of rows/columns is less than the number of rows/columns before the call.<br>
+						<br>
+						However, the function does <b>not</b> add rows/columns to the model if the new number
+						of rows/columns is larger. It does however changes internal memory allocations to the new
+						specified sizes. This to make the
+						<A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A> and
+						<A HREF="add_column.htm">add_column, add_columnex, str_add_column</A> routines faster.
+						Without <b>resize_lp</b>, these functions have to reallocated memory at each call for the new
+						dimensions. However if <b>resize_lp</b> is used, then memory reallocation must be done only once
+						resulting in better performance. So if the number of rows/columns that will be added is known
+						in advance, then performance can be improved by using this function.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 3);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  /* Model created */
+
+  /* 1000 constraints will be added, so allocate memory for it in advance to make things faster */
+  resize_lp(lp, 1000, get_Ncolumns(lp));
+
+  /* Now add the 1000 constraints */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>,
+							<A HREF="add_column.htm">add_column, add_columnex, str_add_column</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

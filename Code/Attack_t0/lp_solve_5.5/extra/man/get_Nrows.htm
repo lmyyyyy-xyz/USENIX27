@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>get_Nrows</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_Nrows</h1>
+					<p>Returns the number of rows (constraints) in the lp.</p>
+					<p><b>int get_Nrows(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_Nrows</b> returns the number of rows (constraints) in the lp.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_Nrows</b> function returns the number of rows (constraints) in the lp.<br>
+						Note that the number of rows can change when a presolve is done.<br>
+						Therefore it is advisable to use this function to determine how many rows there
+						are in the lp instead of relying on an own count.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int Nrows;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  Nrows = get_Nrows(lp); /* Will return 1 */
+
+  set_presolve(lp, PRESOLVE_ROWS);
+  solve(lp);
+
+  Nrows = get_Nrows(lp); /* Will return 0 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_Norig_rows.htm">get_Norig_rows</A>, <A HREF="get_Lrows.htm">get_Lrows</A>, <A HREF="get_Ncolumns.htm">
+							get_Ncolumns</A>, <A HREF="get_Norig_columns.htm">get_Norig_columns</A>, <A href="get_orig_index.htm">get_orig_index</A>, <A href="get_lp_index.htm">get_lp_index</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

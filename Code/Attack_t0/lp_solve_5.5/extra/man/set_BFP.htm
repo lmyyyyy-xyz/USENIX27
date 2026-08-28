@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_BFP</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_BFP</h1>
+					<p>Set basis factorization package.</p>
+					<p><b>unsigned char set_BFP(lprec </b>*<i>lp</i><b>, char *</b><i>filename</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_BFP</b> returns TRUE if the call has succeeded, else FALSE.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>filename</i></p>
+					<p class="indent">The name of the BFP package. Currently following BFPs are
+						implemented:</p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>"bfp_etaPFI"</TD>
+							<TD>original lp_solve product form of the inverse.</TD>
+						</TR>
+						<TR>
+							<TD>"bfp_LUSOL"</TD>
+							<TD>LU decomposition.</TD>
+						</TR>
+						<TR>
+							<TD>"bfp_GLPK"</TD>
+							<TD>GLPK LU decomposition.</TD>
+						</TR>
+						<TR>
+							<TD>NULL</TD>
+							<TD>The default BFP package.</TD>
+						</TR>
+					</TABLE>
+					However the user can also build his own BFP packages ...
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_BFP</b> function sets the basis factorization package (BFP).
+					   See <a href="BFP.htm">Basis Factorization Packages</a> for a complete description on BFPs.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_BFP(lp, "bfp_LUSOL");
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="has_BFP.htm">has_BFP</A>, <A HREF="is_nativeBFP.htm">
+							is_nativeBFP</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

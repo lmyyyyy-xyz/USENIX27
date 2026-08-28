@@ -1,0 +1,4 @@
+#--- $Id: make.linux.x86.gnu.dbg,v 1.6 2004/04/14 11:56:40 bzfkocht Exp $
+CPPFLAGS	+=	-finstrument-functions -DNDEBUG -DFREEMEM -D__NO_MATH_INLINES -DWITH_CALLTRACE
+CFLAGS		=	-O0 -g $(GCCWARN)
+LDFLAGS		=	-lgmp -lz -lm -static

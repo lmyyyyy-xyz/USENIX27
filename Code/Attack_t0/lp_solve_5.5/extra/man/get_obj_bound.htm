@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>get_obj_bound</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_obj_bound</h1>
+					<p>Returns initial "at least better than" guess for objective function.</p>
+					<p><b>REAL get_obj_bound(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_obj_bound</b> returns the initial "at least better than" guess for
+						objective function.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<b>Remarks</b>
+					<p>The <b>get_obj_bound</b> function returns the initial "at least better than"
+						guess for objective function. This is only used in the branch-and-bound
+						algorithm when integer variables exist in the model. All solutions with a worse
+						objective value than this value are immediately rejected. This can result in
+						faster solving times, but it can be difficult to predict what value to take for
+						this bound. Also there is the chance that the found solution is not the most
+						optimal one.<br>
+						The default is infinite.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL obj_bound;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  obj_bound = get_obj_bound(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_obj_bound.htm">set_obj_bound</A>, <A HREF="set_break_at_value.htm">
+							set_break_at_value</A>, <A HREF="get_break_at_value.htm">get_break_at_value</A>,
+						<A HREF="set_mip_gap.htm">set_mip_gap</A>, <A HREF="get_mip_gap.htm">get_mip_gap</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

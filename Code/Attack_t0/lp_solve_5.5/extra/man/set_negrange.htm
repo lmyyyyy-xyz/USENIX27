@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>set_negrange</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_negrange</h1>
+					<p>Set negative value below which variables are split into a negative and a
+						positive part.</p>
+					<p><b>void set_negrange(lprec </b>*<i>lp</i><b>, REAL </b><i>negrange</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_negrange</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>negrange</i></p>
+					<p class="indent">The negative value below which variables are split into a
+						negative and a positive part.
+					</p>
+					<b>Remarks</b>
+					<p>The <b>set_negrange</b> function specifies the negative value below which
+						variables are split into a negative and a positive part. This value must always
+						be zero or negative. If a positive value is specified, then 0 is taken.<br>
+						In some cases, negative variables must be split in a positive part and a
+						negative part. This is when a negative lower or upper bound is set on a
+						variable. If a bound is less than this value, it is <b>possibly</b> split.
+						The default is -1e6.
+                                        </p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_negrange(lp, -1000);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_negrange.htm">get_negrange</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

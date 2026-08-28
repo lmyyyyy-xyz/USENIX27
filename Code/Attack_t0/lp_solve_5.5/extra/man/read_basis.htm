@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>read_basis</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>read_basis</h1>
+					<p>
+						Read basis from a file and set as default basis.</p>
+					<P><B>unsigned char read_basis(lprec </b>*<i>lp</i>, <b>char </B>*<I>filename</I><B>, char </B>*<I>info</I><B>);</B></P>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>Returns TRUE if basis could be read from <i>filename</i> and FALSE if not.<br>
+					   A FALSE return value indicates an error. Specifically file could not be
+					   opened or file has wrong structure or wrong number/names rows/variables or invalid
+					   basis.</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<P class="dt"><I>filename</I></P>
+					<P class="indent">
+					Filename to read the basis from.
+					<P class="indent">
+						<i>info</i>
+					<p class="indent">When not NULL, returns the information of the INFO card in <i>filename</i>. When NULL, the information is ignored.
+                                      Note that when not NULL, that you must make sure that this variable is long enough, else a memory overrun could occur.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						The <b>read_basis</b> function reads a basis from <i>filename</i> and
+                                                sets it as initial basis of the lp.<br>
+                                                Setting an initial basis can speed up the solver considerably. It is the
+						starting point from where the algorithm continues to find an optimal solution.<br>
+						When a restart is done, lp_solve continues at the last basis, except if <A HREF="set_basis.htm">
+							set_basis</A>, <A HREF="default_basis.htm">default_basis</A>, <a href="guess_basis.htm">guess_basis</a> or <A HREF="read_basis.htm">read_basis</A> is called.
+                                        </P>
+					<P>
+						The basis in the file must be in <a href="bas-format.htm">MPS bas file format</a>.
+                                        </P>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int ret;
+
+  /* Read LP model */
+  lp = read_LP("model.lp", NORMAL, "test model");
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  ret = read_basis(lp, "model.bas", NULL);
+
+  ret = solve(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_basis.htm">get_basis</A>, <A HREF="set_basis.htm">set_basis</A>, <A HREF="default_basis.htm">default_basis</A>, <A HREF="write_basis.htm">write_basis</A>, <a href="guess_basis.htm">guess_basis</a>, <A HREF="get_basiscrash.htm">get_basiscrash</A>, <A HREF="set_basiscrash.htm">set_basiscrash</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

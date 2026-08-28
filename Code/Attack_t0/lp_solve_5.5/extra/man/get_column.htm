@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_column</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>get_column, get_columnex</h1>
+					<p>
+						Get all (get_column) or only the non-zero (get_columnex) column elements from the matrix.</p>
+					<p>
+						<b>unsigned char get_column(lprec </b>*<i>lp</i><b>, int </b><i>col_nr</i><b>, REAL </b>*<i>column</i><b>);</b><br>
+						<b>int get_columnex(lprec </b>*<i>lp</i><b>, int </b><i>col_nr</i><b>, REAL </b>*<i>column</i><b>, int </b>*<i>nzrow</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>get_column</b> returns TRUE (1) if the operation was successful. A return
+						value of FALSE (0) indicates an error.<br>
+						<b>get_columnex</b> returns the number of non-zero elements returned in <i>column</i> and <i>nzrow</i>. If an error occurs, then -1 is returned.<br>
+						An error occurs when <i>col_nr</i> is not between 1 and the number of columns
+						in the lp.<br>
+						Note that row entry mode must be off, else these functions also fail. See <A HREF="set_add_rowmode.htm">set_add_rowmode</A>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>col_nr</i></p>
+					<p class="indent">
+						Column number of the matrix. Must be between 1 and number of columns in the lp.</p>
+					<p class="dt">
+						<i>column</i></p>
+					<p class="indent">
+						Array in which the values are returned. For get_column, the array must be dimensioned with at
+						least 1<A HREF="get_Nrows.htm">get_Nrows</A> elements in the lp. For get_columnex, the array must be dimentioned with at
+						least the number of non-zero elements in the column. If that is unknown, then use 1+<A HREF="get_Nrows.htm">get_Nrows</A> in the lp.
+						The return value of the function indicates how many non-zero elements there are.</p>
+					<p class="dt">
+						<i>nzrow</i></p>
+					<p class="indent">
+						Array in which the row numbers are returned. The array must be dimentioned with at
+						least the number of non-zero elements in the column. If that is unknown, then use 1+<A HREF="get_Nrows.htm">get_Nrows</A> in the lp.
+						The return value of the function indicates how many non-zero elements there are.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						get_column retrieves all values for the given column.<br>
+						Element 0 of the <i>column</i> array will contain the value of the objective
+						function, element 1 will contain the value for column 1, Element 2 the value
+						for column 2, ...<br>
+						get_columnex retrieves only the non-zero values for a given column.<br>
+						Returned values in <i>column</i> and <i>nzrow</i> start from element 0.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL column[1+2]; /* must be 1 greater than number of rows ! */
+
+  /* Create a new LP model */
+  lp = make_lp(2, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  get_column(lp, 1, column);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_mat.htm">get_mat</A>, <A HREF="get_row.htm">
+							get_row, get_rowex</A>, <A HREF="set_row.htm">set_row, set_rowex</A>, <A HREF="set_rh.htm">set_rh</A>, <A HREF="set_rh_vec.htm">set_rh_vec,
+							str_set_rh_vec</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="add_column.htm">
+							add_column, add_columnex, str_add_column</A>, <A HREF="set_column.htm">set_column, set_columnex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

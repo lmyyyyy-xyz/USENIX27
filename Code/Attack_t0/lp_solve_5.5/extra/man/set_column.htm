@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_column, set_columnex</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_column, set_columnex</h1>
+					<p>set a column in the lp.</p>
+					<p><b>unsigned char set_column(lprec </b>*<i>lp</i><b>, int </b><i>col_no</i><b>, REAL </b>*<i>column</i><b>);</b></p>
+					<p><b>unsigned char set_columnex(lprec </b>*<i>lp</i><b>, int </b><i>col_no</i><b>, int </b><i>count</i><b>, REAL </b>*<i>column</i><b>, int </b>*<i>rowno</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_column</b>, <b>set_columnex</b> return TRUE (1) if the
+						operation was successful. A return value of FALSE (0) indicates an error.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>col_no</i></p>
+					<p class="indent">The column number that must be changed.</p>
+					<p class="dt"><i>count</i></p>
+					<p class="indent">Number of elements in <i>column</i> and <i>rowno</i>.</p>
+					<p class="dt"><i>column</i></p>
+					<p class="indent">An array with 1+<A HREF="get_Nrows.htm">get_Nrows</A> (<i>count</i> for set_columnex, if <i>rowno</i> is different from NULL) elements that
+						contains the values of the column.</p>
+					<p class="dt"><i>rowno</i></p>
+					<p class="indent">A zero-based array with <i>count</i> elements that contains the row numbers
+						of the column. However this variable can also be NULL. In that case element i
+						in the variable <i>column</i> is row i.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_column</b>, <b>set_columnex</b> functions change the values of an existing column in the
+						model at once.<br>
+						<br>
+						Note that <A HREF="add_column.htm">add_column, add_columnex, str_add_column</A>
+						<b>add</b> a column to the model, making the number of columns one larger. These functions <b>change</b> an <b>existing</b> column.<br>
+						<br>						
+						Note that for <b>set_column</b> (and <b>set_columnex</b> when <i>rowno</i> is
+						NULL) element 0 of the array is row 0 (the objective function), element 1 is row 1, ...<br>
+						<br>
+						<b>set_columnex</b> has the possibility to specify only the non-zero elements.
+						In that case <i>rowno</i> specifies the row numbers of the non-zero elements.
+						And in contrary to <b>set_column</b>,
+						<b>set_columnex</b> reads the arrays starting from element 0.
+						This will speed up building the model considerably if there are a lot of zero values.
+						In most cases the matrix is sparse and has many zero value.<br>
+						<br>
+						Thus it is almost always
+						better to use <b>set_columnex</b> instead of <b>set_column</b>. <b>set_columnex</b>
+						is always at least as performant as <b>set_column</b>.<br>
+						<br>
+						It is more performant to call these functions than multiple times <A HREF="set_mat.htm">set_mat</A>.<br>
+						<br>
+						Note that unspecified values by <b>set_columnex</b> are set to zero.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL column[1+3];     /* must be 1 more than number of rows ! */
+  REAL sparsecolumn[2]; /* must be the number of non-zero values */
+  int rowno[2];
+
+  /* Create a new LP model */
+  lp = make_lp(3, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  column[0] = 1.0; /* the objective value */
+  column[1] = 2.0;
+  column[2] = 0.0;
+  column[3] = 3.0;
+  set_column(lp, 1, column); /* changes the values of existing column 1 */
+  
+  rowno[0] = 0; sparsecolumn[0] = 1.0; /* the objective value */
+  rowno[1] = 1; sparsecolumn[1] = 2.0;
+  rowno[2] = 3; sparsecolumn[2] = 3.0;
+  set_columnex(lp, 2, 3, sparsecolumn, rowno); /* changes the values of existing column 2 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_column.htm">get_column, get_columnex</A>, <A HREF="add_column.htm">add_column, add_columnex, str_add_column</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="set_row.htm">set_row, set_rowex</A>, <A HREF="set_obj_fn.htm">set_obj_fn, set_obj_fnex, str_set_obj_fn,
+							set_obj</A>, <A HREF="set_add_rowmode.htm">set_add_rowmode</A>,
+							<A HREF="is_add_rowmode.htm">is_add_rowmode</A>, <A HREF="get_constr_type.htm">get_constr_type</A>,
+							<A HREF="is_constr_type.htm">is_constr_type</A>, <A HREF="del_constraint.htm">
+							del_constraint</A>, <A HREF="add_column.htm">add_column, add_columnex,
+							str_add_column</A>, <A HREF="get_column.htm">get_column, get_columnex</A>, <A HREF="get_row.htm">
+							get_row, get_rowex</A>, <A HREF="get_mat.htm">get_mat</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

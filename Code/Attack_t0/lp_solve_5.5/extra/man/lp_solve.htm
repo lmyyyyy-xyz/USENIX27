@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>lp_solve command</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>lp_solve command</u></h1>
+
+<p>The lp_solve program is a command line application that can use as good as all functionality of the library.</p>
+
+<h3 align="left"><u>Installation</u></h3>
+
+There is no installation procedure for this application. There is no need for it. You only need one file:
+lp_solve.exe under Windows or lp_solve under Unix/Linux.
+It can be found in the archive lp_solve_5.5.2.14_exe.zip (Windows) or lp_solve_5.5.2.14_exe.tar.gz (Unix/Linux).
+Just extract the file and you can use it.
+Note for Windows users, that you can not just run the lp_solve program by double clicking on it from Windows Explorer.
+The program needs arguments and this is best done from the command line (cmd.exe / command.com) or via batch files.
+lp_solve has many options as shown further.
+
+<h3 align="left"><u>Usage</u></h3>
+
+This program reads the MIP model from standard input or from a file and outputs
+the result back to the console or to a file. There are several possible input formats:
+The 'lp' format (See <a href="lp-format.htm">lp-format</a>),
+and the 'mps' format (See <a href="mps-format.htm">mps-format</a>) are build in,
+but other formats are also supported via the XLI functionality (See <a href="XLI.htm">external language interface</a>).
+For example a MathProg interface is developed via the XLI functionality (See <a href="XLI.htm">external language interface</a> for an example).
+These input formats have nothing to do with the API. So lp1 = make_lp(0,4) is a totally wrong input for the lp_solve program.
+The lp format is the default. Optionaly you can use the -lp option for it.
+To enable the mps format, use the -mps option.
+To enable the XLI, use the -rxli option.
+If lp_solve is started without an input file, then it gives a
+blinking cursor and waits for input. It is then possible to enter the model in
+the specified format (lp by default). But this is not very handy. You must enter
+the whole model each time you want to solve it and must be careful that you
+don't type any errors. To stop input mode, press Ctrl Z.<BR>However it is much
+better to write your model in a disk file with your favourite editor (make sure
+it is in text format) and then provide this file to lp_solve.
+For example:<BR>
+<BR>
+lp_solve input.lp<BR>
+<BR>
+It is also possible to use input redirection:<BR>
+<BR>
+lp_solve &lt;input.lp<BR>
+<BR>
+Or more sophisticated constructs like:<BR>
+<BR>
+gen_model | lp_solve<BR>
+<BR>
+gen_model is here a user written program that outputs the model to standard output and via the pipe
+character (|) this output is redirected to lp_solve. So no intermediate file is needed in this case.<br>
+<br>
+Examples:<br><br>
+lp_solve input.lp<br><br>
+lp_solve -s input.lp<br><br>
+lp_solve -s input.lp &gt;output.txt<br><br>
+lp_solve -s -mps input.mps &gt;output.txt<br><br>
+lp_solve -s -S4 -mps input.mps &gt;output.txt<br><br>
+lp_solve -s -S4 -mps input.mps -wpar par.ini -wparopt "-HMyPar" &gt;output.txt<br><br>
+
+<p>A list of all options is given by entering the following command:</p>
+
+<p>lp_solve -h</p>
+
+<p>This gives:</p>
+
+						<pre>
+Usage of lp_solve version 5.5.2.14:
+lp_solve [options] [[&lt;]input_file]
+List of options:
+-h              prints this message
+-lp             read from LP file (default) <a href="read_lp.htm">See read_LP</a>, <a href="lp-format.htm">See lp-format</a>
+-mps            read from MPS file, default in fixed format <a href="read_mps.htm">See read_MPS</a>, <a href="mps-format.htm">See mps-format</a>
+-mps_free		use free format <a href="read_mps.htm">See read_MPS</a>, <a href="mps-format.htm">See mps-format</a>
+-mps_ibm		interprete integers accoring to ibm format <a href="read_mps.htm">See read_MPS</a>, <a href="mps-format.htm">See mps-format</a>
+-mps_negobjconst	negate objective constant <a href="read_mps.htm">See read_MPS</a>, <a href="mps-format.htm">See mps-format</a>
+-fmps           read from MPS file in free format <a href="read_mps.htm">See read_freeMPS</a>, <a href="mps-format.htm">See mps-format</a>
+-rpar filename  read parameters from filename. <a href="read_params.htm">See read_params</a>
+-rparopt options
+                options for parameter file:
+                 -H headername: header name for parameters. By default 'Default'
+-rxli xliname filename
+                read file with xli library <a href="XLI.htm">See external language interface</a>
+-rxlidata datafilename
+                data file name for xli library. <a href="XLI.htm">See external language interface</a>
+-rxliopt options
+                options for xli library. <a href="XLI.htm">See external language interface</a>
+-rbas filename  read basis from filename. <a href="read_basis.htm">See read_basis</a>, <a href="bas-format.htm">See mps bas file format</a>
+-gbas filename	guess basis with variables from filename. <a href="guess_basis.htm">See guess_basis</a>
+-plp		print model. <a href="print_lp.htm">See print_lp</a>
+-wlp filename   write to LP file <a href="write_lp.htm">See write_lp</a>, <a href="lp-format.htm">See lp-format</a>
+-wmps filename  write to MPS file in fixed format <a href="write_mps.htm">See write_mps</a>, <a href="mps-format.htm">See mps-format</a>
+-wfmps filename write to MPS file in free format <a href="write_mps.htm">See write_freemps</a>, <a href="mps-format.htm">See mps-format</a>
+-wxli xliname filename
+                write file with xli library <a href="XLI.htm">See external language interface</a>
+-wxliopt options
+                options for xli library. <a href="XLI.htm">See external language interface</a>
+-wxlisol xliname filename
+                write solution file with xli library <a href="XLI.htm">See external language interface</a>
+-wxlisolopt options
+                options for xli library. <a href="XLI.htm">See external language interface</a>
+-wbas filename  write basis to filename. <a href="write_basis.htm">See write_basis</a>, <a href="bas-format.htm">See mps bas file format</a>
+-wpar filename  write parameters to filename. <a href="write_params.htm">See write_params</a>
+-wparopt options
+                options for parameter file:
+                 -H headername: header name for parameters. By default 'Default'
+-wafter         Write model after solve (useful if presolve used).
+-wafters        Write scaled model after solve (useful to see scaling effect).
+-parse_only     parse input file but do not solve
+-nonames        Ignore variables and constraint names <a href="set_use_names.htm">See set_use_names</a>
+-norownames     Ignore constraint names <a href="set_use_names.htm">See set_use_names</a>
+-nocolnames     Ignore variable names <a href="set_use_names.htm">See set_use_names</a>
+
+-min            Minimize the lp problem (overrules setting in file) <a href="set_minim.htm">See set_minim</a>
+-max            Maximize the lp problem (overrules setting in file) <a href="set_maxim.htm">See set_maxim</a>
+-r &lt;value&gt;      specify max nbr of pivots between a re-inversion of the matrix <a href="set_maxpivot.htm">See set_maxpivot</a>
+-piv &lt;rule&gt;     specify simplex pivot rule <a href="set_pivoting.htm">See set_pivoting</a>
+         -piv0: Select first
+         -piv1: Select according to Dantzig
+         -piv2: Select Devex pricing from Paula Harris (default)
+         -piv3: Select steepest edge
+These pivot rules can be combined with any of the following:
+-pivf           In case of Steepest Edge, fall back to DEVEX in primal. <a href="set_pivoting.htm">See set_pivoting</a>
+-pivm           Multiple pricing. <a href="set_pivoting.htm">See set_pivoting</a>
+-piva           Temporarily use First Index if cycling is detected.  <a href="set_pivoting.htm">See set_pivoting</a>
+-pivr           Adds a small randomization effect to the selected pricer. <a href="set_pivoting.htm">See set_pivoting</a>
+-pivll          Scan entering/leaving columns left rather than right. <a href="set_pivoting.htm">See set_pivoting</a>
+-pivla          Scan entering/leaving columns alternatingly left/right. <a href="set_pivoting.htm">See set_pivoting</a>
+-pivh           Use Harris' primal pivot logic rather than the default. <a href="set_pivoting.htm">See set_pivoting</a>
+-pivt           Use true norms for Devex and Steepest Edge initializations. <a href="set_pivoting.htm">See set_pivoting</a>
+-o0             Don't put objective in basis. <a href="set_obj_in_basis.htm">See set_obj_in_basis</a>
+-o1             Put objective in basis (default). <a href="set_obj_in_basis.htm">See set_obj_in_basis</a>
+-s &lt;mode&gt; &lt;scaleloop&gt;   use automatic problem scaling. <a href="set_scaling.htm">See set_scaling</a>
+         -s0: No scaling
+         -s1: Geometric scaling (default)
+         -s2: Curtis-reid scaling
+         -s3: Scale to convergence using largest absolute value
+          -s:
+         -s4: Numerical range-based scaling
+         -s5: Same as -s4 -sl
+         -s6: Scale based on the simple numerical range
+         -s7: Same as -s4 -sq
+These scaling rules can be combined with any of the following:
+         -sp: also do power scaling.
+         -si: also do integer scaling (default).
+         -se: also do equilibration to scale to the -1..1 range (default).
+         -sq: also do quadratic scaling.
+         -sl: Scale to convergence using logarithmic mean of all values.
+         -sd: Dynamic update.
+         -sr: Scale only rows.
+         -sc: Scale only columns.
+-presolve       presolve problem before start optimizing (rows+columns) <a href="set_presolve.htm">See set_presolve</a>
+-presolverow    presolve problem before start optimizing (rows only) <a href="set_presolve.htm">See set_presolve</a>
+-presolvecol    presolve problem before start optimizing (columns only) <a href="set_presolve.htm">See set_presolve</a>
+-presolvel      also eliminate linearly dependent rows <a href="set_presolve.htm">See set_presolve</a>
+-presolves      also convert constraints to SOSes (only SOS1 handled) <a href="set_presolve.htm">See set_presolve</a>
+-presolver      If the phase 1 solution process finds that a constraint is
+                redundant then this constraint is deleted <a href="set_presolve.htm">See set_presolve</a>
+-presolvek      Simplification of knapsack-type constraints through
+                addition of an extra variable, which also helps bound the OF <a href="set_presolve.htm">See set_presolve</a>
+-presolveq      Direct substitution of one variable in 2-element equality
+                constraints; this requires changes to the constraint matrix <a href="set_presolve.htm">See set_presolve</a>
+-presolvem	Merge rows <a href="set_presolve.htm">See set_presolve</a>
+-presolvefd	COLFIXDUAL <a href="set_presolve.htm">See set_presolve</a>
+-presolvebnd	Presolve bounds <a href="set_presolve.htm">See set_presolve</a>
+-presolved	Presolve duals <a href="set_presolve.htm">See set_presolve</a>
+-presolvef      Identify implied free variables (releasing their expl. bounds) <a href="set_presolve.htm">See set_presolve</a>
+-presolveslk	IMPLIEDSLK <a href="set_presolve.htm">See set_presolve</a>
+-presolveg      Reduce (tighten) coef. in integer models based on GCD argument <a href="set_presolve.htm">See set_presolve</a>
+-presolveb      Attempt to fix binary variables at one of their bounds <a href="set_presolve.htm">See set_presolve</a>
+-presolvec      Attempt to reduce coefficients in binary models <a href="set_presolve.htm">See set_presolve</a>
+-presolverowd   Idenfify and delete qualifying constraints that
+                are dominated by others, also fixes variables at a bound <a href="set_presolve.htm">See set_presolve</a>
+-presolvecold   Deletes variables (mainly binary), that are dominated
+                by others (only one can be non-zero) <a href="set_presolve.htm">See set_presolve</a>
+-C &lt;mode&gt;       basis crash mode <a href="set_basiscrash.htm">See set_basiscrash</a>
+         -C0: No crash basis
+         -C2: Most feasible basis
+         -C3: Least degenerate basis
+-prim           Prefer the primal simplex for both phases. <a href="set_preferdual.htm">See set_preferdual</a>
+-dual           Prefer the dual simplex for both phases. <a href="set_preferdual.htm">See set_preferdual</a>
+-simplexpp      Set Phase1 Primal, Phase2 Primal. <a href="set_simplextype.htm">See set_simplextype</a>
+-simplexdp      Set Phase1 Dual, Phase2 Primal. <a href="set_simplextype.htm">See set_simplextype</a>
+-simplexpd      Set Phase1 Primal, Phase2 Dual. <a href="set_simplextype.htm">See set_simplextype</a>
+-simplexdd      Set Phase1 Dual, Phase2 Dual. <a href="set_simplextype.htm">See set_simplextype</a>
+-degen          use perturbations to reduce degeneracy,
+                can increase numerical instability <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenc         use column check to reduce degeneracy <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degend         dynamic check to reduce degeneracy <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenf         anti-degen fixedvars <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degens         anti-degen stalling <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenn         anti-degen numfailure <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenl         anti-degen lostfeas <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degeni         anti-degen infeasible <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenb         anti-degen B&amp;B <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenr         anti-degen Perturbation of the working RHS at refactorization <a href="set_anti_degen.htm">See set_anti_degen</a>
+-degenp         anti-degen Limit bound flips <a href="set_anti_degen.htm">See set_anti_degen</a>
+-trej &lt;Trej&gt;    set minimum pivot value <a href="set_epspivot.htm">See set_epspivot</a>
+-epsd &lt;epsd&gt;    set minimum tolerance for reduced costs <a href="set_epsd.htm">See set_epsd</a>
+-epsb &lt;epsb&gt;    set minimum tolerance for the RHS <a href="set_epsb.htm">See set_epsb</a>
+-epsel &lt;epsel&gt;  set tolerance for rounding values to zero <a href="set_epsel.htm">See set_epsel</a>
+-epsp &lt;epsp&gt;    set the value that is used as perturbation scalar for
+                degenerative problems <a href="set_epsperturb.htm">See set_epsperturb</a>
+-improve &lt;level&gt;        iterative improvement level <a href="set_improve.htm">See set_improve</a>
+         -improve0: none
+         -improve1: Running accuracy measurement of solved equations on Bx=r
+         -improve2: Improve initial dual feasibility by bound flips (default)
+         -improve4: Low-cost accuracy monitoring in the dual
+         -improve8: check for primal/dual feasibility at the node level
+-timeout &lt;sec&gt;  Timeout after sec seconds when not solution found. <a href="set_timeout.htm">See set_timeout</a>
+-timeoutok      If timeout, take the best yet found solution.
+-ac &lt;accuracy&gt;  Fail when accuracy is less then specified value.
+-bfp &lt;filename&gt; Set basis factorization package. <a href="set_BFP.htm">See set_BFP</a>
+
+-noint          Ignore integer restrictions
+-e &lt;number&gt;     specifies the tolerance which is used to determine whether a
+                floating point number is in fact an integer.
+                Should be &lt; 0.5 <a href="set_epsint.htm">See set_epsint</a>
+-g &lt;number&gt;
+-ga &lt;number&gt;    specifies the absolute MIP gap for branch-and-bound. <a href="set_mip_gap.htm">See set_mip_gap</a>
+                This specifies the absolute allowed tolerance
+                on the object function. Can result in faster solving times.
+-gr &lt;number&gt;    specifies the relative MIP gap for branch-and-bound. <a href="set_mip_gap.htm">See set_mip_gap</a>
+                This specifies the relative allowed tolerance
+                on the object function. Can result in faster solving times.
+-f              specifies that branch-and-bound algorithm stops at first found
+                solution <a href="set_break_at_first.htm">See set_break_at_first</a>
+-b &lt;bound&gt;      specify a lower bound for the objective function <a href="set_obj_bound.htm">See set_obj_bound</a>
+                to the program. If close enough, may speed up the
+                calculations.
+-o &lt;value&gt;      specifies that branch-and-bound algorithm stops when objective
+                value is better than value <a href="set_break_at_value.htm">See set_break_at_value</a>
+-c
+-cc             during branch-and-bound, take the ceiling branch first <a href="set_bb_floorfirst.htm">See set_bb_floorfirst</a>
+-cf             during branch-and-bound, take the floor branch first <a href="set_bb_floorfirst.htm">See set_bb_floorfirst</a>
+-ca             during branch-and-bound, the algorithm chooses branch <a href="set_bb_floorfirst.htm">See set_bb_floorfirst</a>
+-depth &lt;limit&gt;  set branch-and-bound depth limit <a href="set_bb_depthlimit.htm">See set_bb_depthlimit</a>
+-n &lt;solnr&gt;      specify which solution number to return <a href="set_solutionlimit.htm">See set_solutionlimit</a>
+-B &lt;rule&gt;       specify branch-and-bound rule <a href="set_bb_rule.htm">See set_bb_rule</a>
+         -B0: Select Lowest indexed non-integer column (default)
+         -B1: Selection based on distance from the current bounds
+         -B2: Selection based on the largest current bound
+         -B3: Selection based on largest fractional value
+         -B4: Simple, unweighted pseudo-cost of a variable
+         -B5: This is an extended pseudo-costing strategy based on minimizing
+              the number of integer infeasibilities
+         -B6: This is an extended pseudo-costing strategy based on maximizing
+              the normal pseudo-cost divided by the number of infeasibilities.
+              Similar to (the reciprocal of) a cost/benefit ratio
+These branch-and-bound rules can be combined with any of the following:
+-Bw             WeightReverse branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bb             BranchReverse branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bg             Greedy branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bp             PseudoCost branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-BR             Extended PseudoCost branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bf             DepthFirst branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Br             Randomize branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-BG             GubMode branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bd             Dynamic branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bs             RestartMode branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-BB             BreadthFirst branch-and-bound <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bo             Order variables to improve branch-and-bound performance <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bc             Do bound tightening during B&amp;B based of reduced cost info <a href="set_bb_rule.htm">See set_bb_rule</a>
+-Bi             Initialize pseudo-costs by strong branching <a href="set_bb_rule.htm">See set_bb_rule</a>
+
+-time           Print CPU time to parse input and to calculate result. <a href="time_elapsed.htm">See time_elapsed</a>
+-v &lt;level&gt;      verbose mode, gives flow through the program. <a href="set_verbose.htm">See set_verbose</a>
+                 if level not provided (-v) then -v4 (NORMAL) is taken.
+         -v0: NEUTRAL
+         -v1: CRITICAL
+         -v2: SEVERE
+         -v3: IMPORTANT (default)
+         -v4: NORMAL
+         -v5: DETAILED
+         -v6: FULL
+-t              trace pivot selection <a href="set_trace.htm">See set_trace</a>
+-d              debug mode, all intermediate results are printed,
+                and the branch-and-bound decisions <a href="set_debug.htm">See set_debug</a>
+-R              report information while solving the model <a href="put_msgfunc.htm">See put_msgfunc</a> <a href="get_working_objective.htm">See get_working_objective</a>
+-Db &lt;filename&gt;  Do a generic readable data dump of key lp_solve model variables
+                before solve. <a href="print_debugdump.htm">See print_debugdump</a>
+                Principally for run difference and debugging purposes
+-Da &lt;filename&gt;  Do a generic readable data dump of key lp_solve model variables
+                after solve. <a href="print_debugdump.htm">See print_debugdump</a>
+                Principally for run difference and debugging purposes
+-i              print all intermediate valid solutions. <a href="set_print_sol.htm">See set_print_sol</a>
+                Can give you useful solutions even if the total run time
+                is too long
+-ia             print all intermediate (only non-zero values) valid solutions. <a href="set_print_sol.htm">See set_print_sol</a>
+                Can give you useful solutions even if the total run time
+                is too long
+-ip             print solution with more precision
+-stat		Print model statistics
+-relax          Relax model
+-relaxnotighten Don't tighten relaxed model
+-relaxexclude rowNr|RowName
+                Exclude row from relaxation
+-checkmultiplesolutions deltaobj deltax
+                Check if multiple solutions
+-S &lt;detail&gt;     Print solution. If detail omitted, then -S2 is used.
+         -S0: Print nothing
+         -S1: Only objective value <a href="print_objective.htm">See print_objective</a> <a href="get_objective.htm">See get_objective</a>
+         -S2: Obj value+variables (default) <a href="print_solution.htm">See print_solution</a> <a href="get_variables.htm">See get_variables, get_ptr_variables</a>
+         -S3: Obj value+variables+constraints <a href="print_constraints.htm">See print_constraints</a> <A href="get_constraints.htm">See get_constraints</A>
+         -S4: Obj value+variables+constraints+duals
+              <a href="print_duals.htm">See print_duals</a>
+              <a href="get_sensitivity_rhs.htm">See get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a>,
+              <a href="get_sensitivity_obj.htm">See get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</a>
+         -S5: Obj value+variables+constraints+duals+lp model <a href="print_lp.htm">See print_lp</a>
+         -S6: Obj value+variables+constraints+duals+lp model+scales <a href="print_scales.htm">See print_scales</a>
+         -S7: Obj value+variables+constraints+duals+lp model+scales+lp tableau <a href="print_tableau.htm">See print_tableau</a>
+</pre>
+
+<h4>A practical example</h4>
+
+<p>Enter the following in your favorite text editor (Windows users, don't use Word or Wordpad, that won't work. If you don't have an editor, use notepad).</p>
+
+<pre>max: 143 x + 60 y;
+
+120 x + 210 y &lt;= 15000;
+110 x + 30 y &lt;= 4000;
+x + y &lt;= 75;</pre>
+
+<p>Save this on your hard disk with name model.lp (don't forget in which directory/folder you save it).</p>
+
+<p>Now enter the following:</p>
+
+<p>lp_solve -S3 model.lp</p>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+
+Actual values of the constraints:
+R1                        13781.2
+R2                           4000
+R3                             75
+</pre>
+
+<p>
+Note that this is the model presented in <a href="formulate.htm">Formulation of an lp problem in lpsolve</a>.
+The model is formulated in the lp format. See <a href="lp-format.htm">lp-format</a> for a description of it.
+</p>
+
+
+
+	</BODY>
+</html>

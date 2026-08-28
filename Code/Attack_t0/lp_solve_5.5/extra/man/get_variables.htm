@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_variables, get_ptr_variables</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_variables, get_ptr_variables</h1>
+					<p>Returns the values of the variables.</p>
+					<p><b>unsigned char get_variables(lprec </b>*<i>lp</i><b>, REAL </b>*<i>var</i><b>);</b></p>
+					<p><b>unsigned char get_ptr_variables(lprec </b>*<i>lp</i><b>, REAL </b>**<i>ptr_var</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_variables, get_ptr_variables</b> returns TRUE (1) if the operation was
+						successful. A return value of FALSE (0) indicates an error.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>var</i></p>
+					<p class="indent">An array that will contain the values of the variables.</p>
+					<p class="dt"><i>ptr_var</i></p>
+					<p class="indent">The address of a pointer that will point to an array that will
+						contain the values of the variables.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_variables</b>, <b>get_ptr_variables</b> functions retrieve the values
+						of the variables.<br>
+						These values are only valid after a successful <A href="solve.htm">solve</A> or <A href="lag_solve.htm">
+							lag_solve</A>. Function <b>get_variables</b> needs an array that is already
+						dimensioned with <A href="get_Ncolumns.htm">get_Ncolumns</A> elements. <b>get_ptr_variables</b>
+						returns a pointer to an array already dimensioned by lp_solve. Element 0 will
+						contain the value of the first variable, element 1 of the second variable, ...
+					</p>
+					<p>Note that <b>get_ptr_variables</b> returns a pointer to memory allocated and maintained
+					   by lp_solve. Be careful what you do with it. Don't modify its contents or free the memory.
+					   Unexpected behaviour would occur. Also note that this memory pointer is only guaranteed to
+					   remain constant until a next lp_solve API call is done. You should call this function again
+					   to make sure you have again the correct pointer. Otherwise, this pointer could point to invalid
+					   memory. This should not be a problem since this call is very efficient.</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL var[2], *ptr_var;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  solve(lp);
+
+  get_variables(lp, var);
+  get_ptr_variables(lp, &amp;ptr_var);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="is_feasible.htm">is_feasible</a>, <A HREF="get_objective.htm">
+							get_objective</A>, <A HREF="get_working_objective.htm">get_working_objective</A>, <a href="get_constraints.htm">get_constraints,
+							get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_primal_solution.htm">get_primal_solution,
+							get_ptr_primal_solution, get_var_primalresult</a>,
+							<a href="get_sensitivity_rhs.htm">get_sensitivity_rhs,
+							get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex,
+							get_ptr_sensitivity_objex</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,489 @@
+name: 'Prepare Release Files'
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+.[0-9]+'
+    branches:
+      - 'gh-actions-release-files*' # TODO: For testing the workflow only
+
+jobs:
+  determine-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      LPSOLVE_VERSION: ${{ steps.extract-version.outputs.LPSOLVE_VERSION }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    # TODO: in a real release, we _might_ want to extract that number from the tag instead
+    #       or maybe update the values in lp_lib.h based on the values extracted from the tag
+    - name: Extract Version Number
+      id: extract-version
+      # lp_lib.h contains the version information as:
+      #     #define MAJORVERSION  5
+      #     #define MINORVERSION  5
+      #     #define RELEASE       2
+      #     #define BUILD        14
+      run: |
+        LP_MAJOR=$( sed -n -E 's/^\s*#define\s+MAJORVERSION\s+([0-9]+).*$/\1/p' $GITHUB_WORKSPACE/lp_lib.h )
+        LP_MINOR=$( sed -n -E 's/^\s*#define\s+MINORVERSION\s+([0-9]+).*$/\1/p' $GITHUB_WORKSPACE/lp_lib.h )
+        LP_RELEASE=$( sed -n -E 's/^\s*#define\s+RELEASE\s+([0-9]+).*$/\1/p' $GITHUB_WORKSPACE/lp_lib.h )
+        LP_BUILD=$( sed -n -E 's/^\s*#define\s+BUILD\s+([0-9]+).*$/\1/p' $GITHUB_WORKSPACE/lp_lib.h )
+        LPSOLVE_VERSION=$LP_MAJOR.$LP_MINOR.$LP_RELEASE.$LP_BUILD
+        echo "Version is $LPSOLVE_VERSION"
+        echo "LPSOLVE_VERSION=$LPSOLVE_VERSION" >> "$GITHUB_OUTPUT"
+
+  build-win64:
+    needs: determine-version
+    runs-on: windows-latest
+
+    env:
+      LPSOLVE_WORKSPACE: ${{ github.workspace }}
+      LPSOLVE_VERSION: ${{ needs.determine-version.outputs.LPSOLVE_VERSION }}
+      LPSOLVE_PLATFORM: 'win64'
+      LPSOLVE_GLPK_DIR_4_13: ${{ github.workspace }}\dependencies\glpk4.13
+      LPSOLVE_GLPK_DIR_4_44: ${{ github.workspace }}\dependencies\glpk4.44
+      # Needed by xli_MathProg, but we disable MySQL support for now because of build errors
+      #LPSOLVE_MYSQL_CONNECTOR_C_DIR: ${{ github.workspace }}\dependencies\mysql-connector-c
+      LPSOLVE_XLI_MATHPROG_EXTRABUILDFLAGS: -DNOMYSQL
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Configure build tools
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ env.LPSOLVE_PLATFORM }}
+
+    - name: Install missing dependencies
+      run: |
+        # Currently GLPK is used by bfp_GLPK and xli_MathProg but with different versions
+        # bfp_GLPK needs glpk 4.13
+        # xli_MathProg needs glpk 4.44
+
+        . ${env:LPSOLVE_WORKSPACE}/release_process/check_env_vars.ps1
+        $requiredEnvVars = @("LPSOLVE_WORKSPACE", "LPSOLVE_GLPK_DIR_4_13", "LPSOLVE_GLPK_DIR_4_44")
+        Assert-EnvironmentVariablesAreNotEmpty $requiredEnvVars
+
+        . ${env:LPSOLVE_WORKSPACE}/release_process/download_dependencies.ps1
+        Download-GLPK -Version "4.13" -Destination ${env:LPSOLVE_GLPK_DIR_4_13}
+        Download-GLPK -Version "4.44" -Destination ${env:LPSOLVE_GLPK_DIR_4_44}
+
+        # Needed by xli_MathProg, but we disable MySQL support for now because of build errors
+        # Download-MySQLConnectorC -Version "6.0.2" -Destination ${env:LPSOLVE_MYSQL_CONNECTOR_C_DIR} -Is32Bit $true
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_dev_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-dev_winXX.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       bin/win64/lp_explicit.lib
+    #       mxlpsolve.mexw64
+    # If we decide not to ship those anymore, should we include Makefile.m instead like MATLAB.htm describes?
+    # Maybe also the *.h and *.c that might be needed to build these within MATLAB?
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_MATLAB_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-MATLAB_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       bin/win64/sclpsolve.dll
+    #       macros/lib
+    # If we decide not to ship those anymore, should we include src/ folder?
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_scilab_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-scilab_exe_winXX.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}.chm
+      run: release_process/build-chm.ps1
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.LPSOLVE_PLATFORM }}
+        compression-level: 0 # no compression - already compressed
+        retention-days: 1
+        path: |
+          *.zip
+          *.chm
+
+  build-win32:
+    needs: determine-version
+    runs-on: windows-latest
+
+    env:
+      LPSOLVE_WORKSPACE: ${{ github.workspace }}
+      LPSOLVE_VERSION: ${{ needs.determine-version.outputs.LPSOLVE_VERSION }}
+      LPSOLVE_PLATFORM: 'win32'
+      LPSOLVE_GLPK_DIR_4_13: ${{ github.workspace }}\dependencies\glpk4.13
+      LPSOLVE_GLPK_DIR_4_44: ${{ github.workspace }}\dependencies\glpk4.44
+      #LPSOLVE_MYSQL_CONNECTOR_C_DIR: ${{ github.workspace }}\dependencies\mysql-connector-c
+      LPSOLVE_XLI_MATHPROG_EXTRABUILDFLAGS: -DNOMYSQL
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Configure build tools
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ env.LPSOLVE_PLATFORM }}
+
+    - name: Install missing dependencies
+      run: |
+        # Currently GLPK is used by bfp_GLPK and xli_MathProg but with different versions
+        # bfp_GLPK needs glpk 4.13
+        # xli_MathProg needs glpk 4.44
+
+        . ${env:LPSOLVE_WORKSPACE}/release_process/check_env_vars.ps1
+        $requiredEnvVars = @("LPSOLVE_WORKSPACE", "LPSOLVE_GLPK_DIR_4_13", "LPSOLVE_GLPK_DIR_4_44")
+        Assert-EnvironmentVariablesAreNotEmpty $requiredEnvVars
+
+        . ${env:LPSOLVE_WORKSPACE}/release_process/download_dependencies.ps1
+        Download-GLPK -Version "4.13" -Destination ${env:LPSOLVE_GLPK_DIR_4_13}
+        Download-GLPK -Version "4.44" -Destination ${env:LPSOLVE_GLPK_DIR_4_44}
+
+        # Needed by xli_MathProg, but we disable MySQL support for now because of build errors
+        # Download-MySQLConnectorC -Version "6.0.2" -Destination ${env:LPSOLVE_MYSQL_CONNECTOR_C_DIR} -Is32Bit $true
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_dev_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-dev_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       xli_LPFML.dll
+    #       xli_ZIMPL.dll
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       lpsolve.exe (which seems to be built from extra/AMPL/solvers/lpsolve/makefile5*.vc)
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_AMPL_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-AMPL_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       eulpsolve.dll(which seems to be built from extra/Euler/cvc.bat)
+    #       intsimplex.e
+    #       loadlpsolve.en
+    #       loadlpsolve70.en
+    #       Test Problems.en
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_Euler_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-Euler_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       fmlpsolve.dll(which seems to be built from extra/FreeMat/cvc.bat)
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_FreeMat_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-FreeMat_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       bin/win32/lp_explicit.lib
+    #       mxlpsolve.dll
+    #       mxlpsolve.mexw32
+    # If we decide not to ship those anymore, should we include Makefile.m instead like MATLAB.htm describes?
+    # Maybe also the *.h and *.c that might be needed to build these within MATLAB?
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_MATLAB_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-MATLAB_exe_winXX.ps1
+
+    # TODO: This only contains an HTML file, do we still want to release this?
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_MSF_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-MSF_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       octlpsolve.oct
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_octave_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-octave_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       omlpsolve.dll (which seems built from cvc.bat)
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_OMATRIX_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-OMATRIX_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       php4/php_phplpsolve55.dll
+    #       php5_2/php_phplpsolve55.dll
+    #       php5_3/php_phplpsolve55.dll
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_PHP_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-PHP_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       bin/win32/sclpsolve.dll
+    #       macros/lib
+    # If we decide not to ship those anymore, should we include src/ folder?
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_scilab_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-scilab_exe_winXX.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       sqlpsolveext.dll (seems to be built from cvc.bat)
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_Sysquake_exe_${{ env.LPSOLVE_PLATFORM }}.zip
+      run: release_process/build-zip-Sysquake_exe_winXX.ps1
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.LPSOLVE_PLATFORM }}
+        compression-level: 0 # no compression - already compressed
+        retention-days: 1
+        path: |
+          *.zip
+
+  build-linux:
+    needs: determine-version
+    strategy:
+      matrix:
+        platform: ["ux32", "ux64"]
+    runs-on: ubuntu-latest
+    env:
+      LPSOLVE_WORKSPACE: ${{ github.workspace }}
+      LPSOLVE_VERSION: ${{ needs.determine-version.outputs.LPSOLVE_VERSION }}
+      LPSOLVE_PLATFORM: ${{ matrix.platform }}
+
+    ##### Start section - older glibc support #####
+    # To build binaries with dependencies on older libc versions,
+    # we use a gcc on an earlier distro through a container.
+    # If we want to drop that support, we can remove the defaults.run.shell and container elements below.
+    defaults:
+      run:
+        shell: bash # overriden because default in container jobs is sh
+    container:
+      image: gcc:10.4-buster        # uses symbols from glibc 2.2.5-2.14 in built liblpsolve55.so and others
+      # image: gcc:12.3-bullseye    # uses symbols from glibc 2.2.5-2.29 in built liblpsolve55.so
+      # image: gcc:15.2-bookworm    # uses symbols from glibc ... not tested yet
+      # no container, ubuntu-22.04  # uses symbols from glibc 2.2.5-2.34 in built liblpsolve55.so
+      # no container, ubuntu-24.04  # uses symbols from glibc 2.2.5-2.38 in built liblpsolve55.so
+      # to check versions of glibc used by built liblpsolve55.so:
+      #   readelf --dyn-syms -W /path/to/liblpsolve55.so | grep @GLIBC_ | sed -E 's/^.*@GLIBC_([^ ]+) .*$/\1/' | sort | uniq
+      env:
+        # different path in container, mapped to host workspace in volume and options below
+        LPSOLVE_WORKSPACE: /githubworkspace
+        LPSOLVE_VERSION: ${{ env.LPSOLVE_VERSION }}
+        LPSOLVE_PLATFORM: ${{ env.LPSOLVE_PLATFORM }}
+      volumes:
+        # ${{ env. }} is not available in this section, using ${{ github.workspace }} instead
+        - ${{ github.workspace }}:/githubworkspace
+      # set working directory to workspace
+      options: -w /githubworkspace
+    ##### End section - older glibc support #####
+
+    steps:
+
+    - name: Install 32-bit toolchain
+      if: matrix.platform == 'ux32'
+      run: |
+        LPSOLVE_OS_CODENAME=$(cat /etc/os-release|grep VERSION_CODENAME|sed -E 's/VERSION_CODENAME=//')
+        if [ "$LPSOLVE_OS_CODENAME" = "buster" ] || [ "$LPSOLVE_OS_CODENAME" = "bullseye" ] ; then
+          echo "Detected debian $LPSOLVE_OS_CODENAME - changing apt sources to archive.debian.org"
+          # old debian release, sources have been moved to archive.debian.org
+          sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list
+        fi
+
+        apt-get update
+        apt-get install -y gcc-i686-linux-gnu binutils-i686-linux-gnu
+
+        # ensure to use the 32 bit compiler in subsequent steps
+        echo 'CC=i686-linux-gnu-gcc -m32' >> "$GITHUB_ENV"
+
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Install missing dependencies
+      run: |
+        set -v # echo commands
+        
+        # set glpkdir to where glpk is located, used in bfp/bfp_GLPK/ccc
+        # also set it for future steps
+        glpkdir=${LPSOLVE_WORKSPACE}/dependencies/glpk
+        echo "glpkdir=${glpkdir}" >> "$GITHUB_ENV"
+
+        mkdir -p $glpkdir
+        curl -s -L https://slackware.cs.utah.edu/pub/gnu/glpk/glpk-4.13.tar.gz | tar -xvz -C $glpkdir --strip-components=1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_dev_${{ env.LPSOLVE_PLATFORM }}.tar.gz
+      run: ./release_process/build-targz-dev_uxXX.sh
+      
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_exe_${{ env.LPSOLVE_PLATFORM }}.tar.gz
+      run: ./release_process/build-targz-exe_uxXX.sh
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.LPSOLVE_PLATFORM }}
+        compression-level: 0 # no compression - already compressed
+        retention-days: 1
+        path: |
+          *.tar.gz
+
+  zip-on-windows:
+    needs: determine-version
+    runs-on: windows-latest
+
+    env:
+      LPSOLVE_WORKSPACE: ${{ github.workspace }}
+      LPSOLVE_VERSION: ${{ needs.determine-version.outputs.LPSOLVE_VERSION }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_access.zip
+      run: release_process/build-zip-access.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       lpsolve55COM.dll
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_COM.zip
+      run: release_process/build-zip-COM.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_cs.net.zip
+      run: release_process/build-zip-cs.net.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_Delphi.zip
+      run: release_process/build-zip-Delphi.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_excel.zip
+      run: release_process/build-zip-excel.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_IDE_source.zip
+      run: release_process/build-zip-IDE_source.ps1
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       lib/mac/build-osx
+    #       lib/ux32/liblpsolve55j.so
+    #       lib/ux64/liblpsolve55j.so
+    #       lib/win32/lpsolve55j.dll
+    #       lib/win64/lpsolve55j.dll
+    #       lib/junit.jar
+    #       lib/lpsolve55j.jar
+    #       lib/build
+    #       lib/build.bat
+    # We have 2 extra files in zip:
+    #       lp_solve_5.5_java/src/java/Perf.java
+    #       lp_solve_5.5_java/src/java/IsolatedTest.java
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_java.zip
+      run: release_process/build-zip-java.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_MSF_source.zip
+      run: release_process/build-zip-MSF_source.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_vb.net.zip
+      run: release_process/build-zip-vb.net.ps1
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_vb.zip
+      run: release_process/build-zip-vb.ps1
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.job }}
+        compression-level: 0 # no compression - already compressed
+        retention-days: 1
+        path: |
+          *.zip
+          README.txt
+
+  tar-gz-on-linux:
+    needs: determine-version
+    runs-on: ubuntu-latest
+
+    env:
+      LPSOLVE_WORKSPACE: ${{ github.workspace }}
+      LPSOLVE_VERSION: ${{ needs.determine-version.outputs.LPSOLVE_VERSION }}
+      # TODO: decide what we want as root folder inside the *_source.tar.gz:
+      #       - lp_solve_5.5  like versions up to 5.5.2.11
+      #       - lp_solve      like in version 5.5.2.14
+      LPSOLVE_SOURCE_ROOT_FOLDER: lp_solve
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Install missing dependencies
+      run: |
+        set -v # echo commands
+
+        sudo apt-get update
+        sudo apt-get install -y \
+            dos2unix
+
+    - name: Fix EOL for Windows-related files
+      run: |
+        set -v # echo commands
+
+        find -name "*.bat" -exec unix2dos -q {} \;
+        find -name "*.sln" -exec unix2dos -q {} \;
+        find -name "*.vcproj" -exec unix2dos -q {} \;
+        find -name "*.vcxproj" -exec unix2dos -q {} \;
+        find -name "*.rc" -exec unix2dos -q {} \;
+        find -name "*.def" -exec unix2dos -q {} \;
+        find -name "*.net" -exec unix2dos -q {} \;
+
+    # Ensure this is done *before* adding any file in the workspace (like generated .tar.gz)
+    # otherwise they will end up in lp_solve_${{ env.LPSOLVE_VERSION }}_source.tar.gz file
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_source.tar.gz
+      run: ./release_process/build-targz-source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_bfp_*_source.tar.gz
+      run: ./release_process/build-targz-bfp_XX_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_xli_*_source.tar.gz
+      run: ./release_process/build-targz-xli_XX_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_AMPL_source.tar.gz
+      run: ./release_process/build-targz-AMPL_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_{Euler,FreeMat,PHP,Python,Sysquake}_source.tar.gz
+      run: ./release_process/build-targz-manyextras_source.sh
+
+    # TODO: zip here reproduces what was released with 5.5.2.14 which is missing files compared to 5.5.2.11:
+    #       extra/MATLAB/lpsolve/bin/win{32,64}/lp_explicit.lib
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_MATLAB_source.tar.gz
+      run: ./release_process/build-targz-MATLAB_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_octave_source.tar.gz
+      run: ./release_process/build-targz-octave_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_OMATRIX_source.tar.gz
+      run: ./release_process/build-targz-OMATRIX_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_scilab_source.tar.gz
+      run: ./release_process/build-targz-scilab_source.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_c.tar.gz
+      run: ./release_process/build-targz-c.sh
+
+    - name: Build lp_solve_${{ env.LPSOLVE_VERSION }}_doc.tar.gz
+      run: ./release_process/build-targz-doc.sh
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.job }}
+        compression-level: 0 # no compression - already compressed
+        retention-days: 1
+        path: |
+          *.tar.gz
+
+  collect-all-release-files:
+    runs-on: ubuntu-latest
+    needs:
+      - build-win64
+      - build-win32
+      - build-linux
+      - zip-on-windows
+      - tar-gz-on-linux
+    steps:
+
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          # TODO: all files here reproduces what was released with 5.5.2.14
+          #       EXCEPT lp_solve_..._IDE_Setup.exe which we were not able to build automatically
+          #       Note that 5.5.2.14 is missing .zip/.tar.gz files compared to 5.5.2.11 as well
+          #       as missing files within its .zip/.tar.gz files as mentioned above.
+          name: release-files
+          delete-merged: true
+          compression-level: 0 # no compression - already compressed

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_obj_in_basis</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_obj_in_basis</h1>
+					<p>Returns if the objective is in the matrix or not.</p>
+					<p><b>unsigned char is_obj_in_basis(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_obj_in_basis</b> returns if the objective is in the matrix or not.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>is_obj_in_basis</b> function returns if the objective is in the matrix or not.<br>
+						The default is that the objective is in the matrix (TRUE).
+					</p>
+                                        <p>
+                                        By default, the objective function is stored as the top row in the constraint matrix
+                                        When this function is called with obj_in_basis = FALSE then it is moved out into separate storage.
+                                        When out of the basis, the computation of reduced costs is somewhat slower.
+                                        In the late versions of v5.5, there is now the option to calculate reduced cost in the textbook way, i.e. completely independently of the basis.
+                                        </p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  unsigned char obj_in_basis;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  obj_in_basis = is_obj_in_basis(lp); /* Will return 1 (TRUE) */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_obj_in_basis.htm">set_obj_in_basis</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

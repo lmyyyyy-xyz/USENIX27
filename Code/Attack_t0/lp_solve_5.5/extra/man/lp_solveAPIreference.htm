@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<head>
+		<title>lp_solve API reference</title>
+	</head>
+	<body>
+		<h1 align="left"><u> lp_solve API reference</u></h1>
+		<h3 align="left"><u> Alfabetical index</u></h3>
+        <blockquote>
+                         <a href="add_column.htm">add_column, add_columnex, str_add_column</a><br>
+                         <a href="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</a><br>
+                         <a href="add_lag_con.htm">add_lag_con, str_add_lag_con</a><br>
+                         <a href="add_SOS.htm">add_SOS</a><br>
+                         <a href="column_in_lp.htm">column_in_lp</a><br>
+                         <a href="copy_lp.htm">copy_lp</a><br>
+                         <a href="default_basis.htm">default_basis</a><br>
+                         <a href="del_column.htm">del_column</a><br>
+                         <a href="del_constraint.htm">del_constraint</a><br>
+                         <a href="delete_lp.htm">delete_lp</a><br>
+                         <a href="dualize_lp.htm">dualize_lp</a><br>
+                         <a href="free_lp.htm">free_lp</a><br>
+                         <a href="get_accuracy.htm">get_accuracy</a><br>
+                         <a href="get_anti_degen.htm">get_anti_degen</a><br>
+                         <a href="get_basis.htm">get_basis</a><br>
+                         <a href="get_basiscrash.htm">get_basiscrash</a><br>
+                         <a href="get_bb_depthlimit.htm">get_bb_depthlimit</a><br>
+                         <a href="get_bb_floorfirst.htm">get_bb_floorfirst</a><br>
+                         <a href="get_bb_rule.htm">get_bb_rule</a><br>
+                         <a href="get_bounds_tighter.htm">get_bounds_tighter</a><br>
+                         <a href="get_break_at_value.htm">get_break_at_value</a><br>
+                         <a href="get_break_numeric_accuracy.htm">get_break_numeric_accuracy</a><br>
+                         <a href="get_col_name.htm">get_col_name, get_origcol_name</a><br>
+                         <a href="get_column.htm">get_column, get_columnex</a><br>
+                         <a href="get_constr_type.htm">get_constr_type</a><br>
+                         <a href="get_constr_value.htm">get_constr_value</a><br>
+                         <a href="get_constraints.htm">get_constraints, get_ptr_constraints</a><br>
+                         <a href="get_epsb.htm">get_epsb</a><br>
+                         <a href="get_epsd.htm">get_epsd</a><br>
+                         <a href="get_epsel.htm">get_epsel</a><br>
+                         <a href="get_epsint.htm">get_epsint</a><br>
+                         <a href="get_epsperturb.htm">get_epsperturb</a><br>
+                         <a href="get_epspivot.htm">get_epspivot</a><br>
+                         <a href="get_improve.htm">get_improve</a><br>
+                         <a href="get_infinite.htm">get_infinite</a><br>
+                         <a href="get_lambda.htm">get_lambda, get_ptr_lambda</a>, <a href="get_lambda.htm">get_lambda, get_ptr_lambda</a><br>
+                         <a href="get_lowbo.htm">get_lowbo</a><br>
+                         <a href="get_lp_index.htm">get_lp_index</a><br>
+                         <a href="get_lp_name.htm">get_lp_name</a><br>
+                         <a href="get_Lrows.htm">get_Lrows</a><br>
+                         <a href="get_mat.htm">get_mat</a><br>
+                         <a href="get_max_level.htm">get_max_level</a>, <a href="get_max_level.htm">get_max_level</a><br>
+                         <a href="get_maxpivot.htm">get_maxpivot</a><br>
+                         <a href="get_mip_gap.htm">get_mip_gap</a><br>
+                         <a href="get_Ncolumns.htm">get_Ncolumns</a><br>
+                         <a href="get_nameindex.htm">get_nameindex</a><br>
+                         <a href="get_negrange.htm">get_negrange</a><br>
+                         <a href="get_nonzeros.htm">get_nonzeros</a><br>
+                         <a href="get_Norig_columns.htm">get_Norig_columns</a><br>
+                         <a href="get_Norig_rows.htm">get_Norig_rows</a><br>
+                         <a href="get_Nrows.htm">get_Nrows</a><br>
+                         <a href="get_obj_bound.htm">get_obj_bound</a><br>
+                         <a href="get_objective.htm">get_objective</a><br>
+                         <a href="get_orig_index.htm">get_orig_index</a><br>
+                         <a href="get_pivoting.htm">get_pivoting</a><br>
+                         <a href="get_presolve.htm">get_presolve</a><br>
+                         <a href="get_presolveloops.htm">get_presolveloops</a><br>
+                         <a href="get_primal_solution.htm">get_primal_solution, get_ptr_primal_solution, get_var_primalresult</a><br>
+                         <a href="get_print_sol.htm">get_print_sol</a><br>
+                         <a href="get_rh.htm">get_rh</a><br>
+                         <a href="get_rh_range.htm">get_rh_range</a><br>
+                         <a href="get_row.htm">get_row, get_rowex</a><br>
+                         <a href="get_row_name.htm">get_row_name, get_origrow_name</a><br>
+                         <a href="get_scalelimit.htm">get_scalelimit</a><br>
+                         <a href="get_scaling.htm">get_scaling</a><br>
+                         <a href="get_sensitivity_obj.htm">get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</a><br>
+                         <a href="get_sensitivity_rhs.htm">get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a><br>
+                         <a href="get_simplextype.htm">get_simplextype</a><br>
+                         <a href="get_solutioncount.htm">get_solutioncount</a><br>
+                         <a href="get_solutionlimit.htm">get_solutionlimit</a><br>
+                         <a href="get_status.htm">get_status</a><br>
+                         <a href="get_statustext.htm">get_statustext</a><br>
+                         <a href="get_timeout.htm">get_timeout</a><br>
+                         <a href="get_total_iter.htm">get_total_iter</a><br>
+                         <a href="get_total_nodes.htm">get_total_nodes</a><br>
+                         <a href="get_upbo.htm">get_upbo</a><br>
+                         <a href="get_var_branch.htm">get_var_branch</a><br>
+                         <a href="get_var_priority.htm">get_var_priority</a>, <a href="get_var_priority.htm">get_var_priority</a><br>
+                         <a href="get_variables.htm">get_variables, get_ptr_variables</a><br>
+                         <a href="get_verbose.htm">get_verbose</a><br>
+                         <a href="get_working_objective.htm">get_working_objective</a><br>
+                         <a href="guess_basis.htm">guess_basis</a><br>
+                         <a href="has_BFP.htm">has_BFP</a><br>
+                         <a href="has_XLI.htm">has_XLI</a><br>
+                         <a href="is_add_rowmode.htm">is_add_rowmode</a><br>
+                         <a href="is_anti_degen.htm">is_anti_degen</a><br>
+                         <a href="is_binary.htm">is_binary</a><br>
+                         <a href="is_break_at_first.htm">is_break_at_first</a><br>
+                         <a href="is_constr_type.htm">is_constr_type</a><br>
+                         <a href="is_debug.htm">is_debug</a><br>
+                         <a href="is_feasible.htm">is_feasible</a><br>
+                         <a href="is_unbounded.htm">is_unbounded</a><br>
+                         <a href="is_infinite.htm">is_infinite</a><br>
+                         <a href="is_int.htm">is_int</a><br>
+                         <a href="is_integerscaling.htm">is_integerscaling</a><br>
+                         <a href="is_lag_trace.htm">is_lag_trace</a><br>
+                         <a href="is_maxim.htm">is_maxim</a><br>
+                         <a href="is_nativeBFP.htm">is_nativeBFP</a><br>
+                         <a href="is_nativeXLI.htm">is_nativeXLI</a><br>
+                         <a href="is_negative.htm">is_negative</a><br>
+                         <a href="is_obj_in_basis.htm">is_obj_in_basis</a><br>
+                         <a href="is_piv_mode.htm">is_piv_mode</a><br>
+                         <a href="is_piv_rule.htm">is_piv_rule</a><br>
+                         <a href="is_presolve.htm">is_presolve</a><br>
+                         <a href="is_scalemode.htm">is_scalemode</a><br>
+                         <a href="is_scaletype.htm">is_scaletype</a><br>
+                         <a href="is_semicont.htm">is_semicont</a><br>
+                         <a href="is_SOS_var.htm">is_SOS_var</a><br>
+                         <a href="is_trace.htm">is_trace</a><br>
+                         <a href="is_use_names.htm">is_use_names</a><br>
+                         <a href="lag_solve.htm">lag_solve</a><br>
+                         <a href="lp_solve_version.htm">lp_solve_version</a><br>
+                         <a href="make_lp.htm">make_lp</a><br>
+                         <a href="print_constraints.htm">print_constraints</a><br>
+                         <a href="print_debugdump.htm">print_debugdump</a><br>
+                         <a href="print_duals.htm">print_duals</a><br>
+                         <a href="print_lp.htm">print_lp</a><br>
+                         <a href="print_objective.htm">print_objective</a><br>
+                         <a href="print_scales.htm">print_scales</a><br>
+                         <a href="print_solution.htm">print_solution</a><br>
+                         <a href="print_str.htm">print_str</a><br>
+                         <a href="print_tableau.htm">print_tableau</a><br>
+                         <a href="put_abortfunc.htm">put_abortfunc</a><br>
+                         <a href="put_bb_branchfunc.htm">put_bb_branchfunc</a><br>
+                         <a href="put_bb_nodefunc.htm">put_bb_nodefunc</a><br>
+                         <a href="put_logfunc.htm">put_logfunc</a><br>
+                         <a href="put_msgfunc.htm">put_msgfunc</a><br>
+                         <a href="read_basis.htm">read_basis</a><br>
+                         <a href="read_lp.htm">read_lp, read_LP</a><br>
+                         <a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a><br>
+                         <a href="read_params.htm">read_params</a><br>
+                         <a href="read_XLI.htm">read_XLI</a><br>
+                         <a href="reset_basis.htm">reset_basis</a><br>
+                         <a href="reset_params.htm">reset_params</a><br>
+                         <a href="resize_lp.htm">resize_lp</a><br>
+                         <a href="set_add_rowmode.htm">set_add_rowmode</a><br>
+                         <a href="set_anti_degen.htm">set_anti_degen</a>, <a href="get_anti_degen.htm">get_anti_degen</a><br>
+                         <a href="set_basis.htm">set_basis</a><br>
+                         <a href="set_basiscrash.htm">set_basiscrash</a><br>
+                         <a href="set_basisvar.htm">set_basisvar</a><br>
+                         <a href="set_bb_depthlimit.htm">set_bb_depthlimit</a><br>
+                         <a href="set_bb_floorfirst.htm">set_bb_floorfirst</a><br>
+                         <a href="set_bb_rule.htm">set_bb_rule</a><br>
+                         <a href="set_BFP.htm">set_BFP</a><br>
+                         <a href="set_XLI.htm">set_XLI</a><br>
+                         <a href="set_binary.htm">set_binary</a><br>
+                         <a href="set_bounds.htm">set_bounds</a><br>
+                         <a href="set_bounds_tighter.htm">set_bounds_tighter</a><br>
+                         <a href="set_break_at_first.htm">set_break_at_first</a><br>
+                         <a href="set_break_at_value.htm">set_break_at_value</a><br>
+                         <a href="set_break_numeric_accuracy.htm">set_break_numeric_accuracy</a><br>
+                         <a href="set_column.htm">set_column, set_columnex</a><br>
+                         <a href="set_col_name.htm">set_col_name</a><br>
+                         <a href="set_constr_type.htm">set_constr_type</a><br>
+                         <a href="set_debug.htm">set_debug</a><br>
+                         <a href="set_epsb.htm">set_epsb</a><br>
+                         <a href="set_epsd.htm">set_epsd</a><br>
+                         <a href="set_epsel.htm">set_epsel</a><br>
+                         <a href="set_epsint.htm">set_epsint</a><br>
+                         <a href="set_epsperturb.htm">set_epsperturb</a><br>
+                         <a href="set_epspivot.htm">set_epspivot</a><br>
+                         <a href="set_epslevel.htm">set_epslevel</a><br>
+                         <a href="set_unbounded.htm">set_unbounded</a><br>
+                         <a href="set_improve.htm">set_improve</a><br>
+                         <a href="set_infinite.htm">set_infinite</a><br>
+                         <a href="set_int.htm">set_int</a><br>
+                         <a href="set_lag_trace.htm">set_lag_trace</a><br>
+                         <a href="set_lowbo.htm">set_lowbo</a><br>
+                         <a href="set_lp_name.htm">set_lp_name</a><br>
+                         <a href="set_mat.htm">set_mat</a><br>
+                         <a href="set_maxim.htm">set_maxim</a><br>
+                         <a href="set_maxpivot.htm">set_maxpivot</a><br>
+                         <a href="set_minim.htm">set_minim</a><br>
+                         <a href="set_mip_gap.htm">set_mip_gap</a><br>
+                         <a href="set_negrange.htm">set_negrange</a><br>
+                         <a href="set_obj_bound.htm">set_obj_bound</a><br>
+                         <a href="set_obj_fn.htm">set_obj_fn, set_obj_fnex, str_set_obj_fn, set_obj</a><br>
+                         <a href="set_obj_in_basis.htm">set_obj_in_basis</a><br>
+                         <a href="set_output.htm">set_outputstream, set_outputfile</a><br>
+                         <a href="set_pivoting.htm">set_pivoting</a><br>
+                         <a href="set_preferdual.htm">set_preferdual</a><br>
+                         <a href="set_presolve.htm">set_presolve</a><br>
+                         <a href="set_print_sol.htm">set_print_sol</a><br>
+                         <a href="set_rh.htm">set_rh</a><br>
+                         <a href="set_rh_range.htm">set_rh_range</a><br>
+                         <a href="set_rh_vec.htm">set_rh_vec, str_set_rh_vec</a><br>
+                         <a href="set_row.htm">set_row, set_rowex</a><br>
+                         <a href="set_row_name.htm">set_row_name</a><br>
+                         <a href="set_scalelimit.htm">set_scalelimit</a><br>
+                         <a href="set_scaling.htm">set_scaling</a><br>
+                         <a href="set_semicont.htm">set_semicont</a><br>
+                         <a href="set_sense.htm">set_sense</a><br>
+                         <a href="set_simplextype.htm">set_simplextype</a><br>
+                         <a href="set_solutionlimit.htm">set_solutionlimit</a><br>
+                         <a href="set_timeout.htm">set_timeout</a><br>
+                         <a href="set_trace.htm">set_trace</a><br>
+                         <a href="set_upbo.htm">set_upbo</a><br>
+                         <a href="set_use_names.htm">set_use_names</a><br>
+                         <a href="set_var_branch.htm">set_var_branch</a><br>
+                         <a href="set_var_weights.htm">set_var_weights</a><br>
+                         <a href="set_verbose.htm">set_verbose</a><br>
+                         <a href="solve.htm">solve</a><br>
+                         <a href="time_elapsed.htm">time_elapsed</a><br>
+                         <a href="unscale.htm">unscale</a><br>
+                         <a href="write_basis.htm">write_basis</a><br>
+                         <a href="write_lp.htm">write_lp, write_LP, write_lpex</a><br>
+                         <a href="write_mps.htm">write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</a><br>
+                         <a href="write_params.htm">write_params</a><br>
+                         <a href="write_XLI.htm">write_XLI</a><br>
+        </blockquote>
+        <h3 align="left"><u>Functional index</u></h3>
+        <blockquote>
+                         <h4 align="left"><u>Create/destroy model</u></h4>
+                         <a href="copy_lp.htm">copy_lp</a><br>
+                         <a href="make_lp.htm">make_lp</a><br>
+                         <a href="read_lp.htm">read_lp, read_LP</a><br>
+                         <a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a><br>
+                         <a href="read_XLI.htm">read_XLI</a><br>
+
+                         <a href="delete_lp.htm">delete_lp</a><br>
+                         <a href="free_lp.htm">free_lp</a><br>
+
+                         <h4 align="left"><u>Build model</u></h4>
+                         <a href="add_column.htm">add_column, add_columnex, str_add_column</a>, <A HREF="set_column.htm">set_column, set_columnex</A>, <a href="get_column.htm">get_column, get_columnex</a><br>
+                         <a href="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</a>, <A HREF="set_row.htm">set_row, set_rowex</A><br>
+                         <a href="add_lag_con.htm">add_lag_con, str_add_lag_con</a><br>
+                         <a href="add_SOS.htm">add_SOS</a>, <a href="is_SOS_var.htm">is_SOS_var</a><br>
+                         <a href="del_column.htm">del_column</a><br>
+                         <a href="del_constraint.htm">del_constraint</a>, <a href="get_row.htm">get_row, get_rowex</a><br>
+                         <a href="get_nameindex.htm">get_nameindex</a><br>
+                         <a href="is_infinite.htm">is_infinite</a><br>
+                         <a href="is_negative.htm">is_negative</a><br>
+                         <a href="resize_lp.htm">resize_lp</a><br>
+                         <a href="set_add_rowmode.htm">set_add_rowmode</a>, <a href="is_add_rowmode.htm">is_add_rowmode</a><br>
+                         <a href="set_binary.htm">set_binary</a>, <a href="is_binary.htm">is_binary</a><br>
+                         <a href="set_bounds.htm">set_bounds</a><br>
+                         <a href="set_bounds_tighter.htm">set_bounds_tighter</a>, <a href="get_bounds_tighter.htm">get_bounds_tighter</a><br>
+                         <a href="set_col_name.htm">set_col_name</a>, <a href="get_col_name.htm">get_col_name, get_origcol_name</a><br>
+                         <a href="set_constr_type.htm">set_constr_type</a>, <a href="get_constr_type.htm">get_constr_type</a>, <a href="is_constr_type.htm">is_constr_type</a><br>
+                         <a href="set_unbounded.htm">set_unbounded</a>, <a href="is_unbounded.htm">is_unbounded</a><br>
+                         <a href="set_infinite.htm">set_infinite</a>, <a href="get_infinite.htm">get_infinite</a><br>
+                         <a href="set_int.htm">set_int</a>, <a href="is_int.htm">is_int</a><br>
+                         <a href="set_lowbo.htm">set_lowbo</a>, <a href="get_lowbo.htm">get_lowbo</a><br>
+                         <a href="set_lp_name.htm">set_lp_name</a>, <a href="get_lp_name.htm">get_lp_name</a><br>
+                         <a href="set_mat.htm">set_mat</a>, <a href="get_mat.htm">get_mat</a><br>
+                         <a href="set_obj_bound.htm">set_obj_bound</a>, <a href="get_obj_bound.htm">get_obj_bound</a><br>
+                         <a href="set_obj_fn.htm">set_obj_fn, set_obj_fnex, str_set_obj_fn, set_obj</a><br>
+                         <a href="set_rh.htm">set_rh</a>, <a href="get_rh.htm">get_rh</a><br>
+                         <a href="set_rh_range.htm">set_rh_range</a>, <a href="get_rh_range.htm">get_rh_range</a><br>
+                         <a href="set_rh_vec.htm">set_rh_vec, str_set_rh_vec</a><br>
+                         <a href="set_row_name.htm">set_row_name</a>, <a href="get_row_name.htm">get_row_name, get_origrow_name</a><br>
+                         <a href="set_semicont.htm">set_semicont</a>, <a href="is_semicont.htm">is_semicont</a><br>
+                         <a href="set_upbo.htm">set_upbo</a>, <a href="get_upbo.htm">get_upbo</a><br>
+                         <a href="set_var_branch.htm">set_var_branch</a>, <a href="get_var_branch.htm">get_var_branch</a><br>
+                         <a href="set_var_weights.htm">set_var_weights</a><br>
+
+                         <h4 align="left"><u>Solver settings</u></h4>
+                         <a href="default_basis.htm">default_basis</a><br>
+                         <a href="read_basis.htm">read_basis</a><br>
+                         <a href="reset_basis.htm">reset_basis</a><br>
+                         <a href="write_basis.htm">write_basis</a><br>
+                         <a href="guess_basis.htm">guess_basis</a><br>
+                         <a href="read_params.htm">read_params</a>, <a href="write_params.htm">write_params</a><br>
+                         <a href="reset_params.htm">reset_params</a><br>
+                         <a href="set_anti_degen.htm">set_anti_degen</a>, <a href="is_anti_degen.htm">is_anti_degen</a><br>
+                         <a href="set_basis.htm">set_basis</a>, <a href="get_basis.htm">get_basis</a><br>
+                         <a href="set_basiscrash.htm">set_basiscrash</a>, <a href="get_basiscrash.htm">get_basiscrash</a><br>
+                         <a href="set_bb_depthlimit.htm">set_bb_depthlimit</a>, <a href="get_bb_depthlimit.htm">get_bb_depthlimit</a><br>
+                         <a href="set_bb_floorfirst.htm">set_bb_floorfirst</a>, <a href="get_bb_floorfirst.htm">get_bb_floorfirst</a><br>
+                         <a href="set_bb_rule.htm">set_bb_rule</a>, <a href="get_bb_rule.htm">get_bb_rule</a><br>
+                         <a href="set_BFP.htm">set_BFP</a>, <a href="has_BFP.htm">has_BFP</a>, <a href="is_nativeBFP.htm">is_nativeBFP</a><br>
+                         <a href="set_break_at_first.htm">set_break_at_first</a>, <a href="is_break_at_first.htm">is_break_at_first</a><br>
+                         <a href="set_break_at_value.htm">set_break_at_value</a>, <a href="get_break_at_value.htm">get_break_at_value</a><br>
+                         <a href="set_epsb.htm">set_epsb</a>, <a href="get_epsb.htm">get_epsb</a><br>
+                         <a href="set_epsd.htm">set_epsd</a>, <a href="get_epsd.htm">get_epsd</a><br>
+                         <a href="set_epsel.htm">set_epsel</a>, <a href="get_epsel.htm">get_epsel</a><br>
+                         <a href="set_epsint.htm">set_epsint</a>, <a href="get_epsint.htm">get_epsint</a><br>
+                         <a href="set_epsperturb.htm">set_epsperturb</a>, <a href="get_epsperturb.htm">get_epsperturb</a><br>
+                         <a href="set_epspivot.htm">set_epspivot</a>, <a href="get_epspivot.htm">get_epspivot</a><br>
+                         <a href="set_epslevel.htm">set_epslevel</a><br>
+                         <a href="set_improve.htm">set_improve</a>, <a href="get_improve.htm">get_improve</a><br>
+                         <a href="set_maxim.htm">set_maxim</a>, <a href="is_maxim.htm">is_maxim</a><br>
+                         <a href="set_maxpivot.htm">set_maxpivot</a>, <a href="get_maxpivot.htm">get_maxpivot</a><br>
+                         <a href="set_minim.htm">set_minim</a><br>
+                         <a href="set_mip_gap.htm">set_mip_gap</a>, <a href="get_mip_gap.htm">get_mip_gap</a><br>
+                         <a href="set_negrange.htm">set_negrange</a>, <a href="get_negrange.htm">get_negrange</a><br>
+                         <a href="set_obj_in_basis.htm">set_obj_in_basis</a>, <a href="is_obj_in_basis.htm">is_obj_in_basis</a><br>
+                         <a href="set_pivoting.htm">set_pivoting</a>, <a href="get_pivoting.htm">get_pivoting</a>, <a href="is_piv_mode.htm">is_piv_mode</a>, <a href="is_piv_rule.htm">is_piv_rule</a><br>
+                         <a href="set_preferdual.htm">set_preferdual</a><br>
+                         <a href="set_presolve.htm">set_presolve</a>, <a href="get_presolve.htm">get_presolve</a>, <a href="get_presolveloops.htm">get_presolveloops</a>, <a href="is_presolve.htm">is_presolve</a><br>
+                         <a href="set_scalelimit.htm">set_scalelimit</a>, <a href="get_scalelimit.htm">get_scalelimit</a><br>
+                         <a href="set_scaling.htm">set_scaling</a>, <a href="get_scaling.htm">get_scaling</a>, <a href="is_integerscaling.htm">is_integerscaling</a>, <a href="is_scalemode.htm">is_scalemode</a>, <a href="is_scaletype.htm">is_scaletype</a><br>
+                         <a href="set_sense.htm">set_sense</a><br>
+                         <a href="set_simplextype.htm">set_simplextype</a>, <a href="get_simplextype.htm">get_simplextype</a><br>
+                         <a href="set_solutionlimit.htm">set_solutionlimit</a>, <a href="get_solutionlimit.htm">get_solutionlimit</a><br>
+                         <a href="set_timeout.htm">set_timeout</a>, <a href="get_timeout.htm">get_timeout</a><br>
+                         <a href="set_use_names.htm">set_use_names</a>, <a href="is_use_names.htm">is_use_names</a><br>
+                         <a href="unscale.htm">unscale</a><br>
+
+                         <h4 align="left"><u>Callback routines</u></h4>
+                         <a href="put_abortfunc.htm">put_abortfunc</a><br>
+                         <a href="put_bb_branchfunc.htm">put_bb_branchfunc</a><br>
+                         <a href="put_bb_nodefunc.htm">put_bb_nodefunc</a><br>
+                         <a href="put_logfunc.htm">put_logfunc</a><br>
+                         <a href="put_msgfunc.htm">put_msgfunc</a><br>
+
+                         <h4 align="left"><u>Solve</u></h4>
+                         <a href="solve.htm">solve</a><br>
+                         <a href="lag_solve.htm">lag_solve</a><br>
+
+                         <h4 align="left"><u>Solution</u></h4>
+                         <a href="get_constraints.htm">get_constraints, get_ptr_constraints</a><br>
+                         <a href="get_constr_value.htm">get_constr_value</a>
+                         <a href="get_objective.htm">get_objective</a><br>
+                         <a href="get_primal_solution.htm">get_primal_solution, get_ptr_primal_solution, get_var_primalresult</a><br>
+                         <a href="get_sensitivity_obj.htm">get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</a><br>
+                         <a href="get_sensitivity_rhs.htm">get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a><br>
+                         <a href="get_solutioncount.htm">get_solutioncount</a><br>
+                         <a href="get_total_iter.htm">get_total_iter</a><br>
+                         <a href="get_total_nodes.htm">get_total_nodes</a><br>
+                         <a href="get_variables.htm">get_variables, get_ptr_variables</a><br>
+                         <a href="get_working_objective.htm">get_working_objective</a><br>
+                         <a href="is_feasible.htm">is_feasible</a><br>
+
+                         <h4 align="left"><u>Debug/print settings</u></h4>
+                         <a href="set_debug.htm">set_debug</a>, <a href="is_debug.htm">is_debug</a><br>
+                         <a href="set_lag_trace.htm">set_lag_trace</a>, <a href="is_lag_trace.htm">is_lag_trace</a><br>
+                         <a href="set_output.htm">set_outputstream, set_outputfile</a><br>
+                         <a href="set_print_sol.htm">set_print_sol</a>, <a href="get_print_sol.htm">get_print_sol</a><br>
+                         <a href="set_trace.htm">set_trace</a>, <a href="is_trace.htm">is_trace</a><br>
+                         <a href="set_verbose.htm">set_verbose</a>, <a href="get_verbose.htm">get_verbose</a><br>
+
+                         <h4 align="left"><u>Debug/print</u></h4>
+
+                         <a href="print_constraints.htm">print_constraints</a><br>
+                         <a href="print_debugdump.htm">print_debugdump</a><br>
+                         <a href="print_duals.htm">print_duals</a><br>
+                         <a href="print_lp.htm">print_lp</a><br>
+                         <a href="print_objective.htm">print_objective</a><br>
+                         <a href="print_scales.htm">print_scales</a><br>
+                         <a href="print_solution.htm">print_solution</a><br>
+                         <a href="print_str.htm">print_str</a><br>
+                         <a href="print_tableau.htm">print_tableau</a><br>
+
+                         <h4 align="left"><u>Write model to file</u></h4>
+                         <a href="write_lp.htm">write_lp, write_LP, write_lpex</a><br>
+                         <a href="write_mps.htm">write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</a><br>
+                         <a href="write_XLI.htm">write_XLI</a>, <a href="set_XLI.htm">set_XLI</a>, <a href="has_XLI.htm">has_XLI</a>, <a href="is_nativeXLI.htm">is_nativeXLI</a><br>
+
+                         <h4 align="left"><u>Miscellaneous routines</u></h4>
+                         <a href="column_in_lp.htm">column_in_lp</a><br>
+                         <a href="dualize_lp.htm">dualize_lp</a><br>
+                         <a href="get_lp_index.htm">get_lp_index</a><br>
+                         <a href="get_Lrows.htm">get_Lrows</a><br>
+                         <a href="get_Ncolumns.htm">get_Ncolumns</a><br>
+                         <a href="get_nonzeros.htm">get_nonzeros</a><br>
+                         <a href="get_Norig_columns.htm">get_Norig_columns</a><br>
+                         <a href="get_Norig_rows.htm">get_Norig_rows</a><br>
+                         <a href="get_Nrows.htm">get_Nrows</a><br>
+                         <a href="get_orig_index.htm">get_orig_index</a><br>
+                         <a href="get_status.htm">get_statustext</a><br>
+                         <a href="get_statustext.htm">get_statustext</a><br>
+                         <a href="lp_solve_version.htm">lp_solve_version</a><br>
+                         <a href="set_basisvar.htm">set_basisvar</a><br>
+                         <a href="time_elapsed.htm">time_elapsed</a><br>
+        </blockquote>
+	</body>
+</html>

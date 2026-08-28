@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_row_name, get_origrow_name</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_row_name, get_origrow_name</h1>
+					<p>Gets the name of a constraint (row) in the lp.</p>
+					<p><b>char *get_row_name(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>);</b></p>
+					<p><b>char *get_origrow_name(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_row_name</b> and <b>get_origrow_name</b> return the name of the specified
+						row. A return value of NULL indicates an error. The difference between <b>get_row_name</b>
+						and <b>get_origrow_name</b> is only visible when a presolve (<A href="set_presolve.htm">set_presolve</A>)
+						was done. Presolve can result in deletion of rows in the model. In <b>get_row_name</b>,
+						<i>row</i> specifies the row number after presolve was done. In <b>get_origrow_name</b>,
+						<i>row</i> specifies the row number before presolve was done, ie the original row number.
+						If presolve is not active then both functions are equal.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>row</i></p>
+					<p class="indent">The row for which the name must be retrieved. Must be between 0
+						and the number of rows in the lp. In <b>get_row_name</b>, <i>row</i> specifies
+						the row number after presolve was done. In <b>get_origrow_name</b>,
+						<i>row</i> specifies the row number before presolve was done, ie the original row number.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_row_name</b> and <b>get_origrow_name</b> functions return the name of
+						the row.<br>
+						Row names are optional. If no row name was specified, the function returns Rx
+						with x the row number. row 0 is the objective function.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  char *name;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  name = get_row_name(lp, 1); /* will be R1 since no row name was set */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_row_name.htm">set_row_name</A>, <A HREF="set_col_name.htm">
+							set_col_name</A>, <A HREF="get_col_name.htm">get_col_name, get_origcol_name</A>, <A HREF="get_nameindex.htm">get_nameindex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

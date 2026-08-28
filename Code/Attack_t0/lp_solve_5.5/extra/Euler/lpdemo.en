@@ -1,0 +1,112 @@
+// Script to demonstrate use of the lp_solve toolkit
+
+>lp=eulpsolve("make_lp",0,4);
+>eulpsolve("set_verbose", lp, 3);
+>eulpsolve("add_constraint",lp,[3, 2, 2, 1],3,4);
+>eulpsolve("add_constraint",lp,[0, 4, 3, 1],2,3);
+>eulpsolve("set_obj_fn",lp,[2, 3, -2, 3]);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+
+// Change a single element, and maximize
+
+>eulpsolve("set_mat",lp,2,1,0.5);
+>eulpsolve("set_maxim",lp);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+
+// Change RHS
+
+>eulpsolve("set_rh",lp,1,7.45);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+
+// Set var 4 to an integer
+
+>eulpsolve("set_int",lp,4,1)
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+
+// Put in lower and upper bounds
+
+>eulpsolve("set_lowbo",lp,2,2);
+>eulpsolve("set_upbo",lp,4,5.3);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+
+// Delete a constraint
+
+>eulpsolve("del_constraint",lp,1);
+>eulpsolve("add_constraint",lp,[1, 2, 1, 4],3,8);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+>eulpsolve("delete_lp",lp)
+
+//////////////////////////
+
+// More examples
+
+// ex1.lp from the lp_solve distribution
+
+>lp=eulpsolve("make_lp",2,2);
+>eulpsolve("set_verbose", lp, 3);
+>eulpsolve("set_mat",lp,[2, 1;-4, 4]);
+>eulpsolve("set_obj_fn",lp,[-1, 2]);
+>eulpsolve("set_int",lp,[1,1]);
+>eulpsolve("set_rh_vec",lp,[5, 5]);
+>eulpsolve("set_maxim",lp);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+>eulpsolve("delete_lp",lp);
+
+// Example 2
+
+>f = [50, 100];
+>A = [10, 5;4, 10; 1, 1.5];
+>b = [2500, 2000, 450];
+>e = [-1, -1, -1];
+
+>m = rows(A);
+>n = cols(A);
+>lp=eulpsolve("make_lp",m,n);
+>eulpsolve("set_verbose", lp, 3);
+>eulpsolve("set_obj_fn",lp,f);
+>eulpsolve("set_mat",lp,A);
+>eulpsolve("set_rh_vec",lp,b);
+>eulpsolve("set_maxim",lp);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+>eulpsolve("delete_lp",lp);
+
+// Example 3
+
+>f = -[40, 36];
+>vub = [8, 10];
+>A = [5, 3];
+>b = [45];
+>e = 1;
+
+>m = rows(A);
+>n = cols(A);
+>lp=eulpsolve("make_lp",m,n);
+>eulpsolve("set_verbose", lp, 3);
+>eulpsolve("set_obj_fn",lp,f);
+>eulpsolve("set_mat",lp,A);
+>eulpsolve("set_rh_vec",lp,b);
+>eulpsolve("set_constr_type",lp,1,2);
+>eulpsolve("set_upbo",lp,1,8);
+>eulpsolve("set_upbo",lp,2,10);
+>eulpsolve("set_maxim",lp);
+>result=eulpsolve("solve",lp)
+>obj=eulpsolve("get_objective", lp)
+>x=eulpsolve("get_variables", lp)
+>eulpsolve("delete_lp",lp);
+>

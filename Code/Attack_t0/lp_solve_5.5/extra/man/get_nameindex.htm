@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_nameindex</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_nameindex</h1>
+					<p>Gets the index of a given column or row name in the lp.</p>
+					<p><b>int get_nameindex(lprec </b>*<i>lp</i><b>, char </b>*<i>name</i><b>, unsigned char </b><i>isrow</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_nameindex</b> returns the index (column/row number) of the given column/row name.
+						A return value of -1 indicates that the name does not exist.
+						Note that the index is the original index number. So if presolve is active, it has no effect.
+						It is the original column/row number that is returned.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>name</i></p>
+					<p class="indent">The name of the column or row for which the index (column/row number) must be retrieved.</p>
+					<p class="dt"><i>isrow</i></p>
+					<p class="indent">Set to FALSE (0) if column information is needed and TRUE (1) if row information is needed.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_nameindex</b> function returns the index (column/row number) of the given column/row name.
+					   Note that this index starts from 1. Some API routines expect zero-based indexes and thus this value must then be corrected with -1.<br>
+						This routine is new from version 5.1.1.1.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int column;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_row_name(lp, 1, "col1");
+
+  column = get_nameindex(lp, "col1", TRUE); /* will return 1 */
+  column = get_nameindex(lp, "col", TRUE); /* will return -1 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_row_name.htm">set_row_name</A>, <A HREF="get_row_name.htm">get_row_name, get_origrow_name</A>, <A HREF="set_col_name.htm">
+							set_col_name</A>, <A HREF="get_col_name.htm">get_col_name, get_origcol_name</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

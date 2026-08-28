@@ -1,0 +1,12 @@
+206,208d205
+< #ifdef WIN32
+<    if (access(myfilename, 0) != 0)
+< #else
+210d206
+< #endif
+217,219d212
+< #ifdef WIN32
+<       if (access(myfilename, 0) != 0)
+< #else
+221d213
+< #endif

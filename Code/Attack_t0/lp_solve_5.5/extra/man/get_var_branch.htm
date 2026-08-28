@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_var_branch</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_var_branch</h1>
+					<p>Returns, for the specified variable, which branch to take first in
+						branch-and-bound algorithm.</p>
+					<p><b>int get_var_branch(lprec </b>*<i>lp</i><b>, int </b><i>column</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_var_branch</b> returns which branch to take first in branch-and-bound
+						algorithm.<br>
+						<br>
+						Can by any of the following values:</p>
+					<TABLE id="Table2" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>BRANCH_CEILING (0)</TD>
+							<TD>Take ceiling branch first</TD>
+						</TR>
+						<TR>
+							<TD>BRANCH_FLOOR (1)</TD>
+							<TD>Take floor branch first</TD>
+						</TR>
+						<TR>
+							<TD>BRANCH_AUTOMATIC (2)</TD>
+							<TD>Algorithm decides which branch being taken first</TD>
+						</TR>
+					</TABLE>
+					<br>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>column</i></p>
+					<p class="indent">The column number of the variable on which the mode must be
+						returned. It must be between 1 and the number of columns in the lp. If it is
+						not within this range, the return value is the value of <A href="get_bb_floorfirst.htm">
+							get_bb_floorfirst</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_var_branch</b> function returns which branch to take first in
+						branch-and-bound algorithm. This can influence solving times considerably.
+						Depending on the model one rule can be best and for another model another rule.<br>
+						When no value was set via <A href="set_var_branch.htm">set_var_branch</A>, the
+						return value is the value of <A href="get_bb_floorfirst.htm">get_bb_floorfirst</A>.
+						It also returns the value of <A href="get_bb_floorfirst.htm">get_bb_floorfirst</A> when
+						<A href="set_var_branch.htm">set_var_branch</A> was called with branch mode
+						BRANCH_DEFAULT (3).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int branch_mode;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  branch_mode = get_var_branch(lp, 1); /* will return BRANCH_FLOOR (1), the default branch mode */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_var_branch.htm">set_var_branch</A>, <A HREF="set_bb_floorfirst.htm">
+							set_bb_floorfirst</A>, <A HREF="get_bb_floorfirst.htm">get_bb_floorfirst</A>, <A HREF="set_var_weights.htm">
+							set_var_weights</A>, <A HREF="get_var_priority.htm">get_var_priority</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

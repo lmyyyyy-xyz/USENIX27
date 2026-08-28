@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_col_name</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_col_name</h1>
+					<p>Set the name of a column in the lp.</p>
+					<p><b>unsigned char set_col_name(lprec </b>*<i>lp</i><b>, int </b><i>column</i><b>, char </b>*<i>new_name</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_col_name</b> returns TRUE (1) if the operation was successful. A return
+						value of FALSE (0) indicates an error.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>column</i></p>
+					<p class="indent">The column for which the name must be set. Must be between 1 and
+						the number of columns in the lp.</p>
+					<p class="dt"><i>new_name</i></p>
+					<p class="indent">The name for the column.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_col_name</b> sets the name of the column.<br>
+						The column must already exist. Column names are optional.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_col_name(lp, 1, "col1");
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_col_name.htm">get_col_name, get_origcol_name</A>, <A HREF="set_row_name.htm">
+							set_row_name</A>, <A HREF="get_row_name.htm">get_row_name, get_origrow_name</A>, <A HREF="get_nameindex.htm">get_nameindex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

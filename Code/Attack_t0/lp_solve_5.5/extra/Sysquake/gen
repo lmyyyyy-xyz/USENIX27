@@ -1,0 +1,4 @@
+:
+sh ccc
+cp bin/ux32/*.so /sysquakepro-linux-GTK/LMEExt >/dev/null 2>&1
+cp bin/ux64/*.so /sysquakepro-linux-GTK/LMEExt >/dev/null 2>&1

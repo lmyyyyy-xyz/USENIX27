@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_basis</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_basis</h1>
+					<p>
+						Sets an initial basis of the lp.</p>
+					<p>
+						<b>unsigned char set_basis(lprec </b>*<i>lp</i><b>, int </b>*<i>bascolumn</i><b>, unsigned char </b><i>nonbasic</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>set_basis</b> returns TRUE if provided basis was set. FALSE if not. If FALSE then provided data was invalid.
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>bascolumn</i></p>
+					<p class="indent">
+						An array with 1+<A HREF="get_Nrows.htm">get_Nrows</A> or 1+<A href="get_Nrows.htm">get_Nrows</A>+<A href="get_Ncolumns.htm">get_Ncolumns</A>
+						elements that specifies the basis.</p>
+					<p class="dt">
+						<i>nonbasic</i></p>
+					<p class="indent">
+						If FALSE, then <i>bascolumn</i> must have 1+<A HREF="get_Nrows.htm">get_Nrows</A>
+						elements and only contains the basic variables. If TRUE, then <i>bascolumn</i> must
+						have 1+<A href="get_Nrows.htm">get_Nrows</A>+<A href="get_Ncolumns.htm">get_Ncolumns</A>
+						elements and will also contain the non-basic variables.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>set_basis</b> function sets an initial basis of the lp.<br>
+						The array receives the basic variables and if <i>nonbasic</i> is TRUE, then
+						also the non-basic variables. If an element is less then zero then it means on
+						lower bound, else on upper bound.<br>
+						Element 0 of the array is unused.<br>
+						The default initial basis is bascolumn[x] = -x.<br>
+						Each element represents a basis variable. If the absolute value is between 1
+						and <A HREF="get_Nrows.htm">get_Nrows</A>, it represents a slack variable and
+						if it is between <A HREF="get_Nrows.htm">get_Nrows</A>+1 and <A HREF="get_Nrows.htm">
+							get_Nrows</A>+<A HREF="get_Ncolumns.htm">get_Ncolumns</A> then it
+						represents a regular variable. If the value is negative, then the variable is
+						on its lower bound. If positive it is on its upper bound.<br>
+						Setting an initial basis can speed up the solver considerably. It is the
+						starting point from where the algorithm continues to find an optimal solution.<br>
+						When a restart is done, lp_solve continues at the last basis, except if <A HREF="set_basis.htm">
+							set_basis</A>, <A HREF="default_basis.htm">default_basis</A> or <A HREF="read_basis.htm">read_basis</A> is called.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int bascolumn[1+2]; /* must be 1 more then number of rows ! */
+
+  /* Create a new LP model */
+  lp = make_lp(2, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  bascolumn[0] = 0;
+  bascolumn[1] = -1;
+  bascolumn[2] = -2;
+  set_basis(lp, bascolumn, FALSE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_basis.htm">get_basis</A>, <A HREF="default_basis.htm">default_basis</A>, <A HREF="read_basis.htm">read_basis</A>, <A HREF="write_basis.htm">write_basis</A>, <A HREF="guess_basis.htm">guess_basis</A>, <A HREF="get_basiscrash.htm">get_basiscrash</A>, <A HREF="set_basiscrash.htm">set_basiscrash</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>get_mat</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"  WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>get_mat</h1>
+					<p>
+						Get a single element from the matrix.</p>
+					<p>
+						<b>REAL get_mat(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>, int </b><i>column</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>get_mat</b> returns the value of the element on row <i>row</i>, column <i>column</i>.
+						If no value was set for this element, the function returns 0.<br>
+						Note that row entry mode must be off, else this function also fails. See <A HREF="set_add_rowmode.htm">set_add_rowmode</A>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>row</i></p>
+					<p class="indent">
+						Row number of the matrix. Must be between 0 and number of rows in the lp. Row 0
+						is objective function.</p>
+					<p class="dt">
+						<i>column</i></p>
+					<p class="indent">
+						Column number of the matrix. Must be between 1 and number of columns in the lp.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						This function is not efficient if many values are to be retrieved. Consider to use <A HREF="get_row.htm">
+							get_row, get_rowex</A>, <A HREF="get_column.htm">get_column, get_columnex</A>.<br>
+						If row and/or column are outside the allowed range, the function returns 0.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL a;
+
+  /* Create a new LP model */
+  lp = make_lp(2, 3);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  a = get_mat(lp, 1, 2); /* will return 0 because this element isn't created */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_row.htm">get_row, get_rowex</A>, <A HREF="get_column.htm">
+							get_column, get_columnex</A>, <A HREF="set_column.htm">set_column, set_columnex</A>, <A HREF="set_mat.htm">set_mat</A>, <A HREF="set_row.htm">set_row, set_rowex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

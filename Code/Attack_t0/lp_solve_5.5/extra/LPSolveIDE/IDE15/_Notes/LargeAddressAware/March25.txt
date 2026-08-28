@@ -1,0 +1,107 @@
+- When the IDE starts, it opens on Options. That should be Source.
+   ok
+- The screen on Help, About can be maximized. Can you disable that?
+    ok  see statistics control    BorderIcons = [biSystemMenu]
+- Can you add an IDE version number in IDE, about.
+             5.5.0.14
+- You may add your name there as co-author  
+        ok
+- Menu 'File', 'Export Matrice' should be 'Export Matrix'
+        ok
+- Menu 'Action', 'Statistics'. This screen has two grids. Both have scrollbars. Please make the window and the grids somewhat larger such that these scrollbars are not needed.
+      some trouble with my video driver? bottom scroll only shows during resize
+      I may need a screenshot from your experience.
+
+- Did you change the icon intentionally or was this lost?
+        ok found how online .  file app.ico
+
+- Menu 'Action', 'Load Scripts'. What is it doing?
+	seems to send to solver for the read file operation 
+	called a lot but I do not see a good reason to have it on the menu or F8 key
+	Pretty much covered by Syntax check except syntax check uses a new lp hadle
+	and statistics.
+	I think I will merge syntax into statistics and drop load scripts as Solve is the only action..
+	For today I will shuffle the action rows to put basis stuff down and load script down.
+
+main.pas(1130): acLoadScript.Execute;
+main.pas(1136): acLoadScript.Execute;
+main.pas(1231): acLoadScript.Execute;
+main.pas(1239): acLoadScript.Execute;
+main.pas(1280): procedure TMainForm.acLoadScriptExecute(Sender: TObject);	
+ procedure TMainForm.acLoadScriptExecute(Sender: TObject);
+ begin
+   Screen.Cursor := crHourGlass;
+   try
+     MemoLog.Clear;
+     MemoMessages.Clear;
+     isLoaded := LPSolver.LoadFromStrings(Editor.Lines, LPSolver.Verbose, Mode);
+   finally
+     Screen.Cursor := crDefault;
+   end;
+end;
+
+procedure TMainForm.acSyntaxCheckExecute(Sender: TObject);
+var lp: TLPSolver;
+begin
+  lp := TLPSolver.Create(nil);
+  lp.XLI := LPSolver.XLI;
+  Screen.Cursor := crHourGlass;
+  try
+    if lp.LoadFromStrings(Editor.Lines, LPSolver.Verbose, Mode) then
+      MessageDlg('The script is correct.', mtInformation, [mbOK], 0) else
+      MessageDlg('The scripts has syntax error(s).', mtWarning, [mbOK], 0);
+  finally
+    Screen.Cursor := crDefault;
+   lp.Free;
+  end;
+end;
+
+statistics
+begin
+  TXPMenu.Create(self).Active := true;
+
+  Screen.Cursor := crHourGlass;
+  try
+    with MainForm, LPSolver do
+    begin
+      //constraints
+      if (Ncolumns = 0) or (not isLoaded) or (Editor.Modified)  then
+      begin
+        if (Mode = sfXLI) then
+        begin
+          Editor.Lines.SaveToFile('_tmpfile.txt');
+          isLoaded := LoadFromFile('_tmpfile.txt',LPSolver.Verbose, Mode);
+        end else
+          isLoaded := LoadFromStrings(Editor.lines, Verbose, Mode);
+      end;
+      if isLoaded then
+      
+      
+      
+      Change Application Icon
+        =========================
+      
+        projects -> Options
+         select 'Application' tab
+         Click on 'Load Icon' Button
+      
+         Change Form Icon
+         =================
+           Select the form
+           press F11(get Object Inspector)
+           change the Icon Property
+           
+This tip shows how to extract the associated icon and draw it into a small area of the form (e.g. Notepad icon)?
+
+~~~~~~~~~~
+procedure TForm1.Button1Click(Sender: TObject) ;
+var
+   IconIndex : word;
+   h : hIcon;
+begin
+  IconIndex := 0;
+  h:=ExtractAssociatedIcon
+     (hInstance,'C:\WINDOWS\NOTEPAD.EXE', IconIndex) ;
+  DrawIcon(Form1.Canvas.Handle, 10, 10, h) ;
+end;
+~~~~~~~~~~

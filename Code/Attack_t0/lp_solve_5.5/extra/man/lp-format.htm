@@ -1,0 +1,430 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>LP file format</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>LP file format</u></h1>
+<pre>The lp-format is lpsolves native format to read and write lp models.
+Note that this format is not the same as the CPLEX LP format (see <a href="CPLEX-format.htm">CPLEX lp files</a>)
+or the Xpress LP format (see <a href="Xpress-format.htm">Xpress lp files</a>)
+The lp-format input syntax is a set of algebraic expressions and "free", "int", "bin", "sec", "sos"
+declarations in the following order:
+
+&lt;objective function&gt;
+&lt;constraint&gt;*
+&lt;declaration&gt;*
+
+where:
+
+- &lt;objective function&gt; is a linear combination of optional variables and
+  constants, ending with a semicolon, optionally preceded by "max: " or "min: "
+  to indicate whether you want it to be minimized or maximized. The case
+  is not important, "Max:" or "MAX:" will work as well. Maximization
+  is the default. Alternatives are minimise, minimize, maximise, Maximize.
+  The objective function is required, but can be empty.
+
+- &lt;constraint&gt; is an optional constraint name followed by a colon plus
+  a linear combination of variables and constants or (just one)
+  constraint name followed by a colon (a range) or (just one) variable
+  name without a colon (a bound), followed by a relational operator,
+  followed again by a linear combination of variables and constants,
+  ending with a semicolon. The relational operator can be any of the
+  following: "&lt;" "&lt;=" "=" "&gt;" "&gt;=". There is no semantic difference
+  between "&lt;" and "&lt;=" nor between "&gt;" and "&gt;=" (even for integer
+  variables!).
+
+- &lt;declaration&gt; is of one of the forms:
+  To define variables as integer:
+   "int"
+   var [","] var [","] var ... ";"
+
+  To define variables as binary:
+   "bin"|"binary"
+   var [","] var [","] var ... ";"
+
+  To define variables as semi-cont:
+   "sec"
+   var [","] var [","] var ... ";"
+
+  To define variables as free:
+   "free"
+   var [","] var [","] var ... ";"
+
+  To define Special Ordered Sets (SOS):
+   "sos"
+   [sosdescr:] [","] var[:weight] [","] var[:weight] [","] var[:weight] ... "&lt;[=]" sostype[:sosorder] ";" ...
+  or:
+   "sosx"
+   [sosdescr:] var[:weight] [","] var[:weight] [","] var[:weight] ... ";" ...
+
+- A var must start with a letter (either upper or lower case), and may
+  contain any number of additional letters, numerals, or characters
+  from this list: _[]{}/.&amp;#$%~'@^
+
+- Comments can be used with the /* */ syntax, just like in C.
+  It can be put anywhere in the file and even over multiple lines.
+  lp_solve 4.0.1.11 and newer also supports the C++ line comment //.
+
+- Empty lines are also allowed.
+
+EXAMPLES
+      The simple problem:
+
+      x1 &gt;= 1
+      x2 &gt;= 1
+      x1 + x2 &gt;= 2
+      minimize x1 + x2 (= maximize -(x1 + x2)), with x1 integer
+
+      Can be written as follows in lp-format:
+
+      -x1 -x2;
+      /* or min: x1 + x2; */
+      x1 &gt;= 1;
+      x2 &gt;= 1;
+      x1 + x2 &gt;= 2;
+      int x1;
+
+The correct result for (x1, x2) is of course (1, 1).
+
+If you want to give a name to a restriction then begin the line with the name and a colon.
+
+For example:
+
+      min: x1 + x2;
+      x1 &gt;= 1;
+      x2 &gt;= 1;
+      myrow: x1 + x2 &gt;= 2;
+      int x1;
+
+The objective function may also be empty, but it must be there:
+
+      min: ;
+      x1 &gt;= 1;
+      x2 &gt;= 1;
+      myrow: x1 + x2 &gt;= 2;
+      int x1;
+
+Also constants may be put in the objective function:
+
+      min: x1 + x2 + 3;
+      x1 &gt;= 1;
+      x2 &gt;= 1;
+      myrow: x1 + x2 &gt;= 2;
+      int x1;
+
+Or even the following is ok. The constants will be added to one constant value:
+
+      min: 2 + x1 + 3 + x2 + 4;
+      x1 &gt;= 1;
+      x2 &gt;= 1;
+      myrow: x1 + x2 &gt;= 2;
+      int x1;
+
+This will lead to the same solution as without the constant(s),
+but the objective value will be increased with this value.
+
+
+Note that for bounds on variables, you should not put labels before them.
+This is because lp_solve then makes this an extra restriction.
+If you don't put a label before single variables then lp_solve doesn't have to create
+an extra row for bounds on variables, resulting in better performance.
+
+So it is better to write:
+
+      x1 &gt;= 1;
+
+than
+
+      r_x1: x1 &gt;= 1;
+
+Note that this is only for single variables, so
+
+	  myrow: x1 + x2 &gt;= 2;
+
+performs as well as
+
+	  x1 + x2 &gt;= 2;
+
+In addition, the variable can have a constant, without performance penalty.
+For example:
+
+      2 x1 &gt;= 2;
+
+is automatically translated to
+
+      x1 &gt;= 1;
+
+by lp_solve, so this is not a restriction, but a (better performing) bound.
+The moment there is more than one variable in a constraint, lp_solve can only
+create a restriction (extra row) for this.
+
+
+Sometimes there is a lower and upper bound on a variable. This can be written in several ways:
+
+      x1 &gt;= 1;
+      x1 &lt;= 3;
+
+It doesn't matter if the lower bound comes first or not. They are also not required to be together.
+
+Another way to write this is:
+
+      1 &lt;= x1 &lt;= 3;
+
+Or
+
+      3 &gt;= x1 &gt;= 1;
+
+These bounds on variables are handled by lp_solve in a special way so that no extra restrictions
+(rows) are created, which will lead to better performance.
+
+
+Also on restrictions there can be both a lower and upper value. They are called ranges.
+For example:
+
+      myrow: x1 + x2 &gt;= 2;
+
+Suppose that the same restriction should also be &lt;= 6, then this could be written as:
+
+      myrowmin: x1 + x2 &gt;= 2;
+      myrowmax: x1 + x2 &lt;= 6;
+
+However, then there are two rows in the model which makes it larger and harder to solve.
+lp_solve can handle this in one row so that the model is smaller and it will solve more quickly.
+This will only be done if the modeling is done in one of the following ways:
+
+      myrow: x1 + x2 &gt;= 2;
+      myrow: &lt;= 6;
+
+Or
+
+      myrow: x1 + x2 &lt;= 6;
+      myrow: &gt;= 2;
+
+Or
+
+      myrow: 6 &gt;= x1 + x2 &gt;= 2;
+
+Or
+
+      myrow: 2 &lt;= x1 + x2 &lt;= 6;
+
+Or
+
+      6 &gt;= x1 + x2 &gt;= 2;
+
+Or
+
+      2 &lt;= x1 + x2 &lt;= 6;
+
+
+Note that there must be a row label if the construction
+label: op constant
+is used. This requirement does not count if the min and max restriction is put on one line.
+Also the range must come after the constraint definition.
+
+
+Example with integer variables:
+
+	min: -x1 -2 x2 +0.1 x3 +3 x4;
+	r_1: +x1 +x2 &lt;= 5;
+	r_2: +2 x1 -x2 &gt;= 0;
+	r_3: -x1 +3 x2 &gt;= 0;
+	r_4: +x3 +x4 &gt;= 0.5;
+	x3 &gt;= 1.1;
+
+	int x3, x4;
+
+See <a href="integer.htm">integer variables</a> for a description about integer variables.
+
+Example with binary variables:
+
+	min: -x1 -2 x2 +0.1 x3 +3 x4;
+	r_1: +x1 +x2 &lt;= 5;
+	r_2: +2 x1 -x2 &gt;= 0;
+	r_3: -x1 +3 x2 &gt;= 0;
+	r_4: +x3 +x4 &gt;= 0.5;
+
+	bin x3, x4;
+
+See <a href="integer.htm">integer variables</a> for a description about integer and binary variables.
+
+Example with semi-continuous variables:
+
+	max: x1 + 2x2 - 4x3 -3x4;
+	x1 + x2 &lt;= 5;
+	2x1 - x2 &gt;= 0;
+	-x1 + 3x2 &gt;= 0;
+	x3 + x4 &gt;= .5;
+	x3 &gt;= 1.1;
+	x3 &lt;= 10;
+
+	sec x3, x4;
+
+See <a href="semi-cont.htm">semi-continuous variables</a> for a description about semi-continuous variables.
+
+
+Example with free variables:
+
+        max: x1 + 2x2 - 4x3 -3x4;
+        x1 + x2 &lt;= 5;
+        2x1 - x2 &gt;= 0;
+        -x1 + 3x2 &gt;= 0;
+        x3 + x4 &gt;= .5;
+        x3 &gt;= 1.1;
+        x3 &lt;= 10;
+
+        free x2, x4;
+
+See <a href="free.htm">free variables</a> for a description about free variables.
+
+
+Examples with Special Ordered Sets (SOS):
+
+	min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+	c1: -x1 -x2 +x3 +x4 &lt;= 30;
+	c2: +x1 +x3 -3 x4 &lt;= 30;
+	x1 &lt;= 40;
+	x2 &lt;= 1;
+	x5 &lt;= 1;
+
+	sos
+	SOS1: x1, x2, x3, x4 &lt;= 2;
+	SOS2: x2, x3, x4, x5 &lt;= 3;
+
+
+Alternative:
+
+	min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+	c1: -x1 -x2 +x3 +x4 &lt;= 30;
+	c2: +x1 +x3 -3 x4 &lt;= 30;
+	x1 &lt;= 40;
+	x2 &lt;= 1;
+	x5 &lt;= 1;
+
+	sos2
+	SOS1: x1, x2, x3, x4;
+	SOS2: x2, x3, x4, x5;
+
+
+With SOS weights:
+
+  	min: -x1 -x2 -3 x3 -2 x4 -2 x5;
+	c1: -x1 -x2 +x3 +x4 &lt;= 30;
+	c2: +x1 +x3 -3 x4 &lt;= 30;
+	x1 &lt;= 40;
+	x2 &lt;= 1;
+	x5 &lt;= 1;
+
+	sos
+	SOS1: x1:5, x2:9, x3:12, x4:17 &lt;= 2:3;
+	SOS2: x2:9, x3:12, x4:17, x5:21 &lt;= 2:3;
+
+See <a href="SOS.htm">Special Ordered Sets (SOS)</a> for a description about Special Ordered Sets.
+
+
+<h4>Peculiarities of the lp format:</h4>
+Note that some strange effects can occur.
+
+<h5>Exponents:</h5>
+Consider the following lp:
+
+min: d1 + e1;
+
+-0.5 d1 + e1 &lt;= 3;
+d1 + e1 &gt;= 6;
+3 d1 - 2 e1 &lt;= 16;
+
+This works as expected. d1 and e1 are always seen as variables.
+
+Now consider this:
+
+min: d1 + e1;
+
+-0.5 d1 + e1 &lt;= 3;
+d1 + e1 &gt;= 6;
+3d1 - 2e1 &lt;= 16;
+
+You would expect that this is exactly the same model as before. And for variable d1, this is also the case.
+However, e1 in the last constraint is a problem. Here lp_solve doesn't recognise 2e1 as two times variable e1,
+but as the constant value 2.0e1 (20). It sees the e1 as an exponent!
+There is no problem when there is at least one space between 2 and e1. In that case lp_solve knows that it is
+two times variables e1 because there may not be any spaces in numbers.
+
+<h5>Operators</h5>
+Consider the following constraint:
+
++3 x + 2 y &lt;= 16;
+
+The + sign is optional.
+
+So above equation can also be written as:
+
+3 x + 2 y &lt;= 16;
+
+But also as:
+
+3 x 2 y &lt;= 16;
+
+This may look somewhat strange and can even lead to confusion. Consider the equation without the factor 2:
+
+3 x y &lt;= 16;
+
+This is still considered as:
+
+3 x + y &lt;= 16;
+
+And <b>not</b> as
+
+3 x * y &lt;= 16;
+
+as could be thought...
+
+Also, lp_solve allows adjacent operators.
+
+Consider the following constraint:
+
++3 x - 2 y &lt;= 16;
+
+This may also be written as:
+
++3 x + -2 y &lt;= 16;
+
+or
+
++3 x +- 2 y &lt;= 16;
+
+or
+
++3 x - +2 y &lt;= 16;
+
+And the constraint
+
++3 x + 2 y &lt;= 16;
+
+may also be written as:
+
++3 x + +2 y &lt;= 16;
+
+or
+
++3 x + + 2 y &lt;= 16;
+
+and even:
+
++3 x - -2 y &lt;= 16;
+
+Note that the lp-format does not allow parentheses () to make things clearer ...
+
+So the following is <b>not</b> allowed:
+
++3 x - (-2) y &lt;= 16;
+
+In fact, there is no limit on the number of operators that are placed next to
+each other, separated with as many or as few spaces as desired...
+
+For example - --     -- is seen as -, while ----       -- is seen as +.
+</pre>
+	</BODY>
+</HTML>

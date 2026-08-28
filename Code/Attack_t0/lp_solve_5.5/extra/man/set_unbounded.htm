@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_unbounded</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_unbounded</h1>
+					<p>Sets if the variable is free.</p>
+					<p><b>unsigned char set_unbounded(lprec </b>*<i>lp</i><b>, int </b><i>column</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_unbounded</b> returns TRUE (1) if the variable could be set as free, FALSE (0)
+						otherwise.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>column</i></p>
+					<p class="indent">The column number of the variable that must be set. It must
+						be between 1 and the number of columns in the lp.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_unbounded</b> function sets if a variable is free or not. Free means a
+						lower bound of -infinity and an upper bound of +infinity. Default a variable is
+						not free because default it has a lower bound of 0 (and an upper bound of +infinity).
+                                                See <a href="free.htm">free variables</a> for a description about free variables.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_unbounded(lp, 1); /* will return 0 since the variable is not set as free at this point */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_upbo.htm">get_upbo</A>, <A HREF="set_upbo.htm">set_upbo</A>,
+						<A HREF="set_lowbo.htm">set_lowbo</A>, <A HREF="get_lowbo.htm">get_lowbo</A>, <A HREF="set_bounds.htm">
+							set_bounds</A>, <A HREF="is_unbounded.htm">is_unbounded</A>, <A HREF="is_negative.htm">is_negative</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

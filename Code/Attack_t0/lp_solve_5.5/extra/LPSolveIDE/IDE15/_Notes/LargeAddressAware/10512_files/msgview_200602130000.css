@@ -1,0 +1,116 @@
+
+#ygrp-msg-exp .ygrp-contentblock {padding:0;}
+#ygrp-msg-exp .msgheader {padding:10px 0 10px 15px; background-color:#f0f0f0;}
+#ygrp-msg-exp .msgnumh {padding:10px 0 10px 15px; background-color:#f0f0f0; width:1%;}
+#ygrp-msg-exp .ygrp-datenav {text-align:right; vertical-align:bottom; padding:10px;}
+#ygrp-msg-exp td.headers {padding-right:20px; width:65%;}
+#ygrp-msg-exp td.source {padding:10px 15px;}
+#ygrp-msg-exp td.checks {padding:10px 5px; vertical-align:top;}
+#ygrp-msg-exp td.checks input{margin-top: 15px;}
+.form-div {
+  display:inline;
+}
+.msgarea {
+  padding: 0 4px;
+}
+.msgarea div {
+  clear:right;
+  clear:none;
+}
+table.vcard {
+  margin:15px auto;
+  border:1px solid #d4d4d4; 
+}
+table.vcard td {
+  text-align:center;
+}
+table.vcard td.vcard-header {
+  padding:5px 15px;
+  background-color:#295c7d;
+  color:#fff;
+}
+table.vcard td.vcard-values {
+  padding:12px 15px;
+}
+/*threaded stuff*/
+.ygrp-topic{
+	width: 100%;
+}
+.ygrp-topic-title{
+  padding: 0;
+  margin: 0;
+  font: bold 129% Arial !important;
+}
+.ygrp-topicnav{
+  text-align: right;
+  vertical-align: middle;
+  font-size: 77%;
+  font-family: Verdana;
+}
+#ygrp-msg-topic-exp th.content, #ygrp-msg-topic-exp th.env, #ygrp-msg-exp th.content, #ygrp-msg-exp th.env{
+	padding: 5px 0 2px 15px;
+}
+#ygrp-msg-topic-exp .content, .env{
+	padding: 25px 0;
+}
+.user {  
+  font-family: Georgia;
+}
+.fixed {
+  font-family: "Courier New";
+}
+#ygrp-msg-topic-exp .env, #ygrp-msg-exp .env{
+	width: 145px;
+	background-color: #f4f4f4;
+    padding-left: 15px;
+	padding-right: 2px;
+}
+#ygrp-msg-topic-exp .controls, #ygrp-msg-exp .controls{
+  padding-top: 10px;
+}
+.subject{
+  font-family: Georgia !important;
+  font-weight: bold;
+  color: #000;
+  padding-left: 4px;
+}
+.elbow {
+  background-image:url(http://us.i1.yimg.com/us.yimg.com/i/yg/img/ui/elbow.gif); background-repeat:no-repeat; 
+  padding-left: 24px;
+  margin-left: -20px;
+}
+.root{
+  background-image: none  !important;
+}
+.grey{
+   color: #666;
+}
+#ygrp-msg-topic-exp .content{
+	padding-top: 25px !important;
+}
+#ygrp-msg-exp .content{
+padding: 25px 0 25px 15px;
+}
+#ygrp-msglist td.message{
+  padding-left: 11px;
+}
+.first {
+	border: 0 !important;
+}
+.info hr{
+	height: 1px;
+	color:#ccc;
+	background-color:#ccc;
+	border: 0;
+	margin: 10px 0;
+}
+.info a:hover{
+	text-decoration:none;
+}
+.datatable .footaction img{
+	margin-top: 0 !important;
+}
+.datatable .footaction .ygrp-elbow img.ygrp-ielbow{
+	margin-top: -6px !important;
+	margin-right: 0;
+}

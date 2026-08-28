@@ -1,0 +1,1672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Changes from version 4 to version 5.1</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>Changes from version 4 to version 5.1</h1>
+					<h3>Main features and changes to v5.1 compared to v4</h3>
+					Overall, the v5 code is faster and more robust than v4. This robustness is for
+					example proven by the fact that many more models can now be solved even without
+					scaling. However, scaling should still be considered. The API has also routine
+					to do a crash of basis (determine a starting point so that solving goes
+					faster). The lp_solve program has been extended with options to handle the new
+					functionality. It now also has options to write the model in the different file
+					formats.
+					<ul>
+						<li>
+							The modularization started in v4 has been significantly enhanced.</li>
+						<li>
+							Internal logic and naming is much more in compliance with conventional usage.</li>
+						<li>
+							Advanced pricing using Devex and Steepest Edge for both primal and dual
+							simplexes.</li>
+						<li>
+							Scaling behavior is made more consistent and many more options are available.</li>
+						<li>
+							Presolve has been radically expanded.</li>
+						<li>
+							A crash basis routine has been added to determine a starting point. This can
+							improve solving time.</li>
+						<li>
+							It is now possible to select desired combinations of primal and dual phases 1
+							and 2.</li>
+						<li>
+							The native etaPFI/inverse has been improved with optimization of column
+							ordering.</li>
+						<li>
+							Alternative inverse/re-factorization libraries can be used by lp_solve.
+							See <a href="BFP.htm">Basis Factorization Packages</a></li>
+						<li>
+							Alternative model readers and writers possible via the XLI implementation.
+							See <a href="XLI.htm">External Language Interfaces</a></li>
+						<li>
+							B&amp;B code has been made non-recursive (no more stack overflows!).</li>
+						<li>
+							MIP contains many more variable selection and branching strategies, including
+							pseudo-costs.</li>
+						<li>
+							SOS and SC handling is faster (more branches avoided).</li>
+						<li>
+							LP file support is expanded and now also includes full CPLEX LP format support.</li>
+						<li>
+							Building the model via the API interface row by row can be improved spectacular
+							by calling the new API call <a href="set_add_rowmode.htm">set_add_rowmode</a>.</li>
+					</ul>
+					<h3>Changes in lp_solve program</h3>
+					The lp_solve program has many new options to make use of as many as possible
+					possibilities of lpsolve. There are several extra options, some are extended
+					and some are removed because they are obsolete. See <a href="lp_solve.htm">lp_solve</a>
+					for a list of all possible options. Note that on this link there is also a
+					reference to the API call(s) that are used for this option. There you can find
+					more information on the option. See the list above for some of the new
+					features.
+					<h3>What happened with lp2mps, mps2lp ?</h3>
+					These programs are removed. But don't panic, there is another way to convert
+					from one format to another. This via the lp_solve program. This is done because
+					of the support of a new format: The <a href="CPLEX-format.htm">CPLEX-format</a>.
+					Because there are now 3 formats supported, it would have required 6 programs to
+					convert from one format to another. Instead of doing this, lp_solve has new
+					parameters to be able to write the model to a file, and that in all formats.
+					So, lp_solve can read the model in any format and write it back in any format.
+					In that case, it is most likely not whished to also calculate the model and
+					therefore the parameter -parse_only can be used. Here some examples how to
+					convert from one format to another:<br>
+					<br>
+					lp to mps: <i>lp_solve -parse_only -lp lpfile -wmps mpsfile</i><br>
+					mps to lp: <i>lp_solve -parse_only -mps mpsfile -wlp lpfile</i><br>
+					<br>
+					It is even possible to generate several formats at the same time:<br>
+					lp to all formats: <i>lp_solve -parse_only -lp lpfile -wlp lpfile -wmps mpsfile</i>
+					<h3>Changes in API calls</h3>
+					The API is not that much changed, but has been expanded to handle new
+					functionality. Some simplification has taken place, for example in scaling, and
+					a call to auto_scale is not necessary any more.<br>
+					However the changes in some routines is big enough to break compatibility with
+					version 4. Be aware of this. You must review your source code for the mentioned
+					functions. Especially those with a (!) behind are very important to check. That
+					is also the reason why the Windows dll will be called lpsolve51.dll compared to
+					lpsolve.dll for version 4. Don't just rename this dll and expect that your
+					program will work then.
+					<h4>Changed API calls</h4>
+					<ul>
+						<li>
+							<a href="add_column.htm">add_column, str_add_column</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="add_constraint.htm">add_constraint, str_add_constraint</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>constr_type</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The constant <b>LE</b> has now value <b>1</b> instead of <b>0</b><br>
+									The constant <b>EQ</b> has now value <b>3</b> instead of <b>1</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="add_lag_con.htm">add_lag_con, str_add_lag_con</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>constr_type</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The constant <b>LE</b> has now value <b>1</b> instead of <b>0</b><br>
+									The constant <b>EQ</b> has now value <b>3</b> instead of <b>1</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="add_sos.htm">add_sos</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>sostype</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="column_in_lp.htm">column_in_lp</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>int</b> instead of <b>unsigned char</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="del_column.htm">del_column</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="del_constraint.htm">del_constraint</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_basis.htm">get_basis</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>nonbasic</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_bb_floorfirst.htm">get_bb_floorfirst</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_floor_first</u>
+								</li>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_bb_rule.htm">get_bb_rule</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function returns different constants for different rules.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_bounds_tighter.htm">get_bounds_tighter</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_col_name.htm">get_col_name</a>
+							<ul>
+								<li>
+									When no name is set, the function now returns Cx instead of v_x
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_column.htm">get_column</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_constr_type.htm">get_constr_type</a> <b>(!)</b>
+							<ul>
+								<li>
+									The constant <b>LE</b> has now value <b>1</b> instead of <b>0</b><br>
+									The constant <b>EQ</b> has now value <b>3</b> instead of <b>1</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_constraints.htm">get_constraints, get_ptr_constraints</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_improve.htm">get_improve</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Constant <b>IMPROVE_FULL</b> is renamed to <b>IMPROVE_SOLVE</b>
+								</li>
+								<li>
+									New constant <b>IMPROVE_INVERSE</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_infinite.htm">get_infinite</a> <b>(!)</b>
+							<ul>
+								<li>
+									The new default infinite value is 1e30 instead of 1e24
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_lambda.htm">get_lambda, get_ptr_lambda</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_maxpivot.htm">get_maxpivot</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_max_num_inv</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_mip_gap.htm">get_mip_gap</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>absolute</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_pivoting.htm">get_pivoting</a> <b>(!)</b>
+							<ul>
+                                                                <li>
+									This function is renamed. Before it was called <u>get_piv_rule</u>
+								</li>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function returns different constants for different rules.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_presolve.htm">get_presolve</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_do_presolve</u>
+								</li>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function now returns constants instead of FALSE or TRUE.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_primal_solution.htm">get_primal_solution, get_ptr_primal_solution</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_print_sol.htm">get_print_sol</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_print_sol</u>
+								</li>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function now also returns the constant AUTOMATIC.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_rh_range.htm">get_rh_range</a> <b>(!)</b>
+							<ul>
+								<li>
+									The new default range value is 1e30 instead of 1e24
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_row.htm">get_row</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_row_name.htm">get_row_name</a>
+							<ul>
+								<li>
+									When no name is set, the function now returns Rx instead of r_x
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_scaling.htm">get_scaling</a> <b>(!)</b>
+							<ul>
+                                                                <li>
+                                                                        This function is renamed. Before it was called <u>get_scalemode</u>
+								</li>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function returns different constants.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_sensitivity_obj.htm">get_sensitivity_obj, get_ptr_sensitivity_obj,
+								get_sensitivity_objex, get_ptr_sensitivity_objex</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									If there are integer variables, then these functions only work if <a href="set_presolve.htm">
+										set_presolve</a> is called with parameter <i>PRESOLVE_SENSDUALS</i> before
+									solve.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_sensitivity_rhs.htm">get_sensitivity_rhs, get_ptr_sensitivity_rhs,
+								get_dual_solution, get_ptr_dual_solution</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									If there are integer variables, then these functions only work if <a href="set_presolve.htm">
+										set_presolve</a> is called with parameter <i>PRESOLVE_SENSDUALS</i> before
+									solve.
+								</li>
+								<li>
+								    get_dual_solution is renamed. Before it was called <u>get_reduced_costs</u>
+								</li>
+								<li>
+								    get_ptr_dual_solution is renamed. Before it was called <u>get_ptr_reduced_costs</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_upbo.htm">get_upbo</a> <b>(!)</b>
+							<ul>
+								<li>
+									The new default upper bound is 1e30 instead of 1e24
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_var_branch.htm">get_var_branch</a>
+							<ul>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_var_priority.htm">get_var_priority</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_varpriority</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_variables.htm">get_variables, get_ptr_variables</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_verbose.htm">get_verbose</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Return value can now also be NEUTRAL
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_anti_degen.htm">is_anti_degen</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+								<li>
+									An extra variable is added to the argument list: <i>testmask</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_break_at_first.htm">is_break_at_first</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_debug.htm">is_debug</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_feasible.htm">is_feasible</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									An extra variable is added to the argument list: <i>threshold</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_int.htm">is_int</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_lag_trace.htm">is_lag_trace</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_presolve.htm">is_presolve</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_do_presolve</u>
+								</li>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+								<li>
+									An extra variable is added to the argument list: <i>testmask</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_SOS_var.htm">is_SOS_var</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_trace.htm">is_trace</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="print_constraints.htm">print_constraints</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>columns</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="print_solution.htm">print_solution</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>columns</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<A href="read_lp.htm">read_lp, read_LP</A>
+							<ul>
+								<li>
+									Variable <i>verbose</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="read_mps.htm">read_mps, read_MPS</a>
+							<ul>
+								<li>
+									Variable <i>verbose</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_anti_degen.htm">set_anti_degen</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>anti_degen</i> is now <b>int</b> instead of <b>short</b>. Instead
+									of FALSE/TRUE it takes new constants.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_basis.htm">set_basis</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>nonbasic</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bb_floorfirst.htm">set_bb_floorfirst</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_floor_first</u>
+								</li>
+								<li>
+									Variable <i>branch_mode</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bb_rule.htm">set_bb_rule</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>bb_rule</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Variable <i>bb_rule</i> now takes other constants.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bounds.htm">set_bounds</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bounds_tighter.htm">set_bounds_tighter</a>
+							<ul>
+								<li>
+									Variable <i>tighten</i> is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_break_at_first.htm">set_break_at_first</a>
+							<ul>
+								<li>
+									Variable <i>break_at_first</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_col_name.htm">set_col_name</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_constr_type.htm">set_constr_type</a> <b>(!)</b>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>constr_type</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The constant <b>LE</b> has now value <b>1</b> instead of <b>0</b><br>
+									The constant <b>EQ</b> has now value <b>3</b> instead of <b>1</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_debug.htm">set_debug</a>
+							<ul>
+								<li>
+									Variable <i>debug</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_epsint.htm">set_epsint</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_epsilon</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_improve.htm">set_improve</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>improve</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Constant <b>IMPROVE_FULL</b> is renamed to <b>IMPROVE_SOLVE</b>
+								</li>
+								<li>
+									New constant <b>IMPROVE_INVERSE</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_int.htm">set_int</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>must_be_int</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_lag_trace.htm">set_lag_trace</a>
+							<ul>
+								<li>
+									Variable <i>lag_trace</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_lowbo.htm">set_lowbo</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_lp_name.htm">set_lp_name</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_mat.htm">set_mat</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_maxpivot.htm">set_maxpivot</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_max_num_inv</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_mip_gap.htm">set_mip_gap</a> <b>(!)</b>
+							<ul>
+								<li>
+									An extra variable is added to the argument list: <i>absolute</i>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_obj_fn.htm">set_obj_fn, str_set_obj_fn</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_output.htm">set_outputstream, set_outputfile</a> <b>(!)</b>
+							<ul>
+								<li>
+									The function set_outputfile is renamed. Before it was called <u>print_file</u>
+								</li>
+								<li>
+									Variable <i>lp</i> is added. Output is now set per lp.
+								</li>
+								<li>
+									The function set_outputstream is new
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_pivoting.htm">set_pivoting</a> <b>(!)</b>
+							<ul>
+                                                                <li>
+									This function is renamed. Before it was called <u>set_piv_rule</u>
+								</li>
+								<li>
+									Variable <i>pivot_rule</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function uses different constants for different rules.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_presolve.htm">set_presolve</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_do_presolve</u>
+								</li>
+								<li>
+									Variable <i>do_presolve</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function uses different constants for different rules.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_print_sol.htm">set_print_sol</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>print_sol</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Variable <i>print_sol</i> now also takes the value AUTOMATIC.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_rh.htm">set_rh</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_rh_range.htm">set_rh_range</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_rh_vec.htm">str_set_rh_vec</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_row_name.htm">set_row_name</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_scaling.htm">set_scaling</a> <b>(!)</b>
+							<ul>
+                                                                <li>
+									This function is renamed. Before it was called <u>set_scalemode</u>
+								</li>
+								<li>
+									Variable <i>scalemode</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									The function uses different constants for different rules
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_semicont.htm">set_semicont</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>must_be_sc</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_trace.htm">set_trace</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>trace</i> is now <b>unsigned char</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_upbo.htm">set_upbo</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_var_branch.htm">set_var_branch</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+								<li>
+									Variable <i>branch_mode</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_var_weights.htm">set_var_weights</a> <b>(!)</b>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_varweights</u>
+								</li>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_verbose.htm">set_verbose</a> <b>(!)</b>
+							<ul>
+								<li>
+									Variable <i>verbose</i> is now <b>int</b> instead of <b>short</b>
+								</li>
+								<li>
+									Variable <i>verbose</i> can now also be NEUTRAL.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="solve.htm">solve</a> <b>(!)</b>
+							<ul>
+								<li>
+									The return values of this function have changed.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="write_lp.htm">write_lp, write_LP</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="write_mps.htm">write_mps, write_MPS</a>
+							<ul>
+								<li>
+									Return value is now <b>unsigned char</b> instead of <b>int</b>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+					</ul>
+					<h4>New API calls</h4>
+					<ul>
+						<li>
+							<a href="add_column.htm">add_columnex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="add_constraint.htm">add_constraintex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="default_basis.htm">default_basis</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="free_lp.htm">free_lp</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_anti_degen.htm">get_anti_degen</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_basiscrash.htm">get_basiscrash</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_bb_depthlimit.htm">get_bb_depthlimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_bb_floorfirst.htm">get_bb_floorfirst</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_floor_first</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_col_name.htm">get_origcol_name</a>
+							<p></p>
+						</li>
+						<li>
+						    <a href="get_sensitivity_rhs.htm">get_dual_solution, get_ptr_dual_solution</a>
+							<ul>
+								<li>
+									These functions are renamed. Before they were called <u>get_reduced_costs</u>, <u>get_ptr_reduced_costs</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_maxpivot.htm">get_maxpivot</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_max_num_inv</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_nameindex.htm">get_nameindex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_nonzeros.htm">get_nonzeros</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_pivoting.htm">get_pivoting</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_piv_rule</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_presolve.htm">get_presolve</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_do_presolve</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_primal_solution.htm">get_var_primalresult</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_print_sol.htm">get_print_sol</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_print_sol</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_row_name.htm">get_origrow_name</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_simplextype.htm">get_simplextype</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_scalelimit.htm">get_scalelimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_scaling.htm">get_scaling</a>
+							<ul>
+								<li>
+									The function get_scaling is renamed. Before it was called <u>get_scalemode</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_scaling.htm">get_scaling</a>
+							<ul>
+								<li>
+									The function get_scaling is renamed. Before it was called <u>get_scalemode</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_sensitivity_rhs.htm">get_var_dualresult</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_solutioncount.htm">get_solutioncount</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_solutionlimit.htm">get_solutionlimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_status.htm">get_status</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_statustext.htm">get_statustext</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_var_priority.htm">get_var_priority</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>get_varpriority</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="get_working_objective.htm">get_working_objective</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="has_BFP.htm">has_BFP</a>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="has_XLI.htm">has_XLI</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_add_rowmode.htm">is_add_rowmode</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_binary.htm">is_binary</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_constr_type.htm">is_constr_type</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_unbounded.htm">is_unbounded</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_infinite.htm">is_infinite</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_integerscaling.htm">is_integerscaling</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_maxim.htm">is_maxim</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_nativeBFP.htm">is_nativeBFP</a>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="is_nativeXLI.htm">is_nativeXLI</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_negative.htm">is_negative</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_piv_rule.htm">is_piv_rule</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_piv_mode.htm">is_piv_mode</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_piv_strategy</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_presolve.htm">is_presolve</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>is_do_presolve</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_scalemode.htm">is_scalemode</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_scaletype.htm">is_scaletype</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="is_semicont.htm">is_semicont</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="print_str.htm">print_str</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="print_tableau.htm">print_tableau</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="put_msgfunc.htm">put_msgfunc</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="read_basis.htm">read_basis</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="read_mps.htm">read_freemps, read_freeMPS</a>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="read_XLI.htm">read_XLI</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_add_rowmode.htm">set_add_rowmode</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_basiscrash.htm">set_basiscrash</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bb_depthlimit.htm">set_bb_depthlimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_bb_floorfirst.htm">set_bb_floorfirst</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_floor_first</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_BFP.htm">set_BFP</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_column.htm">set_column, set_columnex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_XLI.htm">set_XLI</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_binary.htm">set_binary</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_unbounded.htm">set_unbounded</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_epsint.htm">set_epsint</a>
+							<ul>
+								<li>
+									The function set_epsint is renamed. Before it was called <u>set_epsilon</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_maxpivot.htm">set_maxpivot</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_max_num_inv</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_obj_fn.htm">set_obj</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_obj_fn.htm">set_obj_fnex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_output.htm">set_outputstream, set_outputfile</a>
+							<ul>
+								<li>
+									The function set_outputfile is renamed. Before it was called <u>print_file</u>
+								</li>
+								<li>
+									The function set_outputstream is new
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_pivoting.htm">set_pivoting</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_piv_rule</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_preferdual.htm">set_preferdual</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_presolve.htm">set_presolve</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_do_presolve</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_row.htm">set_row, set_rowex</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_scalelimit.htm">set_scalelimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_scaling.htm">set_scaling</a>
+							<ul>
+								<li>
+									The function set_scaling is renamed. Before it was called <u>set_scalemode</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_sense.htm">set_sense</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_simplextype.htm">set_simplextype</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_solutionlimit.htm">set_solutionlimit</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="set_var_weights.htm">set_var_weights</a>
+							<ul>
+								<li>
+									This function is renamed. Before it was called <u>set_varweights</u>
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<a href="time_elapsed.htm">time_elapsed</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="print_debugdump.htm">print_debugdump</a>
+							<p></p>
+						</li>
+						<li>
+							<a href="write_mps.htm">write_freemps, write_freeMPS</a>
+							<p></p>
+						</li>
+                                                <li>
+							<a href="write_XLI.htm">write_XLI</a>
+							<p></p>
+						</li>
+					</ul>
+					<h4>Removed API calls</h4>
+					<ul>
+						<li>
+							<u>auto_scale</u>
+							<ul>
+								<li>
+									This function is no longer required to be called. lpsolve calls it
+									automatically when <a href="set_scaling.htm">set_scaling</a> was called to
+									specify a scaling mode. Therefore, this function is no longer exported from the
+									lpsolve library.
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>copy_lp</u>
+							<p></p>
+						</li>
+						<li>
+							<u>get_floor_first</u>
+							<ul>
+								<li>
+									Use <a href="get_bb_floorfirst.htm">get_bb_floorfirst</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>get_max_num_inv</u>
+							<ul>
+								<li>
+									Use <a href="get_maxpivot.htm">get_maxpivot</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>get_pivot_rule</u>
+							<ul>
+								<li>
+									Use <a href="get_pivoting.htm">get_pivoting</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>get_ptr_work_solution</u>
+							<p></p>
+						</li>
+						<li>
+							<u>get_splitnegvars</u>
+							<p></p>
+						</li>
+						<li>
+							<u>get_reduced_costs</u>, <u>get_ptr_reduced_costs</u>
+							<ul>
+								<li>
+									Use <a href="get_sensitivity_rhs.htm">get_dual_solution, get_ptr_dual_solution</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>get_varpriority</u>
+							<ul>
+								<li>
+									Use <a href="get_var_priority.htm">get_var_priority</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>get_work_solution</u>
+							<p></p>
+						</li>
+						<li>
+							<u>is_do_presolve</u>
+							<ul>
+								<li>
+									Use <a href="get_presolve.htm">get_presolve</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>is_print_at_invert</u>
+							<p></p>
+						</li>
+						<li>
+							<u>is_print_sol</u>
+							<ul>
+								<li>
+									Use <a href="get_print_sol.htm">get_print_sol</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>is_do_presolve</u>
+							<ul>
+								<li>
+									Use <a href="is_presolve.htm">is_presolve</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>is_piv_strategy</u>
+							<ul>
+								<li>
+									Use <a href="is_piv_mode.htm">is_piv_mode</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>read_lp_file</u>
+							<ul>
+								<li>
+									Use <A HREF="read_lp.htm">read_lp</A> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>mat_elm</u>
+							<ul>
+								<li>
+									Use <A HREF="get_mat.htm">get_mat</A> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>print_file</u>
+							<ul>
+								<li>
+									Use <a href="set_output.htm">set_outputfile</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_do_presolve</u>
+							<ul>
+								<li>
+									Use <a href="set_presolve.htm">set_presolve</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_floor_first</u>
+							<ul>
+								<li>
+									Use <a href="set_bb_floorfirst.htm">set_bb_floorfirst</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_lowrange</u>
+							<ul>
+								<li>
+									Use <A HREF="set_rh_range.htm">set_rh_range</A> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_max_num_inv</u>
+							<ul>
+								<li>
+									Use <a href="set_maxpivot.htm">set_maxpivot</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_pivot_rule</u>
+							<ul>
+								<li>
+									Use <a href="set_pivoting.htm">set_pivoting</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_print_at_invert</u>
+							<p></p>
+						</li>
+						<li>
+							<u>set_scalemode</u>
+                                                        <ul>
+								<li>
+									Use <a href="set_scaling.htm">set_scaling</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_splitnegvars</u>
+							<p></p>
+						</li>
+						<li>
+							<u>set_uprange</u>
+							<ul>
+								<li>
+									Use <A HREF="set_rh_range.htm">set_rh_range</A> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+						<li>
+							<u>set_varweights</u>
+							<ul>
+								<li>
+									Use <a href="set_var_weights.htm">set_var_weights</a> instead
+								</li>
+							</ul>
+							<p></p>
+						</li>
+					</ul>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

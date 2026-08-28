@@ -1,0 +1,2953 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Using lpsolve from FreeMat</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Using lpsolve from FreeMat</u></h1>
+<a name="FreeMat"></a>
+<h3>FreeMat?</h3>
+<P>FreeMat is a free environment for rapid engineering and scientific prototyping and data processing.
+It is similar to commercial systems such as MATLAB from Mathworks, and IDL from Research Systems, but is Open Source.
+FreeMat is available under the GPL license.<br>
+<br>
+In addition to supporting many MATLAB functions and some IDL functionality, it features a codeless interface to external C, C++, and Fortran code, further parallel distributed algorithm development (via MPI), and has plotting and 3D visualization capabilities.
+</p>
+
+<p>We will not discuss the specifics of FreeMat here but instead refer the reader to the
+<a href="http://freemat.sourceforge.net/">FreeMat</a> website,
+<a href="http://freemat.sourceforge.net/help/index.html">documentation</a>,
+<a href="http://groups.google.com/group/freemat">FreeMat Google Discussions</a> and the FreeMat primer overthere.
+</p>
+
+<a name="FreeMat_and_lpsolve"></a>
+<h3>FreeMat and lpsolve</h3>
+
+<p>lpsolve is callable from FreeMat via an external interface or Import. As such, it looks like lpsolve is fully integrated
+with FreeMat. Matrices can directly be transferred between FreeMat and lpsolve in both directions. The complete interface
+is written in C so it has maximum performance. The whole lpsolve API is implemented with some extra's specific for
+FreeMat (especially for matrix support). So you have full control to the complete lpsolve functionality via the fmlpsolve
+FreeMat driver. If you find that this involves too much work to solve an lp model then you can also work via higher-level
+script files that can make things a lot easier. See further in this article.
+</p>
+
+<p>FreeMat is ideally suited to handle linear programming problems.
+These are problems in which you have a quantity, depending linearly on several variables,
+that you want to maximize or minimize subject to several constraints that are expressed
+as linear inequalities in the same variables. If the number of variables and the number
+of constraints are small, then there are numerous mathematical techniques for solving a
+linear programming problem.
+Indeed these techniques are often taught in high school or university level
+courses in finite mathematics. But sometimes these numbers are high, or even if low,
+the constants in the linear inequalities or the object expression for the quantity
+to be optimized may be numerically complicated in which case a software package like
+FreeMat is required to effect a solution.</p>
+
+<a name="Installation"></a>
+<h3>Installation</h3>
+
+<p>To make this possible, a driver program is needed: fmlpsolve (fmlpsolve.dll under Windows, fmlpsolve.so under Unix/Linux).
+This driver must be put in a directory known to FreeMat and FreeMat can call the fmlpsolve solver.</p>
+
+<p>This driver calls lpsolve via the lpsolve shared library (lpsolve55.dll under Windows
+and liblpsolve55.so under Unix/Linux) (archive lp_solve_5.5.2.14_dev.zip/lp_solve_5.5.2.14_dev.tar.gz). This has the advantage that the fmlpsolve driver doesn't have to
+be recompiled when an update of lpsolve is provided. The shared library must be somewhere in the Windows/Unix/Linux path.</p>
+
+<p>So note the difference between the FreeMat lpsolve driver that is called fmlpsolve and the lpsolve library that implements the
+API that is called lpsolve55.</p>
+
+<p>There are also some FreeMat script files (.m) as a quick start.</p>
+
+<p>To test if everything is installed correctly, enter fmlpsolve in the FreeMat command window.
+If it gives the following, then everything is ok:</p>
+
+<pre>fmlpsolve FreeMat Interface version 5.5.0.6
+using lpsolve version 5.5.2.14
+
+Usage: ret = fmlpsolve(functionname, arg1, arg2, ...)
+</pre>
+
+<p>If you get the following (Windows):</p>
+
+<pre>In base(base) on line 0
+In docli(built in) on line 0
+In Eval(fmlpsolve) on line 2
+In Z:/lp_solve_5.5/extra/FreeMat/fmlpsolve(fmlpsolve) on line 195
+Error: Unable to find file fmlpsolve.dll on the current path!
+</pre>
+
+<p>Or (Unix/Linux):</p>
+
+<pre>In base(base) on line 0
+In docli(built in) on line 0
+In Eval(fmlpsolve) on line 2
+In fmlpsolve(fmlpsolve) on line 195
+Error: Unable to find file fmlpsolve.so on the current path!
+</pre>
+
+<p>Then FreeMat can find the fmlpsolve.m file, but not the fmlpsolve.so/fmlpsolve.dll file.
+This library should be in the same directory as the .m file.</p>
+
+
+<pre>Error: Undefined function or variable fmlpsolve.</pre>
+
+<p>Then FreeMat cannot find the fmlpsolve.* files.
+Use the Path tool (Tools, Path tool) to add the path where the fmlpsolve.m script file is located
+and put the library fmlpsolve.dll/fmlpsolve.so in the appropriate directory.
+Under Windows, c:\windows\system32 is a common location and under Unix/Linux, /lib or /usr/lib is common.
+</p>
+
+<p>If you get the following (Windows):</p>
+
+<pre>In base(base) on line 0
+In docli(built in) on line 0
+In Eval(fmlpsolve) on line 2
+In Z:/lp_solve_5.5/extra/FreeMat/fmlpsolve(fmlpsolve) on line 195
+Error: Unable to open module: Z:/lp_solve_5.5/extra/FreeMat/fmlpsolve.dll
+</pre>
+
+<p>Or (Unix/Linux):</p>
+
+<pre>In base(base) on line 0
+In docli(built in) on line 0
+In Eval(fmlpsolve) on line 2
+In fmlpsolve(fmlpsolve) on line 195
+Error: Unable to open module: /lp_solve/lp_solve_5.5/extra/FreeMat/fmlpsolve.so, operating system reported error: liblpsolve55.so: cannot open shared object file: No such file or directory
+</pre>
+
+<p>Then FreeMat can find the fmlpsolve driver program, but the driver program cannot find the lpsolve library
+that contains the lpsolve implementation.
+This library is called lpsolve55.dll under Windows and liblpsolve55.so under Unix/Linux.<br>
+Under Windows, the lpsolve55.dll file must be in a directory that in the PATH environment variable.
+This path can be shown via the following command at a command prompt: PATH<br>
+It is common to place this in the WINDOWS\system32 folder.<br>
+<br>
+Under Unix/Linux, the liblpsolve55.so shared library must be either in the directories /lib or /usr/lib or in
+a directory specified by the LD_LIBRARY_PATH environment variable.
+</p>
+
+<p>Note that it may also be necessary to restart FreeMat after having put the files in the specified directory.</p>
+
+<p>Also note that there is an fmlpsolve.dll/fmlpsolve.so library and an fmlpsolve.m script file.
+Both are needed. In theory it is possible to call the library directly from FreeMat without the script,
+but this is strongly unadvised and not supported.</p>
+
+<p>All this is developed and tested with FreeMat version 3.6.</p>
+
+<a name="Solve_an_lp_model_from_FreeMat_via_fmlpsolve"></a>
+<h3>Solve an lp model from FreeMat via fmlpsolve</h3>
+
+<p>In the following text, --&gt; before the FreeMat commands is the FreeMat prompt.
+Only the text after --&gt; must be entered.
+</p>
+
+<p>To call an lpsolve function, the following syntax must be used:</p>
+
+<pre>--&gt; [ret1, ret2, ...] = fmlpsolve('functionname', arg1, arg2, ...)</pre>
+
+<p>The return values are optional and depend on the function called. functionname must always be enclosed between single
+quotes to make it alphanumerical and it is case sensitive. The number and type of arguments depend on the function called.
+Some functions even have a variable number of arguments and a different behaviour occurs depending on the type of the argument.
+functionname can be (almost) any of the lpsolve API routines (see <a href="lp_solveAPIreference.htm">lp_solve API reference</a>)
+plus some extra FreeMat specific functions.
+Most of the lpsolve API routines use or return an lprec structure. To make things more robust in FreeMat, this structure
+is replaced by a handle or the model name. The lprec structures are maintained internally by the lpsolve driver.
+The handle is an incrementing number starting from 0.
+Starting from driver version 5.5.0.2, it is also possible to use the model name instead of the handle.
+This can of course only be done if a name is given to the model. This is done via lpsolve routine
+<a href="#set_lp_name">set_lp_name</a> or by specifying the model name in routine <a href="#read_lp">read_lp</a>.
+See <a href="#Using_model_name_instead_of_handle">Using model name instead of handle</a>.
+</p>
+
+<p>Almost all callable functions can be found in the <a href="lp_solveAPIreference.htm">lp_solve API reference</a>.
+Some are exactly as described in the reference guide, others have a slightly different syntax to make maximum
+use of the FreeMat functionality. For example make_lp is used identical as described. But get_variables is slightly
+different. In the API reference, this function has two arguments. The first the lp handle and the second the
+resulting variables and this array must already be dimensioned. When lpsolve is used from FreeMat, nothing must
+be dimensioned in advance. The fmlpsolve driver takes care of dimensioning all return variables and they are
+always returned as return value of the call to fmlpsolve. Never as argument to the routine. This can be a single
+value as for get_objective (although FreeMat stores this in a 1x1 matrix) or a matrix or vector as in get_variables.
+In this case, get_variables returns a 4x1 matrix (vector) with the result of the 4 variables of the lp model.
+</p>
+
+<p>Note that you can get an overview of the available functionnames and their arguments by entering the following in FreeMat:</p>
+
+<pre>--&gt; help fmlpsolve</pre>
+
+<a name="An_example"></a>
+<h3>An example</h3>
+
+<p>(Note that you can execute this example by entering command per command as shown below or by just entering example1.
+This will execute example1.m. You can see its contents by entering type example1.m)</p>
+
+<pre>--&gt; lp=fmlpsolve('make_lp', 0, 4);
+--&gt; fmlpsolve('set_verbose', lp, 3);
+--&gt; fmlpsolve('set_obj_fn', lp, [1, 3, 6.24, 0.1]);
+--&gt; fmlpsolve('add_constraint', lp, [0, 78.26, 0, 2.9], 2, 92.3);
+--&gt; fmlpsolve('add_constraint', lp, [0.24, 0, 11.31, 0], 1, 14.8);
+--&gt; fmlpsolve('add_constraint', lp, [12.68, 0, 0.08, 0.9], 2, 4);
+--&gt; fmlpsolve('set_lowbo', lp, 1, 28.6);
+--&gt; fmlpsolve('set_lowbo', lp, 4, 18);
+--&gt; fmlpsolve('set_upbo', lp, 4, 48.98);
+--&gt; fmlpsolve('set_col_name', lp, 1, 'COLONE');
+--&gt; fmlpsolve('set_col_name', lp, 2, 'COLTWO');
+--&gt; fmlpsolve('set_col_name', lp, 3, 'COLTHREE');
+--&gt; fmlpsolve('set_col_name', lp, 4, 'COLFOUR');
+--&gt; fmlpsolve('set_row_name', lp, 1, 'THISROW');
+--&gt; fmlpsolve('set_row_name', lp, 2, 'THATROW');
+--&gt; fmlpsolve('set_row_name', lp, 3, 'LASTROW');
+--&gt; fmlpsolve('write_lp', lp, 'a.lp');
+--&gt; fmlpsolve('get_mat', lp, 1, 2)
+
+ans =
+
+   78.2600
+
+--&gt; fmlpsolve('solve', lp)
+
+ans =
+
+ 0
+
+--&gt; fmlpsolve('get_objective', lp)
+
+ans =
+
+   31.7828
+
+--&gt; fmlpsolve('get_variables', lp)
+
+ans =
+
+   28.6000
+         0
+         0
+   31.8276
+
+--&gt; fmlpsolve('get_constraints', lp)
+
+ans =
+
+   1.0e+02 *
+
+    0.9230
+    0.0686
+    3.9129
+</pre>
+
+<p>Note that there are some commands that return an answer. To see the answer, the command was not terminated with
+a semicolon (;). If the semicolon is put at the end of a command, the answer is not shown. However it is also possible
+to write the answer in a variable. For example:
+</p>
+
+<pre>--&gt; obj=fmlpsolve('get_objective', lp)
+
+obj =
+
+   31.7828
+</pre>
+
+<p>Or without echoing on screen:</p>
+
+<pre>--&gt; obj=fmlpsolve('get_objective', lp);</pre>
+
+<p>The last command will only write the result in variable obj without showing anything on screen.
+get_variables and get_constraints return a vector with the result. This can also be put in a variable:</p>
+
+<pre>--&gt; x=fmlpsolve('get_variables', lp);
+--&gt; b=fmlpsolve('get_constraints', lp);
+</pre>
+
+<p>It is always possible to show the contents of a variable by just giving it as command:</p>
+
+<pre>--&gt; x
+
+x =
+  28.6000
+        0
+        0
+  31.8276
+</pre>
+
+<p>Don't forget to free the handle and its associated memory when you are done:</p>
+
+<pre>--&gt; fmlpsolve('delete_lp', lp);</pre>
+
+<a name="Using_model_name_instead_of_handle"></a>
+<h3>Using model name instead of handle</h3>
+From driver version 5.5.0.2, it is possible to use the model name instead of the handle. From the moment the model
+has a name, you can use this name instead of the handle. This is best shown by an example. Above example would look
+like this:
+
+<pre>--&gt; lp=fmlpsolve('make_lp', 0, 4);
+--&gt; fmlpsolve('set_lp_name', lp, 'mymodel');
+--&gt; fmlpsolve('set_verbose', 'mymodel', 3);
+--&gt; fmlpsolve('set_obj_fn', 'mymodel', [1, 3, 6.24, 0.1]);
+--&gt; fmlpsolve('add_constraint', 'mymodel', [0, 78.26, 0, 2.9], 2, 92.3);
+--&gt; fmlpsolve('add_constraint', 'mymodel', [0.24, 0, 11.31, 0], 1, 14.8);
+--&gt; fmlpsolve('add_constraint', 'mymodel', [12.68, 0, 0.08, 0.9], 2, 4);
+--&gt; fmlpsolve('set_lowbo', 'mymodel', 1, 28.6);
+--&gt; fmlpsolve('set_lowbo', 'mymodel', 4, 18);
+--&gt; fmlpsolve('set_upbo', 'mymodel', 4, 48.98);
+--&gt; fmlpsolve('set_col_name', 'mymodel', 1, 'COLONE');
+--&gt; fmlpsolve('set_col_name', 'mymodel', 2, 'COLTWO');
+--&gt; fmlpsolve('set_col_name', 'mymodel', 3, 'COLTHREE');
+--&gt; fmlpsolve('set_col_name', 'mymodel', 4, 'COLFOUR');
+--&gt; fmlpsolve('set_row_name', 'mymodel', 1, 'THISROW');
+--&gt; fmlpsolve('set_row_name', 'mymodel', 2, 'THATROW');
+--&gt; fmlpsolve('set_row_name', 'mymodel', 3, 'LASTROW');
+--&gt; fmlpsolve('write_lp', 'mymodel', 'a.lp');
+--&gt; fmlpsolve('get_mat', 'mymodel', 1, 2)
+
+ans =
+
+   78.2600
+
+--&gt; fmlpsolve('solve', 'mymodel')
+
+ans =
+
+ 0
+
+--&gt; fmlpsolve('get_objective', 'mymodel')
+
+ans =
+
+   31.7828
+
+--&gt; fmlpsolve('get_variables', 'mymodel')
+
+ans =
+
+   28.6000
+         0
+         0
+   31.8276
+
+--&gt; fmlpsolve('get_constraints', 'mymodel')
+
+ans =
+
+   1.0e+02 *
+
+    0.9230
+    0.0686
+    3.9129
+</pre>
+
+<p>So everywhere a handle is needed, you can also use the model name. You can even mix the two methods.
+There is also a specific FreeMat routine to get the handle from the model name: <a href="#get_handle">get_handle</a>.<br>
+For example:</p>
+
+<pre>
+--&gt; fmlpsolve('get_handle', 'mymodel')
+
+ans =
+
+ 0
+</pre>
+
+<p>Don't forget to free the handle and its associated memory when you are done:</p>
+
+<pre>--&gt; fmlpsolve('delete_lp', 'mymodel');</pre>
+
+<p>In the next part of this documentation, the handle is used. But if you name the model, the name could thus also be used.</p>
+
+<a name="Matrices"></a>
+<h3>Matrices</h3>
+In FreeMat, all numerical data is stored in matrices; even a scalar variable. FreeMat also supports complex numbers
+(a + b * i with i=SQRT(-1)). fmlpsolve can only work with real numbers.
+FreeMat also supports sparse matrices. Sparse matrices are matrices where only the non-zero elements are provided
+and stored. This results in both less storage and faster calculation if there are a sufficient number of zero values
+in the matrix and there usually are. The fmlpsolve driver supports both dense and sparse matrices and their use
+is totally transparent to the user. Everywhere a matrix can be provided, it can be dense or sparse. In the above
+example all matrices were dense. For example:
+<pre>--&gt; fmlpsolve('add_constraint', lp, [0.24, 0, 11.31, 0], 1, 14.8);</pre>
+
+<p>In sparse matrix notation, this can be written:</p>
+
+<pre>--&gt; fmlpsolve('add_constraint', lp, sparse([0.24, 0, 11.31, 0]), 1, 14.8);</pre>
+
+<p>Most of the time, variables are used to provide the data:</p>
+
+<pre>--&gt; fmlpsolve('add_constraint', lp, a1, 1, 14.8);</pre>
+
+<p>Where a1 is a matrix variable that can be dense or sparse.</p>
+
+<p>The fmlpsolve driver sees all provided matrices as sparse matrices. fmlpsolve also uses sparse matrices
+internally and data can be provided sparse via the ex routines. For example add_constraintex. The fmlpsolve
+driver always uses the ex routines to provide the data to lpsolve. Even if you call from FreeMat the routine
+names that would require a dense matrix (for example add_constraint), the fmlpsolve driver will always call the
+sparse version of the routine (for example add_constraintex). This results in the most performing behaviour.
+Note that if a dense matrix is provided, the dimension must exactly match the dimension that is expected by
+fmlpsolve. Matrices with too few or too much elements gives an 'invalid vector.' error. Sparse matrices can off
+course provide less elements (the non provided elements are seen as zero). However if too many elements are
+provided or an element with a too large index, again an 'invalid vector.' error is raised.</p>
+
+<p>Most of the time, fmlpsolve needs vectors (rows or columns).
+In all situations, it doesn't matter if the vectors are row or column vectors. The driver accepts them both.
+For example:</p>
+
+<pre>--&gt; fmlpsolve('add_constraint', lp, [0.24; 0; 11.31; 0], 1, 14.8);</pre>
+
+<p>Which is a column vector, but it is also accepted.</p>
+
+<p>An important final note. Several lp_solve API routines accept a vector where the first element (element 0) is not used.
+Other lp_solve API calls do use the first element. In the FreeMat interface, there is never an unused element in the matrices.
+So if the lp_solve API specifies that the first element is not used, then this element is not in the FreeMat matrix.</p>
+
+<a name="Maximum_usage_of_matrices_sets_with_fmlpsolve"></a>
+<h3>Maximum usage of matrices/sets with fmlpsolve</h3>
+
+<p>Because FreeMat is all about matrices, all lpsolve API routines that need a column or row number to get/set information for that
+column/row are extended in the fmlpsolve FreeMat driver to also work with matrices. For example set_int in the API can
+only set the integer status for one column. If the status for several integer variables must be set, then set_int
+must be called multiple times. The fmlpsolve FreeMat driver however also allows specifying a vector to set the integer
+status of all variables at once. The API call is: return = fmlpsolve('set_int', lp, column, must_be_int). The
+matrix version of this call is: return = fmlpsolve('set_int', lp, [must_be_int]).
+The API call to return the integer status of a variable is: return = fmlpsolve('is_int', lp, column). The
+matrix version of this call is: [is_int] = fmlpsolve('is_int', lp)<br>
+Also note the get_mat and set_mat routines. In FreeMat these are extended to return/set the complete constraint matrix.
+See following example.
+</p>
+
+<p>Above example can thus also be done as follows:<br>
+(Note that you can execute this example by entering command per command as shown below or by just entering example2.
+This will execute example2.m. You can see its contents by entering type example2.m)</p>
+
+<pre>--&gt; lp=fmlpsolve('make_lp', 0, 4);
+--&gt; fmlpsolve('set_verbose', lp, 3);
+--&gt; fmlpsolve('set_obj_fn', lp, [1, 3, 6.24, 0.1]);
+--&gt; fmlpsolve('add_constraint', lp, [0, 78.26, 0, 2.9], 2, 92.3);
+--&gt; fmlpsolve('add_constraint', lp, [0.24, 0, 11.31, 0], 1, 14.8);
+--&gt; fmlpsolve('add_constraint', lp, [12.68, 0, 0.08, 0.9], 2, 4);
+--&gt; fmlpsolve('set_lowbo', lp, [28.6, 0, 0, 18]);
+--&gt; fmlpsolve('set_upbo', lp, [1.0e30, 1.0e30, 1.0e30, 48.98]);
+--&gt; fmlpsolve('set_col_name', lp, 1, 'COLONE');
+--&gt; fmlpsolve('set_col_name', lp, 2, 'COLTWO');
+--&gt; fmlpsolve('set_col_name', lp, 3, 'COLTHREE');
+--&gt; fmlpsolve('set_col_name', lp, 4, 'COLFOUR');
+--&gt; fmlpsolve('set_row_name', lp, 1, 'THISROW');
+--&gt; fmlpsolve('set_row_name', lp, 2, 'THATROW');
+--&gt; fmlpsolve('set_row_name', lp, 3, 'LASTROW');
+--&gt; fmlpsolve('write_lp', lp, 'a.lp');
+--&gt; fmlpsolve('get_mat', lp)
+
+ans =
+
+         0   78.2600         0    2.9000
+    0.2400         0   11.3100         0
+   12.6800         0    0.0800    0.9000
+
+--&gt; fmlpsolve('solve', lp)
+
+ans =
+
+ 0
+
+--&gt; fmlpsolve('get_objective', lp)
+
+ans =
+
+   31.7828
+
+--&gt; fmlpsolve('get_variables', lp)
+
+ans =
+
+   28.6000
+         0
+         0
+   31.8276
+
+--&gt; fmlpsolve('get_constraints', lp)
+
+ans =
+
+   1.0e+02 *
+
+    0.9230
+    0.0686
+    3.9129
+</pre>
+
+<p>Note the usage of 1.0e30 in set_upbo. This stands for 'infinity'. Meaning an infinite upper bound.
+It is also possible to use -1.0e30 to express minus infinity. This can for example be used to create a free variable.</p>
+
+<p>Starting from driver version 5.5.0.3, get_mat can also return the matrix in sparse format. By default
+the function returns it in dense format for backwards compatibility. However if a 3rd argument is provided that is
+non-zero, the returned matrix is sparse:</p>
+
+<pre>--&gt; fmlpsolve('get_mat', lp, 1)
+
+ans =
+ Matrix is sparse with 7 nonzeros
+</pre>
+
+<p>To show the full power of the matrices, let's now do some matrix calculations to check the solution.
+It works further on above example:</p>
+
+<pre>--&gt; A=fmlpsolve('get_mat', lp);
+--&gt; X=fmlpsolve('get_variables', lp);
+--&gt; B = A * X
+
+B =
+
+   1.0e+02 *
+
+    0.9230
+    0.0686
+    3.9129
+</pre>
+
+<p>So what we have done here is calculate the values of the constraints (RHS) by multiplying the constraint matrix
+with the solution vector. Now take a look at the values of the constraints that lpsolve has found:</p>
+
+<pre>--&gt; fmlpsolve('get_constraints', lp)
+
+ans =
+
+   1.0e+02 *
+
+    0.9230
+    0.0686
+    3.9129
+</pre>
+
+<p>Exactly the same as the calculated B vector, as expected.</p>
+
+<p>Also the value of the objective can be calculated in a same way:</p>
+
+<pre>--&gt; C=fmlpsolve('get_obj_fn', lp);
+--&gt; X=fmlpsolve('get_variables', lp);
+--&gt; obj = C * X
+
+obj =
+
+   31.7828
+</pre>
+
+<p>So what we have done here is calculate the value of the objective by multiplying the objective vector
+with the solution vector. Now take a look at the value of the objective that lpsolve has found:</p>
+
+<pre>--&gt; fmlpsolve('get_objective', lp)
+
+ans =
+
+   31.7828
+</pre>
+
+<p>Again exactly the same as the calculated obj value, as expected.</p>
+
+<a name="Using_string_constants"></a>
+<h3>Using string constants</h3>
+From driver version 5.5.2.14 on, it is possible to use string constants
+everywhere an lp_solve constant is needed or returned. This is best shown by an example.
+In the above code we had:
+
+<pre>--&gt; lp=fmlpsolve('make_lp', 0, 4);
+--&gt; fmlpsolve('set_verbose', lp, 3);
+--&gt; fmlpsolve('add_constraint', lp, [0, 78.26, 0, 2.9], 2, 92.3);
+--&gt; fmlpsolve('add_constraint', lp, [0.24, 0, 11.31, 0], 1, 14.8);
+--&gt; fmlpsolve('add_constraint', lp, [12.68, 0, 0.08, 0.9], 2, 4);</pre>
+
+<p>Note the 3rd parameter on set_verbose and the 4th on add_constraint. These are
+    lp_solve constants. One could define all the possible constants in FreeMat and
+    then use them in the calls, but that has several disadvantages. First there
+    stays the possibility to provide a constant that is not intended for that
+    particular call. Another issue is that calls that return a constant are still
+    returning it numerical.</p>
+<p>Both issues can now be handled by string constants. The above code can be done as
+    following with string constants:</p>
+
+<pre>--&gt; lp=fmlpsolve('make_lp', 0, 4);
+--&gt; fmlpsolve('set_verbose', lp, &#39;IMPORTANT&#39;);
+--&gt; fmlpsolve('add_constraint', lp, [0, 78.26, 0, 2.9], &#39;GE&#39;, 92.3);
+--&gt; fmlpsolve('add_constraint', lp, [0.24, 0, 11.31, 0], &#39;LE&#39;, 14.8);
+--&gt; fmlpsolve('add_constraint', lp, [12.68, 0, 0.08, 0.9], &#39;GE&#39;, 4);</pre>
+
+<p>This is not only more readable, there is much lesser chance that mistakes are
+    being made. The calling routine knows which constants are possible and only
+    allows these. So unknown constants or constants that are intended for other
+    calls are not accepted. For example:</p>
+
+<pre>--&gt; fmlpsolve('set_verbose', lp, &#39;blabla&#39;);
+BLABLA: Unknown.
+
+--&gt; fmlpsolve('set_verbose', lp, &#39;GE&#39;);
+GE: Not allowed here.</pre>
+
+<p>Note the difference between the two error messages. The first says that the
+    constant is not known, the second that the constant cannot be used at that
+    place.</p>
+<p>Constants are case insensitive. Internally they are always translated to upper
+    case. Also when returned they will always be in upper case.</p>
+<p>The constant names are the ones as specified in the documentation of each API
+    routine. There are only 3 exceptions, extensions actually. &#39;LE&#39;, &#39;GE&#39; and &#39;EQ&#39; in
+    <a href="add_constraint.htm">add_constraint</a> and <a href="is_constr_type.htm">is_constr_type</a>
+    can also be &#39;&lt;&#39;, &#39;&lt;=&#39;, &#39;&gt;&#39;, &#39;&gt;=&#39;, &#39;=&#39;. When returned however, &#39;GE&#39;, &#39;LE&#39;, &#39;EQ&#39;
+    will be used.</p>
+
+<p>Some constants can be a combination of multiple constants. For example
+    <a href="set_scaling.htm">set_scaling</a>:</p>
+
+<pre>--&gt; fmlpsolve(&#39;set_scaling&#39;, lp, 3+128);</pre>
+
+<p>With the string version of constants this can be done as following:</p>
+
+<pre>--&gt; fmlpsolve(&#39;set_scaling&#39;, lp, 'SCALE_MEAN|SCALE_INTEGERS');</pre>
+
+<p>| is the OR operator used to combine multiple constants. There may optinally be
+    spaces before and after the |.</p>
+<p>Not all OR combinations are legal. For example in set_scaling, a choice must be
+    made between SCALE_EXTREME, SCALE_RANGE, SCALE_MEAN, SCALE_GEOMETRIC or
+    SCALE_CURTISREID. They may not be combined with each other. This is also tested:</p>
+
+<pre>--&gt; fmlpsolve(&#39;set_scaling&#39;, lp, 'SCALE_MEAN|SCALE_RANGE');
+SCALE_RANGE cannot be combined with SCALE_MEAN</pre>
+
+<p>Everywhere constants must be provided, numeric or string values may be provided.
+    The routine automatically interpretes them. </p>
+<p>Returning constants is a different
+    story. The user must let lp_solve know how to return it. Numerical or as string.
+    The default is numerical:</p>
+
+<pre>--&gt; fmlpsolve(&#39;get_scaling&#39;, lp)
+
+ans =
+
+ 131</pre>
+
+<p>To let lp_solve return a constant as string, a call to a new function must be
+    made: return_constants</p>
+
+<pre>--&gt; fmlpsolve(&#39;return_constants&#39;, 1);</pre>
+
+<p>From now on, all returned constants are returned as string:</p>
+
+<pre>--&gt; fmlpsolve(&#39;get_scaling&#39;, lp)
+
+ans =
+
+ SCALE_MEAN|SCALE_INTEGERS</pre>
+
+<p>This for all routines until return_constants is again called with 0:</p>
+
+<pre>--&gt; fmlpsolve(&#39;return_constants&#39;, 0);</pre>
+
+<p>The (new) current setting of return_constants is always returned by the call.
+    Even when set:</p>
+
+<pre>--&gt; fmlpsolve(&#39;return_constants&#39;, 1)
+
+ans =
+
+ 1</pre>
+
+<p>To get the value without setting it, don&#39;t provide the second argument:</p>
+
+<pre>--&gt; fmlpsolve(&#39;return_constants&#39;)
+
+ans =
+
+ 1</pre>
+
+<p>In the next part of this documentation, return_constants is the default, 0, so all
+    constants are returned numerical and provided constants are also numerical. This
+    to keep the documentation as compatible as possible with older versions. But
+    don&#39;t let you hold that back to use string constants in your code.</p>
+
+<a name="Script files"></a>
+<h3>Script files</h3>
+
+<p>FreeMat can execute a sequence of statements stored in diskfiles. Such files are called
+"Script files". They must have the file type of ".m" as the last part of their filename (extension).
+Much of your work with FreeMat will be in creating and refining script files. Script files are
+usually created using your local editor.</p>
+
+<p>Script files can be compared with batch files or scripts. You can put FreeMat commands in them and execute them at
+any time. The Script file is executed like any other command, by entering its name (without the .m extension).</p>
+
+<p>The fmlpsolve FreeMat distribution contains some example Script files to demonstrate this.</p>
+
+<p>You can edit these files with your favourite text editor (or notepad).</p>
+
+<h4>example1.m</h4>
+
+<p>Contains the commands as shown in the first example of this article.</p>
+
+<h4>example2.m</h4>
+
+<p>Contains the commands as shown in the second example of this article.</p>
+
+<h4>example3.m</h4>
+
+<p>Contains the commands of a practical example. See further in this article.</p>
+
+<h4>example4.m</h4>
+
+<p>Contains the commands of a practical example. See further in this article.</p>
+
+<h4>example5.m</h4>
+
+<p>Contains the commands of a practical example. See further in this article.</p>
+
+<h4>example6.m</h4>
+
+<p>Contains the commands of a practical example. See further in this article.</p>
+
+<h4>lp_solve.m</h4>
+
+<p>This script uses the API to create a higher-level function called lp_solve.
+This function accepts as arguments some matrices and options to create and solve an lp model.
+See the beginning of the file or type help lp_solve or just lp_solve to see its usage:</p>
+
+<pre> --&gt; help lp_solve
+ LP_SOLVE  Solves mixed integer linear programming problems.
+
+   SYNOPSIS: [obj,x,duals] = lp_solve(f,a,b,e,vlb,vub,xint,scalemode,keep)
+
+      solves the MILP problem
+
+              max v = f'*x
+                a*x &lt;&gt; b
+                  vlb &lt;= x &lt;= vub
+                  x(int) are integer
+
+   ARGUMENTS: The first four arguments are required:
+
+            f: n vector of coefficients for a linear objective function.
+            a: m by n matrix representing linear constraints.
+            b: m vector of right sides for the inequality constraints.
+            e: m vector that determines the sense of the inequalities:
+                      e(i) = -1  ==&gt; Less Than
+                      e(i) =  0  ==&gt; Equals
+                      e(i) =  1  ==&gt; Greater Than
+          vlb: n vector of lower bounds. If empty or omitted,
+               then the lower bounds are set to zero.
+          vub: n vector of upper bounds. May be omitted or empty.
+         xint: vector of integer variables. May be omitted or empty.
+    scalemode: scale flag. Off when 0 or omitted.
+         keep: Flag for keeping the lp problem after it's been solved.
+               If omitted, the lp will be deleted when solved.
+
+   OUTPUT: A nonempty output is returned if a solution is found:
+
+          obj: Optimal value of the objective function.
+            x: Optimal value of the decision variables.
+        duals: solution of the dual problem.
+</pre>
+
+<p>Example of usage. To create and solve following lp-model:</p>
+
+<pre>max: -x1 + 2 x2;
+C1: 2x1 + x2 &lt; 5;
+-4 x1 + 4 x2 &lt;5;
+
+int x2,x1;
+</pre>
+
+<p>The following command can be used:</p>
+
+<pre>--&gt; [obj, x]=lp_solve([-1, 2], [2, 1; -4, 4], [5, 5], [-1, -1], [], [], [1, 2])
+obj =
+
+ 3
+
+x =
+
+ 1
+ 2
+</pre>
+
+<h4>lp_maker.m</h4>
+
+<p>This script is analog to the lp_solve script and also uses the API to create a higher-level function called lp_maker.
+This function accepts as arguments some matrices and options to create an lp model. Note that this scripts only
+creates a model and returns a handle.
+See the beginning of the file or type help lp_maker or just lp_maker to see its usage:</p>
+
+<pre> --&gt; help lp_maker
+
+ LP_MAKER  Makes mixed integer linear programming problems.
+
+   SYNOPSIS: lp_handle = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+      make the MILP problem
+        max v = f'*x
+          a*x &lt;&gt; b
+            vlb &lt;= x &lt;= vub
+            x(int) are integer
+
+   ARGUMENTS: The first four arguments are required:
+            f: n vector of coefficients for a linear objective function.
+            a: m by n matrix representing linear constraints.
+            b: m vector of right sides for the inequality constraints.
+            e: m vector that determines the sense of the inequalities:
+                      e(i) &lt; 0  ==&gt; Less Than
+                      e(i) = 0  ==&gt; Equals
+                      e(i) &gt; 0  ==&gt; Greater Than
+          vlb: n vector of non-negative lower bounds. If empty or omitted,
+               then the lower bounds are set to zero.
+          vub: n vector of upper bounds. May be omitted or empty.
+         xint: vector of integer variables. May be omitted or empty.
+    scalemode: Autoscale flag. Off when 0 or omitted.
+     setminim: Set maximum lp when this flag equals 0 or omitted.
+
+   OUTPUT: lp_handle is an integer handle to the lp created.
+</pre>
+
+<p>Example of usage. To create following lp-model:</p>
+
+<pre>max: -x1 + 2 x2;
+C1: 2x1 + x2 &lt; 5;
+-4 x1 + 4 x2 &lt;5;
+
+int x2,x1;
+</pre>
+
+<p>The following command can be used:</p>
+
+<pre>--&gt; lp=lp_maker([-1, 2], [2, 1; -4, 4], [5, 5], [-1, -1], [], [], [1, 2])
+
+lp =
+
+ 0
+</pre>
+
+<p>To solve the model and get the solution:</p>
+
+<pre>--&gt; fmlpsolve('solve', lp)
+
+ans =
+
+ 0
+
+--&gt; fmlpsolve('get_objective', lp)
+
+ans =
+
+ 3
+
+--&gt; fmlpsolve('get_variables', lp)
+
+ans =
+
+ 1
+ 2
+</pre>
+
+<p>Don't forget to free the handle and its associated memory when you are done:</p>
+
+<pre>--&gt; fmlpsolve('delete_lp', lp);</pre>
+
+<h4>lpdemo.m</h4>
+
+<p>Contains several examples to build and solve lp models.</p>
+
+<h4>ex.m</h4>
+
+<p>Contains several examples to build and solve lp models.
+Also solves the lp_examples from the lp_solve distribution.</p>
+
+<a name="A_practical_example"></a>
+<h3>A practical example</h3>
+
+<p>We shall illustrate the method of linear programming by means of a simple example,
+giving a combination graphical/numerical solution, and then solve both a slightly as well as a substantially
+more complicated problem.</p>
+
+<p>Suppose a farmer has 75 acres on which to plant two crops: wheat and barley.
+To produce these crops, it costs the farmer (for seed, fertilizer, etc.) $120 per acre for the
+wheat and  $210 per acre for the barley. The farmer has $15000 available for expenses.
+But after the harvest, the farmer must store the crops while awaiting favourable market conditions.
+The farmer has storage space for 4000 bushels. Each acre yields an average of 110 bushels of wheat
+or 30 bushels of barley.  If the net profit per bushel of wheat (after all expenses have been subtracted)
+is $1.30 and for barley is $2.00, how should the farmer plant the 75 acres to maximize profit?</p>
+
+<p>We begin by formulating the problem mathematically. 
+First we express the objective, that is the profit, and the constraints
+algebraically, then we graph them, and lastly we arrive at the solution
+by graphical inspection and a minor arithmetic calculation.</p>
+
+<p>Let x denote the number of acres allotted to wheat and y the number of acres allotted to barley.
+Then the expression to be maximized, that is the profit, is clearly</p>
+
+<p align="center">P = (110)(1.30)x + (30)(2.00)y = 143x + 60y.</p>
+
+<p>There are three constraint inequalities, specified by the limits on expenses, storage and acreage.
+They are respectively:</p>
+
+<p align="center">
+120x + 210y &lt;= 15000<br>
+110x + 30y &lt;= 4000<br>
+x + y &lt;= 75
+</p>
+
+<p>Strictly speaking there are two more constraint inequalities forced by the fact that the farmer cannot plant
+a negative number of acres, namely:</p>
+
+<p align="center">x &gt;= 0, y &gt;= 0.</p>
+
+<p>Next we graph the regions specified by the constraints. The last two say that we only need to consider
+the first quadrant in the x-y plane. Here's a graph delineating the triangular region in the first quadrant determined
+by the first inequality.</p>
+
+<p><IMG alt="Source" src="O-Matrix1.jpg" border="0"></p>
+
+<p>Now let's put in the other two constraint inequalities.</p>
+
+<p><IMG alt="Source" src="O-Matrix2.jpg" border="0"></p>
+
+<p>The black area is the solution space that holds valid solutions. This means that any point in this area fulfils the
+constraints.
+</p>
+
+<p>Now let's superimpose on top of this picture a contour plot of the objective function P.</p>
+
+<p><IMG alt="Source" src="O-Matrix3.jpg" border="0"></p>
+
+<p>The lines give a picture of the objective function.
+All solutions that intersect with the black area are valid solutions, meaning that this result also fulfils
+the set constraints. The more the lines go to the right, the higher the objective value is. The optimal solution
+or best objective is a line that is still in the black area, but with an as large as possible value.
+</p>
+
+<p>It seems apparent that the maximum value of P will occur on the level curve (that is, level
+line) that passes through the vertex of the polygon that lies near (22,53).<br>
+It is the intersection of x + y = 75 and 110*x + 30*y = 4000<br>
+This is a corner point of the diagram. This is not a coincidence. The simplex algorithm, which is used
+by lp_solve, starts from a theorem that the optimal solution is such a corner point.<br>
+In fact we can compute the result:</p>
+
+<pre>
+--&gt; x = [1 1; 110 30] \ [75; 4000]
+
+x =
+
+   21.8750
+   53.1250
+</pre>
+
+<p>The acreage that results in the maximum profit is 21.875 for wheat and 53.125 for barley.
+In that case the profit is:</p>
+
+<pre>
+--&gt; P = [143 60] * x
+
+P =
+
+ 6.3156e+03
+</pre>
+
+<p>That is, $6315.63.</p>
+
+<p>Note that these command are in script example3.m</p>
+
+<p>Now, lp_solve comes into the picture to solve this linear programming problem more generally.
+After that we will use it to solve two more complicated problems involving more variables
+and constraints.</p>
+
+<p>For this example, we use the higher-level script lp_maker to build the model and then some lp_solve API calls
+to retrieve the solution. Here is again the usage of lp_maker:</p>
+
+<pre>--&gt; help lp_maker
+
+ LP_MAKER  Makes mixed integer linear programming problems.
+
+   SYNOPSIS: lp_handle = lp_maker(f,a,b,e,vlb,vub,xint,scalemode,setminim)
+      make the MILP problem
+        max v = f'*x
+          a*x &lt;&gt; b
+            vlb &lt;= x &lt;= vub
+            x(int) are integer
+
+   ARGUMENTS: The first four arguments are required:
+            f: n vector of coefficients for a linear objective function.
+            a: m by n matrix representing linear constraints.
+            b: m vector of right sides for the inequality constraints.
+            e: m vector that determines the sense of the inequalities:
+                      e(i) &lt; 0  ==&gt; Less Than
+                      e(i) = 0  ==&gt; Equals
+                      e(i) &gt; 0  ==&gt; Greater Than
+          vlb: n vector of non-negative lower bounds. If empty or omitted,
+               then the lower bounds are set to zero.
+          vub: n vector of upper bounds. May be omitted or empty.
+         xint: vector of integer variables. May be omitted or empty.
+    scalemode: Autoscale flag. Off when 0 or omitted.
+     setminim: Set maximum lp when this flag equals 0 or omitted.
+
+   OUTPUT: lp_handle is an integer handle to the lp created.
+</pre>
+
+<p>Now let's formulate this model with lp_solve:</p>
+
+<pre>
+--&gt; f = [143 60];
+--&gt; A = [120 210; 110 30; 1 1];
+--&gt; b = [15000; 4000; 75];
+--&gt; lp = lp_maker(f, A, b, [-1; -1; -1], [], [], [], 1, 0);
+--&gt; solvestat = fmlpsolve('solve', lp)
+
+solvestat =
+
+ 0
+
+--&gt; obj = fmlpsolve('get_objective', lp)
+
+obj =
+
+ 6.3156e+03
+
+--&gt; x = fmlpsolve('get_variables', lp)
+
+x =
+
+   21.8750
+   53.1250
+
+--&gt; fmlpsolve('delete_lp', lp);
+</pre>
+
+<p>Note that these command are in script example4.m</p>
+
+<p>With the higher-level script lp_maker, we provide all data to lp_solve. lp_solve returns a handle (lp) to the
+created model. Then the API call 'solve' is used to calculate the optimal solution of the model.
+The value of the objective function is retrieved via the API call 'get_objective' and the values of the variables
+are retrieved via the API call 'get_variables'. At last, the model is removed from memory via a call to 'delete_lp'.
+Don't forget this to free all memory allocated by lp_solve.</p>
+
+<p>The solution is the same answer we obtained before. 
+Note that the non-negativity constraints are accounted implicitly because variables are by default non-negative
+in lp_solve.</p>
+
+<p>Well, we could have done this problem by hand (as shown in the introduction) because it is very small and it
+can be graphically presented.<br>
+Now suppose that the farmer is dealing with a third crop, say corn, and that the corresponding data is:</p>
+
+<blockquote>
+<table cellSpacing="1" cellPadding="1" border="1">
+<tr><td>cost per acre</td><td>$150.75</td></tr>
+<tr><td>yield per acre</td><td>125 bushels</td></tr>
+<tr><td>profit per bushel</td><td>$1.56</td></tr>
+</table>
+</blockquote>
+
+<p>With three variables it is already a lot more difficult to show this model graphically. Adding more variables
+makes it even impossible because we can't imagine anymore how to represent this. We only have a practical understanding
+of 3 dimentions, but beyound that it is all very theorethical.</p>
+
+<p>If we denote the number of acres allotted to corn by z, then the objective function becomes:</p>
+
+<p align="center">P = (110)(1.30)x + (30)(2.00)y + (125)(1.56) = 143x + 60y + 195z</p>
+
+<p>And the constraint inequalities are:</p>
+
+<p align="center">
+120x + 210y + 150.75z &lt;= 15000<br>
+110x + 30y + 125z &lt;= 4000<br>
+x + y + z &lt;= 75<br>
+x &gt;= 0, y &gt;= 0, z &gt;= 0
+</p>
+
+<p>The problem is solved with lp_solve as follows:</p>
+
+<pre>
+--&gt; f = [143 60 195];
+--&gt; A = [120 210 150.75; 110 30 125; 1 1 1];
+--&gt; b = [15000; 4000; 75];
+--&gt; lp = lp_maker(f, A, b, [-1; -1; -1], [], [], [], 1, 0);
+--&gt; solvestat = fmlpsolve('solve', lp)
+
+solvestat =
+
+ 0
+
+--&gt; obj = fmlpsolve('get_objective', lp)
+
+obj =
+
+ 6.9868e+03
+
+--&gt; x = fmlpsolve('get_variables', lp)
+
+x =
+
+         0
+   56.5789
+   18.4211
+
+--&gt; fmlpsolve('delete_lp', lp);
+</pre>
+
+<p>Note that these command are in script example5.m</p>
+
+<p>So the farmer should ditch the wheat and plant 56.5789 acres of barley and 18.4211 acres of corn.</p>
+
+<p>There is no practical limit on the number of variables and constraints that FreeMat can handle.
+Certainly none that the relatively unsophisticated user will encounter. Indeed, in
+many true applications of the technique of linear programming, one needs
+to deal with many variables and constraints. The solution of such
+a problem by hand is not feasible, and software like FreeMat is crucial
+to success. For example, in the farming problem with which we
+have been working, one could have more crops than two or three. Think
+agribusiness instead of family farmer. And one could have constraints
+that arise from other things beside expenses, storage and acreage limitations. For example:</p>
+<ul>
+  <li>Availability of seed. This might lead to constraint inequalities like xj &lt; k.</li>
+  <li>Personal preferences. Thus the farmer's spouse might have a preference
+  for one variety over another and insist on a corresponding planting,
+  or something similar with a collection of crops; thus constraint inequalities
+  like xi &lt; xj or x1 + x2 &gt; x3.</li>
+  <li>Government subsidies. It may take a moment's reflection on the reader's part,
+  but this could lead to inequalities like xj &gt; k.</li>
+</ul>
+
+<p>Below is a sequence of commands that solves exactly such a problem.
+You should be able to recognize the objective expression and the constraints from the data that is entered. 
+But as an aid, you might answer the following questions:
+</p>
+
+<ul>
+  <li>How many crops are under consideration?</li>
+  <li>What are the corresponding expenses? How much is available for expenses?</li>
+  <li>What are the yields in each case? What is the storage capacity?</li>
+  <li>How many acres are available?</li>
+  <li>What crops are constrained by seed limitations? To what extent?</li>
+  <li>What about preferences?</li>
+  <li>What are the minimum acreages for each crop?</li>
+</ul>
+
+<pre>
+--&gt; f = [110*1.3 30*2.0 125*1.56 75*1.8 95*.95 100*2.25 50*1.35];
+--&gt; A = [120 210 150.75 115 186 140 85;
+        110 30 125 75 95 100 50;
+        1 1 1 1 1 1 1;
+        1 -1 0 0 0 0 0;
+        0 0 1 0 -2 0 0;
+        0 0 0 -1 0 -1 1];
+
+--&gt; b = [55000;40000;400;0;0;0];
+--&gt; lp = lp_maker(f, A, b, [-1; -1; -1; -1; -1; -1], [10 10 10 10 20 20 20], [100 1.0e30 50 1.0e30 1.0e30 250 1.0e30], [], 1, 0);
+--&gt; solvestat = fmlpsolve('solve', lp)
+
+solvestat =
+
+ 0
+
+--&gt; obj = fmlpsolve('get_objective', lp)
+
+obj =
+
+ 7.5398e+04
+
+--&gt; x = fmlpsolve('get_variables', lp)
+
+x =
+
+   1.0e+02 *
+
+    0.1000
+    0.1000
+    0.4000
+    0.4565
+    0.2000
+    2.5000
+    0.2000
+
+--&gt; fmlpsolve('delete_lp', lp);
+</pre>
+
+<p>Note that these command are in script example6.m</p>
+
+<p>Note that we have used in this formulation the vlb and vub arguments of lp_maker. This to set lower and upper bounds
+on variables. This could have been done via extra constraints, but it is more performant to set bounds on variables.
+Also note that 1.0e30 is used for variables that have no upper limit. This stands for Infinity.
+</p>
+
+<p>Note that despite the complexity of the problem, lp_solve solves it almost instantaneously. It seems the
+farmer should bet the farm on crop number 6. We strongly suggest
+you alter the expense and/or the storage limit in the problem and see
+what effect that has on the answer.</p>
+
+<a name="Another,_more_theoretical,_example"></a>
+<h3>Another, more theoretical, example</h3>
+
+<p>Suppose we want to solve the following linear program using FreeMat:</p>
+<p align="center">
+max 4x1 + 2x2 + x3<br>
+s. t. 2x1 + x2 &lt;= 1<br>
+x1 + 2x3 &lt;= 2<br>
+x1 + x2 + x3 = 1<br>
+x1 &gt;= 0<br>
+x1 &lt;= 1<br>
+x2 &gt;= 0<br>
+x2 &lt;= 1<br>
+x3 &gt;= 0<br>
+x3 &lt;= 2<br>
+</p>
+
+<p>Convert the LP into FreeMat format we get:</p>
+
+<p align="center">
+f = [4 2 1]<br>
+A = [2 1 0; 1 0 2; 1 1 1]<br>
+b = [1; 2; 1]
+</p>
+
+<p>Note that constraints on single variables are not put in the constraint matrix.
+lp_solve can set bounds on individual variables and this is more performant than creating
+additional constraints. These bounds are:
+</p>
+
+<p align="center">
+l = [ 0 0 0]<br>
+u = [ 1 1 2]
+</p>
+
+<p>Now lets enter this in FreeMat:</p>
+
+<pre>
+--&gt; f = [4 2 1];
+--&gt; A = [2 1 0; 1 0 2; 1 1 1];
+--&gt; b = [1; 2; 1];
+--&gt; l = [ 0 0 0];
+--&gt; u = [ 1 1 2];
+</pre>
+
+<p>Now solve the linear program using FreeMat: Type the commands</p>
+
+<pre>
+--&gt; lp = lp_maker(f, A, b, [-1; -1; -1], l, u, [], 1, 0);
+--&gt; solvestat = fmlpsolve('solve', lp)
+
+solvestat =
+
+ 0
+
+--&gt; obj = fmlpsolve('get_objective', lp)
+
+obj =
+
+    2.5000
+
+--&gt; x = fmlpsolve('get_variables', lp)
+
+x =
+
+    0.5000
+         0
+    0.5000
+
+--&gt; fmlpsolve('delete_lp', lp);
+</pre>
+
+<p>What to do when some of the variables are missing ?<br>
+For example, suppose there are no lower bounds on the variables. In this case define l to be the empty set using the FreeMat command:
+</p>
+
+<pre>
+--&gt; l = [];
+</pre>
+
+<p>This has the same effect as before, because lp_solve has as default lower bound for variables 0.</p>
+
+<p>But what if you want that variables may also become negative?<br>
+Then you can use -1.0e30 as lower bounds:</p>
+
+<pre>
+--&gt; l = [-1.0e30 -1.0e30 -1.0e30];
+</pre>
+
+<p>Solve this and you get a different result:</p>
+
+<pre>
+--&gt; lp = lp_maker(f, A, b, [-1; -1; -1], l, u, [], 1, 0);
+--&gt; solvestat = fmlpsolve('solve', lp)
+
+solvestat =
+
+ 0
+
+--&gt; obj = fmlpsolve('get_objective', lp)
+
+obj =
+
+    2.6667
+
+--&gt; x = fmlpsolve('get_variables', lp)
+
+x =
+
+    0.6667
+   -0.3333
+    0.6667
+
+--&gt; fmlpsolve('delete_lp', lp);
+</pre>
+
+<a name="Overview_of_API_routines"></a>
+<h3>Overview of API routines</h3>
+
+<p>Note again that the FreeMat command 'help fmlpsolve' gives an overview of all functions that can be called via fmlpsolve with their arguments and return values.</p>
+
+<p>Note that everwhere where lp is used as argument that this can be a handle (lp_handle) or the models name.</p>
+
+<ul>
+	<li>
+		<a href="add_column.htm">add_column, add_columnex</a>
+		<ul>
+			<li>return = fmlpsolve('add_column', lp,
+    [column])
+
+			<li>return = fmlpsolve('add_columnex', lp,
+    [column])
+
+			<li>Both have the same interface from <a href="add_column.htm">add_column</a> but act as <a href="add_column.htm">add_columnex</a></li>
+		</ul>
+    <li>
+        <a href="add_constraint.htm">add_constraint, add_constraintex</a>
+        <ul>
+            <li>return = fmlpsolve('add_constraint', lp,
+    [row], constr_type, rh)
+            <li>return = fmlpsolve('add_constraintex', lp,
+    [row], constr_type, rh)
+            <li>Both have the same interface from <a href="add_constraint.htm">add_constraint</a> but act as <a href="add_constraint.htm">add_constraintex</a></li>
+        </ul>
+    <li>
+        <a href="add_SOS.htm">add_SOS</a>
+        <ul>
+            <li>return = fmlpsolve('add_SOS', lp, name,
+    sostype, priority, [sosvars], [weights])
+            <li>The <i>count</i> argument in the API documentation is not needed in FreeMat since the number of elements is derived from the size of the sosvars and weights matrices. These must have the same size.</li>
+        </ul>
+    <li>
+        <a href="column_in_lp.htm">column_in_lp</a>
+        <ul>
+            <li>return = fmlpsolve('column_in_lp', lp,
+    [column])
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="copy_lp.htm">copy_lp</a>
+        <ul>
+            <li>lp_handle = fmlpsolve('copy_lp', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="default_basis.htm">default_basis</a>
+        <ul>
+            <li>fmlpsolve('default_basis', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="del_column.htm">del_column</a>
+        <ul>
+            <li>return = fmlpsolve('del_column', lp, column)
+
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="del_constraint.htm">del_constraint</a>
+        <ul>
+            <li>return = fmlpsolve('del_constraint', lp,
+    del_row)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="delete_lp.htm">delete_lp</a>
+        <ul>
+            <li>fmlpsolve('delete_lp', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="free_lp.htm">free_lp</a>
+        <ul>
+            <li>fmlpsolve('free_lp', lp)
+            <li>lp is not changed as in the lpsolve API since it is a read_only input parameter. So it acts the same as delete_lp.</li>
+        </ul>
+    <li>
+        <a href="get_anti_degen.htm">get_anti_degen</a>
+        <ul>
+            <li>return = fmlpsolve('get_anti_degen', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_basis.htm">get_basis</a>
+        <ul>
+            <li>[bascolumn] = fmlpsolve('get_basis', lp {,
+    nonbasic})
+            <li>The <i>bascolumn</i> argument in the API documentation is here the return value. The <i>nonbasic</i> argument is optional in FreeMat. If not provided, then 0 is used.</li>
+        </ul>
+    <li>
+        <a href="get_basiscrash.htm">get_basiscrash</a>
+        <ul>
+            <li>return = fmlpsolve('get_basiscrash', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_bb_depthlimit.htm">get_bb_depthlimit</a>
+        <ul>
+            <li>return = fmlpsolve('get_bb_depthlimit', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_bb_floorfirst.htm">get_bb_floorfirst</a>
+        <ul>
+            <li>return = fmlpsolve('get_bb_floorfirst', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_bb_rule.htm">get_bb_rule</a>
+        <ul>
+            <li>return = fmlpsolve('get_bb_rule', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_bounds_tighter.htm">get_bounds_tighter</a>
+        <ul>
+            <li>return = fmlpsolve('get_bounds_tighter', lp)
+
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_break_at_value.htm">get_break_at_value</a>
+        <ul>
+            <li>return = fmlpsolve('get_break_at_value', lp)
+
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_col_name.htm">get_col_name</a>
+        <ul>
+            <li>name = fmlpsolve('get_col_name', lp, column)
+
+            <li>column must be provided and is as such not optional.
+                As such no array of names can be returned.
+                This because FreeMat has no possibility to return sets via the import interface.
+        </ul>
+    <li>
+        <a href="get_column.htm">get_column</a>
+        <a href="get_column.htm">get_columnex</a>
+        <ul>
+            <li>[column, return] = fmlpsolve('get_column', lp, col_nr)
+            <li>[column, return] = fmlpsolve('get_columnex', lp, col_nr)
+            <li>The <i>column</i> argument in
+    the API documentation is here the first return value.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_constr_type.htm">get_constr_type</a>
+        <ul>
+            <li>return = fmlpsolve('get_constr_type', lp,
+    row)
+            <li>[constr_type] = fmlpsolve('get_constr_type',
+    lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_constr_value.htm">get_constr_value</a>
+        <ul>
+            <li>return = fmlpsolve('get_constr_value', lp, row {, primsolution})
+            <li>The primsolution argument is optional. If not provided, then the solution of last solve is used.</li>
+        </ul>
+    <li>
+        <a href="get_constraints.htm">get_constraints</a>
+        <ul>
+            <li>[constr, return] = fmlpsolve('get_constraints',
+    lp)
+            <li>The <i>constr</i> argument in
+    the API documentation is here the first return value.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_rhs.htm">get_dual_solution</a>
+        <ul>
+            <li>[duals, return] = fmlpsolve('get_dual_solution',
+    lp)
+            <li>The <i>duals</i> argument in
+    the API documentation is here the first return value.
+            <li>In the API, element 0 is not used and values start
+    from element 1. In FreeMat, there is no unused element in the matrix.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_epsb.htm">get_epsb</a>
+        <ul>
+            <li>return = fmlpsolve('get_epsb', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_epsd.htm">get_epsd</a>
+        <ul>
+            <li>return = fmlpsolve('get_epsd', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_epsel.htm">get_epsel</a>
+        <ul>
+            <li>return = fmlpsolve('get_epsel', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_epsint.htm">get_epsint</a>
+        <ul>
+            <li>return = fmlpsolve('get_epsint', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_epsperturb.htm">get_epsperturb</a>
+        <ul>
+            <li>return = fmlpsolve('get_epsperturb', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_epspivot.htm">get_epspivot</a>
+        <ul>
+            <li>return = fmlpsolve('get_epspivot', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_improve.htm">get_improve</a>
+        <ul>
+            <li>return = fmlpsolve('get_improve', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_infinite.htm">get_infinite</a>
+        <ul>
+            <li>return = fmlpsolve('get_infinite', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_lowbo.htm">get_lowbo</a>
+        <ul>
+            <li>return = fmlpsolve('get_lowbo', lp, column)
+            <li>[return] = fmlpsolve('get_lowbo', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_lp_index.htm">get_lp_index</a>
+        <ul>
+            <li>return = fmlpsolve('get_lp_index', lp,
+    orig_index)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_lp_name.htm">get_lp_name</a>
+        <ul>
+            <li>name = fmlpsolve('get_lp_name', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_mat.htm">get_mat</a>
+        <ul>
+            <li>value = fmlpsolve('get_mat', lp, row, col)
+            <li>[matrix, return] = fmlpsolve('get_mat', lp[, sparse])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix in the first return value.
+                If sparse is different from zero then the returned matrix is a sparse matrix.
+                The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_max_level.htm">get_max_level</a>
+        <ul>
+            <li>return = fmlpsolve('get_max_level', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_maxpivot.htm">get_maxpivot</a>
+        <ul>
+            <li>return = fmlpsolve('get_maxpivot', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_mip_gap.htm">get_mip_gap</a>
+        <ul>
+            <li>return = fmlpsolve('get_mip_gap', lp,
+    absolute)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_nameindex.htm">get_nameindex</a>
+        <ul>
+            <li>return = fmlpsolve('get_nameindex', lp, name, isrow)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_Ncolumns.htm">get_Ncolumns</a>
+        <ul>
+            <li>return = fmlpsolve('get_Ncolumns', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_negrange.htm">get_negrange</a>
+        <ul>
+            <li>return = fmlpsolve('get_negrange', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_nonzeros.htm">get_nonzeros</a>
+        <ul>
+            <li>return = fmlpsolve('get_nonzeros', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_Norig_columns.htm">get_Norig_columns</a>
+        <ul>
+            <li>return = fmlpsolve('get_Norig_columns', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_Norig_rows.htm">get_Norig_rows</a>
+        <ul>
+            <li>return = fmlpsolve('get_Norig_rows', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_Nrows.htm">get_Nrows</a>
+        <ul>
+            <li>return = fmlpsolve('get_Nrows', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_obj_bound.htm">get_obj_bound</a>
+        <ul>
+            <li>return = fmlpsolve('get_obj_bound', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_objective.htm">get_objective</a>
+        <ul>
+            <li>return = fmlpsolve('get_objective', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_orig_index.htm">get_orig_index</a>
+        <ul>
+            <li>return = fmlpsolve('get_orig_index', lp,
+    lp_index)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_col_name.htm">get_origcol_name</a>
+        <ul>
+            <li>name = fmlpsolve('get_origcol_name', lp, column)
+
+            <li>column must be provided and is as such not optional.
+                As such no array of names can be returned.
+                This because FreeMat has no possibility to return sets via the import interface.
+        </ul>
+    <li>
+        <a href="get_row_name.htm">get_origrow_name</a>
+        <ul>
+            <li>name = fmlpsolve('get_origrow_name', lp, row)
+
+            <li>row must be provided and is as such not optional.
+                As such no array of names can be returned.
+                This because FreeMat has no possibility to return sets via the import interface.
+        </ul>
+    <li>
+        <a href="get_pivoting.htm">get_pivoting</a>
+        <ul>
+            <li>return = fmlpsolve('get_pivoting', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_presolve.htm">get_presolve</a>
+        <ul>
+            <li>return = fmlpsolve('get_presolve', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_presolveloops.htm">get_presolveloops</a>
+        <ul>
+            <li>return = fmlpsolve('get_presolveloops', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_primal_solution.htm">get_primal_solution</a>
+        <ul>
+            <li>[pv, return] = fmlpsolve('get_primal_solution',
+    lp)
+            <li>The <i>pv</i> argument in the
+    API documentation is here the first return value.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_print_sol.htm">get_print_sol</a>
+        <ul>
+            <li>return = fmlpsolve('get_print_sol', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_constraints.htm">get_ptr_constraints</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_rhs.htm">get_ptr_dualsolution</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_primal_solution.htm">get_ptr_primal_solution</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_obj.htm">get_ptr_sensitivity_obj, get_ptr_sensitivity_objex</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_rhs.htm">get_ptr_sensitivity_rhs</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_variables.htm">get_ptr_variables</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="get_rh.htm">get_rh</a>
+        <ul>
+            <li>return = fmlpsolve('get_rh', lp, row)
+            <li>[rh] = fmlpsolve('get_rh', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_rh_range.htm">get_rh_range</a>
+        <ul>
+            <li>return = fmlpsolve('get_rh_range', lp, row)
+            <li>[rh_ranges] = fmlpsolve('get_rh_range', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_row.htm">get_row</a>
+        <a href="get_row.htm">get_rowex</a>
+        <ul>
+            <li>[row, return] = fmlpsolve('get_row', lp, row_nr)
+            <li>[row, return] = fmlpsolve('get_rowex', lp, row_nr)
+            <li>The <i>row</i> argument in the
+    API documentation is here the first return value.
+            <li>In the API, element 0 is not used and values start
+    from element 1. In FreeMat, there is no unused element in the matrix.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_row_name.htm">get_row_name</a>
+        <ul>
+            <li>name = fmlpsolve('get_row_name', lp, row)
+
+            <li>row must be provided and is as such not optional.
+                As such no array of names can be returned.
+                This because FreeMat has no possibility to return sets via the import interface.
+        </ul>
+    <li>
+        <a href="get_scalelimit.htm">get_scalelimit</a>
+        <ul>
+            <li>return = fmlpsolve('get_scalelimit', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_scaling.htm">get_scaling</a>
+        <ul>
+            <li>return = fmlpsolve('get_scaling', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_obj.htm">get_sensitivity_obj, get_sensitivity_objex</a>
+        <ul>
+            <li>[objfrom, objtill, objfromvalue, objtillvalue,
+    return] = fmlpsolve('get_sensitivity_obj', lp)
+            <li>[objfrom, objtill, objfromvalue, objtillvalue,
+    return] = fmlpsolve('get_sensitivity_objex', lp)
+            <li>The <i>objfrom</i>, <i>objtill</i>, <i>objfromvalue</i>, <i>objtillvalue</i> arguments in the API documentation
+    are here the return values. Note that FreeMat allows the return of fewer
+    variables. For example if only objfrom and objtill are needed then the
+    call can be [objfrom, objtill] = fmlpsolve('get_sensitivity_obj',
+    lp). The unrequested values are even not calculated.
+            <li>Since the API routine doesn't calculate the <i>objtillvalue</i> value at this time, FreeMat always
+    returns a zero vector for this.
+            <li>The return code of the call is the last value.
+            <li>get_sensitivity_obj and get_sensitivity_objex are both implemented, but have the same functionality.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_rhs.htm">get_sensitivity_rhs, get_sensitivity_rhsex</a>
+        <ul>
+            <li>[duals, dualsfrom, dualstill, return] =
+    fmlpsolve('get_sensitivity_rhs', lp)
+            <li>[duals, dualsfrom, dualstill, return] =
+    fmlpsolve('get_sensitivity_rhsex', lp)
+            <li>The <i>duals</i>, <i>dualsfrom</i>, <i>dualstill</i>
+    arguments in the API documentation are here the return values. Note that
+    FreeMat allows the return of fewer variables. For example if only duals is
+    needed then the call can be [duals] = fmlpsolve('get_sensitivity_rhs',
+    lp). The unrequested values are even not calculated.
+            <li>The return code of the call is the last value.
+            <li>get_sensitivity_rhs and get_sensitivity_rhsex are both implemented, but have the same functionality.</li>
+        </ul>
+    <li>
+        <a href="get_simplextype.htm">get_simplextype</a>
+        <ul>
+            <li>return = fmlpsolve('get_simplextype', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_solutioncount.htm">get_solutioncount</a>
+        <ul>
+            <li>return = fmlpsolve('get_solutioncount', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_solutionlimit.htm">get_solutionlimit</a>
+        <ul>
+            <li>return = fmlpsolve('get_solutionlimit', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_status.htm">get_status</a>
+        <ul>
+            <li>return = fmlpsolve('get_status', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_statustext.htm">get_statustext</a>
+        <ul>
+            <li>return = fmlpsolve('get_statustext', lp,
+    statuscode)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_timeout.htm">get_timeout</a>
+        <ul>
+            <li>return = fmlpsolve('get_timeout', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_total_iter.htm">get_total_iter</a>
+        <ul>
+            <li>return = fmlpsolve('get_total_iter', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_total_nodes.htm">get_total_nodes</a>
+        <ul>
+            <li>return = fmlpsolve('get_total_nodes', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_upbo.htm">get_upbo</a>
+        <ul>
+            <li>return = fmlpsolve('get_upbo', lp, column)
+            <li>[upbo] = fmlpsolve('get_upbo', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_var_branch.htm">get_var_branch</a>
+        <ul>
+            <li>return = fmlpsolve('get_var_branch', lp,
+    column)
+            <li>[var_branch] = fmlpsolve('get_var_branch',
+    lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_sensitivity_rhs.htm">get_var_dualresult</a>
+        <ul>
+            <li>return = fmlpsolve('get_var_dualresult', lp,
+    index)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_primal_solution.htm">get_var_primalresult</a>
+        <ul>
+            <li>return = fmlpsolve('get_var_primalresult',
+    lp, index)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_var_priority.htm">get_var_priority</a>
+        <ul>
+            <li>return = fmlpsolve('get_var_priority', lp,
+    column)
+            <li>[var_priority] = fmlpsolve('get_var_priority',
+    lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="get_variables.htm">get_variables</a>
+        <ul>
+            <li>[var, return] = fmlpsolve('get_variables',
+    lp)
+            <li>The <i>var</i> argument in the
+    API documentation is here the first return value.
+            <li>The return code of the call is the second return value.</li>
+        </ul>
+    <li>
+        <a href="get_verbose.htm">get_verbose</a>
+        <ul>
+            <li>return = fmlpsolve('get_verbose', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="get_working_objective.htm">get_working_objective</a>
+        <ul>
+            <li>return = fmlpsolve('get_working_objective',
+    lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="guess_basis.htm">guess_basis</a>
+        <ul>
+            <li>[basisvector, return] = fmlpsolve('guess_basis', lp, [guessvector])
+            <li>In the API, element 0 of <i>guessvector</i> is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+            <li>In the API, element 0 of <i>basisvector</i> is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+        </ul>
+    <li>
+        <a href="has_BFP.htm">has_BFP</a>
+        <ul>
+            <li>return = fmlpsolve('has_BFP', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="has_XLI.htm">has_XLI</a>
+        <ul>
+            <li>return = fmlpsolve('has_XLI', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_add_rowmode.htm">is_add_rowmode</a>
+        <ul>
+            <li>return = fmlpsolve('is_add_rowmode', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_anti_degen.htm">is_anti_degen</a>
+        <ul>
+            <li>return = fmlpsolve('is_anti_degen', lp,
+    testmask)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_binary.htm">is_binary</a>
+        <ul>
+            <li>return = fmlpsolve('is_binary', lp, column)
+            <li>[binary] = fmlpsolve('is_binary', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_break_at_first.htm">is_break_at_first</a>
+        <ul>
+            <li>return = fmlpsolve('is_break_at_first', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_constr_type.htm">is_constr_type</a>
+        <ul>
+            <li>return = fmlpsolve('is_constr_type', lp,
+    row, mask)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_debug.htm">is_debug</a>
+        <ul>
+            <li>return = fmlpsolve('is_debug', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_feasible.htm">is_feasible</a>
+        <ul>
+            <li>return = fmlpsolve('is_feasible', lp,
+    [values] {, threshold})
+            <li>The threshold argument is optional.
+                When not provided, the value of <A href="get_epsint.htm">get_epsint</A> will be taken.</li>
+        </ul>
+    <li>
+        <a href="is_unbounded.htm">is_free</a>
+        <a href="is_unbounded.htm">is_unbounded</a>
+        <ul>
+            <li>return = fmlpsolve('is_free', lp, column)
+            <li>return = fmlpsolve('is_unbounded', lp, column)
+            <li>[free] = fmlpsolve('is_free', lp)
+            <li>[free] = fmlpsolve('is_unbounded', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_infinite.htm">is_infinite</a>
+        <ul>
+            <li>return = fmlpsolve('is_infinite', lp, value)
+
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_int.htm">is_int</a>
+        <ul>
+            <li>return = fmlpsolve('is_int', lp, column)
+            <li>[int] = fmlpsolve('is_int', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_integerscaling.htm">is_integerscaling</a>
+        <ul>
+            <li>return = fmlpsolve('is_integerscaling', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_maxim.htm">is_maxim</a>
+        <ul>
+            <li>return = fmlpsolve('is_maxim', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_nativeBFP.htm">is_nativeBFP</a>
+        <ul>
+            <li>return = fmlpsolve('is_nativeBFP', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_nativeXLI.htm">is_nativeXLI</a>
+        <ul>
+            <li>return = fmlpsolve('is_nativeXLI', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_negative.htm">is_negative</a>
+        <ul>
+            <li>return = fmlpsolve('is_negative', lp,
+    column)
+            <li>[negative] = fmlpsolve('is_negative', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_piv_mode.htm">is_piv_mode</a>
+        <ul>
+            <li>return = fmlpsolve('is_piv_mode', lp,
+    testmask)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_piv_rule.htm">is_piv_rule</a>
+        <ul>
+            <li>return = fmlpsolve('is_piv_rule', lp, rule)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_presolve.htm">is_presolve</a>
+        <ul>
+            <li>return = fmlpsolve('is_presolve', lp,
+    testmask)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_scalemode.htm">is_scalemode</a>
+        <ul>
+            <li>return = fmlpsolve('is_scalemode', lp,
+    testmask)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_scaletype.htm">is_scaletype</a>
+        <ul>
+            <li>return = fmlpsolve('is_scaletype', lp,
+    scaletype)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_semicont.htm">is_semicont</a>
+        <ul>
+            <li>return = fmlpsolve('is_semicont', lp,
+    column)
+            <li>[semicont] = fmlpsolve('is_semicont', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_SOS_var.htm">is_SOS_var</a>
+        <ul>
+            <li>return = fmlpsolve('is_SOS_var', lp, column)
+
+            <li>[SOS_var] = fmlpsolve('is_SOS_var', lp)
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows retrieving the values into a FreeMat matrix.</li>
+        </ul>
+    <li>
+        <a href="is_trace.htm">is_trace</a>
+        <ul>
+            <li>return = fmlpsolve('is_trace', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="is_use_names.htm">is_use_names</a>
+        <ul>
+            <li>return = fmlpsolve('is_use_names', lp, isrow)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="lp_solve_version.htm">lp_solve_version</a>
+        <ul>
+            <li>versionstring = fmlpsolve('lp_solve_version')
+            <li>The fmlpsolve API routine returns the version information in 4 provided argument variables while the FreeMat version returns the information as a string in the format major.minor.release.build</li>
+        </ul>
+    <li>
+        <a href="make_lp.htm">make_lp</a>
+        <ul>
+            <li>lp_handle = fmlpsolve('make_lp', rows, columns)
+            <li>lp_handle is not a pointer to an lprec structure as in the API, but an incrementing handle number starting from 0.</li>
+        </ul>
+    <li>
+        <a href="print_constraints.htm">print_constraints</a>
+        <ul>
+			<li>fmlpsolve('print_constraints', lp {,
+    columns})
+
+			<li>columns is optional. If not specified, then 1 is
+    used.
+
+			<li>First call set_outputfile to specify where the
+    information is written to. In the API documentation it is written that by
+    default, the output goes to stdout, but under FreeMat (Windows) this means
+    that the output is not shown.
+            <li>The same information can also be obtained via fmlpsolve('get_constraints', lp). This shows the result on screen.</li>
+        </ul>
+    <li>
+        <a href="print_debugdump.htm">print_debugdump</a>
+        <ul>
+            <li>return = fmlpsolve('print_debugdump', lp,
+    filename)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="print_duals.htm">print_duals</a>
+        <ul>
+			<li>fmlpsolve('print_duals', lp)
+
+			<li>First call set_outputfile to specify where the
+    information is written to. In the API documentation it is written that by
+    default, the output goes to stdout, but under FreeMat (Windows) this means
+    that the output is not shown.
+            <li>The same information can be obtained via fmlpsolve('get_dual_solution', lp). This shows the result on screen.</li>
+        </ul>
+    <li>
+        <a href="print_lp.htm">print_lp</a>
+        <ul>
+			<li>fmlpsolve('print_lp', lp)
+
+			<li>First call set_outputfile to specify where the information is written to.
+			    In the API documentation it is written that by default, the output goes to stdout, but under FreeMat (Windows) this means that the output is not shown.</li>
+        </ul>
+    <li>
+        <a href="print_objective.htm">print_objective</a>
+        <ul>
+			<li>fmlpsolve('print_objective', lp)
+
+			<li>First call set_outputfile to specify where the
+    information is written to. In the API documentation it is written that by
+    default, the output goes to stdout, but under FreeMat (Windows) this means
+    that the output is not shown.
+            <li>The same information can be obtained via fmlpsolve('get_objective', lp). This shows the result on screen.</li>
+        </ul>
+    <li>
+        <a href="print_scales.htm">print_scales</a>
+        <ul>
+			<li>fmlpsolve('print_scales', lp)
+
+			<li>First call set_outputfile to specify where the information is written to.
+			    In the API documentation it is written that by default, the output goes to stdout, but under FreeMat (Windows) this means that the output is not shown.</li>
+        </ul>
+    <li>
+        <a href="print_solution.htm">print_solution</a>
+        <ul>
+			<li>fmlpsolve('print_solution', lp {, columns})
+
+			<li>columns is optional. If not specified, then 1 is
+    used.
+
+			<li>First call set_outputfile to specify where the
+    information is written to. In the API documentation it is written that by
+    default, the output goes to stdout, but under FreeMat (Windows) this means
+    that the output is not shown.
+            <li>The same information can also be obtained via fmlpsolve('get_variables', lp). This shows the result on screen.</li>
+        </ul>
+    <li>
+        <a href="print_str.htm">print_str</a>
+        <ul>
+			<li>fmlpsolve('print_str', lp, str)
+
+			<li>First call set_outputfile to specify where the information is written to.
+			    In the API documentation it is written that by default, the output goes to stdout, but under FreeMat (Windows) this means that the output is not shown.</li>
+        </ul>
+    <li>
+        <a href="print_tableau.htm">print_tableau</a>
+        <ul>
+			<li>fmlpsolve('print_tableau', lp)
+
+			<li>First call set_outputfile to specify where the information is written to.
+			    In the API documentation it is written that by default, the output goes to stdout, but under FreeMat (Windows) this means that the output is not shown.</li>
+        </ul>
+    <li>
+        <a href="put_abortfunc.htm">put_abortfunc</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="put_logfunc.htm">put_logfunc</a>
+        <ul>
+            <li>Not implemented.
+            <li>However, the fmlpsolve driver sets a log function to redirect the output of lpsolve from stdout (which is not visible in Windows FreeMat) to the command window of FreeMat.
+                As such, all reported output can be seen in FreeMat. How much output is seen is controlled by the verbose level that can be defined by set_verbose or can be specified in the read_ routines.</li>
+        </ul>
+    <li>
+        <a href="put_msgfunc.htm">put_msgfunc</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="read_basis.htm">read_basis</a>
+        <ul>
+            <li>[ret, info] = fmlpsolve('read_basis', lp, filename)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="read_mps.htm">read_freemps, read_freeMPS</a>
+        <ul>
+            <li>lp_handle = fmlpsolve('read_freemps', filename {,
+    options})
+            <li>lp_handle = fmlpsolve('read_freeMPS', filename {,
+    options})
+            <li>In the lpsolve API, read_freemps needs a FILE
+    handle. In FreeMat it needs the filename and thus acts the same as
+    read_freeMPS.
+            <li>lp_handle is not a pointer to an lprec structure as
+    in the API, but an incrementing handle number starting from 0.
+            <li>options is optional. If not specified, then NORMAL is used.</li>
+        </ul>
+    <li>
+        <a name="read_lp"></a>
+        <a href="read_lp.htm">read_lp, read_LP</a>
+        <ul>
+			<li>lp_handle = fmlpsolve('read_lp', filename {,
+    verbose {, lp_name}})
+            <li>lp_handle = fmlpsolve('read_LP', filename {,
+    verbose {, lp_name}})
+            <li>In the lpsolve API, read_lp needs a FILE handle. In
+    FreeMat it needs the filename and thus acts the same as read_LP.
+            <li>lp_handle is not a pointer to an lprec structure as
+    in the API, but an incrementing handle number starting from 0.
+            <li>verbose is optional. If not provided then NORMAL is
+    used.
+            <li>lp_name is optional. If not provided then no name is given to the model ('').</li>
+        </ul>
+    <li>
+        <a href="read_MPS.htm">read_mps, read_MPS</a>
+        <ul>
+			<li>lp_handle = fmlpsolve('read_mps', filename {,
+    options})
+            <li>lp_handle = fmlpsolve('read_MPS', filename {,
+    options})
+            <li>In the lpsolve API, read_mps needs a FILE handle.
+    In FreeMat it needs the filename and thus acts the same as read_MPS.
+            <li>lp_handle is not a pointer to an lprec structure as
+    in the API, but an incrementing handle number starting from 0.
+            <li>options is optional. If not specified, then NORMAL is used.</li>
+        </ul>
+    <li>
+        <a href="read_params.htm">read_params</a>
+        <ul>
+            <li>return = fmlpsolve('read_params', lp, filename {, options })
+            <li>options is optional.</li>
+        </ul>
+    <li>
+        <a href="read_XLI.htm">read_XLI</a>
+        <ul>
+            <li>lp_handle = fmlpsolve('read_XLI', xliname,
+    modelname {, dataname {, options {, verbose}}}
+            <li>lp_handle is not a pointer to an lprec structure as
+    in the API, but an incrementing handle number starting from 0.
+            <li>dataname is optional. When not provided, '' (NULL)
+    is taken. '' is taken as NULL.
+            <li>options is optional. When not provided, '' is
+    taken.
+            <li>verbose is optional. If not specified, then NORMAL is used.</li>
+        </ul>
+    <li>
+        <a href="reset_basis.htm">reset_basis</a>
+        <ul>
+            <li>Not implemented.
+            <li>Use <A href="default_basis.htm">default_basis</A></li>
+        </ul>
+    <li>
+        <a href="set_basisvar.htm">set_basisvar</a>
+        <ul>
+            <li>fmlpsolve('set_basisvar', lp, basisPos, enteringCol)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_add_rowmode.htm">set_add_rowmode</a>
+        <ul>
+            <li>return = fmlpsolve('set_add_rowmode', lp,
+    turnon)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_anti_degen.htm">set_anti_degen</a>
+        <ul>
+            <li>fmlpsolve('set_anti_degen', lp, anti_degen)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_basis.htm">set_basis</a>
+        <ul>
+            <li>return = fmlpsolve('set_basis', lp,
+    [bascolumn], nonbasic)
+            <li>In the API, element 0 of <i>bascolumn</i> is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+        </ul>
+    <li>
+        <a href="set_basiscrash.htm">set_basiscrash</a>
+        <ul>
+            <li>fmlpsolve('set_basiscrash', lp, mode)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_bb_depthlimit.htm">set_bb_depthlimit</a>
+        <ul>
+            <li>fmlpsolve('set_bb_depthlimit', lp,
+    bb_maxlevel)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_bb_floorfirst.htm">set_bb_floorfirst</a>
+        <ul>
+            <li>fmlpsolve('set_bb_floorfirst', lp,
+    bb_floorfirst)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_bb_rule.htm">set_bb_rule</a>
+        <ul>
+            <li>fmlpsolve('set_bb_rule', lp, bb_rule)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_BFP.htm">set_BFP</a>
+        <ul>
+            <li>return = fmlpsolve('set_BFP', lp, filename)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_binary.htm">set_binary</a>
+        <ul>
+            <li>return = fmlpsolve('set_binary', lp, column,
+    must_be_bin)
+            <li>return = fmlpsolve('set_binary', lp,
+    [must_be_bin])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_bounds.htm">set_bounds</a>
+        <ul>
+            <li>return = fmlpsolve('set_bounds', lp, column, lower, upper)
+            <li>return = fmlpsolve('set_bounds', lp, [lower], [upper])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_bounds_tighter.htm">set_bounds_tighter</a>
+        <ul>
+            <li>fmlpsolve('set_bounds_tighter', lp, tighten)
+
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_break_at_first.htm">set_break_at_first</a>
+        <ul>
+            <li>fmlpsolve('set_break_at_first', lp,
+    break_at_first)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_break_at_value.htm">set_break_at_value</a>
+        <ul>
+            <li>fmlpsolve('set_break_at_value', lp,
+    break_at_value)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_col_name.htm">set_col_name</a>
+        <ul>
+            <li>return = fmlpsolve('set_col_name', lp, column, name)
+
+            <li>column must be provided and is as such not optional.
+                As such no array of names can be provided.
+                This because FreeMat has no possibility to provide sets via the import interface.
+        </ul>
+    <li>
+        <a href="set_column.htm">set_column, set_columnex</a>
+        <ul>
+            <li>return = fmlpsolve('set_column', lp, col_no,
+    [column])
+            <li>return = fmlpsolve('set_columnex', lp,
+    col_no, [column])
+            <li>Both have the same interface from <a href="set_column.htm">set_column</a> but act as <a href="set_column.htm">set_columnex</a></li>
+        </ul>
+    <li>
+        <a href="set_constr_type.htm">set_constr_type</a>
+        <ul>
+            <li>return = fmlpsolve('set_constr_type', lp,
+    row, con_type)
+            <li>return = fmlpsolve('set_constr_type', lp,
+    [con_type])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all rows.</li>
+        </ul>
+    <li>
+        <a href="set_debug.htm">set_debug</a>
+        <ul>
+            <li>fmlpsolve('set_debug', lp, debug)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epsb.htm">set_epsb</a>
+        <ul>
+            <li>fmlpsolve('set_epsb', lp, epsb)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epsd.htm">set_epsd</a>
+        <ul>
+            <li>fmlpsolve('set_epsd', lp, epsd)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epsel.htm">set_epsel</a>
+        <ul>
+            <li>fmlpsolve('set_epsel', lp, epsel)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epsint.htm">set_epsint</a>
+        <ul>
+            <li>fmlpsolve('set_epsint', lp, epsint)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epslevel.htm">set_epslevel</a>
+        <ul>
+            <li>fmlpsolve('set_epslevel', lp, epslevel)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epsperturb.htm">set_epsperturb</a>
+        <ul>
+            <li>fmlpsolve('set_epsperturb', lp, epsperturb)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_epspivot.htm">set_epspivot</a>
+        <ul>
+            <li>fmlpsolve('set_epspivot', lp, epspivot)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_unbounded.htm">set_free</a>
+        <a href="set_unbounded.htm">set_unbounded</a>
+        <ul>
+            <li>return = fmlpsolve('set_free', lp, column)
+            <li>return = fmlpsolve('set_unbounded', lp, column)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_improve.htm">set_improve</a>
+        <ul>
+            <li>fmlpsolve('set_improve', lp, improve)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_infinite.htm">set_infinite</a>
+        <ul>
+            <li>fmlpsolve('set_infinite', lp, infinite)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_int.htm">set_int</a>
+        <ul>
+            <li>return = fmlpsolve('set_int', lp, column,
+    must_be_int)
+            <li>return = fmlpsolve('set_int', lp,
+    [must_be_int])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_lowbo.htm">set_lowbo</a>
+        <ul>
+            <li>return = fmlpsolve('set_lowbo', lp, column,
+    value)
+            <li>return = fmlpsolve('set_lowbo', lp,
+    [values])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a name="set_lp_name"></a>
+        <a href="set_lp_name.htm">set_lp_name</a>
+        <ul>
+            <li>return = fmlpsolve('set_lp_name', lp, name)
+            <li>In FreeMat, when you name a model, this name can be used everywhere where lp is specified.
+                This to access the model via the name instead of via a handle.</li>
+        </ul>
+    <li>
+        <a href="set_mat.htm">set_mat</a>
+        <ul>
+            <li>return = fmlpsolve('set_mat', lp, row,
+    column, value)
+            <li>return = fmlpsolve('set_mat', lp, [matrix])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows to set the whole matrix (all rows/columns) at once.
+                This is the most performant way to provide the constraint matrix. Consider using a FreeMat sparse matrix for maximum performance and least memory usage.
+                The matrix must be two-dimentional.</li>
+        </ul>
+    <li>
+        <a href="set_maxim.htm">set_maxim</a>
+        <ul>
+            <li>fmlpsolve('set_maxim', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_maxpivot.htm">set_maxpivot</a>
+        <ul>
+            <li>fmlpsolve('set_maxpivot', max_num_inv)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_minim.htm">set_minim</a>
+        <ul>
+            <li>fmlpsolve('set_minim', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_mip_gap.htm">set_mip_gap</a>
+        <ul>
+            <li>fmlpsolve('set_mip_gap', lp, absolute,
+    mip_gap)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_negrange.htm">set_negrange</a>
+        <ul>
+            <li>fmlpsolve('set_negrange', negrange)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_obj_fn.htm">set_obj</a>
+        <ul>
+            <li>return = fmlpsolve('set_obj', lp, column,
+    value)
+            <li>return = fmlpsolve('set_obj', lp, [values])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables. It is then the same as set_obj_fn</li>
+        </ul>
+    <li>
+        <a href="set_obj_bound.htm">set_obj_bound</a>
+        <ul>
+            <li>fmlpsolve('set_obj_bound', lp, obj_bound)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_obj_fn.htm">set_obj_fn, set_obj_fnex</a>
+        <ul>
+            <li>return = fmlpsolve('set_obj_fn', lp, [row])
+            <li>return = fmlpsolve('set_obj_fnex', lp,
+    [row])
+            <li>Both have the same interface from <a href="set_obj_fn.htm">set_obj_fn</a> but act as <a href="set_obj_fn.htm">set_obj_fnex</a>
+            <li>In the API, element 0 is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+        </ul>
+    <li>
+        <a href="set_output.htm">set_outputfile</a>
+        <ul>
+            <li>return = fmlpsolve('set_outputfile', lp,
+    filename)
+            <li>In the API description it says that setting filename to NULL results in writing output back to stdout.
+                In FreeMat under Windows, output to stdout it not shown. However it results in closing the file.
+                Use '' to have the effect of NULL.</li>
+        </ul>
+    <li>
+        <a href="set_output.htm">set_outputstream</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="set_pivoting.htm">set_pivoting</a>
+        <ul>
+            <li>fmlpsolve('set_pivoting', lp, pivoting)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_preferdual.htm">set_preferdual</a>
+        <ul>
+            <li>fmlpsolve('set_preferdual', lp, dodual)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_presolve.htm">set_presolve</a>
+        <ul>
+            <li>fmlpsolve('set_presolve', lp, do_presolve {, maxloops})
+            <li>The <i>maxloops</i> argument is optional in FreeMat. If not provided, then infinite is used.</li>
+        </ul>
+    <li>
+        <a href="set_print_sol.htm">set_print_sol</a>
+        <ul>
+            <li>fmlpsolve('set_print_sol', lp, print_sol)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_rh.htm">set_rh</a>
+        <ul>
+            <li>return = fmlpsolve('set_rh', lp, row, value)
+
+            <li>return = fmlpsolve('set_rh', lp, [values])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all rows. Note that in this case, the value of row 0 is not specified in the matrix.</li>
+        </ul>
+    <li>
+        <a href="set_rh_range.htm">set_rh_range</a>
+        <ul>
+            <li>return = fmlpsolve('set_rh_range', lp, row,
+    deltavalue)
+            <li>return = fmlpsolve('set_rh_range', lp,
+    [deltavalues])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all rows.</li>
+        </ul>
+    <li>
+        <a href="set_rh_vec.htm">set_rh_vec</a>
+        <ul>
+            <li>fmlpsolve('set_rh_vec', lp, [rh])
+            <li>In the API, element 0 is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+        </ul>
+    <li>
+        <a href="set_row.htm">set_row, set_rowex</a>
+        <ul>
+            <li>return = fmlpsolve('set_row', lp, row_no,
+    [row])
+            <li>return = fmlpsolve('set_rowex', lp, row_no,
+    [row])
+            <li>Both have the same interface from <a href="set_row.htm">set_row</a> but act as <a href="set_row.htm">set_rowex</a>
+            <li>In the API, element 0 is not used and values start from element 1. In FreeMat, there is no unused element in the matrix.</li>
+        </ul>
+    <li>
+        <a href="set_row_name.htm">set_row_name</a>
+        <ul>
+            <li>return = fmlpsolve('set_row_name', lp, row, name)
+
+            <li>row must be provided and is as such not optional.
+                As such no array of names can be provided.
+                This because FreeMat has no possibility to provide sets via the import interface.
+        </ul>
+    <li>
+        <a href="set_scalelimit.htm">set_scalelimit</a>
+        <ul>
+            <li>fmlpsolve('set_scalelimit', lp, scalelimit)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_scaling.htm">set_scaling</a>
+        <ul>
+            <li>fmlpsolve('set_scaling', lp, scalemode)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_semicont.htm">set_semicont</a>
+        <ul>
+            <li>return = fmlpsolve('set_semicont', lp,
+    column, must_be_sc)
+            <li>return = fmlpsolve('set_semicont', lp,
+    [must_be_sc])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_sense.htm">set_sense</a>
+        <ul>
+            <li>fmlpsolve('set_sense', lp, maximize)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_simplextype.htm">set_simplextype</a>
+        <ul>
+            <li>fmlpsolve('set_simplextype', lp,
+    simplextype)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_solutionlimit.htm">set_solutionlimit</a>
+        <ul>
+            <li>fmlpsolve('set_solutionlimit', lp,
+    simplextype)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_timeout.htm">set_timeout</a>
+        <ul>
+            <li>fmlpsolve('set_timeout', lp, sectimeout)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_trace.htm">set_trace</a>
+        <ul>
+            <li>fmlpsolve('set_trace', lp, trace)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_upbo.htm">set_upbo</a>
+        <ul>
+            <li>return = fmlpsolve('set_upbo', lp, column,
+    value)
+            <li>return = fmlpsolve('set_upbo', lp, [values])
+
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_use_names.htm">set_use_names</a>
+        <ul>
+            <li>fmlpsolve('set_use_names', lp, isrow, use_names)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_var_branch.htm">set_var_branch</a>
+        <ul>
+            <li>return = fmlpsolve('set_var_branch', lp,
+    column, branch_mode)
+            <li>return = fmlpsolve('set_var_branch', lp,
+    [branch_mode])
+            <li>In FreeMat, this routine has two formats. The first format is identical to the API.
+                The second format allows setting a matrix of all variables.</li>
+        </ul>
+    <li>
+        <a href="set_var_weights.htm">set_var_weights</a>
+        <ul>
+            <li>return = fmlpsolve('set_var_weights', lp,
+    [weights])
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_verbose.htm">set_verbose</a>
+        <ul>
+            <li>fmlpsolve('set_verbose', lp, verbose)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="set_XLI.htm">set_XLI</a>
+        <ul>
+            <li>return = fmlpsolve('set_XLI', lp, filename)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="solve.htm">solve</a>
+        <ul>
+            <li>result = fmlpsolve('solve', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="add_column.htm">str_add_column</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="add_constraint.htm">str_add_constraint</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="set_obj_fn.htm">str_set_obj_fn</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="set_rh_vec.htm">str_set_rh_vec</a>
+        <ul>
+            <li>Not implemented.</li>
+        </ul>
+    <li>
+        <a href="time_elapsed.htm">time_elapsed</a>
+        <ul>
+            <li>return = fmlpsolve('time_elapsed', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="unscale.htm">unscale</a>
+        <ul>
+            <li>fmlpsolve('unscale', lp)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="write_basis.htm">write_basis</a>
+        <ul>
+            <li>fmlpsolve('write_basis', lp, filename)
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="write_mps.htm">write_freemps, write_freeMPS</a>
+        <ul>
+            <li>return = fmlpsolve('write_freemps', lp,
+    filename)
+            <li>return = fmlpsolve('write_freeMPS', lp,
+    filename)
+            <li>In the lpsolve API, write_freeMPS needs a FILE handle. In FreeMat it needs the filename and thus acts the same as write_freemps.</li>
+        </ul>
+    <li>
+        <a href="write_lp.htm">write_lp, write_LP</a>
+        <ul>
+            <li>return = fmlpsolve('write_lp', lp, filename)
+
+            <li>return = fmlpsolve('write_LP', lp, filename)
+
+            <li>In the lpsolve API, write_LP needs a FILE handle. In FreeMat it needs the filename and thus acts the same as write_lp.</li>
+        </ul>
+    <li>
+        <a href="write_mps.htm">write_mps, write_MPS</a>
+        <ul>
+            <li>return = fmlpsolve('write_mps', lp,
+    filename)
+            <li>return = fmlpsolve('write_MPS', lp,
+    filename)
+            <li>In the lpsolve API, write_MPS needs a FILE handle.
+    In FreeMat it needs the filename and thus acts the same as write_mps.
+            <li>No special considerations.</li>
+        </ul>
+    <li>
+        <a href="write_XLI.htm">write_XLI</a>
+        <ul>
+            <li>return = fmlpsolve('write_XLI', lp, filename
+    {, options {, results}})
+            <li>No special considerations.</li>
+        </ul>
+    </li>
+</ul>
+
+<a name="Extra_FreeMat_routines"></a>
+<h3>Extra FreeMat routines</h3>
+
+<p>These routines are not part of the lpsolve API, but are added for backwards compatibility.
+Most of them exist in the lpsolve API with another name.</p>
+
+<ul>
+	<li>[constr_type] = fmlpsolve('get_constr_types', lp)
+        <ul>
+            <li>The same as get_constr_type. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>[int] = fmlpsolve('get_int', lp)
+        <ul>
+            <li>The same as is_int. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>return = fmlpsolve('get_no_cols', lp)
+        <ul>
+            <li>The same as get_Ncolumns. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>return = fmlpsolve('get_no_rows', lp)
+        <ul>
+            <li>The same as get_Nrows. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>name = fmlpsolve('get_objective_name', lp)
+        <ul>
+            <li>The same as get_row_name with row=0. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>[row_vec, return] = fmlpsolve('get_obj_fn', lp)<br>
+        [row_vec, return] =
+           fmlpsolve('get_obj_fun', lp)
+        <ul>
+            <li>The same as get_row with row 0. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>name = fmlpsolve('get_problem_name', lp)
+        <ul>
+            <li>The same as get_lp_name. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>[costs] = fmlpsolve('get_reduced_costs', lp)
+        <ul>
+            <li>The same as get_dual_solution. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>[obj, x, duals, return] = fmlpsolve('get_solution', lp)
+        <ul>
+            <li>Returns the value of the objective function, the
+    values of the variables and the duals. Implemented for backwards
+    compatibility.
+            <li>The return code of the call is the last value.</li>
+        </ul>
+    <li>value = fmlpsolve('mat_elm', lp)
+        <ul>
+            <li>The same as get_mat. Implemented for backwards compatibility.</li>
+        </ul>
+    <li>[handle_vec] = fmlpsolve('print_handle')
+        <ul>
+            <li>Returns a vector with open handles.
+                Can be handy to see which handles aren't closed yet with delete_lp or free_lp.</li>
+        </ul>
+    <li>lp_handle = fmlpsolve('read_lp_file', filename {, verbose {, lp_name}})
+        <ul>
+            <li>The same as read_LP. Implemented for backwards compatibility.</li>
+        </ul>
+    </li>
+    <li><a name="get_handle"></a>lp_handle = fmlpsolve('get_handle', lp_name)
+        <ul>
+            <li>Get the handle for this model from the models name.
+                If an unknown model name is given (or already deleted), -1 is returned.
+            </li>
+       </ul>
+    </li>
+    <li><a name="return_constants"></a>return_constants = fmlpsolve('return_constants'[, return_constants])
+        <ul>
+            <li>Returns the setting of return_constants and optionally sets its value.
+            </li>
+       </ul>
+    </li>
+</ul>
+
+<a name="Compile_the_fmlpsolve_driver"></a>
+<h3>Compile the fmlpsolve driver</h3>
+
+<p>Under Windows, the fmlpsolve FreeMat driver is a dll: fmlpsolve.dll<br>
+Under Unix/Linux, the fmlpsolve FreeMat driver is a shared library.: fmlpsolve.so<br>
+This driver is an interface to the lpsolve library lpsolve55.dll/liblpsolve55.so that contains the implementation of lp_solve.
+lpsolve55.dll/liblpsolve55.so is distributed with the lp_solve package (archive lp_solve_5.5.2.14_dev.zip/lp_solve_5.5.2.14_dev.tar.gz).
+The fmlpsolve FreeMat driver is just a wrapper between FreeMat and lp_solve to translate the input/output to/from FreeMat and the lp_solve library.
+</p>
+
+<h4>Compilation</h4>
+
+<p>The fmlpsolve FreeMat driver is written in C. To compile this code, under Windows the Microsoft visual C compiler is needed and under Unix/Linux the standard cc compiler.<br>
+The needed commands are in a batch file/script.<br>
+Under Windows it is called cvc.bat, under Unix/Linux ccc.<br>
+In a command prompt/shell, go to the lpsolve FreeMat directory and enter cvc.bat/sh ccc
+and the compilation is done. The result is fmlpsolve.dll/fmlpsolve.so.
+</p>
+
+<p>See also <a href="MatLab.htm">Using lpsolve from MATLAB</a>,
+            <a href="O-Matrix.htm">Using lpsolve from O-Matrix</a>,
+            <a href="Sysquake.htm">Using lpsolve from Sysquake</a>,
+            <a href="Scilab.htm">Using lpsolve from Scilab</a>,
+            <a href="Octave.htm">Using lpsolve from Octave</a>,
+            <a href="Euler.htm">Using lpsolve from Euler</a>,
+            <a href="Python.htm">Using lpsolve from Python</a>,
+            <a href="Sage.htm">Using lpsolve from Sage</a>,
+            <a href="PHP.htm">Using lpsolve from PHP</a>,
+            <a href="R.htm">Using lpsolve from R</a>,
+            <a href="MSF.htm">Using lpsolve from Microsoft Solver Foundation</a>
+</p>
+	</BODY>
+</html>

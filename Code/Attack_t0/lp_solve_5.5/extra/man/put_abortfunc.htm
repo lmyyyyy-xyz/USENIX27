@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>put_abortfunc</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>put_abortfunc</h1>
+					<p>Sets an abort routine.</p>
+					<p><b>void put_abortfunc(lprec </b>*<i>lp</i><b>, lphandle_intfunc </b><i>newctrlc</i><b>, void </b>*<i>ctrlchandle</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>put_abortfunc</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>newctrlc</i></p>
+					<p class="indent">The abort routine.<br>
+						<br>
+						typedef int (__WINAPI lphandle_intfunc)(lprec *lp, void *userhandle);<br>
+						<br>
+						Note the __WINAPI attribute. This is important under Windows. It ensures __stdcall calling
+						convention which is required.
+					</p>
+					<p class="dt"><i>ctrlchandle</i></p>
+					<p class="indent">A parameter that will be provided to the abort routine.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>put_abortfunc</b> function sets an abort routine.<br>
+						When set, the abort routine is called regularly. The user can do whatever he
+						wants in this routine. For example check if the user pressed abort. The return
+						value of this routine must be FALSE (0) or TRUE (1). If TRUE (1), then lp_solve
+						aborts the solver and returns with an appropriate code. The abort routine can
+						be cleared by specifying NULL as abort routine.<br>
+						The default is no abort routine (NULL).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int __WINAPI abortfunction(lprec *lp, void *userhandle)
+{
+ int doabort = FALSE;
+
+ /* do something */
+
+ return(doabort);
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_abortfunc(lp, abortfunction, NULL);
+
+  solve(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="put_logfunc.htm">put_logfunc</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

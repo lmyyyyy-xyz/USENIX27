@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>lag_solve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"  WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>lag_solve</h1>
+					<p>
+						Solve the model via Lagrangian relaxation.</p>
+
+                                        <p><b>The Lagrangian solver does not work. Do not use this call.</b></p>
+					<p>
+						<b>int lag_solve(lprec </b>*<i>lp</i><b>, REAL </b><i>start_bound</i><b>, int </b>
+						<i>num_iter</i><b>, short </b><i>verbose</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p></p><TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>TIMEOUT (-2)</TD>
+								<TD>A timeout occurred. A timeout was set via <A HREF="set_timeout.htm">set_timeout</A></TD>
+							</TR>
+							<TR>
+								<TD>USERABORT (-3)</TD>
+								<TD>The abort routine returned TRUE. See <A HREF="put_abortfunc.htm">put_abortfunc</A></TD>
+							</TR>
+							<TR>
+								<TD>OPTIMAL (0)</TD>
+								<TD>An optimal solution was obtained</TD>
+							</TR>
+							<TR>
+								<TD>INFEASIBLE (2)</TD>
+								<TD>The model is infeasible</TD>
+							</TR>
+							<TR>
+								<TD>FEAS_FOUND (6)</TD>
+								<TD>An feasible solution was obtained, but <i>num_iter</i> was reached</TD>
+							</TR>
+							<TR>
+								<TD>NO_FEAS_FOUND (7)</TD>
+								<TD>No feasible solution found</TD>
+							</TR>
+						</TABLE>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>start_bound</i></p>
+					<p class="indent">Initial bound.</p>
+					<p class="dt"><i>num_iter</i></p>
+					<p class="indent">Maximum number of iterations.</p>
+					<p class="dt"><i>verbose</i></p>
+					<p class="indent">Not used. Still included for backwards compatibility. Use <A href="set_lag_trace.htm">
+							set_lag_trace</A> to set the verbose level.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+
+                                        <p><b>The Lagrangian solver does not work. Do not use this call.</b></p>
+
+					<p>
+						The <b>lag_solve</b> function solves the model via Lagrangian relaxation. Gives
+						the ability to find an integer solution without the branch-and-bound algorithm.<br>
+						At least 1 Lagrangian constraint must be added via <a href="add_lag_con.htm">add_lag_con,
+							str_add_lag_con</a> before <i>lag_solve</i> can be used.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int ret;
+  REAL row[1+2]; /* must be 1 more then number of columns ! */
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  row[1] = 1.0;
+  row[2] = 1.0;
+  add_lag_con(lp, row, LE, 1.0);
+
+  ret = lag_solve(lp, 0, 30, FALSE);
+
+  delete_lp(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="solve.htm">solve</A>, <A HREF="get_statustext.htm">get_statustext</A>, <a href="is_feasible.htm">is_feasible</a>,
+						<A HREF="get_objective.htm">get_objective</A>, <A HREF="get_working_objective.htm">get_working_objective</A>, <a href="get_variables.htm">get_variables,
+							get_ptr_variables</a>, <a href="get_constraints.htm">get_constraints,
+							get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="get_sensitivity_rhs.htm">get_sensitivity_rhs,
+							get_ptr_sensitivity_rhs, get_dual_solution, get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">
+							get_sensitivity_obj, get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</a>, <A HREF="add_lag_con.htm">add_lag_con</A>,
+						<A HREF="get_Lrows.htm">get_Lrows</A>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

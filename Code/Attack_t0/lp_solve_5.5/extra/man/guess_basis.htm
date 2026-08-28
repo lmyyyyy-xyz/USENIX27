@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>guess_basis</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"  WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>guess_basis</h1>
+					<p>Create a starting base from the provided guess vector.</p>
+					<p>
+						<b>unsigned char guess_basis(lprec </b>*<i>lp</i><b>, REAL </b>*<i>guessvector</i><b>, int </b>*<i>basisvector</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>guess_basis</b> returns TRUE if a valid base could be termined and FALSE if not.
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>guessvector</i></p>
+					<p class="indent">
+						A vector that must contain a feasible solution vector. It must contain at least 1+<A HREF="get_Ncolumns.htm">get_Ncolumns</A> elements. Element 0 is not used.</p>
+					<p class="dt">
+						<i>basisvector</i></p>
+					<p class="indent">
+						When successful, this vector contains a feasible basis corresponding to guessvector.
+						The array must already be dimentioned for at least 1+<A href="get_Nrows.htm">get_Nrows</A>+<A href="get_Ncolumns.htm">get_Ncolumns</A> elements.
+						When the routine returns successful, <i>basisvector</i> is filled with the basis. This array can be provided to <A HREF="set_basis.htm">set_basis</A>.
+						</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						This routine is ment to find a basis based on provided variable values.
+						This basis can be provided to lp_solve via <A HREF="set_basis.htm">set_basis</A>.
+						This can result in getting faster to an optimal solution. However the simplex algorithm
+						doesn't guarantee you that.
+					</p>
+
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int ret;
+  REAL guessvector[1 + 2];
+  int basis[1 + 2 + 2];
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_maxim(lp);
+  str_add_constraint(lp, "1 0", LE, 3);
+  str_add_constraint(lp, "0 1", LE, 3);
+
+  guessvector[1] = 3;
+  guessvector[2] = 3;
+
+  ret = guess_basis(lp, guessvector, basis);
+  set_basis(lp, basis, TRUE);
+  set_print_sol(lp, TRUE);
+
+  solve(lp); /* notice that the number of iterations is NULL because we provided a base that is immediately optimal */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_basis.htm">get_basis</A>, <A HREF="set_basis.htm">set_basis</A>,
+						<a href="default_basis.htm">default_basis</a>,
+						<a href="get_basiscrash.htm">get_basiscrash</a>
+						<a href="set_basiscrash.htm">set_basiscrash</a></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Scaling</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Scaling</u></h1>
+					<p>Scaling is a very important issue to consider in mathematical computations on a computer.
+					A computer stores floating-point numbers with a limited precision because it uses a fixed
+					number of bytes to store them. Consider for example the result of the following calculation: 1/3
+					In our metric system, the result of this computation cannot be represented with a finite number
+					of digits. The value is 0.3333333333333... with an infinite number of digits. Because a computer
+					only has a certain precision, the result is stored with a finite number of digits. For regular
+					floating-point numbers this is about 15 digits, independent of its size. So this result would for
+					example be stored as 0.333333333333333 on a computer. The computation of 100000000000000000/3 would
+					be stored as 33333333333333300. In several cases, this is no problem. The stored value is close
+					enough to the value that is needed. However, when doing calculations, problems can arise because of
+					this. Especially if small and large values are added or subtracted from each other. In that case,
+					the precision of the small number is lost. This can result in the effect that calculated values
+					aren't correct anymore.</p>
+
+					<p>The more floating-point calculations are done, the more chance there is that numerical
+					instability occurs and doing calculations with big and small numbers results in faster occurrence
+					of this effect. Then there is also the effect of accumulating rounding errors which can result in
+					a totally screwed up data matrix after having done several calculations.</p>
+					
+					<p>The simplex algorithm is a typical iterating process where factors of thousands of floating
+					calculations are done to find the optimal solution. The chance of numerical instability is
+					then also quite big. But scaling not only improves numerical stability and minimizes rounding
+					errors, it also improves performance. This may seem strange, but it is true. When a model is
+					not scaled, the algorithm could reject certain pivot elements because they are too small and
+					because of this, the solver doesn't choose the shortest route to the solution. If a model is
+					proper scaled, this effect will not occur.</p>
+					
+					<p>There are several ways to cope with this and it starts with the input data. The chance for
+					numerical instability and rounding errors is considerably larger when the input data contains
+					both large and small numbers. So to improve stability, one must try to work with numbers that
+					are somewhat in the same range. Ideally in the neighbourhood of 1.</p>
+					
+					<p>You should realize, that you the user are probably in a better position to scale 
+					the problem than any computer algorithm. The way to do this is: first choose appropriately 
+					scaled units for the extensive variables of the problem, e.g., kilo-tons instead of pounds,
+					tankcar loads instead of gallons, millions of dollars instead of pennies, or nanometers instead 
+					of feet, so that the numerical spread of the coefficients in each single constraint, and in the
+					objective function, will be at most one or two orders of magnitude; and then second scale the
+					constraints themselves, by multiplying each entire constraint relation by an appropriate positive
+					constant, so that the numerical spread of the coefficients in the different constraints is at most
+					another one or two orders of magnitude.
+					For example saying:<br><br>
+					
+					10000 x1 + 20000 x2 &lt;= 30000<br><br>
+					
+					Can also be expressed as:<br><br>
+					
+					1 x1 + 2 x2 &lt;= 3<br><br>
+					</p>
+					<p>lp_solve also has some build-in scaling routines which can take over this scaling job from the
+					modeller or maybe better, to do additional scaling. This is implemented in such a way that it is transparent to the user. When scaling is done,
+					lp_solve scales rows and/or columns, but the user doesn't see anything of this process. The returned values
+					are still as if no scaling was done. See <A href="set_scaling.htm">set_scaling</A> for the possible scaling
+					types. Note that lp_solve, by default doesn't do scaling. It must be invoked explicitly. Also
+					note that even when scaling is enabled that integer variables are then again by default not scaled.
+					To scale also integer variables, SCALE_INTEGERS must be added to the scale mode. This is done because of
+					the nature of integer variables. If you want them integer, but you also scale them, then they aren't integer
+					anymore. It is possible to scale those variables with the SCALE_INTEGERS flag, but some accuracy on being
+					integer can be lost.
+					</p>
+					<p>Conslusion. You should always do some sort of scaling. It starts when you design the model.
+					Extra scaling can be accomplished by one of the scaling options of lp_solve.
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

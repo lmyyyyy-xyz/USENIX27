@@ -1,0 +1,1244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Using lpsolve from Microsoft Solver Foundation</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	        .style1
+            {
+                color: #FF0000;
+            }
+	</style>
+        <link rel="stylesheet" type="text/css" href="csharp.css" >
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Using lpsolve from Microsoft Solver Foundation</u></h1>
+<a name=" Microsoft_Solver_Foundation"></a>
+<h3>Microsoft Solver Foundation?</h3>
+<p>
+<a href="http://code.msdn.microsoft.com/solverfoundation">Microsoft Solver Foundation</a> is an extensible .NET framework that helps you model and solve complex problems by:</p>
+<ul>
+  <li>Modeling and solving scenarios by using constraints, goals, and data.</li>
+  <li>Programming in the Optimization Modeling Language (OML), in C# imperatively, in F# functionally, or in any .NET Framework language.</li>
+  <li>Integrating third-party solvers, such as Gurobi, Mosek™, FICO™ Xpress, LINDO, CPLEX&#174;, and lp_solve.</li>
+  <li>Using familiar interfaces in Microsoft Office Excel and SharePoint to create and solve models.</li>
+</ul>
+
+<p>
+<b>Modeling and solving capabilities</b><br />
+
+Solver Foundation Services (SFS) can automatically analyze models and determine which solver is most appropriate.
+If you are an advanced modeler, you can choose specific solvers and solver attributes.
+While solving the models, SFS manages all threading, many-core, synchronization, scheduling, and model execution issues.
+When finished, SFS produces reports about solver behavior and results, and provides additional information about solutions, including sensitivity.
+Finally, SFS allows LINQ data binding of model parameters and delivery of results in multiple formats.
+</p>
+
+<p>
+<b>Program in OML, F#, C#, VB, C++, IronPython, and more</b><br />
+
+Solver Foundation supports all the .NET Framework languages and provides samples in many of them.
+In addition, if you prefer a modeling language, you can use Solver Foundation's type safe optimization modeling language (OML).
+</p>
+
+<p>
+<b>Integrated and Third-Party Solvers</b><br />
+
+Solver Foundation allows new or existing third-party solvers to plug into the SFS directly, avoiding the need to learn a new modeling language or the significant overhead in managing solver specific solutions.
+These solvers include numerical, symbolic, and search algorithms that you can use in your models.
+There is a collection of certified partner wrappers for Gurobi, Mosek™, FICO™ Xpress, and LINDO, as well as reference wrapper source code for CPLEX&#174; and lp_solve.
+</p>
+
+<p>The following system diagram describes the extensible architecture of Microsoft Solver Foundation.<br />
+<br /><img src="http://code.msdn.microsoft.com/Project/Download/FileDownload.aspx?ProjectName=solverfoundation&amp;DownloadId=4847" alt="sf-arch.jpg" /><br />
+</p>
+
+<p>
+For more information see Microsoft Solver Foundation <a href="http://blogs.msdn.com/solverfoundation/">blog</a>
+</p>
+
+<a name="Introduction"></a>
+<h3>Introduction</h3>
+<p>Solver Foundation can be approached either at the Solver Foundation Services (SFS) level or via the APIs for specific kinds of solver.</p>
+
+<p>The SFS level is recommended for conceptual clarity of modeling, for ease of binding to data from various sources, for educational use, for introducing you to all the capabilities of Solver Foundation, for automatic selection of a solver to suit your model, and for construction of models which may require the use of more than one kind of solver.
+Solver Foundation will be heavily investing in the SFS.</p>
+
+<p>The Solver-specific APIs are intended for use by experienced programmers who clearly know which kind of solver they need to use, are prepared to write code to translate a model into a sequence of API calls, and where the usage is to be embedded in an application where the application is fully responsible for capturing the model and supplying the instance data.</p>
+
+<p>The advantage of using the SFS level is that code is (almost) solver independent. In the ideal case the system chooses which solver to use
+dependent of the model and availability of solvers. Solver choice can also be instructed via the configuration file. To have more control of the
+chosen solver and its parameters also a specific solver directive can be chosen in the code. Only that directive code is then solver specific.</p>
+
+<p>The advantage of using the API of the specific solver is that you have more control over the solvers' specific features.
+But the disadvantage is that you are targetting specifically that solver and it is thus more difficult to change solver.</p>
+
+<p>The Microsoft solver foundation team recommend use of the Solver Foundation Services unless you are absolutely sure you need to program direct to a specific solver API.</p>
+
+<a name="Microsoft_Foundation_Solver_and_lpsolve"></a>
+<h3>Microsoft Foundation Solver and lpsolve</h3>
+
+<p>lpsolve is callable from Microsoft Foundation Solver via a wrapper or plugin. As such, it looks like lpsolve is fully integrated
+with Microsoft Foundation Solver.<br />
+<br />
+This plugin acts as a bridge between Solver foundation and lpsolve.<br />
+Users of the plugin and MSF need to register the new solver in the app.config in order to use it.<br />
+<br />
+To use the lpsolve plugin with MSF:</p>
+<ul>
+ <li>
+   Copy the compiled lpsolve plugin wrapper code i.e LpSolvePlugIn.dll and the lpsolve library i.e lpsolve55.dll to the bin\Debug, bin\Release folder.
+   As an alternative, MSF has created a registry key "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft Solver Foundation" with a string value PluginDirectory.
+   The lpsolve plugin can also installed in this folder. MSF will search first in the folder of the executable that embeds Solver Foundation, and then in the plug-in directory specified in the registry key.
+   In 64-bit machines, Solver Foundation will also create the same registry key for 32-bit apps. The key will be stored under "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft"<br />
+ </li>
+ <li>
+   Add a new file App.config to the project or edit the existing App.config and paste the solver registration contents as below:<br>
+<pre>
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+&lt;configSections&gt;
+&lt;section name="MsfConfig"
+type="Microsoft.SolverFoundation.Services.MsfConfigSection, Microsoft.Solver.Foundation, Version=<span
+                        class="style1">{Version}</span>, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
+allowLocation="true"
+allowDefinition="Everywhere"
+allowExeDefinition="MachineToApplication"
+restartOnExternalChanges="true"
+requirePermission="true" /&gt;
+&lt;/configSections&gt;
+
+&lt;MsfConfig&gt;
+&lt;MsfPluginSolvers&gt;
+&lt;MsfPluginSolver name="LpSolveLP"
+capability="LP"
+assembly="LpSolvePlugIn.dll"
+solverclass="SolverFoundation.Plugin.LpSolve.LpSolveSolver"
+directiveclass="SolverFoundation.Plugin.LpSolve.LpSolveDirective"
+parameterclass="SolverFoundation.Plugin.LpSolve.LpSolveParams" /&gt;
+&lt;MsfPluginSolver name="LpSolveMIP"
+capability="MILP"
+assembly="LpSolvePlugIn.dll"
+solverclass="SolverFoundation.Plugin.LpSolve.LpSolveSolver"
+directiveclass="SolverFoundation.Plugin.LpSolve.LpSolveDirective"
+parameterclass="SolverFoundation.Plugin.LpSolve.LpSolveParams" /&gt;
+&lt;/MsfPluginSolvers&gt;
+&lt;/MsfConfig&gt;
+&lt;/configuration&gt;
+</pre>
+
+  <span class="style1">{Version}</span> must be replaced by the version of MSF that is used. For example 2.0.2.8632 or 2.0.3.9657
+
+ </li>
+</ul>
+
+<a name="LpSolveDirective_object"></a>
+<h3>LpSolveDirective object</h3>
+
+<p>Microsoft Foundation Services can instruct the solver via a directive.
+All properties and methods starting with LpSolve are lp_solve specific and control the solver. All others are inherited from the base Directive object.
+These are the available properties and methods:
+</p>
+
+<TABLE cellSpacing="1" cellPadding="1" width="100%" border="1">
+	<TR>
+		<TD>Arithmetic</TD>
+		<TD>Get or set the arithmetic to use for numeric solving. lp_solve only allows double arithmetic. Setting this property to something different from Double or Default will result in a NotImplementedException exception.</TD>
+	</TR>
+	<TR>
+		<TD>GetSensitivity</TD>
+		<TD>Whether to generate sensitivity information at report. The default is False.</TD>
+	</TR>
+	<TR>
+		<TD>LpSolveLogFunc</TD>
+		<TD>A log callback function to allow lp_solve to return information to the application. See <a href="put_logfunc.htm">put_logfunc</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveMsgFunc</TD>
+		<TD>A message callback function to allow lp_solve to return information to the application. See <a href="put_msgfunc.htm">put_msgfunc</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveAntiDegen</TD>
+                <TD>See <a href="set_anti_degen.htm">set_anti_degen</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBasiscrash</TD>
+                <TD>See <a href="set_basiscrash.htm">set_basiscrash</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBbDepthlimit</TD>
+                <TD>See <a href="set_bb_depthlimit.htm">set_bb_depthlimit</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBbFloorfirst</TD>
+                <TD>See <a href="set_bb_floorfirst.htm">set_bb_floorfirst</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBbRule</TD>
+                <TD>See <a href="set_bb_rule.htm">set_bb_rule</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBreakAtFirst</TD>
+                <TD>See <a href="set_break_at_first.htm">set_break_at_first</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveBreakAtValue</TD>
+                <TD>See <a href="set_break_at_value.htm">set_break_at_value</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveDebug</TD>
+                <TD>See <a href="set_debug.htm">set_debug</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpsb</TD>
+                <TD>See <a href="set_epsb.htm">set_epsb</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpsd</TD>
+                <TD>See <a href="set_epsd.htm">set_epsd</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpsel</TD>
+                <TD>See <a href="set_epsel.htm">set_epsel</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpsint</TD>
+                <TD>See <a href="set_epsint.htm">set_epsint</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpsperturb</TD>
+                <TD>See <a href="set_epsperturb.htm">set_epsperturb</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveEpspivot</TD>
+                <TD>See <a href="set_epspivot.htm">set_epspivot</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveImprove</TD>
+                <TD>See <a href="set_improve.htm">set_improve</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveInfinite</TD>
+                <TD>See <a href="set_infinite.htm">set_infinite</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveLogFile</TD>
+                <TD>See <a href="set_output.htm">set_outputfile</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveMaxpivot</TD>
+                <TD>See <a href="set_maxpivot.htm">set_maxpivot</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveMipGapAbs</TD>
+                <TD>See <a href="set_mip_gap.htm">set_mip_gap</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveMipGapRel</TD>
+                <TD>See <a href="set_mip_gap.htm">set_mip_gap</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveNegrange</TD>
+                <TD>See <a href="set_negrange.htm">set_negrange</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveObjBound</TD>
+                <TD>See <a href="set_obj_bound.htm">set_obj_bound</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveObjInBasis</TD>
+                <TD>See <a href="set_obj_in_basis.htm">set_obj_in_basis</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolvePivoting</TD>
+                <TD>See <a href="set_pivoting.htm">set_pivoting</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolvePresolve</TD>
+                <TD>See <a href="set_presolve.htm">set_presolve</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolvePresolveMaxLoops</TD>
+                <TD>See <a href="set_presolve.htm">set_presolve</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveReadParams</TD>
+                <TD>Read all settings from a file. See <a href="read_params.htm">read_params</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveScalelimit</TD>
+                <TD>See <a href="set_scalelimit.htm">set_scalelimit</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveScaling</TD>
+                <TD>See <a href="set_scaling.htm">set_scaling</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveSimplextype</TD>
+                <TD>See <a href="set_simplextype.htm">set_simplextype</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveSolutionlimit</TD>
+                <TD>See <a href="set_solutionlimit.htm">set_solutionlimit</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveTimeout</TD>
+                <TD>See <a href="set_timeout.htm">set_timeout</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveTrace</TD>
+                <TD>See <a href="set_trace.htm">set_trace</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveVerbose</TD>
+                <TD>See <a href="set_verbose.htm">set_verbose</a></TD>
+	</TR>
+	<TR>
+		<TD>MaximumGoalCount</TD>
+                <TD>Get and set the maximum number of goals to optimize. lp_solve allows only one goal. If something different from 1 is specified, a NotImplementedException will be thrown.
+        </TD>
+	</TR>
+	<TR>
+		<TD>TimeLimit</TD>
+                <TD>Get and set the time-limit (in milliseconds) of Solve. No limit if it is set to a negative value. Default value is -1 (no limit).</TD>
+	</TR>
+	<TR>
+		<TD>WaitLimit</TD>
+                <TD>Get and set the amount of time (in milliseconds) the SFS will wait for a result after requesting a timeout/abort.</TD>
+	</TR>
+</TABLE>
+
+<a name="LpSolveSolver_object"></a>
+<h3>LpSolveSolver object (API)</h3>
+
+<p>When the solver is called directly via the API, the LpSolveSolver object is used to build and solve the model.
+All properties and methods starting with LpSolve are lp_solve specific and control the solver. All others are inherited from the base object.
+These are the available properties and methods:
+</p>
+
+<TABLE cellSpacing="1" cellPadding="1" width="100%" border="1">
+	<TR>
+		<TD>LpSolveLogFunc</TD>
+		<TD>A log callback function to allow lp_solve to return information to the application. See <a href="put_logfunc.htm">put_logfunc</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveMsgFunc</TD>
+		<TD>A message callback function to allow lp_solve to return information to the application. See <a href="put_msgfunc.htm">put_msgfunc</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolvePrintDebugDump</TD>
+                <TD>See <a href="print_debugdump.htm">print_debugdump</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveWriteLp</TD>
+                <TD>See <a href="write_lp.htm">write_lp</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveWriteMPS</TD>
+                <TD>See <a href="write_mps.htm">write_mps</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveWriteParams</TD>
+                <TD>See <a href="write_params.htm">write_params</a></TD>
+	</TR>
+	<TR>
+		<TD>LpSolveWriteXLI</TD>
+                <TD>See <a href="write_XLI.htm">write_XLI</a></TD>
+	</TR>
+</TABLE>
+
+<p>The LpSolveSolver object can also be subclassed to override the LpSolveLogFunc and LpSolveMsgFunc methods.
+That is an alternative for providing the these functions via the LpSolveLogFunc and LpSolveMsgFunc properties.
+That will be shown in the examples below.
+</p>
+
+
+<a name="SFS_examples"></a>
+<h3>SFS examples</h3>
+
+<a name="Example1"></a>
+<h4>Example1</h4>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example1()
+{
+    <span class="rem">// Create the model</span>
+    SolverContext context = SolverContext.GetContext();
+    Model model = context.CreateModel();
+    <span class="rem">// Add a decision</span>
+    Decision x = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"x"</span>);
+    model.AddDecisions(x);
+    <span class="rem">// Add a constraint</span>
+    model.AddConstraints(<span class="str">"one"</span>, x == 1);
+
+    <span class="rem">//SimplexDirective simplex = new SimplexDirective();</span>
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective();
+
+    <span class="rem">// Solve the problem</span>
+    Solution sol = context.Solve(simplex);
+    <span class="rem">// Display the results</span>
+    Console.WriteLine(<span class="str">"x: {0}"</span>, x);
+
+    Report report = sol.GetReport();
+
+    Console.WriteLine(report);
+
+    <span class="kwrd">using</span> (StreamWriter sw = <span class="kwrd">new</span> StreamWriter(<span class="str">"Example1.mps"</span>))
+    {
+        context.SaveModel(FileFormat.FreeMPS, sw);
+    }
+}</pre>
+
+<p>This gives as output:</p>
+
+<pre>
+x: 1
+===Solver Foundation Service Report===
+Date: 16-May-10 17:20:36
+Version: Microsoft Solver Foundation 2.0.3.9657 Express Edition
+Model Name: Default
+Capabilities Applied: LP
+Solve Time (ms): 34
+Total Time (ms): 113
+Solve Completion Status: Optimal
+Solver Selected: SolverFoundation.Plugin.LpSolve.LpSolveSolver
+Directives:
+LpSolve(SolveAntiDegen:ANTIDEGEN_FIXEDVARS, ANTIDEGEN_STALLING,SolveBasiscrash:C
+RASH_NOTHING,SolveBbDepthlimit:-50,SolveBbFloorfirst:BRANCH_AUTOMATIC,SolveBbRul
+e:NODE_PSEUDONONINTSELECT, NODE_GREEDYMODE, NODE_DYNAMICMODE, NODE_RCOSTFIXING,S
+olveBreakAtFirst:False,SolveBreakAtValue:-1E+30,SolveDebug:False,SolveEpsb:1E-10
+,SolveEpsd:1E-09,SolveEpsel:1E-12,SolveEpsint:1E-07,SolveEpsperturb:1E-05,SolveE
+pspivot:2E-07,SolveImprove:IMPROVE_DEFAULT,SolveInfinite:1E+30,SolveMaxpivot:250
+,SolveMipGapAbs:1E-11,SolveMipGapRel:1E-11,SolveNegrange:-1000000,SolveObjBound:
+1E+30,SolveObjInBasis:True,SolvePivoting:PRICER_DEVEX, PRICE_ADAPTIVE,SolvePreso
+lve:PRESOLVE_NONE,SolvePresolveMaxLoops:2147483647,SolveScalelimit:5,SolveScalin
+g:SCALE_GEOMETRIC, SCALE_EQUILIBRATE, SCALE_INTEGERS,SolveSimplextype:SIMPLEX_DU
+AL_PRIMAL,SolveSolutionlimit:1,SolveTimeout(s):4294967296,SolveTrace:False,Solve
+Verbose:4,Arithmetic:Double,TimeLimit (ms):-1,GetSensitivity:False,MaximumGoalCo
+unt:1)
+===SolverDetails====
+Iteration Count:1
+Presolve loops:2147483647
+Pivot count:250
+===Model details===
+Variables:1
+Rows:1
+Non-zeros:1
+===Solution Details===
+Goals:
+
+Decisions:
+x: 1
+</pre>
+
+<a name="Example2"></a>
+<h4>Example2</h4>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example2()
+{
+    <span class="rem">// Get the context and create a new model.</span>
+    SolverContext context = SolverContext.GetContext();
+    Model model = context.CreateModel();
+    <span class="rem">// Create two decision variables representing the number of barrels to</span>
+    <span class="rem">// purchase from two countries.</span>
+    <span class="rem">// AddDecisions tells the model about the two variables.</span>
+    Decision vz = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"barrels_venezuela"</span>);
+    Decision sa = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"barrels_saudiarabia"</span>);
+    model.AddDecisions(vz, sa);
+    <span class="rem">// Adding five constraints. The first line defines the allowable range // for the two decision variables. The other constraints put</span>
+    <span class="rem">// minimums on the total yield of three products.</span>
+    model.AddConstraints(<span class="str">"limits"</span>,
+    0 &lt;= vz &lt;= 9000,
+    0 &lt;= sa &lt;= 6000);
+    model.AddConstraints(<span class="str">"production"</span>,
+    0.3 * sa + 0.4 * vz &gt;= 2000,
+    0.4 * sa + 0.2 * vz &gt;= 1500,
+    0.2 * sa + 0.3 * vz &gt;= 500);
+    <span class="rem">// AddGoal states that we want to minimize the total cost subject to the</span>
+    <span class="rem">// above constraints</span>
+    model.AddGoal(<span class="str">"cost"</span>, GoalKind.Minimize,
+    20 * sa + 15 * vz);
+
+    <span class="rem">// Solve the problem using the simplex solver</span>
+    <span class="rem">//SimplexDirective simplex = new SimplexDirective();</span>
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective();
+    Solution solution = context.Solve(simplex);
+    <span class="rem">// Report the solution values</span>
+    Report report = solution.GetReport();
+    Console.WriteLine(<span class="str">"vz: {0}, sa: {1}"</span>, vz, sa);
+    Console.Write(<span class="str">"{0}"</span>, report);
+
+    <span class="kwrd">using</span> (StreamWriter sw = <span class="kwrd">new</span> StreamWriter(<span class="str">"Example2.mps"</span>))
+    {
+        context.SaveModel(FileFormat.FreeMPS, sw);
+    }
+}</pre>
+<p>This gives as output:</p>
+
+<pre>
+vz: 3848290697215999/1099511627776, sa: 2199023255552001/1099511627776
+===Solver Foundation Service Report===
+Date: 16-May-10 17:27:53
+Version: Microsoft Solver Foundation 2.0.3.9657 Express Edition
+Model Name: Default
+Capabilities Applied: LP
+Solve Time (ms): 35
+Total Time (ms): 119
+Solve Completion Status: Optimal
+Solver Selected: SolverFoundation.Plugin.LpSolve.LpSolveSolver
+Directives:
+LpSolve(SolveAntiDegen:ANTIDEGEN_FIXEDVARS, ANTIDEGEN_STALLING,SolveBasiscrash:C
+RASH_NOTHING,SolveBbDepthlimit:-50,SolveBbFloorfirst:BRANCH_AUTOMATIC,SolveBbRul
+e:NODE_PSEUDONONINTSELECT, NODE_GREEDYMODE, NODE_DYNAMICMODE, NODE_RCOSTFIXING,S
+olveBreakAtFirst:False,SolveBreakAtValue:-1E+30,SolveDebug:False,SolveEpsb:1E-10
+,SolveEpsd:1E-09,SolveEpsel:1E-12,SolveEpsint:1E-07,SolveEpsperturb:1E-05,SolveE
+pspivot:2E-07,SolveImprove:IMPROVE_DEFAULT,SolveInfinite:1E+30,SolveMaxpivot:250
+,SolveMipGapAbs:1E-11,SolveMipGapRel:1E-11,SolveNegrange:-1000000,SolveObjBound:
+1E+30,SolveObjInBasis:True,SolvePivoting:PRICER_DEVEX, PRICE_ADAPTIVE,SolvePreso
+lve:PRESOLVE_NONE,SolvePresolveMaxLoops:2147483647,SolveScalelimit:5,SolveScalin
+g:SCALE_GEOMETRIC, SCALE_EQUILIBRATE, SCALE_INTEGERS,SolveSimplextype:SIMPLEX_DU
+AL_PRIMAL,SolveSolutionlimit:1,SolveTimeout(s):4294967296,SolveTrace:False,Solve
+Verbose:4,Arithmetic:Double,TimeLimit (ms):-1,GetSensitivity:False,MaximumGoalCo
+unt:1)
+===SolverDetails====
+Iteration Count:2
+Presolve loops:2147483647
+Pivot count:250
+===Model details===
+Variables:2
+Rows:6
+Non-zeros:10
+===Solution Details===
+Goals:
+cost: 92500
+
+Decisions:
+barrels_venezuela: 3500
+barrels_saudiarabia: 2000
+</pre>
+
+<a name="Example3"></a>
+<h4>Example3</h4>
+
+<p>It is also possible to return and access the sensitivity information (from MSF version 2.1). This is demonstrated by this example.
+This is the same example as in the <a href="sensitivity.htm">sensitivity</a> section.</p>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example3()
+{
+    SolverContext context = SolverContext.GetContext();
+    Model model = context.CreateModel();
+    Decision COLONE = <span class="kwrd">new</span> Decision(Domain.RealRange(28.6, Rational.PositiveInfinity), <span class="str">"COLONE"</span>);
+    Decision COLTWO = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"COLTWO"</span>);
+    Decision COLTHREE = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"COLTHREE"</span>);
+    Decision COLFOUR = <span class="kwrd">new</span> Decision(Domain.RealRange(18.0, 48.98), <span class="str">"COLFOUR"</span>);
+    model.AddDecisions(COLONE, COLTWO, COLTHREE, COLFOUR);
+
+    model.AddConstraints(<span class="str">"THISROW"</span>,
+    +78.26 * COLTWO + 2.9 * COLFOUR &gt;= 92.3);
+
+    model.AddConstraints(<span class="str">"THATROW"</span>,
+    +0.24 * COLONE + 11.31 * COLTHREE &lt;= 14.8);
+
+    model.AddConstraints(<span class="str">"LASTROW"</span>,
+    +12.68 * COLONE + 0.08 * COLTHREE + 0.9 * COLFOUR &gt;= 4);
+
+    model.AddGoal(<span class="str">"cost"</span>, GoalKind.Minimize, COLONE + 3 * COLTWO + 6.24 * COLTHREE + 0.1 * COLFOUR);
+
+    <span class="rem">//SimplexDirective simplex = new SimplexDirective(); simplex.GetSensitivity = true;</span>
+    <span class="rem">//LindoSimplexDirective simplex = new LindoSimplexDirective();</span>
+    <span class="rem">//GurobiDirective simplex = new GurobiDirective(); simplex.GetSensitivity = true;</span>
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective(); simplex.GetSensitivity = <span class="kwrd">true</span>;
+
+    Solution solution = context.Solve(simplex);
+    Report report = solution.GetReport();
+    Console.Write(<span class="str">"{0}"</span>, report);
+
+    LinearReport lpReport = report <span class="kwrd">as</span> LinearReport;
+    <span class="kwrd">object</span> ShadowPrices = lpReport.GetAllShadowPrices();
+    <span class="kwrd">object</span> ConstraintBoundsSensitivity = lpReport.GetAllConstraintBoundsSensitivity();
+
+    Console.WriteLine(<span class="str">"Decisions"</span>);
+    <span class="kwrd">foreach</span> (Decision d <span class="kwrd">in</span> solution.Decisions)
+        Console.WriteLine(<span class="str">"Name: "</span> + d.Name + <span class="str">", Description: "</span> + d.Description);
+
+    Console.WriteLine(<span class="str">"GetAllShadowPrices:"</span>);
+    <span class="kwrd">foreach</span> (KeyValuePair&lt;<span class="kwrd">string</span>, Rational&gt; o <span class="kwrd">in</span> lpReport.GetAllShadowPrices())
+        Console.WriteLine(<span class="str">"Key: "</span> + o.Key + <span class="str">", Value: "</span> + o.Value.ToDouble().ToString());
+
+    Console.WriteLine(<span class="str">"GetAllConstraintBoundsSensitivity:"</span>);
+    <span class="kwrd">foreach</span> (KeyValuePair&lt;<span class="kwrd">string</span>, LinearSolverSensitivityRange&gt; o <span class="kwrd">in</span> lpReport.GetAllConstraintBoundsSensitivity())
+        Console.WriteLine(<span class="str">"Key: "</span> + o.Key + <span class="str">", Current: "</span> + o.Value.Current.ToDouble().ToString()  + <span class="str">", Value.Lower: "</span> + o.Value.Lower.ToDouble().ToString() + <span class="str">", Value.Upper: "</span> + o.Value.Upper.ToDouble().ToString());
+
+    <span class="kwrd">object</span>[] indexes = <span class="kwrd">new</span> <span class="kwrd">object</span>[0];
+    Console.WriteLine(<span class="str">"GetGoalCoefficientSensitivity:"</span>);
+    <span class="kwrd">foreach</span> (Decision d <span class="kwrd">in</span> solution.Decisions)
+    {
+        LinearSolverSensitivityRange ? o = lpReport.GetGoalCoefficientSensitivity(d, indexes);
+        Console.WriteLine(<span class="str">"Name: "</span> + d.Name + <span class="str">", Current: "</span> + o.Value.Current.ToDouble().ToString() + <span class="str">", Lower: "</span> + o.Value.Lower.ToDouble().ToString() + <span class="str">", Upper: "</span> + o.Value.Upper.ToDouble().ToString());
+    }
+
+    <span class="kwrd">using</span> (StreamWriter sw = <span class="kwrd">new</span> StreamWriter(<span class="str">"Example3.mps"</span>))
+    {
+        context.SaveModel(FileFormat.FreeMPS, sw);
+    }
+}</pre>
+<p>Note that GetSensitivity on the directive must be set on true to get sensitivity information.
+By default this is not set and as in the examples above there is no sensitivity information provided if not set.</p>
+
+<p>This gives as output:</p>
+
+<pre>
+===Solver Foundation Service Report===
+Date: 16-May-10 17:32:08
+Version: Microsoft Solver Foundation 2.0.3.9657 Express Edition
+Model Name: Default
+Capabilities Applied: LP
+Solve Time (ms): 34
+Total Time (ms): 119
+Solve Completion Status: Optimal
+Solver Selected: SolverFoundation.Plugin.LpSolve.LpSolveSolver
+Directives:
+LpSolve(SolveAntiDegen:ANTIDEGEN_FIXEDVARS, ANTIDEGEN_STALLING,SolveBasiscrash:C
+RASH_NOTHING,SolveBbDepthlimit:-50,SolveBbFloorfirst:BRANCH_AUTOMATIC,SolveBbRul
+e:NODE_PSEUDONONINTSELECT, NODE_GREEDYMODE, NODE_DYNAMICMODE, NODE_RCOSTFIXING,S
+olveBreakAtFirst:False,SolveBreakAtValue:-1E+30,SolveDebug:False,SolveEpsb:1E-10
+,SolveEpsd:1E-09,SolveEpsel:1E-12,SolveEpsint:1E-07,SolveEpsperturb:1E-05,SolveE
+pspivot:2E-07,SolveImprove:IMPROVE_DEFAULT,SolveInfinite:1E+30,SolveMaxpivot:250
+,SolveMipGapAbs:1E-11,SolveMipGapRel:1E-11,SolveNegrange:-1000000,SolveObjBound:
+1E+30,SolveObjInBasis:True,SolvePivoting:PRICER_DEVEX, PRICE_ADAPTIVE,SolvePreso
+lve:PRESOLVE_NONE,SolvePresolveMaxLoops:2147483647,SolveScalelimit:5,SolveScalin
+g:SCALE_GEOMETRIC, SCALE_EQUILIBRATE, SCALE_INTEGERS,SolveSimplextype:SIMPLEX_DU
+AL_PRIMAL,SolveSolutionlimit:1,SolveTimeout(s):4294967296,SolveTrace:False,Solve
+Verbose:4,Arithmetic:Double,TimeLimit (ms):-1,GetSensitivity:True,MaximumGoalCou
+nt:1)
+===SolverDetails====
+Iteration Count:1
+Presolve loops:2147483647
+Pivot count:250
+===Model details===
+Variables:4
+Rows:4
+Non-zeros:11
+===Solution Details===
+Goals:
+cost: 31.7827586206897
+
+Decisions:
+COLONE: 28.6
+COLTWO: 0
+COLTHREE: 0
+COLFOUR: 31.8275862068966
+
+Shadow Pricing:
+THISROW: 0.0344827586206897
+THATROW: 0
+LASTROW: 0
+
+Goal Coefficients:
+COLONE: 1 [0 Infinity]
+COLTWO: 3 [2.69862068965517 Infinity]
+COLTHREE: 6.24 [0 Infinity]
+COLFOUR: 0.1 [-Infinity 0.111167901865576]
+
+Constraint Bounds:
+THISROW: 92.3 [52.2 142.042]
+THATROW: 14.8 [-Infinity Infinity]
+LASTROW: 4 [-Infinity Infinity]
+</pre>
+
+<p>Note that sensitivity information can also be retrieved from the report in variables via the methods GetAllShadowPrices() and GetAllConstraintBoundsSensitivity()
+</p>
+
+<a name="Example4"></a>
+<h4>Example4</h4>
+
+<p>This example is an extension to Example3. Sensitivity is not asked and thus not reported. COLFOUR is defined as integer and an extra constraint is added.
+This constraint will be removed afterwards.
+Also log and message callback functions are set to show the lp_solve optimization process.</p>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> LpSolveLogFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, <span class="kwrd">string</span> buffer)
+{
+    Console.Write(<span class="str">"{0}"</span>, buffer);
+}
+
+<span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> LpSolveMsgFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, LpSolveNativeInterface.lpsolve.lpsolve_msgmask message)
+{
+    Console.Write(<span class="str">"{0}\n"</span>, message);
+}
+
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example4()
+{
+    SolverContext context = SolverContext.GetContext();
+    Model model = context.CreateModel();
+    Decision COLONE = <span class="kwrd">new</span> Decision(Domain.RealRange(28.6, Rational.PositiveInfinity), <span class="str">"COLONE"</span>);
+    Decision COLTWO = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"COLTWO"</span>);
+    Decision COLTHREE = <span class="kwrd">new</span> Decision(Domain.RealNonnegative, <span class="str">"COLTHREE"</span>);
+    Decision COLFOUR = <span class="kwrd">new</span> Decision(Domain.IntegerRange(18.0, 48.98), <span class="str">"COLFOUR"</span>);
+    model.AddDecisions(COLONE, COLTWO, COLTHREE, COLFOUR);
+
+    model.AddConstraints(<span class="str">"THISROW"</span>,
+    +78.26 * COLTWO + 2.9 * COLFOUR &gt;= 92.3);
+
+    model.AddConstraints(<span class="str">"THATROW"</span>,
+    +0.24 * COLONE + 11.31 * COLTHREE &lt;= 14.8);
+
+    model.AddConstraints(<span class="str">"LASTROW"</span>,
+    +12.68 * COLONE + 0.08 * COLTHREE + 0.9 * COLFOUR &gt;= 4);
+
+    Constraint extrarow = model.AddConstraints(<span class="str">"EXTRAROW"</span>, +78.26 * COLTWO + 2.9 * COLFOUR &gt;= 92.4);
+
+    model.AddGoal(<span class="str">"cost"</span>, GoalKind.Minimize, COLONE + 3 * COLTWO + 6.24 * COLTHREE + 0.1 * COLFOUR);
+
+    <span class="rem">//SimplexDirective simplex = new SimplexDirective();</span>
+    <span class="rem">//LindoSimplexDirective simplex = new LindoSimplexDirective();</span>
+    <span class="rem">//GurobiDirective simplex = new GurobiDirective();</span>
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective(); simplex.LpSolveMsgFunc = LpSolveMsgFunc; simplex.LpSolveVerbose = 4; simplex.LpSolveLogFunc = LpSolveLogFunc;
+
+    Solution solution = context.Solve(simplex);
+    Report report = solution.GetReport();
+    Console.Write(<span class="str">"{0}"</span>, report);
+
+    model.RemoveConstraint(extrarow);
+
+    solution = context.Solve(simplex);
+    report = solution.GetReport();
+    Console.Write(<span class="str">"{0}"</span>, report);
+}</pre>
+
+<p>This gives as output:</p>
+
+<pre>
+Model name:  '' - run #1
+Objective:   Minimize(R0)
+
+SUBMITTED
+Model size:        4 constraints,       4 variables,            9 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+The primal and dual simplex pricing strategy set to 'Devex'.
+
+
+Relaxed solution       31.7862068966 after          2 iter is B&amp;B base.
+
+MSG_LPOPTIMAL
+Feasible solution               31.8 after          3 iter,         1 nodes (gap
+ 0.0%)
+MSG_MILPFEASIBLE
+Improved solution      31.7958343982 after          4 iter,         2 nodes (gap
+ 0.0%)
+MSG_MILPBETTER
+
+Optimal solution       31.7958343982 after          4 iter,         2 nodes (gap
+ 0.0%).
+
+Excellent numeric accuracy ||*|| = 0
+
+ MEMO: lp_solve version 5.5.2.14 for 32 bit OS, with 64 bit REAL variables.
+      In the total iteration count 4, 0 (0.0%) were bound flips.
+      There were 1 refactorizations, 0 triggered by time and 0 by density.
+       ... on average 4.0 major pivots per refactorization.
+      The largest [LUSOL v2.2.1.0] fact(B) had 8 NZ entries, 1.0x largest basis.
+
+      The maximum B&amp;B level was 2, 1.0x MIP order, 2 at the optimal solution.
+      The constraint matrix inf-norm is 78.26, with a dynamic range of 978.25.
+      Time to load data was 0.011 seconds, presolve used 0.005 seconds,
+       ... 0.003 seconds in simplex solver, in total 0.019 seconds.
+===Solver Foundation Service Report===
+Date: 17-May-10 22:41:11
+Version: Microsoft Solver Foundation 2.0.3.9657 Express Edition
+Model Name: Default
+Capabilities Applied: MILP
+Solve Time (ms): 39
+Total Time (ms): 133
+Solve Completion Status: Optimal
+Solver Selected: SolverFoundation.Plugin.LpSolve.LpSolveSolver
+Directives:
+LpSolve(SolveAntiDegen:ANTIDEGEN_FIXEDVARS, ANTIDEGEN_STALLING,SolveBasiscrash:C
+RASH_NOTHING,SolveBbDepthlimit:-50,SolveBbFloorfirst:BRANCH_AUTOMATIC,SolveBbRul
+e:NODE_PSEUDONONINTSELECT, NODE_GREEDYMODE, NODE_DYNAMICMODE, NODE_RCOSTFIXING,S
+olveBreakAtFirst:False,SolveBreakAtValue:-1E+30,SolveDebug:False,SolveEpsb:1E-10
+,SolveEpsd:1E-09,SolveEpsel:1E-12,SolveEpsint:1E-07,SolveEpsperturb:1E-05,SolveE
+pspivot:2E-07,SolveImprove:IMPROVE_DEFAULT,SolveInfinite:1E+30,SolveMaxpivot:250
+,SolveMipGapAbs:1E-11,SolveMipGapRel:1E-11,SolveNegrange:-1000000,SolveObjBound:
+1E+30,SolveObjInBasis:True,SolvePivoting:PRICER_DEVEX, PRICE_ADAPTIVE,SolvePreso
+lve:PRESOLVE_NONE,SolvePresolveMaxLoops:2147483647,SolveScalelimit:5,SolveScalin
+g:SCALE_GEOMETRIC, SCALE_EQUILIBRATE, SCALE_INTEGERS,SolveSimplextype:SIMPLEX_DU
+AL_PRIMAL,SolveSolutionlimit:1,SolveTimeout(s):4294967296,SolveTrace:False,Solve
+Verbose:4,Arithmetic:Double,TimeLimit (ms):-1,GetSensitivity:False,MaximumGoalCo
+unt:1)
+===SolverDetails====
+Iteration Count:4
+Presolve loops:2147483647
+Node Count:2
+===Model details===
+Variables:4
+Rows:5
+Non-zeros:13
+===Solution Details===
+Goals:
+cost: 31.79583439816
+
+Decisions:
+COLONE: 28.6
+COLTWO: 0.03194479938666
+COLTHREE: 0
+COLFOUR: 31
+
+Model name:  '' - run #1
+Objective:   Minimize(R0)
+
+SUBMITTED
+Model size:        3 constraints,       4 variables,            7 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+The primal and dual simplex pricing strategy set to 'Devex'.
+
+
+Relaxed solution       31.7827586207 after          1 iter is B&amp;B base.
+
+MSG_LPOPTIMAL
+Feasible solution               31.8 after          2 iter,         1 nodes (gap
+ 0.1%)
+MSG_MILPFEASIBLE
+Improved solution      31.7920010222 after          3 iter,         2 nodes (gap
+ 0.0%)
+MSG_MILPBETTER
+
+Optimal solution       31.7920010222 after          3 iter,         2 nodes (gap
+ 0.0%).
+
+Excellent numeric accuracy ||*|| = 0
+
+ MEMO: lp_solve version 5.5.2.14 for 32 bit OS, with 64 bit REAL variables.
+      In the total iteration count 3, 0 (0.0%) were bound flips.
+      There were 1 refactorizations, 0 triggered by time and 0 by density.
+       ... on average 3.0 major pivots per refactorization.
+      The largest [LUSOL v2.2.1.0] fact(B) had 6 NZ entries, 1.0x largest basis.
+
+      The maximum B&amp;B level was 2, 1.0x MIP order, 2 at the optimal solution.
+      The constraint matrix inf-norm is 78.26, with a dynamic range of 978.25.
+      Time to load data was 0.000 seconds, presolve used 0.001 seconds,
+       ... 0.002 seconds in simplex solver, in total 0.003 seconds.
+===Solver Foundation Service Report===
+Date: 17-May-10 22:41:12
+Version: Microsoft Solver Foundation 2.0.3.9657 Express Edition
+Model Name: Default
+Capabilities Applied: MILP
+Solve Time (ms): 4
+Total Time (ms): 5
+Solve Completion Status: Optimal
+Solver Selected: SolverFoundation.Plugin.LpSolve.LpSolveSolver
+Directives:
+LpSolve(SolveAntiDegen:ANTIDEGEN_FIXEDVARS, ANTIDEGEN_STALLING,SolveBasiscrash:C
+RASH_NOTHING,SolveBbDepthlimit:-50,SolveBbFloorfirst:BRANCH_AUTOMATIC,SolveBbRul
+e:NODE_PSEUDONONINTSELECT, NODE_GREEDYMODE, NODE_DYNAMICMODE, NODE_RCOSTFIXING,S
+olveBreakAtFirst:False,SolveBreakAtValue:-1E+30,SolveDebug:False,SolveEpsb:1E-10
+,SolveEpsd:1E-09,SolveEpsel:1E-12,SolveEpsint:1E-07,SolveEpsperturb:1E-05,SolveE
+pspivot:2E-07,SolveImprove:IMPROVE_DEFAULT,SolveInfinite:1E+30,SolveMaxpivot:250
+,SolveMipGapAbs:1E-11,SolveMipGapRel:1E-11,SolveNegrange:-1000000,SolveObjBound:
+1E+30,SolveObjInBasis:True,SolvePivoting:PRICER_DEVEX, PRICE_ADAPTIVE,SolvePreso
+lve:PRESOLVE_NONE,SolvePresolveMaxLoops:2147483647,SolveScalelimit:5,SolveScalin
+g:SCALE_GEOMETRIC, SCALE_EQUILIBRATE, SCALE_INTEGERS,SolveSimplextype:SIMPLEX_DU
+AL_PRIMAL,SolveSolutionlimit:1,SolveTimeout(s):4294967296,SolveTrace:False,Solve
+Verbose:4,Arithmetic:Double,TimeLimit (ms):-1,GetSensitivity:False,MaximumGoalCo
+unt:1)
+===SolverDetails====
+Iteration Count:3
+Presolve loops:2147483647
+Node Count:2
+===Model details===
+Variables:4
+Rows:4
+Non-zeros:11
+===Solution Details===
+Goals:
+cost: 31.7920010222336
+
+Decisions:
+COLONE: 28.6
+COLTWO: 0.0306670074111935
+COLTHREE: 0
+COLFOUR: 31
+</pre>
+
+<a name="API_examples"></a>
+<h3>API examples</h3>
+
+<a name="Example5"></a>
+<h4>Example5</h4>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> LpSolveLogFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, <span class="kwrd">string</span> buffer)
+{
+    Console.Write(<span class="str">"{0}"</span>, buffer);
+}
+
+<span class="kwrd">private</span> <span class="kwrd">static</span> <span class="kwrd">void</span> LpSolveMsgFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, LpSolveNativeInterface.lpsolve.lpsolve_msgmask message)
+{
+    Console.Write(<span class="str">"{0}\n"</span>, message);
+}
+
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example5()
+{
+    LpSolveSolver solver = <span class="kwrd">new</span> LpSolveSolver();
+    <span class="rem">//SimplexSolver solver = new SimplexSolver();</span>
+
+    <span class="rem">// data about the projects.</span>
+    <span class="kwrd">double</span>[] estimatedProfitOfProjectX = <span class="kwrd">new</span> <span class="kwrd">double</span>[] { 1, 1.8, 1.6, 0.8, 1.4 };
+    <span class="kwrd">double</span>[] capitalRequiredForProjectX = <span class="kwrd">new</span> <span class="kwrd">double</span>[] { 6, 12, 10, 4, 8 };
+    <span class="kwrd">double</span> availableCapital = 20;
+    <span class="rem">// decision variables.</span>
+    <span class="kwrd">int</span>[] chooseProjectX = <span class="kwrd">new</span> <span class="kwrd">int</span>[5];
+    <span class="kwrd">int</span> goal;
+    solver.AddRow(<span class="str">"goal"</span>, <span class="kwrd">out</span> goal);
+    solver.AddGoal(goal, 0, <span class="kwrd">false</span>);
+    <span class="kwrd">int</span> expenditure;
+    solver.AddRow(<span class="str">"expenditure"</span>, <span class="kwrd">out</span> expenditure);
+    solver.SetBounds(expenditure, 0, availableCapital);
+    <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; 5; i++)
+    {
+        solver.AddVariable(<span class="kwrd">string</span>.Format(<span class="str">"project{0}"</span>, i),
+        <span class="kwrd">out</span> chooseProjectX[i]);
+        solver.SetBounds(chooseProjectX[i], 0, 1);
+        <span class="rem">// we either choose or don't choose the project; no half way decisions.</span>
+        solver.SetIntegrality(chooseProjectX[i], <span class="kwrd">true</span>);
+        solver.SetCoefficient(goal, chooseProjectX[i],
+        estimatedProfitOfProjectX[i]);
+        solver.SetCoefficient(expenditure, chooseProjectX[i],
+        capitalRequiredForProjectX[i]);
+    }
+
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective(); simplex.LpSolveReadParams(<span class="str">@"params.par"</span>, <span class="str">""</span>); simplex.GetSensitivity = <span class="kwrd">true</span>; simplex.LpSolveLogFunc = LpSolveLogFunc; simplex.LpSolveMsgFunc = LpSolveMsgFunc; LpSolveParams param = <span class="kwrd">new</span> LpSolveParams(simplex);
+    <span class="rem">//SimplexSolverParams param = new SimplexSolverParams(); param.MixedIntegerGenerateCuts = true;</span>
+
+    ILinearSolution solution = solver.Solve(param);
+
+    ILinearSolverReport sensitivity = solver.GetReport(LinearSolverReportType.Sensitivity);
+
+    Console.WriteLine(solver.MipResult);
+    <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; 5; i++)
+    {
+        Console.WriteLine(<span class="str">"Project {0} is {1} selected."</span>, i,
+        solver.GetValue(chooseProjectX[i]) == 1 ? <span class="str">""</span> : <span class="str">"not "</span>);
+    }
+    Console.WriteLine(<span class="str">"The estimated total profit is: ${0}."</span>,
+    (<span class="kwrd">double</span>)solver.GetValue(goal).ToDouble());
+    Console.WriteLine(<span class="str">"The total expenditure is: ${0}."</span>,
+    solver.GetValue(expenditure).ToDouble());
+
+    solver.LpSolveWriteParams(<span class="str">@"params.par"</span>, <span class="str">""</span>);
+    solver.LpSolveWriteLp(<span class="str">@"a.lp"</span>);
+    solver.LpSolveWriteMPS(<span class="str">@"a.mps"</span>, <span class="kwrd">true</span>);
+    solver.LpSolvePrintDebugDump(<span class="str">@"a.txt"</span>);
+}</pre>
+
+<p>This gives as output:</p>
+
+<pre>
+Model name:  '' - run #1
+Objective:   Maximize(R0)
+
+SUBMITTED
+Model size:        1 constraints,       5 variables,            5 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+The primal and dual simplex pricing strategy set to 'Devex'.
+
+
+Relaxed solution                3.52 after          2 iter is B&amp;B base.
+
+MSG_LPOPTIMAL
+Feasible solution                  3 after          8 iter,         8 nodes (gap
+ 11.5%)
+MSG_MILPFEASIBLE
+Improved solution                3.4 after          9 iter,         9 nodes (gap
+ 2.7%)
+MSG_MILPBETTER
+
+Optimal solution                 3.4 after         10 iter,        10 nodes (gap
+ 2.7%).
+
+Excellent numeric accuracy ||*|| = 0
+
+ MEMO: lp_solve version 5.5.2.14 for 32 bit OS, with 64 bit REAL variables.
+      In the total iteration count 10, 2 (20.0%) were bound flips.
+      There were 5 refactorizations, 0 triggered by time and 0 by density.
+       ... on average 1.6 major pivots per refactorization.
+      The largest [LUSOL v2.2.1.0] fact(B) had 3 NZ entries, 1.0x largest basis.
+
+      The maximum B&amp;B level was 6, 0.6x MIP order, 3 at the optimal solution.
+      The constraint matrix inf-norm is 12, with a dynamic range of 3.
+      Time to load data was 0.013 seconds, presolve used 0.002 seconds,
+       ... 0.003 seconds in simplex solver, in total 0.018 seconds.
+Optimal
+Project 0 is  selected.
+Project 1 is not  selected.
+Project 2 is  selected.
+Project 3 is  selected.
+Project 4 is not  selected.
+The estimated total profit is: $3.4.
+The total expenditure is: $20.
+</pre>
+
+<a name="Example6"></a>
+<h4>Example6</h4>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">private</span> <span class="kwrd">class</span> MyLpSolveSolver : LpSolveSolver
+{
+    <span class="kwrd">public</span> <span class="kwrd">override</span> <span class="kwrd">void</span> LpSolveLogFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, <span class="kwrd">string</span> buffer)
+    {
+        <span class="kwrd">base</span>.LpSolveLogFunc(lp, userhandle, buffer);
+        Console.Write(<span class="str">"{0}"</span>, buffer);
+    }
+
+    <span class="kwrd">public</span> <span class="kwrd">override</span> <span class="kwrd">void</span> LpSolveMsgFunc(<span class="kwrd">int</span> lp, <span class="kwrd">int</span> userhandle, LpSolveNativeInterface.lpsolve.lpsolve_msgmask message)
+    {
+        <span class="kwrd">base</span>.LpSolveMsgFunc(lp, userhandle, message);
+        Console.Write(<span class="str">"{0}"</span>, message);
+    }
+}
+
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example6()
+{
+    MyLpSolveSolver solver = <span class="kwrd">new</span> MyLpSolveSolver();
+    <span class="rem">//SimplexSolver solver = new SimplexSolver();</span>
+
+    <span class="rem">// add variables with their lower and upper bounds</span>
+    <span class="kwrd">int</span> savid, vzvid;
+    solver.AddVariable(<span class="str">"Saudi Arabia"</span>, <span class="kwrd">out</span> savid);
+    solver.SetBounds(savid, 0, 9000);
+    solver.AddVariable(<span class="str">"Venezuela"</span>, <span class="kwrd">out</span> vzvid);
+    solver.SetBounds(vzvid, 0, 6000);
+    solver.SetIntegrality(vzvid, <span class="kwrd">true</span>);
+    <span class="rem">// add constraints to model</span>
+    <span class="kwrd">int</span> c1rid, c2rid, c3rid, goalrid;
+    solver.AddRow(<span class="str">"constraint1"</span>, <span class="kwrd">out</span> c1rid);
+    solver.AddRow(<span class="str">"constraint2"</span>, <span class="kwrd">out</span> c2rid);
+    solver.AddRow(<span class="str">"constraint3"</span>, <span class="kwrd">out</span> c3rid);
+    solver.AddRow(<span class="str">"goal"</span>, <span class="kwrd">out</span> goalrid);
+    <span class="rem">// add coefficients to constraint rows</span>
+    solver.SetCoefficient(c1rid, savid, 0.3);
+    solver.SetCoefficient(c1rid, vzvid, 0.4);
+    solver.SetBounds(c1rid, 2000, Rational.PositiveInfinity);
+    solver.SetCoefficient(c2rid, savid, 0.4);
+    solver.SetCoefficient(c2rid, vzvid, 0.2);
+    solver.SetBounds(c2rid, 1500, Rational.PositiveInfinity);
+    solver.SetCoefficient(c3rid, savid, 0.2);
+    solver.SetCoefficient(c3rid, vzvid, 0.3);
+    solver.SetBounds(c3rid, 500, Rational.PositiveInfinity);
+    <span class="rem">// add objective (goal) to model and specify minimization (==true)</span>
+    solver.SetCoefficient(goalrid, savid, 20);
+    solver.SetCoefficient(goalrid, vzvid, 15);
+    solver.AddGoal(goalrid, 1, <span class="kwrd">true</span>);
+    <span class="rem">// solve the model</span>
+
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective(); simplex.GetSensitivity = <span class="kwrd">true</span>; ; simplex.LpSolveVerbose = 4; LpSolveParams parameter = <span class="kwrd">new</span> LpSolveParams(simplex);
+    <span class="rem">//SimplexSolverParams parameter = new SimplexSolverParams(); parameter.GetSensitivityReport = true;</span>
+    <span class="rem">//SimplexSolverParams parameter = new DemoSimplexSolverParams(); parameter.GetSensitivityReport = true;</span>
+
+    ILinearSolution solution = solver.Solve(parameter);
+    Console.WriteLine(<span class="str">"SA {0}, VZ {1}, C1 {2}, C2 {3}, C3 {4}, Goal {5}"</span>,
+    solver.GetValue(savid).ToDouble(), solver.GetValue(vzvid).ToDouble(),
+    solver.GetValue(c1rid).ToDouble(), solver.GetValue(c2rid).ToDouble(),
+    solver.GetValue(c3rid).ToDouble(), solver.GetValue(goalrid).ToDouble());
+
+    Console.WriteLine(<span class="str">"{0}"</span>, solver.PivotCount);
+    Console.WriteLine(<span class="str">"{0}"</span>, solver.AlgorithmUsed);
+
+    Console.WriteLine(<span class="str">"{0}"</span>, solver.GetDualValue(2).ToDouble());
+    solver.LpSolveWriteParams(<span class="str">@"d:\brol\params.par"</span>, <span class="str">""</span>);
+
+    ILinearSolverReport report = solver.GetReport(LinearSolverReportType.Sensitivity);
+
+    Report Report = report <span class="kwrd">as</span> Report;
+    LinearReport lpReport = report <span class="kwrd">as</span> LinearReport;
+}</pre>
+
+<p>This gives as output:</p>
+
+<pre>
+Model name:  '' - run #1
+Objective:   Minimize(R0)
+
+SUBMITTED
+Model size:        3 constraints,       2 variables,            6 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+The primal and dual simplex pricing strategy set to 'Devex'.
+
+
+Relaxed solution               92500 after          2 iter is B&amp;B base.
+
+MSG_LPOPTIMALFeasible solution              92500 after          2 iter,
+ 0 nodes (gap 0.0%)
+MSG_MILPFEASIBLE
+Optimal solution               92500 after          2 iter,         0 nodes (gap
+ 0.0%).
+
+Excellent numeric accuracy ||*|| = 0
+
+ MEMO: lp_solve version 5.5.2.14 for 32 bit OS, with 64 bit REAL variables.
+      In the total iteration count 2, 0 (0.0%) were bound flips.
+      There were 0 refactorizations, 0 triggered by time and 0 by density.
+       ... on average 2.0 major pivots per refactorization.
+      The largest [LUSOL v2.2.1.0] fact(B) had 4 NZ entries, 1.0x largest basis.
+
+      The maximum B&amp;B level was 1, 0.5x MIP order, 1 at the optimal solution.
+      The constraint matrix inf-norm is 0.4, with a dynamic range of 2.
+      Time to load data was 0.014 seconds, presolve used 0.002 seconds,
+       ... 3.674 seconds in simplex solver, in total 3.690 seconds.
+SA 2000, VZ 3500, C1 2000, C2 1500, C3 1450, Goal 92500
+250
+Primal
+20
+</pre>
+
+<a name="Example7"></a>
+<h4>Example7</h4>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<pre class="csharpcode">
+<span class="kwrd">static</span> <span class="kwrd">void</span> Example7()
+{
+    LpSolveSolver solver = <span class="kwrd">new</span> LpSolveSolver();
+    <span class="kwrd">int</span> COLONE, COLTWO, COLTHREE, COLFOUR;
+
+    solver.AddVariable(<span class="str">"COLONE"</span>, <span class="kwrd">out</span> COLONE); solver.SetBounds(COLONE, 28.6, Rational.PositiveInfinity);
+    solver.AddVariable(<span class="str">"COLTWO"</span>, <span class="kwrd">out</span> COLTWO); solver.SetBounds(COLTWO, 0.0, Rational.PositiveInfinity);
+    solver.AddVariable(<span class="str">"COLTHREE"</span>, <span class="kwrd">out</span> COLTHREE); solver.SetBounds(COLTHREE, 0.0, Rational.PositiveInfinity);
+    solver.AddVariable(<span class="str">"COLFOUR"</span>, <span class="kwrd">out</span> COLFOUR); solver.SetBounds(COLFOUR, 18.0, 48.98);
+
+    <span class="kwrd">int</span> THISROW, THATROW, LASTROW, goal;
+    solver.AddRow(<span class="str">"THISROW"</span>, <span class="kwrd">out</span> THISROW); solver.SetBounds(THISROW, 92.3, Rational.PositiveInfinity); solver.SetCoefficient(THISROW, COLTWO, 78.26); solver.SetCoefficient(THISROW, COLFOUR, 2.9);
+    solver.AddRow(<span class="str">"THATROW"</span>, <span class="kwrd">out</span> THATROW); solver.SetBounds(THATROW, Rational.NegativeInfinity, 14.8); solver.SetCoefficient(THATROW, COLONE, 0.24); solver.SetCoefficient(THATROW, COLTHREE, 11.31);
+    solver.AddRow(<span class="str">"LASTROW"</span>, <span class="kwrd">out</span> LASTROW); solver.SetBounds(LASTROW, 4.0, Rational.PositiveInfinity); solver.SetCoefficient(LASTROW, COLONE, 12.68); solver.SetCoefficient(LASTROW, COLTHREE, 0.08); solver.SetCoefficient(LASTROW, COLFOUR, 0.9);
+
+    solver.AddRow(<span class="str">"goal"</span>, <span class="kwrd">out</span> goal); solver.SetCoefficient(goal, COLONE, 1.0); solver.SetCoefficient(goal, COLTWO, 3.0); solver.SetCoefficient(goal, COLTHREE, 6.24); solver.SetCoefficient(goal, COLFOUR, 0.1);
+    solver.AddGoal(goal, 1, <span class="kwrd">true</span>);
+
+    LpSolveDirective simplex = <span class="kwrd">new</span> LpSolveDirective(); simplex.GetSensitivity = <span class="kwrd">true</span>; ; simplex.LpSolveVerbose = 4; LpSolveParams parameter = <span class="kwrd">new</span> LpSolveParams(simplex);
+    ILinearSolution solution = solver.Solve(parameter);
+
+    solver.LpSolveWriteLp(<span class="str">"con"</span>);
+
+    <span class="kwrd">double</span> Value;
+
+    Console.WriteLine(<span class="str">"GetValue:"</span>);
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> vid <span class="kwrd">in</span> solver.VariableIndices)
+    {
+        Value = solver.GetValue(vid).ToDouble();
+        Console.WriteLine(solver.GetKeyFromIndex(vid) + <span class="str">": Value: "</span> + Value.ToString());
+    }
+
+    Console.WriteLine(<span class="str">"GetDualValue:"</span>);
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> rid <span class="kwrd">in</span> solver.RowIndices)
+    {
+        <span class="kwrd">if</span> (!solver.IsGoal(rid))
+        {
+            Value = solver.GetDualValue(rid).ToDouble();
+            Console.WriteLine(solver.GetKeyFromIndex(rid) + <span class="str">": Value: "</span> + Value.ToString());
+        }
+    }
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> vid <span class="kwrd">in</span> solver.VariableIndices)
+    {
+        Value = solver.GetDualValue(vid).ToDouble();
+        Console.WriteLine(solver.GetKeyFromIndex(vid) + <span class="str">": Value: "</span> + Value.ToString());
+    }
+
+    LinearSolverSensitivityRange x;
+
+    Console.WriteLine(<span class="str">"Variable GetVariableRange:"</span>);
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> vid <span class="kwrd">in</span> solver.VariableIndices)
+    {
+        x = solver.GetVariableRange(vid);
+        Console.WriteLine(solver.GetKeyFromIndex(vid) + <span class="str">": Current: "</span> + x.Current.ToDouble().ToString() + <span class="str">", Lower: "</span> + x.Lower.ToDouble().ToString() + <span class="str">", Upper: "</span> + x.Upper.ToDouble().ToString());
+    }
+
+    Console.WriteLine(<span class="str">"RHS GetVariableRange:"</span>);
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> rid <span class="kwrd">in</span> solver.RowIndices)
+    {
+        <span class="kwrd">if</span> (!solver.IsGoal(rid))
+        {
+            x = solver.GetVariableRange(rid);
+            Console.WriteLine(solver.GetKeyFromIndex(rid) + <span class="str">": Current: "</span> + x.Current.ToDouble().ToString() + <span class="str">", Lower: "</span> + x.Lower.ToDouble().ToString() + <span class="str">", Upper: "</span> + x.Upper.ToDouble().ToString());
+        }
+    }
+
+    Console.WriteLine(<span class="str">"GetObjectiveCoefficientRange:"</span>);
+    <span class="kwrd">foreach</span> (<span class="kwrd">int</span> vid <span class="kwrd">in</span> solver.VariableIndices)
+    {
+        x = solver.GetObjectiveCoefficientRange(vid);
+        Console.WriteLine(solver.GetKeyFromIndex(vid) + <span class="str">": Current: "</span> + x.Current.ToDouble().ToString() + <span class="str">", Lower: "</span> + x.Lower.ToDouble().ToString() + <span class="str">", Upper: "</span> + x.Upper.ToDouble().ToString());
+    }
+}</pre>
+
+<p>This gives as output:</p>
+
+<pre>
+/* Objective function */
+min: +C1 +3 C2 +6.24 C3 +0.1 C4;
+
+/* Constraints */
++78.26 C2 +2.9 C4 &gt;= 92.3;
++0.24 C1 +11.31 C3 &lt;= 14.8;
++12.68 C1 +0.08 C3 +0.9 C4 &gt;= 4;
+
+/* Variable bounds */
+C1 &gt;= 28.6;
+18 &lt;= C4 &lt;= 48.98;
+GetValue:
+COLONE: Value: 28.6
+COLTWO: Value: 0
+COLTHREE: Value: 0
+COLFOUR: Value: 31.8275862068966
+GetDualValue:
+THISROW: Value: 0.0344827586206897
+THATROW: Value: 0
+LASTROW: Value: 0
+COLONE: Value: 1
+COLTWO: Value: 0.301379310344828
+COLTHREE: Value: 6.24
+COLFOUR: Value: 0
+Variable GetVariableRange:
+COLONE: Current: 28.6, Lower: -1.94359839007941, Upper: 61.6666666666667
+COLTWO: Current: 0, Lower: -0.635599284436494, Upper: 0.512394582162024
+COLTHREE: Current: 0, Lower: -4841.16034482759, Upper: 0.701679929266136
+COLFOUR: Current: 18, Lower: -Infinity, Upper: Infinity
+RHS GetVariableRange:
+THISROW: Current: 92.3, Lower: 52.2, Upper: 142.042
+THATROW: Current: 14.8, Lower: -Infinity, Upper: Infinity
+LASTROW: Current: 4, Lower: -Infinity, Upper: Infinity
+GetObjectiveCoefficientRange:
+COLONE: Current: 1, Lower: 0, Upper: Infinity
+COLTWO: Current: 3, Lower: 2.69862068965517, Upper: Infinity
+COLTHREE: Current: 6.24, Lower: 0, Upper: Infinity
+COLFOUR: Current: 0.1, Lower: -Infinity, Upper: 0.111167901865576
+</pre>
+
+<p>See also <a href="MATLAB.htm">Using lpsolve from MATLAB</a>,
+            <a href="O-Matrix.htm">Using lpsolve from O-Matrix</a>,
+            <a href="Sysquake.htm">Using lpsolve from Sysquake</a>,
+            <a href="Octave.htm">Using lpsolve from Octave</a>,
+            <a href="FreeMat.htm">Using lpsolve from FreeMat</a>,
+            <a href="Euler.htm">Using lpsolve from Euler</a>,
+            <a href="Python.htm">Using lpsolve from Python</a>,
+            <a href="Sage.htm">Using lpsolve from Sage</a>,
+            <a href="PHP.htm">Using lpsolve from PHP</a>,
+            <a href="Scilab.htm">Using lpsolve from Scilab</a>
+</p>
+
+	</BODY>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>put_logfunc</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>put_logfunc</h1>
+					<p>Sets a log routine.</p>
+					<p><b>void put_logfunc(lprec </b>*<i>lp</i><b>, lphandlestr_func </b><i>newlog</i><b>, void </b>*<i>loghandle</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>put_logfunc</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>newlog</i></p>
+					<p class="indent">The log routine.<br>
+						<br>
+						typedef void (__WINAPI lphandlestr_func)(lprec *lp, void *userhandle, char *buf);
+						<br>
+						Note the __WINAPI attribute. This is important under Windows. It ensures __stdcall calling
+						convention which is required.
+					</p>
+					<p class="dt"><i>loghandle</i></p>
+					<p class="indent">A parameter that will be provided to the log routine.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>put_logfunc</b> function sets a log routine.<br>
+						When set, the log routine is called when lp_solve has someting to report.
+						The return value of this routine should be 0. The log
+						routine can be cleared by specifying NULL as log routine.<br>
+						This function is called at the same time as something is written to file set via
+						<A HREF="set_output.htm">set_outputstream, set_outputfile</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+void __WINAPI logfunction(lprec *lp, void *userhandle, char *buf)
+{
+
+ /* do something with buf (the message) */
+
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_logfunc(lp, logfunction, NULL);
+  set_verbose(lp, FULL);
+
+  del_column(lp, 1); /* Will generate an error because column 1 does not exist */
+                     /* Note that del_column returns FALSE (0) to indicate an error */
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="put_abortfunc.htm">put_abortfunc</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

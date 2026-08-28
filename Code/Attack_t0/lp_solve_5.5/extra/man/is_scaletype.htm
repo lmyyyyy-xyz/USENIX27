@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_scaletype</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_scaletype</h1>
+					<p>Returns if scaling type specified in <i>scaletype</i> is active.</p>
+					<p><b>unsigned char is_scaletype(lprec </b>*<i>lp</i><b>, int </b><i>scaletype</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_scaletype</b> returns if scaling mode specified in <i>scaletype</i>
+					is active.
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>scaletype</i></p>
+					<TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+<!--
+						<TR>
+							<TD>SCALE_LINEAR&nbsp;(0)</TD>
+							<TD>Linear scaling</TD>
+						</TR>
+-->
+						<TR>
+							<TD>SCALE_EXTREME&nbsp;(1)</TD>
+							<TD>Scale to convergence using largest absolute value</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_RANGE&nbsp;(2)</TD>
+							<TD>Scale based on the simple numerical range</TD>
+						</TR>
+						<TR>
+							<TD>
+								SCALE_MEAN&nbsp;(3)</TD>
+							<TD>Numerical range-based scaling</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_GEOMETRIC (4)</TD>
+							<TD>Geometric scaling</TD>
+						</TR>
+						<TR>
+							<TD>SCALE_CURTISREID (7)</TD>
+							<TD>Curtis-reid scaling</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>is_scaletype</b> function returns if scaling mode specified in <i>scaletype</i>.
+						This can influence numerical stability considerably. It is advisable to always
+						use some sort of scaling.<br>
+						<A HREF="set_scaling.htm">set_scaling</A> must be called before <A HREF="solve.htm">
+							solve</A> is called.<br>
+						SCALE_EXTREME, SCALE_RANGE, SCALE_MEAN, SCALE_GEOMETRIC, SCALE_CURTISREID are
+						the possible scaling algorithms.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int scaletype;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  scaletype = is_scaletype(lp, SCALE_MEAN);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_scaling.htm">set_scaling</A>, <A HREF="get_scaling.htm">
+							get_scaling</A>, <A HREF="set_scalelimit.htm">set_scalelimit</A>, <A HREF="get_scalelimit.htm">
+							get_scalelimit</A>, <A HREF="is_integerscaling.htm">is_integerscaling</A>, <A HREF="is_scalemode.htm">is_scalemode</A>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

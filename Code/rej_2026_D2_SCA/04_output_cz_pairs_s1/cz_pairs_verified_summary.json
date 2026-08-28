@@ -1,0 +1,7 @@
+{
+  "n_pairs": 7989,
+  "pair_purity": 1.0,
+  "coverage": "1024/1024",
+  "C_THR": 10,
+  "Z_THR": 0.99
+}

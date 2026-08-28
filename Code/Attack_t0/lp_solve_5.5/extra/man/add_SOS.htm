@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>add_SOS</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>add_SOS</h1>
+					<p>Add a SOS (Special Ordered Sets) constraint.</p>
+					<p><b>int add_SOS(lprec </b>*<i>lp</i><b>, char </b>*<i>name</i><b>, int </b><i>sostype</i><b>, int </b><i>priority</i><b>, int </b><i>count</i><b>, int </b>*<i>sosvars</i><b>, REAL </b>*<i>weights</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>add_SOS</b> returns the list index of the new SOS if the operation was successful. A return value
+						of 0 indicates an error.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>name</i></p>
+					<p class="indent">The name of the SOS constraint.</p>
+					<p class="dt"><i>sostype</i></p>
+					<p class="indent">
+						The type of the SOS constraint. Must be &gt;= 1</p>
+					<p class="dt"><i>priority</i></p>
+					<p class="indent">Priority of the SOS constraint in the SOS set.</p>
+					<p class="dt"><i>count</i></p>
+					<p class="indent">The number of variables in the SOS list.</p>
+					<p class="dt"><i>sosvars</i></p>
+					<p class="indent">An array specifying the <b>count</b> variables (their column
+						numbers).</p>
+					<p class="dt"><i>weights</i></p>
+					<p class="indent">An array specifying the <b>count</b> variable weights. May also be NULL. In that case, lp_solve will weight the variables in the order they are specified.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>add_SOS</b> function adds an SOS constraint.<br>
+					See <a href="SOS.htm">Special Ordered Sets</a> for a description about SOS variables.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int vars[2];
+  double weights[2];
+
+  /* Create a new LP model */
+  lp = make_lp(0, 4);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  vars[0] = 2; vars[1] = 3;
+  weights[0] = 1.0; weights[1] = 2.0;
+  add_SOS(lp, "SOS", 1, 1, sizeof(vars)/sizeof(*vars), vars, weights);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p><A href="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p><b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="is_SOS_var.htm">is_SOS_var</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

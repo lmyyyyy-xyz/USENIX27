@@ -1,0 +1,85 @@
+#
+# O-Matrix code for 'A Practical Example' from
+# (Also referred to as example3.oms in the documentation)
+
+# Problem Description:
+# Suppose a farmer has 75 acres on which to plant two crops: wheat and barley.
+# To produce these crops, it costs the farmer (for seed, fertilizer, etc.)
+# $120 per acre for the wheat and  $210 per acre for the barley.
+# The farmer has $15,000 available for expenses. But after the harvest,
+# the farmer must store the crops while awaiting favorable market conditions.
+# The farmer has storage space for 4000 bushels. Each acre yields an average
+# of 110 bushels of wheat or 30 bushels of barley.  If the net profit per bushel
+# of wheat (after all expenses have been subtracted) is $1.30 and for barley is # $2.00,
+# how should the farmer plant the 75 acres to maximize profit?
+
+# We begin by formulating the problem mathematically.  First we express
+# the objective, that is the profit, and the constraints algebraically,
+# then we graph them, and lastly we arrive at the solution by graphical
+# inspection and a minor arithmetic calculation.
+
+# Let x denote the number of acres allotted to wheat and y the number
+# of acres allotted to barley. Then the expression to be maximized,
+#that is the profit, is clearly
+#        P = (110)(1.30)x + (30)(2.00)y = 143x + 60y.
+
+# There are three constraint inequalities, specified by the limits on
+# expenses, storage and acreage. They are respectively:
+#        120x + 210y <= 15000
+#        110x + 30y <= 4000
+#        x + y <= 75
+clear
+
+X = 0.1 : 0.05 : 125
+Y1 = (15000. - 120*X)/210
+bar(X, Y1)
+
+print "Put in the other two constraint inequalities."
+X = 0.1 : 0.05 : 38
+mlmode
+Y1 = (15000. - 120*X)/210;
+Y2 = max((4000 - 110.*X)./30, 0);
+Y3 = max(75 - X, 0.);
+Ytop = min(min(Y1, Y2), Y3);
+omatrix
+gaddwin("Solution Space");
+bar(X, Ytop)
+gtitle("Solution Space");
+
+print ""
+print "Now let's superimpose on top of this picture a contour plot of"
+print "the objective function P."
+mlmode meshgrid.m
+[U, V] = meshgrid(0:1:40, 0:1:80);
+Ur = U.row(1)
+Vc = V.col(1)
+Z = 143.*U + 60.*V
+levels = (0:1:11)*1000.
+gaddwin("Solution Space and Objective");
+bar(X, Ytop)
+contour(Z', levels, Ur', Vc');
+gtitle("Solution Space and Objective")
+
+# The lines give a picture of the objective function. All solutions
+# that intersect with the black area are valid solutions, meaning that this
+# result also fulfills the set constraints. The more the lines go to the right,
+# the higher the objective value is. The optimal solution or best objective
+# is a line that is still in the blue area, but with a as large as possible value.
+
+# It seems apparent that the maximum value of P will occur on the level curve
+# (that is, level line) that passes through the vertex of the polygon that
+# lies near (22,53).  It is the intersection of x + y = 75 and
+# 110*x + 30*y = 4000. This is a corner point of the diagram. This is not a
+# coincidence. The simplex algorithm, which is used by lp_solve, starts from a
+# theorem that the optimal solution is such a corner point.
+# In fact we can compute the result:
+x = {[1, 1], [110, 30]} \ {75, 4000}
+print "x = ", x
+
+# The acreage that results in the maximum profit is 21.875 for wheat and 53.125
+# for barley. In that case the profit is:
+
+P = [143, 60] * x
+print "Profit, P = $", P
+
+# That is $6315.63

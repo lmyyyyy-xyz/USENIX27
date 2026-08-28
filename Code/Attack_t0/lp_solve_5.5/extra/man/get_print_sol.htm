@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>get_print_sol</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_print_sol</h1>
+					<p>Returns a flag if all intermediate valid solutions must be printed while
+						solving.</p>
+					<p><b>int get_print_sol(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_print_sol</b> returns the debug print status. Can by any of following values:
+					Can be any of the following values:</p>
+						<TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>FALSE&nbsp;(0)</TD>
+								<TD>No printing</TD>
+							</TR>
+							<TR>
+								<TD>TRUE&nbsp;(1)</TD>
+								<TD>Print all values</TD>
+							</TR>
+							<TR>
+								<TD>AUTOMATIC&nbsp;(2)</TD>
+								<TD>Print only non-zero values</TD>
+							</TR>
+						</TABLE>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_print_sol</b> function returns a flag if all intermediate valid
+						solutions must be printed while solving. Can give you useful solutions even if
+						the total run time is too long. This function is mend for debugging purposes.
+						The default is not to print (FALSE).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int doprint;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  doprint = get_print_sol(lp); /* Will return FALSE */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_print_sol.htm">set_print_sol</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

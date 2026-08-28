@@ -1,0 +1,9 @@
+% lpsolve example3 from the manual.
+
+function example3()
+  echo example3 on;
+
+  x = [1 1; 110 30] \ [75; 4000]
+  P = [143 60] * x
+
+  echo example3 off;

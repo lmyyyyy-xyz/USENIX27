@@ -1,0 +1,464 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Presolve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+<h1 align="left"><u>Presolve</u></h1>
+<P>Presolve is a preprocess of the lp-model. It looks for ways to simplify it.
+For example it can delete unused variables and restrictions. Substitute fixed variable values by a
+constant and so on. The result is a new model that is less complex than the original model and likely solves faster.
+<br>
+The result of presolve can be that there are less variables and/or constraints in the presolved model.
+</P>
+
+<p>
+Presolve is not active by default. It must specifically being enabled via the API call <A href="set_presolve.htm">set_presolve</A>.<br>
+<br>
+Different presolve options are possible.<br>
+The more are chosen, the more presolve can be done and the model could me made simpler thus solved faster, but also presolve takes more time.
+Presolve will most of the time result in a netto time that is faster than without, but can also result in a slower time.
+So it is up to the user to decide when and which presolve to use on specific models. There is no general presolve option applicable for all models.
+</p>
+
+<p>
+A simple example:
+</p>
+
+<pre>
+max: x1 + x2 + x3;
+
+r1: x2 = 2;
+r2: x1 + x2 &lt;= 6;
+r3: x1 - 2 x3 &gt;= 2;
+r4: x2 + 3 x3 &lt;= 5;
+</pre>
+
+<p>
+Row r1 is a constraint on one variable. Presolve can detect this and convert it to a bound on that variable.
+For this, presolve of rows must be activated:
+</p>
+
+<pre>
+lp_solve model.lp -wlp con -S1 -wafter -presolverow
+</pre>
+
+<pre>
+/* Objective function */
+max: +x1 +x2 +x3;
+
+/* Constraints */
+r2: +x1 +x2 &lt;= 6;
+r3: +x1 -2 x3 &gt;= 2;
+r4: +x2 +3 x3 &lt;= 5;
+
+/* Variable bounds */
+x2 = 2;
+</pre>
+
+<p>
+And even this model can be presolved further.<br>
+When presolve of columns is active, variables can be eliminated from the model.
+</p>
+
+<pre>
+lp_solve model.lp -wlp con -S1 -wafter -presolverow -presolvecol
+</pre>
+
+<pre>
+/* Objective function */
+max: +x1 +x3 +2;
+
+/* Constraints */
+r3: +x1 -2 x3 &gt;= 2;
+
+/* Variable bounds */
+x1 &lt;= 4;
+x3 &lt;= 1;
+</pre>
+
+<p>
+Note the -wafter option. If this option is not specified, the original model is printed.
+The reason for this is the moment that write_lp is called. The effect of presolve happens
+when a solve is done. If write_lp is called before solve then the original model is given.
+If called after solve then the presolved model is.
+</p>
+
+<p>
+As previously stated, presolve can result in removal of variables and/or constraints.
+For some models, presolve can even find the solution of the model.<br>
+<br>
+For constraints that are removed, all information of them are lost. Presolve has removed them from the
+matrix and cannot retrieve any information of them anymore. The number of rows is decreased by the number of
+constraints deleted.
+<A HREF="get_Nrows.htm">get_Nrows</A> does not return the original number of rows, but the number of rows in the
+new model.<br>
+<br>
+Variables that are removed from the matrix result in less columns in the model.
+<A href="get_Ncolumns.htm">get_Ncolumns</A> does not return the original number of columns, but the number of
+columns in the new model.<br>
+<br>
+However the information of the removed variables is not lost. Only variables that result in a fixed value are
+removed by presolve and their value is remembered at that time.
+</p>
+
+<p>
+Example in C:
+</p>
+
+<pre>
+#include &lt;stdio.h&gt;
+
+#include "lp_lib.h"
+
+int main(void)
+{
+# if defined ERROR
+#  undef ERROR
+# endif
+# define ERROR() { fprintf(stderr, "Error\n"); exit(1); }
+  lprec *lp;
+
+  if ((lp=make_lp(0, 3)) == NULL)
+    ERROR();
+  set_col_name(lp, 1, "x1");
+  set_col_name(lp, 2, "x2");
+  set_col_name(lp, 3, "x3");
+  set_maxim(lp);
+  if (!str_add_constraint(lp, "0 1 0", EQ, 2))
+    ERROR();
+  set_row_name(lp, 1, "R1");
+  if (!str_add_constraint(lp, "1 1 0", LE, 6))
+    ERROR();
+  set_row_name(lp, 2, "R2");
+  if (!str_add_constraint(lp, "1 0 -2", GE, 2))
+    ERROR();
+  set_row_name(lp, 3, "R3");
+  if (!str_add_constraint(lp, "0 1 3", LE, 5))
+    ERROR();
+  set_row_name(lp, 4, "R4");
+  if (!str_set_obj_fn(lp, "1 1 1"))
+    ERROR();
+
+  write_LP(lp, stdout);
+  set_presolve(lp, PRESOLVE_ROWS + PRESOLVE_COLS, 0);
+  solve(lp);
+  print_objective(lp);
+  print_solution(lp, 1);
+  print_constraints(lp, 1);
+
+  print_duals(lp);
+
+  write_LP(lp, stdout);
+
+  delete_lp(lp);
+
+}
+</pre>
+
+<p>
+This gives:
+</p>
+
+<pre>
+/* Objective function */
+max: +x1 +x2 +x3;
+
+/* Constraints */
+R1: +x2 = 2;
+R2: +x1 +x2 &lt;= 6;
+R3: +x1 -2 x3 &gt;= 2;
+R4: +x2 +3 x3 &lt;= 5;
+
+Model name:  '' - run #1
+Objective:   Maximize(R0)
+
+SUBMITTED
+Model size:        4 constraints,       3 variables,            7 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+
+Presolve O:1 -&gt; Reduced rows:    3, cols:    1 --- changed bnds:    4, Ab:    0.
+
+PRESOLVE             Elimination loops performed.......... O3:M3:I5
+                   1 empty or fixed variables............. REMOVED.
+                   3 empty or redundant constraints....... REMOVED.
+                   4 bounds............................... TIGHTENED.
+                     [           +2 &lt; Z &lt; +7           ]
+
+REDUCED
+Model size:        1 constraints,       2 variables,            2 non-zeros.
+Sets:                                   0 GUB,                  0 SOS.
+Row-types:         0 LE,                1 GE,                   0 EQ.
+
+Using DUAL simplex for phase 1 and PRIMAL simplex for phase 2.
+The primal and dual simplex pricing strategy set to 'Devex'.
+
+
+Optimal solution                   7 after          0 iter.
+
+Excellent numeric accuracy ||*|| = 0
+
+ MEMO: lp_solve version 5.5.2.14 for 32 bit OS, with 64 bit REAL variables.
+      In the total iteration count 0, 0 (100.0%) were bound flips.
+      There were 0 refactorizations, 0 triggered by time and 0 by density.
+       ... on average 0.0 major pivots per refactorization.
+      The largest [etaPFI v1.4] fact(B) had 0 NZ entries, 0.0x largest basis.
+      The constraint matrix inf-norm is 2, with a dynamic range of 2.
+      Time to load data was 0.235 seconds, presolve used 0.140 seconds,
+       ... 0.047 seconds in simplex solver, in total 0.422 seconds.
+
+Value of objective function: 7
+
+Actual values of the variables:
+x1                              4
+x2                              2
+x3                              1
+
+Actual values of the constraints:
+R3                              2
+
+Objective function limits:
+                                 From            Till       FromValue
+x1                                  0          1e+030         -1e+030
+x3                                  0          1e+030         -1e+030
+
+Dual values with from - till limits:
+                           Dual value            From            Till
+R3                                  0         -1e+030          1e+030
+x1                                  1               4          1e+030
+x3                                  1         -1e+030               1
+/* Objective function */
+max: +x1 +x3 +2;
+
+/* Constraints */
+R3: +x1 -2 x3 &gt;= 2;
+
+/* Variable bounds */
+x1 &lt;= 4;
+x3 &lt;= 1;
+</pre>
+
+<p>
+The result only shows values of contraint R3, the one that is kept.
+The information of the removed constraints is no longer there.<br>
+The variable result however is not lost. x2 is removed by presolve, but its value is still known.
+On the other hand, note also that the variable does not appear in the sensitivity result.
+</p>
+
+<p>
+Almost all API calls return information of the presolved model.
+<A HREF="get_Nrows.htm">get_Nrows</A> and <A href="get_Ncolumns.htm">get_Ncolumns</A> return the number of
+rows and columns of the presolved model. To know the original values,
+<A href="get_Norig_rows.htm">get_Norig_rows</A> and <A HREF="get_Norig_columns.htm">get_Norig_columns</A> must be
+used:
+</p>
+
+<pre>
+printf("get_Nrows: %d\n", get_Nrows(lp));
+printf("get_Norig_rows: %d\n", get_Norig_rows(lp));
+printf("get_Ncolumns: %d\n", get_Ncolumns(lp));
+printf("get_Norig_columns: %d\n", get_Norig_columns(lp));
+
+get_Nrows: 1
+get_Norig_rows: 4
+get_Ncolumns: 2
+get_Norig_columns: 3
+</pre>
+
+<p>
+To retrieve the variable data of all variables, including the presolved variables, API call
+<a href="get_primal_solution.htm">get_var_primalresult</a> must be used.
+This is the only call available to get all information.<br>
+The following code prints the values of all variables:
+</p>
+
+<pre>
+int column, Nrows, Ncolumns;
+
+Ncolumns = get_Norig_columns(lp);
+Nrows = get_Norig_rows(lp);
+for (column = 1; column &lt;= Ncolumns; column++) {
+  printf("x%d: %f\n", column, get_var_primalresult(lp, Nrows + column));
+}
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+x1: 4.000000
+x2: 2.000000
+x3: 1.000000
+</pre>
+
+<p>
+<a href="get_primal_solution.htm">get_var_primalresult</a> also returns information about rows.<br>
+The following code prints the results of all rows:
+</p>
+
+<pre>
+int row, Nrows;
+
+Nrows = get_Norig_rows(lp);
+
+for (row = 1; row &lt;= Nrows; row++) {
+  printf("R%d: %f\n", row, get_var_primalresult(lp, row));
+}
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+R1: 0.000000
+R2: 0.000000
+R3: 2.000000
+R4: 0.000000
+</pre>
+
+<p>
+You could think here that a result for all original rows are returned, but this is not the case.
+Only the result of constraints that were kept in the model are given. The other rows will return 0!
+</p>
+
+<p>
+There is also a possibility to know which rows and columns are removed from the model.
+<a href="get_orig_index.htm">get_orig_index</a> can be used for that.<br>
+The following code demonstrates it:
+</p>
+
+<pre>
+int row, Nrows;
+int column, Ncolumns;
+
+Ncolumns = get_Ncolumns(lp);
+Nrows = get_Nrows(lp);
+
+for (row = 1; row &lt;= Nrows; row++)
+  printf("row %d was row R%d\n", row, get_orig_index(lp, row));
+
+for (column = 1; column &lt;= Ncolumns; column++)
+  printf("column %d was column x%d\n", column, get_orig_index(lp, Nrows + column));
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+row 1 was row R3
+column 1 was column x1
+column 2 was column x3
+</pre>
+
+<p>
+So from this it can be determined that only row R3 and columns x1 and x3 are kept in the model.
+The others are removed by presolve.
+</p>
+
+<p>
+Again note that all other API calls return information about the presolved model.
+So for example <a href="get_primal_solution.htm">get_ptr_primal_solution</a> must be used like this:
+</p>
+
+<pre>
+int row, Nrows;
+int column, Ncolumns;
+double *pv;
+
+get_ptr_primal_solution(lp, &amp;pv);
+
+Ncolumns = get_Ncolumns(lp);
+Nrows = get_Nrows(lp);
+
+for (row = 1; row &lt;= Nrows; row++)
+  printf("row %d: %f\n", row, pv[row]);
+
+for (column = 1; column &lt;= Ncolumns; column++)
+  printf("column %d: %f\n", column, pv[Nrows + column]);
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+row 1: 2.000000
+column 1: 4.000000
+column 2: 1.000000
+</pre>
+
+<p>
+Row and column names of the original model can be obtained via
+<a href="get_row_name.htm">get_origrow_name</a> and <a href="get_col_name.htm">get_origcol_name</a>:
+</p>
+
+<pre>
+int row, Nrows;
+int column, Ncolumns;
+
+Ncolumns = get_Norig_columns(lp);
+Nrows = get_Norig_rows(lp);
+
+for (row = 1; row &lt;= Nrows; row++)
+ printf("row %d: %s\n", row, get_origrow_name(lp, row));
+
+for (column = 1; column &lt;= Ncolumns; column++)
+ printf("column %d: %s\n", column, get_origcol_name(lp, column));
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+row 1: R1
+row 2: R2
+row 3: R3
+row 4: R4
+column 1: x1
+column 2: x2
+column 3: x3
+</pre>
+
+<p>
+Row and column names of the presolved model can be obtained via
+<a href="get_row_name.htm">get_row_name</a> and <a href="get_col_name.htm">get_col_name</a>:
+</p>
+
+<pre>
+int row, Nrows;
+int column, Ncolumns;
+
+Ncolumns = get_Ncolumns(lp);
+Nrows = get_Nrows(lp);
+
+for (row = 1; row &lt;= Nrows; row++)
+ printf("row %d: %s\n", row, get_row_name(lp, row));
+
+for (column = 1; column &lt;= Ncolumns; column++)
+ printf("column %d: %s\n", column, get_col_name(lp, column));
+</pre>
+
+<p>
+With result:
+</p>
+
+<pre>
+row 1: R3
+column 1: x1
+column 2: x3
+</pre>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

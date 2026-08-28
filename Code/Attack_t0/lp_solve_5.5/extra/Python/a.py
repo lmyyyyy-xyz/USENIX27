@@ -1,0 +1,11 @@
+from lpsolve55 import *
+lp = lpsolve('make_lp', 0, 2)
+ret = lpsolve('set_maxim', lp)
+ret = lpsolve('set_obj_fn', lp, [1, 1])
+ret = lpsolve('add_constraint', lp, [1, 0], LE, 3)
+ret = lpsolve('add_constraint', lp, [0, 1], LE, 3)
+[basis, ret] = lpsolve('guess_basis', lp, [3, 3])
+ret = lpsolve('set_basis', lp, basis, 1)
+ret = lpsolve('solve', lp)
+ret = lpsolve('get_solution', lp)
+ret = lpsolve('write_lp', lp, 'con')

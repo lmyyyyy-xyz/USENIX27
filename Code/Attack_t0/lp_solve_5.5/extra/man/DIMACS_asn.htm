@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>DIMACS assignment problems</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>DIMACS assignment problems</u></h1>
+                                        <p>DIMACS (Center for Discrete Mathematics and Theoretical Computer Science (see <a href="http://dimacs.rutgers.edu/">http://dimacs.rutgers.edu/</a>))
+                                           has formulated some 'challenges' for some specific problem instances (see <a href="http://dimacs.rutgers.edu/Challenges/">http://dimacs.rutgers.edu/Challenges/</a>).
+                                           One of these challenges is network flows and matching - the first DIMACS implementation challenge.</p>
+
+                                        <p>One of these network flows are assignment problems:<br><br>
+
+                                           There are a number of agents and a number of tasks.
+                                           Any agent can be assigned to perform any task, incurring some cost that may vary depending on the agent-task assignment.
+                                           It is required to perform all tasks by assigning exactly one agent to each task in such a way that the total cost of the assignment is minimized.</p>
+
+                                        <h3>Network Structure </h3>
+
+                                        <ul>
+                                        <li>
+                                          A network is a directed graph with <i> n </i> nodes and <i> m </i> arcs.
+                                        </li><li>
+                                          Nodes are identified by integers 1...<i>n</i>.
+
+                                        </li><li>
+                                          Graphs do not have to be symmetric: if an arc <i>(v,w)</i> is in the graph,
+                                          the reverse arc <i>(w,v)</i> does not have to be in the graph.
+                                        </li><li>
+                                          Parallel arcs are not allowed.
+                                        </li><li>
+                                          Self-loops are not allowed.
+                                        </li><li>
+                                          Arc capacities are 32-bit signed integers.
+
+                                        </li><li>
+                                          The source and the sink are distinct.
+                                        </li><li>
+                                          The sink may be unreachable from the source.
+                                        </ul>
+
+                                        <p>
+                                           There is a specific file format available for these kinds of problems:
+                                        </p>
+
+<p>The following information makes up a DIMACS assignment problem input file:</p>
+
+<ul>
+  <li>comment lines </li>
+  <li>problem line </li>
+  <li>node descriptors </li>
+  <li>arc descriptors </li>
+</ul>
+
+<p>As noted above, information is collected into <i>lines</i>, which begin with
+one-character designators. We describe each type of information line in turn.</p>
+
+<ol>
+  <li><b>Comment Lines</b>: Comment lines give human-readable information about the file and
+    are ignored by programs. Comment lines can appear anywhere in the file. Each comment line
+    begins with a lower-case character <tt>c</tt>. <pre>    c This is an example of a comment line.</pre>
+  </li>
+  <li><b>Problem Line</b>: There is one problem line per input file. The problem line must
+    appear before any node or arc descriptor lines. For assignment problem instances
+    the problem line has the following format: <pre>    p asn NODES ARCS</pre>
+
+    <p>The lower-case character <tt>p</tt> signifies that this is a problem line. The
+    three-character problem designator <tt>asn</tt> identifies the file as containing
+    specification information for an assignment problem. The <tt>NODES</tt> field
+    contains an integer value specifying <i>n</i>, the number of nodes in the network.
+    The <tt>ASCS</tt> field contains an integer value specifying <i>m</i>, the number of arcs in the network. </p>
+
+  </li>
+  <li><b>Node Descriptors</b>: All node descriptor lines must appear before all arc descriptor
+    lines. For assignment problem instances, the node descriptor lines describe supply nodes.
+    That is, only nodes with nonzero node supply
+    values appear. There is one node descriptor line for each such node, with the following
+    format. <pre>    n ID</pre>
+    <p>The lower-case character <tt>n</tt> signifies that this is a node descriptor line. The <tt>ID</tt>
+    field gives a node identification number, an integer between 1 and <i>n</i>.</p>
+  </li>
+  <li><b>Arc Descriptors</b>: There is one arc descriptor line for each arc in the network.
+    For an assignment problem instance, arc descriptor lines are of the following form.
+    <pre>    a SRC DST COST</pre>
+    <p>The lower-case character <tt>a</tt> signifies that this is an arc descriptor line. For
+    a directed arc (<i>v,w</i>) the <tt>SRC</tt> field gives the identification number for the
+    source vertex <i>v</i>, and the <tt>DST</tt> field gives the destination vertex <i>w</i>.
+    Identification numbers are integers between 1 and <i>n</i>.
+    The <tt>COST</tt> field contains the per-unit cost of flow sent along arc (<i>v,w</i>).
+    </p>
+  </li>
+</ol>
+
+<h4>Input File Example :</h4>
+
+<P>Consider the table below which shows the cost of allocating 5 jobs to
+5 machines. </P>
+
+<PRE>         Machine
+      6  7  8  9  10
+Job 1 22 30 26 16 25
+    2 27 29 28 20 32
+    3 33 25 21 29 23
+    4 24 24 30 19 26
+    5 30 33 32 37 31
+</PRE>
+
+<P>Which jobs should be allocated to which machines so as to minimise the
+total cost? </P>
+
+<UL>
+<LI>each source (job) can supply one unit </LI>
+
+<LI>each sink (machine) demands one unit </LI>
+
+<LI>each arc has a capacity of one unit of flow and a cost taken from the
+table above. </LI>
+</UL>
+
+<p align="center"><IMG alt="Assignment model graph" border="1" vspace="10" SRC="dimacs_asn.gif" HEIGHT=352 WIDTH=474></P>
+
+<P>Problems of this type are called <I>assignment</I> problems since they
+involve the assignment of n (in this case n=5) distinct entities to another
+n distinct entities. For example in the area of production planning we
+might be interested in assigning operators to machines, or in assigning
+operators to jobs, or (as above) in assigning jobs to machines.</P>
+
+<pre>
+c This is a simple example file to demonstrate the DIMACS
+c input file format for assignment problems.
+c
+c Problem line (resources+tasks) (resources*tasks)
+p asn 10 25
+c
+c Node descriptor lines (indeces of assignable resources only)
+n 1
+n 2
+n 3
+n 4
+n 5
+c
+c Arc descriptor lines (tasks over each resource and "score")
+a 1  6 22
+a 1  7 30
+a 1  8 26
+a 1  9 16
+a 1 10 25
+a 2  6 27
+a 2  7 29
+a 2  8 28
+a 2  9 20
+a 2 10 32
+a 3  6 33
+a 3  7 25
+a 3  8 21
+a 3  9 29
+a 3 10 23
+a 4  6 24
+a 4  7 24
+a 4  8 30
+a 4  9 19
+a 4 10 26
+a 5  6 30
+a 5  7 33
+a 5  8 32
+a 5  9 37
+a 5 10 31
+c
+c End of file
+</pre>
+                                        <p>lp_solve can read/write and solve these models via the xli_DIMACS XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).
+                                           It reads such a model in above format and solves it via linear programming.
+                                           The xli can also generate a DIMACS formatted file.<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS assignment.net
+</pre>
+                                        <p>This gives as result:</p>
+<pre>
+Value of objective function: 118
+
+Actual values of the variables:
+C1                              1
+C2                              0
+C3                              0
+C4                              0
+C5                              0
+C6                              0
+C7                              0
+C8                              0
+C9                              1
+C10                             0
+C11                             0
+C12                             0
+C13                             1
+C14                             0
+C15                             0
+C16                             0
+C17                             1
+C18                             0
+C19                             0
+C20                             0
+C21                             0
+C22                             0
+C23                             0
+C24                             0
+C25                             1
+</pre>
+                                        <p>Also from within the IDE, this XLI can be used. However, some entries
+                                           must be added in LpSolveIDE.ini (in the folder where the IDE is installed).
+                                        </p>
+                                        <p>In the [XLI] section the following must be added:</p>
+<pre>
+lib6=xli_DIMACS
+</pre>
+                                        <p>And a new section for the DIMACS XLI must also be added:</p>
+<pre>
+[xli_DIMACS]
+extension=.net
+language=DIMACS
+</pre>
+                                        <p>Then make sure that the xli_DIMACS.dll is available for the IDE.
+                                           This must be done by placing this dll in the IDE folder or in the
+                                           Windows system32 folder.</p>
+
+<h4>Solution :</h4>
+
+                                        <p>The solution vector of above example is [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1]<br>
+                                           This must be interpreted as follows:<br>
+                                           There are as many variables as there are arc descriptor lines in the input file and
+                                           they appear in the same order. So:<br><br>
+                                           C1 specifies how much flow there is for the first arc definition, in this case from 1 -&gt; 6<br>
+                                           C2 specifies how much flow there is for the second arc definition, in this case from 1 -&gt; 7<br>
+                                           ...<br>
+                                           <br>
+                                           This means there is a flow from node 1 to 6, a flow from node 2 to 9, a flow from node 3 to 8, a flow from node 4 to 7, a flow from node 5 to 10<br>
+                                           This gives a total cost of 22 + 20 + 21 + 24 + 31 = 118
+                                           <br>
+                                           The value of the objective is the cost of the flow: 118
+                                        </p>
+
+<h4>Output :</h4>
+
+                                        <p>The solution of the model can also be written in a DIMACS format:</p>
+
+
+<ul>
+  <li>comment lines </li>
+  <li>solution lines </li>
+  <li>flow assignments </li>
+</ul>
+
+<p>For each network problem, the solution is an <i>integer-valued</i> flow assignment. The
+output file should list the solution and flow assignment for all arcs in the graph. As
+noted above, information is collected into <i>lines</i>, which begin with one-character
+designators. We describe each type of information line in turn.
+
+<OL>
+  <li><b>Comment Lines</b>: Comment lines give human-readable information about the file and
+    are ignored by programs. Comment lines can appear anywhere in the file. Each comment line
+    begins with a lower-case character <tt>c</tt>. <pre>    c This is an example of a comment line.</pre>
+  </li>
+  <LI>
+    <B> Solution line. </B>
+
+    The solution line contains the flow value and has the following format:
+    <pre>    s VALUE</pre>
+
+    <p>The lower-case character <tt>s</tt> signifies that this is a solution line.
+    The <tt>VALUE</tt> field
+    contains the value of the objective. </p>
+
+  <LI>
+    <B> Flow assignments. </B>
+    There is one flow assignment line for each arc in the input network.
+    These lines have the following format:
+
+    <pre>    f SRC DST FLOW</pre>
+
+    The lower-case character f signifies that this is a flow assignment line. For arc (u,v), the SRC and DST fields give v and w, respectively. The FLOW field gives the amount of flow assigned to arc (u,v).
+</OL>
+
+                                        <p>lp_solve can generate a solution file via the xli_DIMACS XLI driver (see <a href="XLI.htm">External Language Interfaces</a>).<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS assignment.net -wxlisol xli_DIMACS assignment.sol
+</pre>
+                                        <p>This generates the following solution contents:</p>
+<pre>
+c assignment.net
+c
+c Dimacs-format network assignment result file
+c generated by lp_solve
+c
+c Solution
+s 118
+c
+c SRC DST FLOW
+f 1 6 1
+f 1 7 0
+f 1 8 0
+f 1 9 0
+f 1 10 0
+f 2 6 0
+f 2 7 0
+f 2 8 0
+f 2 9 1
+f 2 10 0
+f 3 6 0
+f 3 7 0
+f 3 8 1
+f 3 9 0
+f 3 10 0
+f 4 6 0
+f 4 7 1
+f 4 8 0
+f 4 9 0
+f 4 10 0
+f 5 6 0
+f 5 7 0
+f 5 8 0
+f 5 9 0
+f 5 10 1
+c
+c End of file
+</pre>
+
+                                        <p>lp_solve can also generate a solution file with only non-zero values.<br><br>
+					   For example:</p>
+
+<pre>
+lp_solve -rxli xli_DIMACS assignment.net -wxlisol xli_DIMACS assignment.sol -wxlisolopt "-nz"
+</pre>
+                                        <p>This generates the following solution contents:</p>
+<pre>
+c assignment.net
+c
+c Dimacs-format network assignment result file
+c generated by lp_solve
+c
+c Solution
+s 118
+c
+c Only non-zero flows are written
+c SRC DST FLOW
+f 1 6 1
+f 2 9 1
+f 3 8 1
+f 4 7 1
+f 5 10 1
+c
+c End of file
+</pre>
+
+
+
+                                        <p>
+                                                <b>See Also</b> <A HREF="DIMACS_mcf.htm">DIMACS minimum cost flow problems</A>,
+                                                                <A HREF="DIMACS_maxf.htm">DIMACS maximum flow problems</A>
+                                        </p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

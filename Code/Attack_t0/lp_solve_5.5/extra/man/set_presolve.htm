@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_presolve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_presolve</h1>
+					<p>Specifies if a presolve must be done before solving.</p>
+					<p><b>void set_presolve(lprec </b>*<i>lp</i><b>, int </b><i>do_presolve</i><b>, int </b><i>maxloops</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_presolve</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>do_presolve</i></p>
+					<p class="indent">Specifies presolve level. Can be the (OR) combination of any of
+						the following values:</p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>PRESOLVE_NONE (0)</TD>
+								<TD>No presolve at all</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_ROWS (1)</TD>
+								<TD>Presolve rows</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_COLS (2)</TD>
+								<TD>Presolve columns</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_LINDEP (4)</TD>
+								<TD>Eliminate linearly dependent rows</TD>
+							</TR>
+<!--
+							<TR>
+								<TD>PRESOLVE_AGGREGATE (8)</TD>
+								<TD>Not used at this time</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_SPARSER (16)</TD>
+								<TD>Not used at this time</TD>
+							</TR>
+-->
+							<TR>
+							    <TD>PRESOLVE_SOS (32)</TD>
+							    <TD>Convert constraints to SOSes (only SOS1 handled)</TD>
+						    </TR>
+							<TR>
+								<TD>PRESOLVE_REDUCEMIP (64)</TD>
+								<TD>If the phase 1 solution process finds that a constraint is redundant then this constraint is deleted.
+                                                                    This is no longer active since it is very rare that this is effective, and also that it adds code complications and delayed presolve effects that are not captured properly.
+                                                                </TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_KNAPSACK (128)</TD>
+								<TD>Simplification of knapsack-type constraints through addition of an extra variable, which also helps bound the OF</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_ELIMEQ2 (256)</TD>
+                                                                <TD>Direct substitution of one variable in 2-element equality constraints; this requires changes to the constraint matrix.
+                                                                    Elimeq2 simply eliminates a variable by substitution when you have 2-element equality constraints. This can sometimes cause fill-in of the constraint matrix, and also be a source of rounding errors which can lead to problems in the simplex.</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_IMPLIEDFREE (512)</TD>
+								<TD>Identify implied free variables (releasing their explicit bounds)</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_REDUCEGCD (1024)</TD>
+                                                                <TD>Reduce (tighten) coefficients in integer models based on GCD argument.
+                                                                    Reduce GCD is for mixed integer programs where it is possible to adjust the constraint coefficies due to integrality. This can cause the dual objective ("lower bound") to increase and may make it easier to prove optimality.</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_PROBEFIX (2048)</TD>
+								<TD>Attempt to fix binary variables at one of their bounds</TD>
+							</TR>
+                                                        <TR>
+								<TD>PRESOLVE_PROBEREDUCE (4096)</TD>
+								<TD>Attempt to reduce coefficients in binary models</TD>
+							</TR>
+                                                        <TR>
+								<TD>PRESOLVE_ROWDOMINATE (8192)</TD>
+								<TD>Idenfify and delete qualifying constraints that are dominated by others, also fixes variables at a bound</TD>
+							</TR>
+                                                        <TR>
+								<TD>PRESOLVE_COLDOMINATE (16384)</TD>
+								<TD>Deletes variables (mainly binary), that are dominated by others (only one can be non-zero)</TD>
+							</TR>
+                                                        <TR>
+								<TD>PRESOLVE_MERGEROWS (32768)</TD>
+								<TD>Merges neighboring &gt;= or &lt;= constraints when the vectors are otherwise relatively identical into a single ranged constraint</TD>
+							</TR>
+                                                        <TR>
+                                                                <TD>Converts qualifying equalities to inequalities by converting a column singleton variable to slack. The routine also detects implicit duplicate slacks from inequality constraints, fixes and removes the redundant variable. This latter removal also tends to reduce the risk of degeneracy. The combined function of this option can have a dramatic simplifying effect on some models.
+                                                                    Implied slacks is when, for example, there is a column singleton (with zero OF) in an equality constraint. In this case, the column can be deleted and the constraint converted to a LE constraint.</TD>
+							</TR>
+                                                        <TR>
+								<TD>PRESOLVE_COLFIXDUAL (131072)</TD>
+                                                                <TD>Variable fixing and removal based on considering signs of the associated dual constraint.
+                                                                    Dual fixing is when the (primal) variable can be fixed due to the implied value of the dual being infinite.</TD>
+							</TR>
+                            <TR>
+								<TD>PRESOLVE_BOUNDS (262144)</TD>
+								<TD>Does bound tightening based on full-row constraint information. This can assist in tightening  the OF bound, eliminate variables and constraints.  At the end of presolve, it is checked if any variables can be deemed free, thereby reducing any chance that degeneracy is introduced via this presolve option.</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_DUALS (524288)</TD>
+								<TD>Calculate duals</TD>
+							</TR>
+							<TR>
+								<TD>PRESOLVE_SENSDUALS (1048576)</TD>
+								<TD>Calculate sensitivity if there are integer variables</TD>
+							</TR>
+						</TABLE>
+					<p class="dt"><i>maxloops</i></p>
+					<p class="indent">The maximum number of times presolve may be done.
+					Use <A href="get_presolveloops.htm">get_presolveloops</A> if you don't want to change this value.</p>
+					<br>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_presolve</b> function specifies if a presolve must be done before
+						solving. Presolve looks at the model and tries to simplify it so that solving
+						times are shorter. For example a constraint on only one variable is converted
+						to a bound on this variable (and the constraint is deleted). Note that the
+						model dimensions can change because of this, so be careful with this. Both rows
+						and columns can be deleted by the presolve.<br>
+						The <i>maxloops</i> variable specifies the maximum number of times presolve is done.
+					    After a presolve is done, another presolve can again result in elimination of extra rows and/or columns.
+					    This number specifies the maximum number of times this process is repeated. By default this is until
+					    presolve has nothing to do anymore. Use <A href="get_presolveloops.htm">get_presolveloops</A> if you don't want to change this value.<br>
+						Note that PRESOLVE_LINDEP can result in deletion of rows (the linear dependent ones).
+						<A href="get_constraints.htm">get_constraints, get_ptr_constraints</A> will then
+						return only the values of the rows that are kept and the values of the deleted rows
+						are not known anymore.
+						The default is not (PRESOLVE_NONE) doing a presolve.
+						The following code can be used to retrieve the values of all the variables, even if
+						variables are deleted by presolve:
+					</p>
+<pre>
+int Norig_columns, Norig_rows, i;
+REAL value;
+
+Norig_columns = get_Norig_columns(lp);
+Norig_rows = get_Norig_rows(lp);
+for(i = 1; i &lt;= Norig_columns; i++) {
+  value = get_var_primalresult(lp, Norig_rows + i);
+  printf("%f\n", value);
+}
+</pre>
+                    <p>Note that there is no possibility to get the values of deleted rows.</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_presolve(lp, PRESOLVE_ROWS | PRESOLVE_COLS | PRESOLVE_LINDEP, get_presolveloops(lp));
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_presolve.htm">get_presolve</A>, <A HREF="get_presolveloops.htm">get_presolveloops</A>, <A HREF="is_presolve.htm">is_presolve</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

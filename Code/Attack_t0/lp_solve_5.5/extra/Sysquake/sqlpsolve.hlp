@@ -1,0 +1,17 @@
+// Help for sqlpsolve
+// Copyright 2000-2009, Peter Notebaert
+// 2009-03-19
+
+sqlpsolve
+
+/*
+==sqlpsolve==
+sqlpsolve Sysquake Interface for lpsolve
+===Syntax===
+{{{
+ret = sqlpsolve(functionname, arg1, arg2, ...)
+}}}
+===Description===
+##sqlpsolve## interfaces to lpsolve to solve a (mixed integer) linear model.
+
+*/

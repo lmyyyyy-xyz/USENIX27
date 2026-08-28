@@ -1,0 +1,30 @@
+:
+src='../../shared/commonlib.c ../../colamd/colamd.c lp_etaPFI.c ../../lp_utils.c'
+
+c=${CC:-cc}
+
+MYTMP=`mktemp -d "${TMPDIR:-/tmp}"/lp_solve_XXXXXX`
+
+#determine platform (32/64 bit)
+>"$MYTMP"/platform.c
+echo '#include <stdlib.h>'>>"$MYTMP"/platform.c
+echo '#include <stdio.h>'>>"$MYTMP"/platform.c
+echo 'int main(){printf("osx%d", (int) (sizeof(void *)*8)); return 0;}'>>"$MYTMP"/platform.c
+$c "$MYTMP"/platform.c -o "$MYTMP"/platform
+PLATFORM=`"$MYTMP"/platform`
+rm "$MYTMP"/platform "$MYTMP"/platform.c >/dev/null 2>&1
+
+mkdir bin bin/$PLATFORM >/dev/null 2>&1
+
+opts='-O3 -DINTEGERTIME'
+
+$c -s -c $opts -I.. -I../.. -I../../colamd -I../../shared -I. -DRoleIsExternalInvEngine -DINVERSE_ACTIVE=INVERSE_ETAPFI $src
+libtool -static -o libbfp_etaPFI.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+
+opts="$opts -fPIC -fno-common"
+so="-dynamiclib"
+
+$c -s -c $opts -I.. -I../.. -I../../colamd -I../../shared -I. -DRoleIsExternalInvEngine -DINVERSE_ACTIVE=INVERSE_ETAPFI $src
+$c $so libbfp_etaPFI.a -compatibility_version 5.5.0 -current_version 5.5.0 -o bin/$PLATFORM/libbfp_etaPFI.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm
+
+rm *.o >/dev/null

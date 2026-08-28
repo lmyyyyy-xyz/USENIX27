@@ -1,0 +1,5 @@
+:
+sh ccc 2>&1 | tee out
+rm *.so 2>/dev/null
+cp bin/ux32/fmlpsolve.so fmlpsolve.so 2>/dev/null
+cp bin/ux64/fmlpsolve.so fmlpsolve.so 2>/dev/null

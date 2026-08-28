@@ -1,0 +1,40 @@
+To DO mar 25 2009
+Delphi Prism 2009 .net pro$499 cross platform
+http://en.wikipedia.org/wiki/Lazarus_(software)  linux clone 
+IDE for free pascal with most vcl
+
+test free MPS button     autoconnect to filetype? .fmps?
+add newer xli highlighters? XPRESS,DIMACS
+test XML
+test zimpl  
+	where did the source go? 5.5.0.4 xli_ZIMPL.zip  jun 25,2005
+		5.5.0.13 lp_solve_5.5_xli_ZIMPL_source.tar.gz  aug 3,2008 proj and ccc
+	http://tech.groups.yahoo.com/group/lp_solve/message/8182 feb 16,2007
+	http://tech.groups.yahoo.com/group/lp_solve/message/11194 nov 24, 2008 zimplsrc changes needed
+
+add -maxiter field  handle locally in IDE.
+add -wafter checkmark  to known file name wafter.lp?  what about xli?
+add -nonames checkmark -nocolname -norownames
+add -noint checkmark
+add? -stat checkmark for v14 stats to log.
+add guessbasis reader  
+    add write solution writer matching guess basis g22 full precision format.
+
+fix (done) send LP via file to dll so the LARGEADDRESSAWARE MSVC7 and MSVC8 dll wor
+activate -rpar -wpar code  (done)
+add -wbatch to write a bat file for lp_solve.exe for this problem, 
+	use -rpar for most params. 
+   This will help with problems too big to run in the Ide or X64 or cross platform dispatch.
+   
+add pause/resume button to allow review of log or attach debugger to dll
+figure out what goes to the Messages pane.  Seems to be MiP Progress - add improved obj calc.
+	 So bring to front when updated  test with mlpg1.lp  improves every 3 sec or so.
+try to send stderr to LOG too
+change matrix view to bring Lhs RHS  to col 2 and 3 then vars.  LHS <= A <= RHS  ranges.
+?add Bitmap popup of nonzeros? for structure. KJell posted a picture once.
+
+Freepascal in april tests compile
+start with demo.pas.
+
+
+

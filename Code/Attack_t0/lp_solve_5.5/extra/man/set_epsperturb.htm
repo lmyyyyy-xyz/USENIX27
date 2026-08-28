@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>set_epsperturb</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15" width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_epsperturb</h1>
+					<p>Specifies the value that is used as perturbation scalar for degenerative problems.</p>
+					<p><b>void set_epsperturb(lprec </b>*<i>lp</i><b>, REAL </b><i>epsperturb</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_epsperturb</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>epsperturb</i></p>
+					<p class="indent">perturbation scalar.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The default <i>epsperturb</i> value is 1e-5
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_epsperturb(lp, 1.0e-6); /* sets epsperturb to 1e-6 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_epsperturb.htm">get_epsperturb</A>, <A href="set_infinite.htm">
+							set_infinite</A>, <A href="get_infinite.htm">get_infinite</A>, <A href="is_infinite.htm">is_infinite</A>, <A href="set_epsint.htm">
+							set_epsint</A>, <A href="get_epsint.htm">get_epsint</A>, <A href="set_epsd.htm">
+							set_epsd</A>, <A href="get_epsd.htm">get_epsd</A>, <A href="set_epsel.htm">set_epsel</A>,
+						<A href="get_epsel.htm">get_epsel</A>, <A href="get_epspivot.htm">get_epspivot</A>, <A href="set_epspivot.htm">set_epspivot</A>, <A HREF="set_mip_gap.htm">set_mip_gap</A>, <A HREF="get_mip_gap.htm">get_mip_gap</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

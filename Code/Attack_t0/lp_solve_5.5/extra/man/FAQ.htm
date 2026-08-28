@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>lp_solve Frequently Asked Questions</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>lp_solve Frequently Asked Questions</u></h1>
+					<P>
+						- <b>Where can I find the latest version of lp_solve?</b><br>
+						There is a google group (<a href="https://groups.google.com/g/lp_solve" target="_blank">https://groups.google.com/g/lp_solve</a>)
+						that bundles all activities of the lp_solve community. You have to register but
+						this is for free. You will find there the latest sources, examples and manuals.</P>
+					<p>
+						- <b>Can I use lp_solve in commercial code?</b><br>
+						Yes you can. However read the GNU LESSER GENERAL PUBLIC LICENSE which you can
+						find in LGPL.txt</p>
+					<p>
+						- <b>Please explain what this LGPL license exactly means. I don't understand it.</b><br>
+The LGPL is as clear as fog on what is allowed, what is not, and what is
+commercial.  We use the following structure for determining the applicability
+of LGPL for a particular setting (which nobody has disagreed with yet):<br>
+<br>
+The LGPL "decision tree/truth table" essentially consists of the following
+structure:</p>
+<pre>
+               lp_solve used
+                as compiled
+                 library?
+                 Yes    No
+                -----------
+lp_solve   Yes |  B1 |  B2 |
+code was       |-----|-----|
+modified?   No |  A  |  B3 |
+                -----------
+</pre>
+<p>
+A: "Work that uses the library"<br>
+B: "Work based on the library"<br>
+<br>
+Case A: Since no lp_solve code has been changed and it is used purely as a
+library based on distributed original code, only conspicuously placed
+copyright/citation information and the reference to where the source may be
+obtained is necessary.  No part of your own code has to be provided and it
+can be protected and licensed as you wish.<br>
+<br>
+Case B1: The full code of the modified lp_solve library has to be
+distributed or made very easily available with full credits and license
+information (optionally LGPL or GPL).  Your own source code does *not* have
+to be included and it can be protected and licensed as you wish.<br>
+<br>
+Case B2: The full code of the modified lp_solve library has to be
+distributed or made very easily available with full credits and license
+information (optionally LGPL or GPL).  Your own code *has* to be made
+public/reverse engineer-able and be licensed under either LGPL or GPL.<br>
+<br>
+Case B3: Since no lp_solve code has been changed and it is used as a
+linked-in library based on distributed original code, only conspicuously
+placed copyright information and the reference to where the source may be
+obtained is necessary.  Your own code *has* to be made public/reverse
+engineer-able and be licensed under either LGPL or GPL.<br>
+<br>
+You have to make a judicious determination based on this.  If your code
+falls under the categories B2 or B3, and the terms are unacceptable to you
+(or the company you represent), then our interpretation of the LGPL is that
+you have to find a suitable commercial arrangement/licensing with the
+copyright holders of lp_solve.  If this is applicable to you, then you can
+address any mail about licensing/copyrights to us we will
+resolve this.</p>
+					<p>
+						- <b>But how much does lp_solve costs me?</b></p>
+<p>lp_solve is totally free - gratis - if you follow the rules of the LGPL.
+You may of course ask money for code you have developed or added, but only for that part, and the openness provisions of the LGPL have to be respected.
+If you are not willing to respect this, then the only recourse is that you seek an agreement with the copyright holders of the appropriate parts of lp_solve.</p>
+					<p>
+						- <b>How should lp_solve be cited when I use it?</b></p>
+					<pre>
+lpsolve citation data
+----------------------
+Description     : Open source (Mixed-Integer) Linear Programming system
+Language        : Multi-platform, pure ANSI C / POSIX source code, Lex/Yacc based parsing
+Official name   : lp_solve (alternatively lpsolve)
+Release data    : Version 5.1.0.0 dated 1 May 2004
+Co-developers   : Michel Berkelaar, Kjell Eikland, Peter Notebaert
+Licence terms   : GNU LGPL (Lesser General Public Licence)
+Citation policy : General references as per LGPL
+                  Module specific references as specified therein</pre>
+					This text is also in citations.txt
+					<p>
+						- <b>What are the default bounds on variables?</b><br>
+						As all (at least, simplex) lp solvers, the default lower bound on a variable is
+						0 and the default upper bound is unlimited.</p>
+					<p>
+						- <b>Is it possible to set negative bounds on variables?</b><br>
+						Yes, this is perfectly possible.</p>
+					<p>
+						- <b>Is it possible to set a minus infinite lower bound on a variable?</b><br>
+						Yes, this is possible. In the lp format, use as lower bound -Inf. In the mps
+						format, in the BOUNDS section use FR<br>
+						If you use the API interface, use get_infinite(lp)<br>
+						Note that lp_solve splits this variable in 2 if there is a positive or no upper
+						bound. This is done automatically by lp_solve. Because of this, the model
+						becomes larger and thus can take some more time to solve, so only put a minus
+						infinity lower bound on a variable when it is needed.</p>
+					<p>
+						- <b>What is the layout of the lp/mps/CPLEX format?</b><br>
+						See the help file</p>
+					<p>
+						- <b>When I call the API call solve(), several messages are printed on screen. How can I
+						disable those messages?</b><br>
+						Use the <a href="set_verbose.htm">set_verbose</a> API call. The default is NORMAL (4).
+						Changing this to IMPORTANT (3) already disables a lot of messages.
+						</p>
+					<p>
+						- <b>lp_solve fails to solve my model or it takes a very long time to solve my model.
+						What can I do?</b><br>
+						lp_solve has a lot of options. Consider to use the following:</p>
+						<ol>
+						<li>Use the LUSOL bfp. See <a href="BFP.htm">Basis Factorization Packages</a>. This will improve speed and numerical stability considerably. This bfp will probably be the default in a later lp_solve version.</li>
+						<li>Use scaling. See <a href="scaling.htm">scaling</a> and <a href="set_scaling.htm">set_scaling</a>. This will improve numerical stability and even performance considerably.</li>
+						<li>Use presolve. Presolve eliminates variables and constraints where possible. This makes the model smaller so that it is solved faster. But presolve also takes some time, so it depends on the model if the total time is faster or even slower.</li>
+						<li>If the model has integer variables, look at branching options and tolerance gaps.
+						Especially, look at the following API calls:
+						<a href="set_mip_gap.htm">set_mip_gap</a>,
+						<a href="set_break_at_first.htm">set_break_at_first</a>
+						<a href="set_break_at_value.htm">set_break_at_value</a>
+						<a href="set_bb_floorfirst.htm">set_bb_floorfirst</a>
+						<a href="set_bb_depthlimit.htm">set_bb_depthlimit</a>
+						<a href="set_solutionlimit.htm">set_solutionlimit</a>
+						<a href="set_bb_rule.htm">set_bb_rule</a>
+						</li>
+						</ol>
+						If you use the <a href="lp_solve.htm">lp_solve command</a> line program, each of these options can be set via a command line option. See lp_solve -h or <a href="lp_solve.htm">lp_solve command</a>.
+					<p>
+						- <b>Can lp_solve handle non-linear equations?</b><br>
+						No, lp_solve can only handle linear constraints. However it also supports
+						integer and semi-continuous variables and special ordered sets. This can be a
+						help to simulate non-linearity.</p>
+					<p>
+					    - <b>Can lp_solve handle ratios?</b><br>
+					    Ratios can be converted to linear equations. See the help file.
+					</p>
+					    - <b>I get a parse error on my lp-file, but I don't see any error in the formulation I have done. What is wrong here?</b><br>
+					    Have you entered your model via Word? Then the problem will probably be that some characters have ascii codes that are not recognised
+					    by lp_solve. For example, Word changes the minus sign (-) to another character that also looks like a minus sign, but it is a bit longer.
+					    The ascii code of this character is different from the ascii code of the real minus sign and lp_solve has problem with it. However you see
+					    a - on screen. The solution is not to use Word to enter your lp-model. Notepad should be ok. Better is to use the LPSolve IDE.
+					<p>
+					</p>
+					<p>
+					    - <b>lp_solve prints the output on screen. Can I have the output also in a file?</b><br>
+					    Yes, you can use standard redirection for that. Use the &gt; before the filename to do that.<br>
+					    For example:<br>
+					    lp_solve input.lp >output.txt
+					</p>
+					<p>
+					    - <b>I have a constraint saying that x &lt;  2, but lp_solve comes with a solution of 2, how comes?</b><br>
+					    &lt; is the same as as &lt;=<br>also &gt; is the same as &gt;=<br>
+					    This makes more than sense. Mathematically, 1.99999999999999999999999999999999999999999999999999
+					    is smaller than 2, but what is the practical difference with 2? You always have to consider
+					    rounding errors also... If the variable is defined as integer then just say x &lt;= 1
+					</p>
+					<p>
+					    - <b>When I solve my model, I get a stack overflow error/core dump/protection error. What is wrong?</b><br>
+					    If your model has integer/binary/semi-cont/SOS variables then version 5 can solve your problem.
+					    In version 4, the implemented branch-and-bound algorithm puts its branches on the stack and that
+					    can result in a stack overflow when it is a tough model. Version 5 doesn't put the branches on the
+					    stack anymore and because of that, this error is solved.
+					</p>
+					<p>
+					    - <b>Version 4 solves my models slower than version 3 did. What can I do?</b><br>
+					    Some models are indeed slower with version 4. Version 5 has several enhancements and is
+					    faster and more stable. Also version 4 always calculates the sensitivity information while
+					    older versions did not have this feature. This also takes some time. Version 5 only calculates
+					    the sensitivity when this information is specifically asked that makes it again faster.
+					</p>
+					<p>
+					    - <b>It takes a long time to build the model via the API interface. Especially
+					    <a href="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</a>
+					    seems to be slow. How can it be made faster?</b><br>
+					    Version 5 has a new API call <a href="set_add_rowmode.htm">set_add_rowmode</a>
+					    that makes <a href="add_constraint.htm">add_constraint, str_add_constraint</a> spectacular
+					    faster.<br>
+					    If the model is build column by column, then it is strongly suggested to use
+					    <a href="add_column.htm">add_columnex</a> instead of <a href="add_column.htm">add_column</a>
+					    because <a href="add_column.htm">add_columnex</a> gives the possibility to only supply the
+					    non-zero elements and that speeds up building the model considerably, especially if the matrix
+					    is sparse (a lot of zero elements).<br>
+					    If the model is build row by row, then it is strongly suggested to use
+					    <a href="add_constraint.htm">add_constraintex</a> instead of <a href="add_constraint.htm">add_constraint</a>
+					    because <a href="add_constraint.htm">add_constraintex</a> gives the possibility to only supply the
+					    non-zero elements and that speeds up building the model considerably, especially if the matrix
+					    is sparse (a lot of zero elements).
+					</p>
+					<p>
+					    - <b>Can lp_solve give me the 'simplex tableau' of the model?</b><br>
+					    Version 5 has a new routine (print_tableau) to give you this information.
+					</p>
+					<p>
+						- <b>Is there documentation about the API interface?</b><br>
+						Yes, there are html (help) files. See the Files section in the google group.</p>
+					<p>
+						- <b>What is the maximum number of rows/columns that lp_solve can handle?</b><br>
+						There is no fixed limit. Only available memory is a limit.</p>
+                                        <p>
+						- <b>I use a programming language that is not listed as supported or for which there
+						are no examples. Can lp_solve be called from this language?</b><br>
+						If this language allows calling functions from a C-dll, then it is possible.
+						It is not because there is no example provided (yet) that it is not possible.
+						The lp_solve community is always interested in your interface to call the lp_solve library.
+						It doesn't have to be perfect.</p>
+					<p>
+						- <b>The Windows examples don't work. I get an error running them. Some dll cannot be
+						found.</b><br>
+						The examples call a dll that contains the lp_solve routines. This dll is called
+						lpsolve*.dll and must be on the system either in the directory of the
+						application or somewhere in the path.<br>
+						This dll is contained in the windows binaries archive in the files section.</p>
+					<p>
+						- <b>Does lp_solve supports the mps free format?</b><br>
+						This is possible from version 5.0.10.0. Before it was not possible.
+						See <a href="read_mps.htm">read_freeMPS</a> or the -fmps and -wfmps options to the lp_solve program.
+						There is also a utility LPx2D that allows to convert this format.
+						See the Files section.</p>
+					<p>
+						- <b>Does the lp_solve lp format support comments?</b><br>
+						Yes it does. Put the comments between /* */<br>
+						It can be anywhere in the text, even over multiple lines. Just like in C<br>
+						lp_solve 4.0.1.11 and newer also supports the C++ line comment //</p>
+					<p>
+						- <b>I want to compile lp_solve myself, but I get link errors. Also what should I
+						do with lp.y, lex.l, lp_rlp.y, lp_rlp.l?</b><br>
+						The .y files are yacc files. They can be translated to C via the bison or yacc commands.<br>
+						The .l files are lex files. They can be translated to C via the flex or lex commands.<br>
+						lp.y/lex.l were used in version 4. Version 5 use the names lp_rlp.y/lp_rlp.l
+						All unix environments have these commands. There are also windows versions
+						available.<br>
+						For example at <a href="http://unxutils.sourceforge.net/">http://unxutils.sourceforge.net/</a><br>
+						Also only include lp.c in your compile project, not lex.c. lex.c is
+						automatically #included by lp.c<br>
+						Version 5 doesn't use the .c extension for the translated lex file. Instead it uses
+						the .h extension. That way there is no confusion.
+						So you don't have to (and may not) include it yourself again in the project.<br>
+						To compile lp_solve, you must use make or gmake and a Makefile. There are
+						several example makefiles in the source included like Makefile.linux,
+						Makefile.msc. Enter make or gmake -f makefile. Note that for WINDOWS, you must
+						use gnu make because MS make hasn't enough functionality. You can find gmake at <a href="http://unxutils.sourceforge.net/">
+							http://unxutils.sourceforge.net/</a></p>
+					<p>
+						- <b>I compile lp_solve myself, but I get link errors saying that main (or _main)
+						is already defined.</b><br>
+						demo.c, mps2lp.c, lp2mps.c, lp_solve.c may never be in the same project. You
+						must use one of these with the other C source files (except lex.c, see above)
+						to make either demo.exe, mps2lp.exe, lp2mps.exe, lp_solve.exe
+					</p>
+					<p>
+					    - <b>I want to use the lpsolve dll, but when I compile my C/C++ program, I get link
+					    errors. He doesn't find any of the lpsolve API routines. What am I doing wrong?</b><br>
+					    Each function that you use in a C/C++ application must be defined.
+						The compiler gives a warning if he doesn't find a definition of a function
+						and the linker gives an error if he doesn't find an implementation for each
+						used function. The implementation of a function can be in your source code,
+						in another source file or in a library. If the function is in the same
+						source code and defined before it is called, then you get no compiler
+						warning because it is declared implicitly. If the function is after you call
+						it, in another source file or in a library, then your source code must have
+						a definition of this function or the compiler will give a warning. This
+						is because the compiler wants to check if the function is correctly
+						called (correct number of arguments, correct return code, should there be
+						done some implicit conversion, ...). It is common to define these
+						declarations in a header (.h) file. That is the reason why you include
+						stdio.h, stdlib.h, string.h, windows.h and so on. For lpsolve, this library
+						is lp_lib.h (lpkit.h in version 4 and before). Because lp_lib.h and lpkit.h
+						also include other header files, you need these also.  Including these source
+						files do not guarantee that the linker will not give an error. This because
+						the linker not only wants the definition of the functions, it also needs
+						the implementation of it. So all routine calls that you do must be
+						found somewhere by the linker. These can be in one of your source files and
+						if they are not static defined then it is ok for the linker, or they are in
+						a library. For example the function printf is a function from a library.
+						This library can be linked statically or dynamically with your program. In
+						Visual C, for the standard libraries this is defined via one of the
+						compiler options /MT, /MD, /ML (in .NET via project, properties, C/C++,
+						Code generation, Runtime Library. In VC6 via Project, settings, C/C++,
+						category code generation, use runtime library). This results in using one of
+						the libraries LIBC*.lib or MSVCRT*.lib. If you use static linking, then
+						these routines are linked at link time with your program so that this program
+						runs without the need of any other file. So these routines are then in
+						LIBC.lib (the static libraries). If you use dynamic linking (MSVCRT.lib),
+						then this library contains minimal code (not the implementation of this
+						function) to call a library (a dll) at runtime. For example MSVCRT.DLL. So
+						this dll must be on the system when you *run* the application. You will see
+						that the resulting exe is smaller when dynamically linked compared to
+						statically linked. This is logical because the implementation of the routine
+						is in the DLL. The advantage of a DLL is that you can have a new
+						implementation of it and use it in your application without having to rebuild
+						your application. This because the DLL is linked at runtime with your
+						program. Off course, the interface should stay the same for that. Also
+						see <A href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_c_run.2d.time_libraries.asp">http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_c_run.2d.time_libraries.asp</A>
+						for an explanation on the VC runtime libraries.<BR>Now besides the standard
+						libraries there are also additional libraries. For example odbc32.lib is one
+						that provides an API to access ODBC, or ws2_32.lib that contains the
+						winsock/TCP/IP API calls and so on. These are all dynamic linked libraries,
+						so the implementation is in a DLL. You must specify the library to the linker
+						so that he knows how to call the implemented DLL (how it is called,
+						...).<BR><BR>
+						Now if you want to use the lpsolve dll, you must also specify the
+						lpsolve library to the linker so that you don't get the link errors. For
+						version 5, this library is called lpsolve51.lib. You must specify it via
+						Project, Properties, Linker, Input, Additional Dependencies (.NET) or
+						Project, Settings, Link, Category General, Object Library Modules (VC6).
+						There you add lpsolve51.lib (if there are already other libraries, just add at
+						the end, separated via a space). You can specify the path where this file is
+						located or you can specify via Project, Properies, Linker, General,
+						Additional Library Directories (.NET) or Project, Settings, Link, Category
+						Input, Additional library path, the paths where libraries can be found
+						(separated by ,). Basically that is it.
+						Also see <a href="Build.htm">Calling the lpsolve API from your application</a>
+						for more information.</p>
+					<p>
+						- <b>lp.c and lex.c that are generated on my system are different from the
+						versions that can be found in the support folder in the files section. Are the
+						latest versions of these files on your site?</b><br>
+						Depending on the platform, the command used and the version of the command,
+						these files are indeed different. That is not a problem. You can compare this
+						with a compiler. The same source code generates totally different binaries,
+						depending on the compiler used and its version, but the programs react the same
+						(at least, they should ...).</p>
+					<p>
+						- <b>When I start the lp_solve program, nothing
+                          happens. I just get a blinking cursor. If I enter a command like lp1 = make_lp(0,4),
+                          I get a parse error. What is wrong here? How do I use the program?</b><br>
+						lp_solve is a library with a set of routines with purpose to solve a MIP model.
+						These routines are sometimes referred as the API (Application Programming
+						Interface). These routines can be used in a C-program to solve MIP models. This
+						is for example demonstrated in the demo program. Under Windows there is also a
+						dll available that can be used by other programming languages to call the API
+						functions. There are demos in VB and .NET available, but the principle is the
+						same. The lp_solve program is basically another 'demo' program of this api.
+						This program reads the MIP model from standard input or from a file and outputs
+						the result back to the console or to a file. There are two possible input
+						formats: the 'lp' format and the 'mps' format. This has nothing to do with the
+						API. So lp1 = make_lp(0,4) is a totally wrong input for the lp_solve program.
+						The lp-format is a 'readable' format of a MIP model.<br>
+						For example:<br>
+						<br>
+						max: -x1 + 2 x2;<br>
+						C1: 2x1 + x2 &lt;= 5;<br>
+						-4 x1 + 4 x2 &lt;= 5;<br>
+						<br>
+						int x2,x1;<br>
+						<br>
+						This lp-format is the default format of the lp_solve program.<br>
+						<br>
+						The other format is mps format. This is a totally different format and used by
+						many MIP solvers. This format is not very readable for us humans. The same
+						example as above in mps format looks like this:</p>
+					<pre>
+ROWS
+ N  r_0
+ L  C1
+ L  r_2
+COLUMNS
+    MARK0000  'MARKER'                 'INTORG'
+    x1        r_0                  1   C1                   2
+    x1        r_2                 -4
+    x2        r_0                 -2   C1                   1
+    x2        r_2                  4
+    MARK0001  'MARKER'                 'INTEND'
+RHS
+    RHS       C1                   5   r_2                  5
+ENDATA
+</pre>
+					<p>
+					To enable this input format in the lp_solve program, use the -mps option.<br>
+					<br>
+					The lp_solve program has many other options to control many other things like
+					the amount of data to output, if scaling must be used and so on.<br>
+					<br>
+					There are two other 'demo' programs: lp2mps and mps2lp. They convert model
+					files from one format to the other.<br>
+					<br>
+					The lp_solve, lp2mps and mps2lp programs all use API calls of the lp_solve
+					library to perform their actions.<br><br>
+
+					If lp_solve is started without an input file, then it gives a blinking cursor and waits for input.
+					It is now possible to enter the model in the specified format (lp by default).
+					But this is not very handy. You must enter the whole model each time you want to
+                    solve it and must be careful that you don't type any errors. To stop input mode,
+                    press Ctrl Z.<br>
+                    However it is much better to write your model in a disk file with your favourite
+                    editor (make sure it is in text format) and then provide this file to lp_solve.
+                    For example:<br><br>
+                    lp_solve input.lp<br><br>
+                    It is also possible to use input redirection:<br><br>
+                    lp_solve &lt;input.lp<br><br>
+                    Or more sophisticated constructs like:<br><br>
+                    gen_model | lp_solve<br><br>
+                    gen_model is here a user written program that outputs the model to standard output and
+                    via the pipe character (|) this output is redirected to lp_solve. So no intermediate
+                    file is needed in this case.</p>
+                    <p>
+						- <b>Is there no more user-friendly interface than the <a href="lp_solve.htm">lp_solve command</a> line program?</b><br>
+						Yes there is, thanks to <a href="mailto:hgourvest@progdigy.com">Henri Gourvest</a>.
+						For version 5 there is now the LPSolve IDE, a Windows interface to the lpsolve
+						library. See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,10 @@
+>load "lpmaker"
+>f = [143, 60, 195];
+>A = [120, 210, 150.75; 110, 30, 125; 1, 1, 1];
+>b = [15000; 4000; 75];
+>lp = lpmaker(f, A, b, [-1, -1, -1], [], [], [], 1, 0);
+>solvestat = eulpsolve("solve", lp);
+>eulpsolve("get_objective", lp)
+>eulpsolve("get_variables", lp)
+>eulpsolve("delete_lp", lp);
+>

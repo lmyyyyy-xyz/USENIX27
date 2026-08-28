@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_anti_degen</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_anti_degen</h1>
+					<p>Specifies if&nbsp;special handling&nbsp;must be done to reduce
+						degeneracy/cycling while solving.</p>
+					<p><b>void set_anti_degen(lprec </b>*<i>lp</i><b>, int </b><i>anti_degen</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_anti_degen</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>anti_degen</i></p>
+					<p class="indent">
+						Can be any combination (OR) of following values:</p>
+					<TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>ANTIDEGEN_NONE&nbsp;(0)</TD>
+								<TD>No anti-degeneracy handling</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_FIXEDVARS&nbsp;(1)</TD>
+								<TD>Check if there are equality slacks in the basis and try to drive them out in
+								order to reduce chance of degeneracy in Phase 1</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_COLUMNCHECK&nbsp;(2)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>
+									ANTIDEGEN_STALLING&nbsp;(4)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_NUMFAILURE (8)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_LOSTFEAS (16)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_INFEASIBLE (32)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_DYNAMIC (64)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+							<TR>
+								<TD>ANTIDEGEN_DURINGBB (128)</TD>
+                                                                <TD>&nbsp;</TD>
+							</TR>
+                                                        <TR>
+								<TD>ANTIDEGEN_RHSPERTURB (256)</TD>
+                                                                <TD>Perturbation of the working RHS at refactorization</TD>
+							</TR>
+                                                        <TR>
+								<TD>ANTIDEGEN_BOUNDFLIP (512)</TD>
+                                                                <TD>Limit bound flips that can sometimes contribute to degeneracy in some models</TD>
+							</TR>
+						</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_anti_degen</b> function specifies if&nbsp;special handling&nbsp;must
+						be done to reduce degeneracy/cycling while solving. Setting this flag can avoid
+						cycling, but can also increase numerical instability. The default is ANTIDEGEN_INFEASIBLE + ANTIDEGEN_STALLING + ANTIDEGEN_FIXEDVARS (37).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_anti_degen(lp, ANTIDEGEN_FIXEDVARS | ANTIDEGEN_PERTURB);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_anti_degen.htm">get_anti_degen</A>, <A HREF="is_anti_degen.htm">
+							is_anti_degen</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

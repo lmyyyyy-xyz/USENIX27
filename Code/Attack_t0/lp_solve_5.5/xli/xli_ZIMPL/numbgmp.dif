@@ -1,0 +1,9 @@
+46,53d45
+< #ifdef WIN32
+< #ifndef finite
+<   #include <float.h>
+<   #define finite _finite
+< #endif
+< #endif
+< 
+< 

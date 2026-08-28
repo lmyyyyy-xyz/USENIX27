@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_obj_fn, set_obj_fnex, str_set_obj_fn, set_obj</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_obj_fn, set_obj_fnex, str_set_obj_fn, set_obj</h1>
+					<p>
+						Set the objective function (row 0) of the matrix.</p>
+					<p>
+						<b>unsigned char set_obj_fn(lprec </b>*<i>lp</i><b>, REAL </b>*<i>row</i><b>);</b></p>
+					<p>
+						<b>unsigned char set_obj_fnex(lprec </b>*<i>lp</i><b>, int </b><i>count</i><b>, REAL </b>*<i>row</i><b>, int </b>*<i>colno</i><b>);</b></p>
+					<p>
+						<b>unsigned char str_set_obj_fn(lprec </b>*<i>lp</i><b>, char </b>*<i>row_string</i><b>);</b></p>
+					<p>
+						<b>unsigned char set_obj(lprec </b>*<i>lp</i><b>, int </b><i>column</i><b>, REAL </b><i>value</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>set_obj_fn</b>, <b>set_obj_fnex</b>, <b>str_set_obj_fn</b> and <b>set_obj</b> return TRUE (1) if
+						the operation was successful. A return value of FALSE (0) indicates an error.
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>count</i></p>
+					<p class="indent">Number of elements in <i>row</i> and <i>colno</i>.</p>
+					<p class="dt">
+						<i>row</i></p>
+					<p class="indent">
+						An array with 1+<A href="get_Ncolumns.htm">get_Ncolumns</A> (<i>count</i> for set_obj_fnex) elements that contains the values of the objective
+						function.</p>
+					<p class="dt"><i>colno</i></p>
+					<p class="indent">An array with <i>count</i> elements that contains the column numbers
+						of the row. However this variable can also be NULL. In that case element i
+						in the variable <i>row</i> is column i.</p>
+					<p class="dt">
+						<i>row_string</i></p>
+					<p class="indent">
+						A string with column elements that contains the values of the objective
+						function. Each element must be separated by space(s).</p>
+					<p class="dt">
+						<i>column</i></p>
+					<p class="indent">
+						The column number for which the value must be set.</p>
+					<p class="dt">
+						<i>value</i></p>
+					<p class="indent">
+						The value that must be set.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>set_obj_fn</b>, <b>set_obj_fnex</b>, <b>str_set_obj_fn</b> functions set all values of the
+						objective function at once.<br>
+						Note that for <b>set_obj_fn</b> (and <b>set_obj_fnex</b> when <i>colno</i> is
+						NULL) element 0 of the array is not considered (i.e. ignored). Column 1 is
+						element 1, column 2 is element 2, ...<br>
+						<b>set_obj_fnex</b> has the possibility to specify only the non-zero elements.
+						In that case <i>colno</i> specifies the column numbers of the non-zero elements.
+						This will speed up building the model considerably if there are a lot of zero values.
+						In most cases the matrix is sparse and has many zero value. Thus it is almost always
+						better to use <b>set_obj_fnex</b> instead of <b>set_obj_fn</b>. <b>set_obj_fnex</b>
+						is always at least as performant as <b>set_obj_fn</b>.
+						Note that unspecified values by <B>set_obj_fnex</B> are set to zero.<br>
+						The <b>set_obj</b> function sets the objective value for the specified column.
+						If multiple objective values must be set, it is more performant to use <b>set_obj_fnex</b>.<br>
+						Note that it is advised to set the objective function before adding rows via
+						<A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>.
+						This especially for larger models. This will be much more performant than adding the
+						objective function afterwards.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL row[1+2]; /* must be 1 more then number of columns ! */
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  row[1] = 1.0;
+  row[2] = 2.0;
+  set_obj_fn(lp, row);  /* constructs the obj: +v_1 +2 v_2 */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="set_row.htm">set_row, set_rowex</A>, <A HREF="add_column.htm">
+							add_column, add_columnex, str_add_column</A>, <A HREF="set_column.htm">set_column, set_columnex</A>, <A HREF="get_column.htm">get_column, get_columnex</A>,
+						<A HREF="get_row.htm">get_row, get_rowex</A>, <A HREF="get_mat.htm">get_mat</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

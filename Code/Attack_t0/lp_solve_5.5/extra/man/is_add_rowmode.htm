@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_add_rowmode</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_add_rowmode</h1>
+					<p>Returns a flag which of the add routines perform best.</p>
+					<p><b>unsigned char is_add_rowmode(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_add_rowmode</b> returns TRUE or FALSE. If FALSE, then <A HREF="add_column.htm">add_column, add_columnex,
+							str_add_column</A> performs best. If TRUE, then <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A> performs best.
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label"><b>Remarks</b></p>
+					<p>Default, this is FALSE, meaning that <A HREF="add_column.htm">add_column, add_columnex,
+							str_add_column</A> performs best. If the model is build via <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A> calls, then these routines will be much faster
+							if this routine is called with <i>turnon</i> set on TRUE. This is also called row entry mode.
+							The speed improvement is spectacular,
+							especially for bigger models, so it is advisable to call this routine to set the mode.
+							Normally a model is build either column by column or row by row.<br>
+							Note that there are several restrictions with this mode:<br>
+							Only use this function after a <A HREF="make_lp.htm">make_lp</A> call. Not when the model
+							is read from file. Also, if this function is used, first add the objective function via <A HREF="set_obj_fn.htm">set_obj_fn, set_obj_fnex, str_set_obj_fn</A>
+							and after that add the constraints via <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A>. Don't call other API functions while in row entry mode.
+							No other data matrix access is allowed while in row entry mode.
+							After adding the contraints, turn row entry mode back off. Once turned of, you cannot switch back
+							to row entry mode. So in short:<br>
+							- turn row entry mode on<br>
+							- set the objective function<br>
+							- create the constraints<br>
+							- turn row entry mode off<br>
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  unsigned char rowmode;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  rowmode = is_add_rowmode(lp); /* Will return FALSE */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_add_rowmode.htm">set_add_rowmode</A>, <A HREF="set_add_rowmode.htm">set_add_rowmode</A>, <A HREF="set_obj_fn.htm">set_obj_fn, set_obj_fnex, str_set_obj_fn,
+							set_obj</A>,
+							<A HREF="add_column.htm">add_column, add_columnex, str_add_column</A>, <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

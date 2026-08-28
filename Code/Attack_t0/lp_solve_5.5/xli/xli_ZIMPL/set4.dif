@@ -1,0 +1,38 @@
+43,55d42
+< #if !defined INLINE
+< 
+< #if defined __cplusplus
+<   #define INLINE inline
+< #elif defined _WIN32 || defined WIN32
+<   #define INLINE _inline
+< #else
+<   #define INLINE
+< #endif
+< 
+< #endif
+< 
+< 
+143c130
+< INLINE int set_lookup_idx(const Set* set, const Tuple* tuple, int offset)
+---
+> inline int set_lookup_idx(const Set* set, const Tuple* tuple, int offset)
+156c143
+< INLINE void set_get_tuple_intern(const Set* set, int idx, Tuple* tuple, int offset)
+---
+> inline void set_get_tuple_intern(const Set* set, int idx, Tuple* tuple, int offset)
+176c163
+< INLINE SetIter* set_iter_init_intern(const Set* set, const Tuple* pattern, int offset)
+---
+> inline SetIter* set_iter_init_intern(const Set* set, const Tuple* pattern, int offset)
+186c173
+< INLINE Bool set_iter_next_intern(SetIter* iter, const Set* set, Tuple* tuple, int offset)
+---
+> inline Bool set_iter_next_intern(SetIter* iter, const Set* set, Tuple* tuple, int offset)
+205c192
+< INLINE void set_iter_exit_intern(SetIter* iter, const Set* set)
+---
+> inline void set_iter_exit_intern(SetIter* iter, const Set* set)
+215c202
+< INLINE void set_iter_reset_intern(SetIter* iter, const Set* set)
+---
+> inline void set_iter_reset_intern(SetIter* iter, const Set* set)

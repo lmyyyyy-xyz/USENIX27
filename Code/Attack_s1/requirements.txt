@@ -1,0 +1,4 @@
+numpy
+scipy
+# hint_solver is the compiled dependency used by CLWE_Solve's PyBP implementation.
+

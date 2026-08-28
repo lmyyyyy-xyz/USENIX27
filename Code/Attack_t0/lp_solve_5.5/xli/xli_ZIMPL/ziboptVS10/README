@@ -1,0 +1,129 @@
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*                                                                           *
+*                  This file is part of the program and library             *
+*         SCIP --- Solving Constraint Integer Programs                      *
+*                                                                           *
+*    Copyright (C) 2002-2010 Konrad-Zuse-Zentrum                            *
+*                            fuer Informationstechnik Berlin                *
+*                                                                           *
+*  SCIP is distributed under the terms of the ZIB Academic License.         *
+*                                                                           *
+*  You should have received a copy of the ZIB Academic License              *
+*  along with SCIP; see the file COPYING. If not email to scip@zib.de.      *
+*                                                                           *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+The following instructions help setting up the ZIB Optimization Suite, i.e.
+   ZIMPL  - the Zuse Institute Mathematical Programming language
+   SoPlex - the Sequential Object Oriented Simplex
+   SCIP   - Solving Constraint Integer Programs
+for Microsoft Developer Studio Projects.
+
+For questions, contact the author Wei Huang (huang@zib.de) or one of the
+mailing lists {soplex,scip}@zib.de.
+
+
+VERSIONS
+
+We have successfully tested under the following environments:
+- Visual Studio 2008 (VC9), WinXP x86, WIN32
+- Visual Studio 2008 (VC9), Win7 x64, WIN32 and WIN64
+- Visual Studio 2010 (VC10), Win7 x64, WIN32 and WIN64
+VC9 users will need SP1 in order to debug under WIN64.
+
+
+THIRDPARTY PACKAGES
+
+ZIMPL requires the additional libraries
+- gmp (for arbitrary-precision arithmetic) and
+- pcre (for handling regular expressions),
+Optionally, zlib enables parsers to read compressed *.gz files, e.g. *.mps.gz, *.lp.gz.
+
+Using pre-compiled static or dynamic libraries for these packages is possible in theory,
+but has not worked in all the environments we tested.  We recommend to compile them
+manually.  For this, first:
+
+1. Create a new directory named thirdparty in your working directory.
+
+2. Download the source of GMP, e.g., at http://cs.nyu.edu/exact/core/gmp/, 
+   extract it into directory thirdparty and rename the directory to gmp.
+   (We have tested with gmp version 4.1).
+
+3. Download the source of PCRE, e.g., at http://www.pcre.org/,
+   extract it into directory thirdparty and rename the directory to pcre.
+   (We have tested with pcre version 8.10.)
+
+4. Download the source of ZLIB, e.g., at http://www.zlib.net/,
+   extract it into directory thirdparty and rename the directory to zlib.
+   (We have tested with zlib version 1.2.5.)
+
+
+PROJECT FILES
+
+5. Extract the tarball of ziboptsuite, e.g. ziboptsuite-X.X.X.tgz into your working directory,
+   and rename the directory ziboptsuite-X.X.X to zibopt.
+
+6. Enter zibopt (the directory of the ZIB Optimization Suite) and rename the three directories
+   scip-X.X.X, soplex-X.X.X, zimpl-X.X.X (after extract) to get rid of the version numbers:
+
+   scip-X.X.X         ->   scip
+   soplex-X.X.X       ->   soplex
+   zimpl-X.X.X        ->   zimpl
+
+7. Copy *.sln and *.vcproj files (in directory projectfiles) to the following directories:
+
+   ziboptsuite.sln    ->   working directory
+
+   libzimpl.vcproj    ->   zibopt\zimpl       static library of ZIMPL
+   binzimpl.vcproj    ->   zibopt\zimpl       executable file of ZIMPL
+   libsoplex.vcproj   ->   zibopt\soplex      static library of SoPlex
+   binsoplex.vcproj   ->   zibopt\soplex      executable file of SoPlex
+   binscip.vcproj     ->   zibopt\scip        executable file of SCIP
+   libscip.vcproj     ->   zibopt\scip        static library of SCIP, core component
+   liblpispx.vcproj   ->   zibopt\scip        static library of SCIP's LP interface to SoPlex
+   libnlpi.vcproj     ->   zibopt\scip        static library of SCIP's NLP interface
+   libobjscip.vcproj  ->   zibopt\scip        static library of SCIP's C++ wrapper
+
+   libgmp.vcproj      ->   thirdparty\gmp     static library of gmp
+   libpcre.vcproj     ->   thirdparty\pcre    static library of pcre
+   libz.vcproj        ->   thirdparty\zlib    static library of zlib
+
+
+PATCHES
+
+8. In order to build the solution successfully, you need to make the following modifications
+   (all needed files are in directory patchfiles):
+
+   In pcre:	     
+   - config.h, pcre.h:               copy these two header files into directory thirdparty\pcre
+   - pcre_chartables.c.dist:         rename pcre_chartables.c.dist in thirdparty\pcre to pcre_chartables.c, 
+   - pcre_internal.h:                add '#include "config.h"' in line 93
+
+   In gmp:
+   - config.h, gmp-mparam.h, gmp.h:  copy these three header files to thirdparty\gmp
+    
+   In ZIMPL: 
+   - unistd.h, getopt.{h,c}          copy to zibopt\zimpl\src
+   - numbgmp.c  (project libzimpl)   add 'int finite(double ddd) { return ddd < 1e100; }' in line 51
+
+   In SCIP:
+   - cons_soc.c   (project libscip)  in line 39 add lines '#define _USE_MATH_DEFINES'
+   - reader_zpl.c (project libscip)  replace all 'zimpl/' to '', i.e. remove all 'zimpl/'
+
+
+DEPENDENCIES (BUILD ORDER)
+
+The solution file ziboptsuite.sln does not contain automatic projects dependencies.  You may want to add such
+according to the following dependencies:
+
+     binzimpl depends on:  libgmp, libpcre, libz, libzimpl
+     binsoplex depends on: libz, libsoplex
+     binscip depends on:   libz, libpcre, libzimpl, libgmp, libsoplex, libscip, liblpispx, libnlpi, libobjscip
+     
+A recommended build order is libgmp, libpcre, libz, libscip, liblpispx, libnlpi, libobjscip, libsoplex, libzimpl,
+binzimpl, binsoplex, binscip.
+
+NOTE: Projects libscip and libnlpi both contain a file with the name "expression.c" and different content.
+This may cause linking problems when trying to build binscip.  We were able to resolve these problems by always
+building libscip BEFORE libnlpi.
+

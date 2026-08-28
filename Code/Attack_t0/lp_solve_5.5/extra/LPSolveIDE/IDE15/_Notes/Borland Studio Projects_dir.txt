@@ -1,0 +1,47 @@
+
+
+ Directory of F:\Delphi\IDE13\Borland Studio Projects
+
+08/22/2009  07:44 PM    <DIR>          .
+08/22/2009  07:44 PM    <DIR>          ..
+08/22/2009  07:10 PM    <DIR>          Bpl
+08/08/2008  02:47 PM                49 Lpobject.identcache
+03/19/2009  11:11 PM             1,895 lpobjectD.dcu
+03/20/2009  12:30 AM             2,403 Package1.dcu
+03/19/2009  11:07 PM                48 Package1.identcache
+03/18/2009  12:03 PM                99 Project1.bdsproj.local
+03/18/2009  12:05 PM                96 Project1.identcache
+08/22/2009  07:44 PM                 0 Projects
+03/20/2009  12:36 AM             2,297 VLPSynedit1.dcu
+03/19/2009  10:18 AM             2,157 XPmenu1.dcu
+               9 File(s)          9,044 bytes
+
+ Directory of F:\Delphi\IDE13\Borland Studio Projects\Bpl
+
+08/22/2009  07:10 PM    <DIR>          .
+08/22/2009  07:10 PM    <DIR>          ..
+03/18/2009  01:03 PM           315,392 LPSynedt_1.bpl
+03/18/2009  01:03 PM           550,124 LPSynedt_1.dcp
+03/20/2009  12:30 AM           315,904 Package1.bpl
+03/20/2009  12:30 AM           549,854 Package1.dcp
+03/19/2009  10:39 PM            93,696 SynEdit_D2006.bpl
+03/19/2009  10:39 PM            35,863 SynEdit_D2006.dcp
+03/18/2009  09:29 PM         1,617,920 SynEdit_R2006.bpl
+03/21/2009  03:39 PM         2,993,596 SynEdit_R2006.dcp
+03/18/2009  09:26 PM         1,616,896 SynEdit_R7.bpl
+03/18/2009  09:26 PM         2,993,259 SynEdit_R7.dcp
+08/08/2008  05:12 PM           411,648 VirtualTreesD10.bpl
+08/08/2008  05:12 PM           394,388 VirtualTreesD10.dcp
+08/08/2008  05:12 PM            66,048 VirtualTreesD10D.bpl
+08/08/2008  05:12 PM            22,331 VirtualTreesD10D.dcp
+08/08/2008  05:12 PM           468,992 VirtualTreesD9.bpl
+08/08/2008  05:12 PM           427,773 VirtualTreesD9.dcp
+03/20/2009  12:36 AM            24,064 VLPSynedit1.bpl
+03/20/2009  12:36 AM             7,970 VLPSynedit1.dcp
+03/19/2009  10:18 AM            67,584 XPmenu1.bpl
+03/19/2009  10:18 AM            70,758 XPmenu1.dcp
+              20 File(s)     13,044,060 bytes
+
+     Total Files Listed:
+              29 File(s)     13,053,104 bytes
+               5 Dir(s)  42,572,820,480 bytes free

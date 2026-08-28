@@ -1,0 +1,19 @@
+236c236
+< int __cdecl main(int argc, char* const* argv)
+---
+> int main(int argc, char* const* argv)
+259,264c259,261
+<    FILE*         (__cdecl *openfile)(const char*, const char*) = fopen;
+<    int           (__cdecl *closefile)(FILE*)                   = fclose;
+< #if !defined peter
+<    int optind = 1;
+< #  define VERSION "2.4.0"
+< #endif
+---
+>    FILE*         (*openfile)(const char*, const char*) = fopen;
+>    int           (*closefile)(FILE*)                   = fclose;
+> 
+270d266
+< #if defined peter
+370d365
+< #endif

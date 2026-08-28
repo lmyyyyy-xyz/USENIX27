@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>put_bb_branchfunc</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>put_bb_branchfunc</h1>
+					<p>Specifies a user function to select a B&amp;B branching, given the column to branch on.</p>
+					<p><b>void put_bb_branchfunc(lprec </b>*<i>lp</i><b>, lphandleint_intfunc </b><i>newbranch</i><b>, void </b>*<i>bb_branchhandle</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>put_bb_branchfunc</b> has no return value.</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>newbranch</i></p>
+					<p class="indent">The branch routine.<br>
+						<br>
+						typedef int (__WINAPI lphandleint_intfunc)(lprec *lp, void *bb_branchhandle, int column);<br>
+						<br>
+						The routine must return TRUE if first the floor branch must be taken and FALSE if first the ceiling
+						branch must be taken for the specified column.
+						<br>
+						Note the __WINAPI attribute. This is important under Windows. It ensures __stdcall calling
+						convention which is required.
+					</p>
+					<p class="dt"><i>bb_branchhandle</i></p>
+					<p class="indent">A parameter that will be provided to the branch routine.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>Specifies a user function to select a B&amp;B branching, given the column to branch on.
+					With this function you can specify which branch must be taken first in the B&amp;B algorithm.
+					The floor or the ceiling.
+					This overrules the setting of <A HREF="set_bb_floorfirst.htm">set_bb_floorfirst</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int __WINAPI branchfunction(lprec *lp, void *bb_branchhandle, int column)
+{
+ int branch;
+
+ /* set branch to TRUE or FALSE to specify to branch first on the floor or ceiling branch */
+
+ return(branch);
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_bb_branchfunc(lp, branchfunction, NULL);
+
+  solve(lp);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_bb_floorfirst.htm">set_bb_floorfirst</A>, <A HREF="get_bb_floorfirst.htm">get_bb_floorfirst</A>, <A HREF="set_var_branch.htm">
+							set_var_branch</A>, <A HREF="get_var_branch.htm">get_var_branch</A>, <A HREF="set_var_weights.htm">
+							set_var_weights</A>, <A HREF="get_var_priority.htm">get_var_priority</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,15 @@
+c problem line
+p max 6 8
+c source
+n 1 s
+c sink
+n 6 t
+c arc descriptors
+a 1 2 5
+a 1 3 15
+a 2 4 5
+a 2 5 5
+a 3 4 5
+a 3 5 5
+a 4 6 15
+a 5 6 5

@@ -1,0 +1,1696 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Formulation of an lp problem in lpsolve</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+	</style>
+	</HEAD>
+	<BODY>
+					<h1 align="left"><u>Formulation of an lp problem in lpsolve</u></h1>
+
+<p>We shall illustrate the method of linear programming by means of a simple example,
+giving a combination graphical/numerical solution, and then solve the problem in lpsolve in different ways.
+This via ASCII files and from different programming languages.</p>
+
+<p>Suppose a farmer has 75 acres on which to plant two crops: wheat and barley.
+To produce these crops, it costs the farmer (for seed, fertilizer, etc.) $120 per acre for the
+wheat and  $210 per acre for the barley. The farmer has $15000 available for expenses.
+But after the harvest, the farmer must store the crops while awaiting favourable market conditions.
+The farmer has storage space for 4000 bushels. Each acre yields an average of 110 bushels of wheat
+or 30 bushels of barley.  If the net profit per bushel of wheat (after all expenses have been subtracted)
+is $1.30 and for barley is $2.00, how should the farmer plant the 75 acres to maximize profit?</p>
+
+<p>We begin by formulating the problem mathematically. 
+First we express the objective, that is the profit, and the constraints
+algebraically, then we graph them, and lastly we arrive at the solution
+by graphical inspection and a minor arithmetic calculation.</p>
+
+<p>Let x denote the number of acres allotted to wheat and y the number of acres allotted to barley.
+Then the expression to be maximized, that is the profit, is clearly</p>
+
+<p align="center">P = (110)(1.30)x + (30)(2.00)y = 143x + 60y.</p>
+
+<p>There are three constraint inequalities, specified by the limits on expenses, storage and acreage.
+They are respectively:</p>
+
+<p align="center">
+120x + 210y &lt;= 15000<br>
+110x + 30y &lt;= 4000<br>
+x + y &lt;= 75
+</p>
+
+<p>Strictly speaking there are two more constraint inequalities forced by the fact that the farmer cannot plant
+a negative number of acres, namely:</p>
+
+<p align="center">x &gt;= 0, y &gt;= 0.</p>
+
+<p>Next we graph the regions specified by the constraints. The last two say that we only need to consider
+the first quadrant in the x-y plane. Here's a graph delineating the triangular region in the first quadrant determined
+by the first inequality.</p>
+
+<p><IMG alt="Source" src="O-Matrix1.jpg" border="0"></p>
+
+<p>Now let's put in the other two constraint inequalities.</p>
+
+<p><IMG alt="Source" src="O-Matrix2.jpg" border="0"></p>
+
+<p>The black area is the solution space that holds valid solutions. This means that any point in this area fulfils the
+constraints.
+</p>
+
+<p>Now let's superimpose on top of this picture a contour plot of the objective function P.</p>
+
+<p><IMG alt="Source" src="O-Matrix3.jpg" border="0"></p>
+
+<p>The lines give a picture of the objective function.
+All solutions that intersect with the black area are valid solutions, meaning that this result also fulfils
+the set constraints. The more the lines go to the right, the higher the objective value is. The optimal solution
+or best objective is a line that is still in the black area, but with an as large as possible value.
+</p>
+
+<p>It seems apparent that the maximum value of P will occur on the level curve (that is, level
+line) that passes through the vertex of the polygon that lies near (22,53).<br>
+It is the intersection of x + y = 75 and 110*x + 30*y = 4000<br>
+This is a corner point of the diagram. This is not a coincidence. The simplex algorithm, which is used
+by lpsolve, starts from a theorem that the optimal solution is such a corner point.<br>
+In fact we can compute the result:</p>
+
+<pre>
+x + y = 75          (1)
+110*x + 30*y = 4000 (2)
+</pre>
+
+<p>From (1), y can be expressed in function of x:</p>
+
+<pre>
+y = 75 - x (3)
+</pre>
+
+<p>This equation can be substituted in (2):</p>
+
+<pre>
+110*x + 30*(75 - x) = 4000
+</pre>
+
+<p>Or:</p>
+
+<pre>
+80*x = 1750
+</pre>
+
+<p>Or:</p>
+
+<pre>
+x = 21.875
+</pre>
+
+<p>From (3), y can be derived:</p>
+
+<pre>
+y = 75 - 21.875 = 53.125
+</pre>
+
+<p>The acreage that results in the maximum profit is 21.875 for wheat and 53.125 for barley.
+In that case the profit is:</p>
+
+<pre>
+P = 143*x + 60*y
+</pre>
+
+<p>Or:</p>
+
+P = 143*21.875 + 60*53.125 = 6326.625
+
+<p>That is, $6315.625.</p>
+
+<p>Now, lpsolve comes into the picture to solve this linear programming problem more generally.</p>
+
+<p>First let us show this problem in its mathematical format:</p>
+
+<pre>
+max(143x + 60y)
+s.t.
+120x + 210y &lt;= 15000
+110x + 30y &lt;= 4000
+x + y &lt;= 75
+x &gt;= 0
+y &gt;= 0
+</pre>
+
+<h3><u>Formulate an lp problem with lpsolve</u></h3>
+
+<p>There are several ways to model a linear problem via lpsolve:</p>
+
+<ul>
+  <li><a href="#Read the model from an ASCII file">Read the model from an ASCII file</a></li>
+  <li><a href="#Construct the model from a Mathematical Programming Language">Construct the model from a Mathematical Programming Language</a></li>
+  <li><a href="#Construct the model from a Programming Language">Construct the model from a Programming Language</a></li>
+</ul>
+
+<a name="Read the model from an ASCII file"></a>
+<h4><u>Read the model from an ASCII file.</u></h4>
+
+<p>There exist a lot of formats to model an lp problem into. Almost each solver has its format on its own.</p>
+
+<ul>
+  <li><a href="#MPS file format">MPS file format</a></li>
+  <li><a href="#lp file format">lp file format</a></li>
+  <li><a href="#CPLEX lp file format">CPLEX lp file format</a></li>
+  <li><a href="#LINDO lp file format">LINDO lp file format</a></li>
+  <li><a href="#GNU MathProg file format">GNU MathProg file format</a></li>
+  <li><a href="#LPFML XML file format">LPFML XML file format</a></li>
+</ul>
+
+<a name="MPS file format"></a>
+<h4><u>MPS file format</u></h4>
+
+<p>The MPS format is supported by most lp solvers and thus very universal. The model is provided to the solver
+via an ASCII file.
+This format is very old and difficult to read by humans.
+See <a href="mps-format.htm">MPS file format</a> for a complete description about the format. This problem
+is formulated as follows in MPS format:</p>
+
+<pre>
+* model.mps
+NAME
+ROWS
+ N  R0
+ L  R1
+ L  R2
+ L  R3
+COLUMNS
+    x         R0        143.00000000   R1        120.00000000
+    x         R2        110.00000000   R3        1.0000000000
+    y         R0        60.00000000    R1        210.00000000
+    y         R2        30.000000000   R3        1.0000000000
+RHS
+    RHS       R1        15000.000000   R2        4000.0000000
+    RHS       R3        75.000000000
+ENDATA
+</pre>
+
+<p>Save this as ASCII file with name model.mps</p>
+
+<p>To read this format in lpsolve, the API functions <a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a> can be used.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this MPS model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve -max -mps model.mps</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read an MPS file.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="lp file format"></a>
+<h4><u>lp file format</u></h4>
+
+<p>The lp format is the native lpsolve format to provide LP models via an ASCII file to the solver.
+It is very readable and its syntax is very similar to the Mathematical formulation.
+See <a href="lp-format.htm">LP file format</a> for a complete description about the format. This model
+is formulated as follows in lp-format:</p>
+
+<pre>
+/* model.lp */
+
+max: 143 x + 60 y;
+
+120 x + 210 y &lt;= 15000;
+110 x + 30 y &lt;= 4000;
+x + y &lt;= 75;
+</pre>
+
+<p>Save this as ASCII file with name model.lp</p>
+
+<p>To read this format in lpsolve, the API functions <a href="read_lp.htm">read_lp, read_LP</a> can be used.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this lp model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve model.lp</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read an lp-file.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="CPLEX lp file format"></a>
+<h4><u>CPLEX lp file format</u></h4>
+
+<p>The CPLEX lp format is another format to provide LP models via an ASCII file to the solver.
+It is very readable and its syntax is very similar to the Mathematical formulation. It is a format used
+by the CPLEX solver. See <a href="CPLEX-format.htm">CPLEX lp files</a> for a complete description about the format. This model
+is formulated as follows in CPLEX lp format:</p>
+
+<pre>
+\* model.lpt *\
+
+Maximize
+ +143 x +60 y
+
+Subject To
+ +120 x +210 y &lt;= 15000
+ +110 x +30 y &lt;= 4000
+ +x +y &lt;= 75
+
+End
+</pre>
+
+<p>Save this as ASCII file with name model.lpt</p>
+
+<p>lpsolve doesn't has an API call to read/write this format. However, the lpsolve distribution
+has an XLI that can do this. See <a href="XLI.htm">External Language Interfaces</a> for a description about XLIs.
+This uses the API call <a href="read_XLI.htm">read_XLI</a>. The xli to read/write this format is xli_CPLEX.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this CPLEX lp model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve -rxli xli_CPLEX model.lpt</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read a CPLEX lp file via an XLI.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="LINDO lp file format"></a>
+<h4><u>LINDO lp file format</u></h4>
+
+<p>The LINDO FILE format is another format to provide LP models via an ASCII file to the solver.
+It is very readable and its syntax is very similar to the Mathematical formulation. It is a format used
+by the LINDO solver. See <a href="LINDO-format.htm">LINDO lp files</a> for a complete description about the format. This model
+is formulated as follows in LINDO FILE format:</p>
+
+<pre>
+! model.lnd
+
+MAXIMIZE
+ +143 x +60 y
+
+SUBJECT TO
+ +120 x +210 y &lt;= 15000
+ +110 x +30 y &lt;= 4000
+ +x +y &lt;= 75
+
+END
+</pre>
+
+<p>Save this as ASCII file with name model.lpt</p>
+
+<p>lpsolve doesn't has an API call to read/write this format. However, the lpsolve distribution
+has an XLI that can do this. See <a href="XLI.htm">External Language Interfaces</a> for a description about XLIs.
+This uses the API call <a href="read_XLI.htm">read_XLI</a>. The xli to read/write this format is xli_LINDO.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this LINDO lp model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve -rxli xli_LINDO model.lnd</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read a LINDO lp file via an XLI.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="GNU MathProg file format"></a>
+<h4><u>GNU MathProg file format</u></h4>
+
+<p>The GNU MathProg format is another format to provide LP models via an ASCII file to the solver.
+It is very readable and its syntax is very similar to the Mathematical formulation. It is a format used
+by the GLPK solver and a subset of AMPL. It has also the possibility to use loops.
+See <a href="http://plato.asu.edu/gnu_mp.pdf">Modeling Language GNU MathProg</a>
+This model is formulated as follows in GNU MathProg format:</p>
+
+<pre>
+/* model.mod */
+
+var x >= 0;
+var y >= 0;
+
+maximize obj: +143*x +60*y;
+
+R1: +120*x +210*y &lt;= 15000;
+R2: +110*x +30*y &lt;= 4000;
+R3: +x +y &lt;= 75;
+</pre>
+
+<p>Save this as ASCII file with name model.mod</p>
+
+<p>lpsolve doesn't has an API call to read/write this format. However, the lp_solve distribution
+has an XLI that can do this. See <a href="XLI.htm">External Language Interfaces</a> for a description about XLIs.
+This uses the API call <a href="read_XLI.htm">read_XLI</a>. The xli to read/write this format is xli_MathProg.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this GNU MathProg model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve -rxli xli_MathProg model.mod</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read a GNU MathProg file via an XLI.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="LPFML XML file format"></a>
+<h4><u>LPFML XML file format</u></h4>
+
+<p>The LPFML XML format is another format to provide LP models via an ASCII file to the solver. This format
+is very recent and uses XML layout. It is not very readable by us, but because of the XML structure very flexible.
+See <a href="http://gsbkip.chicagogsb.edu/fml/fml.html">LPFML: A W3C XML Schema for Linear Programming</a> for more information.
+This model is formulated as follows in LPFML XML format:</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8" standalone="no" ?&gt;
+&lt;mathProgram xmlns="http://FML/lpfml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://FML/lpfml.xsd lpfml.xsd"&gt;
+
+  &lt;linearProgramDescription&gt;
+    &lt;source&gt;&lt;/source&gt;
+    &lt;maxOrMin&gt;max&lt;/maxOrMin&gt;
+    &lt;numberRows&gt;3&lt;/numberRows&gt;
+    &lt;numberVars&gt;2&lt;/numberVars&gt;
+  &lt;/linearProgramDescription&gt;
+
+  &lt;linearProgramData&gt;
+    &lt;rows&gt;
+      &lt;row rowName="R1" rowUB="15000"/&gt;
+      &lt;row rowName="R2" rowUB="4000"/&gt;
+      &lt;row rowName="R3" rowUB="75"/&gt;
+    &lt;/rows&gt;
+    &lt;columns&gt;
+      &lt;col colName="x" colType="C" objVal="143"/&gt;
+      &lt;col colName="y" colType="C" objVal="60"/&gt;
+    &lt;/columns&gt;
+    &lt;amatrix&gt;
+      &lt;sparseMatrix&gt;
+        &lt;pntANonz&gt;
+          &lt;el&gt;3&lt;/el&gt;
+          &lt;el&gt;6&lt;/el&gt;
+        &lt;/pntANonz&gt;
+        &lt;rowIdx&gt;
+          &lt;el&gt;0&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;2&lt;/el&gt;
+          &lt;el&gt;0&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;2&lt;/el&gt;
+        &lt;/rowIdx&gt;
+        &lt;nonz&gt;
+          &lt;el&gt;120&lt;/el&gt;
+          &lt;el&gt;110&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+          &lt;el&gt;210&lt;/el&gt;
+          &lt;el&gt;30&lt;/el&gt;
+          &lt;el&gt;1&lt;/el&gt;
+        &lt;/nonz&gt;
+      &lt;/sparseMatrix&gt;
+    &lt;/amatrix&gt;
+  &lt;/linearProgramData&gt;
+
+&lt;/mathProgram&gt;
+</pre>
+
+<p>Save this as ASCII file with name model.xml</p>
+
+<p>lpsolve doesn't has an API call to read/write this format. However, the lp_solve distribution
+has an XLI that can do this. See <a href="XLI.htm">External Language Interfaces</a> for a description about XLIs.
+This uses the API call <a href="read_XLI.htm">read_XLI</a>. The xli to read/write this format is xli_LPFML.
+The lpsolve distribution comes with two applications that use this API call to read a model:</p>
+
+<h5><a href="lp_solve.htm">lp_solve command</a> line program</h5>
+
+<p>To read this LPFML XML model via the <a href="lp_solve.htm">lp_solve command</a> line program and calculate the solution, enter the following command:</p>
+
+<pre>lp_solve -rxli xli_LPFML model.xml</pre>
+
+<p>This gives:</p>
+
+<pre>
+Value of objective function: 6315.63
+
+Actual values of the variables:
+x                          21.875
+y                          53.125
+</pre>
+
+<p>The lp_solve program has a lot of options that can be set. See <a href="lp_solve.htm">lp_solve command</a></p>
+
+<h5>IDE</h5>
+
+<p>Under Windows, there is also a graphical IDE that can read a LPFML XML file via an XLI.
+See <a href="IDE.htm">LPSolve IDE</a> for more information.</p>
+
+<a name="Construct the model from a Mathematical Programming Language"></a>
+<h4><u>Construct the model from a Mathematical Programming Language.</u></h4>
+
+<p>There are several commercial and free Mathematical programming applications out there which can be
+used to solve lp problems. An lpsolve driver is made for several of them:</p>
+
+<ul>
+  <li><a href="AMPL.htm">AMPL</a></li>
+  <li><a href="MATLAB.htm">MATLAB</a></li>
+  <li><a href="O-Matrix.htm">O-Matrix</a></li>
+  <li><a href="Sysquake.htm">Sysquake</a></li>
+  <li><a href="Scilab.htm">Scilab</a></li>
+  <li><a href="Octave.htm">Octave</a></li>
+  <li><a href="FreeMat.htm">FreeMat</a></li>
+  <li><a href="Euler.htm">Euler</a></li>
+  <li><a href="Python.htm">Python</a></li>
+  <li><a href="Sage.htm">Sage</a></li>
+  <li><a href="PHP.htm">PHP</a></li>
+  <li><a href="R.htm">R</a></li>
+  <li><a href="MSF.htm">Microsoft Solver Foundation</a></li>
+</ul>
+
+<a name="Construct the model from a Programming Language"></a>
+<h4><u>Construct the model from a Programming Language.</u></h4>
+
+<p>In several cases it is required that the solver is called from within the programming language
+in which an application is build. All the data is in memory and no files are created to provide data
+to the solver. lpsolve has a very rich, yet easy, API to do this.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API.
+lpsolve is a library of API routines. This library is called from the programming language.
+See <a href="Build.htm">Calling the lpsolve API from your application</a> for more information.
+
+Above example is now formulated in several programming languages:</p>
+
+<ul>
+  <li><a href="#C/C++">C/C++</a></li>
+  <li><a href="#Java">Java</a></li>
+  <li><a href="#Delphi, Free Pascal">Delphi, Free Pascal</a></li>
+  <li><a href="#VB, VBScript">VB, VBScript</a></li>
+  <li><a href="#VB.NET">VB.NET</a></li>
+  <li><a href="#CS.NET">C#.NET</a></li>
+</ul>
+
+<a name="C/C++"></a>
+<h4><u>C/C++</u></h4>
+
+<p>The example model can be formulated as follows in C:</p>
+
+<pre>
+/* demo.c */
+
+#include "lp_lib.h"
+
+int demo()
+{
+  lprec *lp;
+  int Ncol, *colno = NULL, j, ret = 0;
+  REAL *row = NULL;
+
+  /* We will build the model row by row
+     So we start with creating a model with 0 rows and 2 columns */
+  Ncol = 2; /* there are two variables in the model */
+  lp = make_lp(0, Ncol);
+  if(lp == NULL)
+    ret = 1; /* couldn't construct a new model... */
+
+  if(ret == 0) {
+    /* let us name our variables. Not required, but can be useful for debugging */
+    set_col_name(lp, 1, "x");
+    set_col_name(lp, 2, "y");
+
+    /* create space large enough for one row */
+    colno = (int *) malloc(Ncol * sizeof(*colno));
+    row = (REAL *) malloc(Ncol * sizeof(*row));
+    if((colno == NULL) || (row == NULL))
+      ret = 2;
+  }
+
+  if(ret == 0) {
+    set_add_rowmode(lp, TRUE);  /* makes building the model faster if it is done rows by row */
+
+    /* construct first row (120 x + 210 y &lt;= 15000) */
+    j = 0;
+
+    colno[j] = 1; /* first column */
+    row[j++] = 120;
+
+    colno[j] = 2; /* second column */
+    row[j++] = 210;
+
+    /* add the row to lpsolve */
+    if(!add_constraintex(lp, j, row, colno, LE, 15000))
+      ret = 3;
+  }
+
+  if(ret == 0) {
+    /* construct second row (110 x + 30 y &lt;= 4000) */
+    j = 0;
+
+    colno[j] = 1; /* first column */
+    row[j++] = 110;
+
+    colno[j] = 2; /* second column */
+    row[j++] = 30;
+
+    /* add the row to lpsolve */
+    if(!add_constraintex(lp, j, row, colno, LE, 4000))
+      ret = 3;
+  }
+
+  if(ret == 0) {
+    /* construct third row (x + y &lt;= 75) */
+    j = 0;
+
+    colno[j] = 1; /* first column */
+    row[j++] = 1;
+
+    colno[j] = 2; /* second column */
+    row[j++] = 1;
+
+    /* add the row to lpsolve */
+    if(!add_constraintex(lp, j, row, colno, LE, 75))
+      ret = 3;
+  }
+
+  if(ret == 0) {
+    set_add_rowmode(lp, FALSE); /* rowmode should be turned off again when done building the model */
+
+    /* set the objective function (143 x + 60 y) */
+    j = 0;
+
+    colno[j] = 1; /* first column */
+    row[j++] = 143;
+
+    colno[j] = 2; /* second column */
+    row[j++] = 60;
+
+    /* set the objective in lpsolve */
+    if(!set_obj_fnex(lp, j, row, colno))
+      ret = 4;
+  }
+
+  if(ret == 0) {
+    /* set the object direction to maximize */
+    set_maxim(lp);
+
+    /* just out of curioucity, now show the model in lp format on screen */
+    /* this only works if this is a console application. If not, use write_lp and a filename */
+    write_LP(lp, stdout);
+    /* write_lp(lp, "model.lp"); */
+
+    /* I only want to see important messages on screen while solving */
+    set_verbose(lp, IMPORTANT);
+
+    /* Now let lpsolve calculate a solution */
+    ret = solve(lp);
+    if(ret == OPTIMAL)
+      ret = 0;
+    else
+      ret = 5;
+  }
+
+  if(ret == 0) {
+    /* a solution is calculated, now lets get some results */
+
+    /* objective value */
+    printf("Objective value: %f\n", get_objective(lp));
+
+    /* variable values */
+    get_variables(lp, row);
+    for(j = 0; j &lt; Ncol; j++)
+      printf("%s: %f\n", get_col_name(lp, j + 1), row[j]);
+
+    /* we are done now */
+  }
+
+  /* free allocated memory */
+  if(row != NULL)
+    free(row);
+  if(colno != NULL)
+    free(colno);
+
+  if(lp != NULL) {
+    /* clean up such that all used memory by lpsolve is freed */
+    delete_lp(lp);
+  }
+
+  return(ret);
+}
+
+int main()
+{
+  demo();
+}
+</pre>
+
+<p>When this is run, the following is shown on screen:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+Objective value: 6315.625000
+x: 21.875000
+y: 53.125000
+</pre>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+<a name="Java"></a>
+<h4><u>Java</u></h4>
+
+<p>The example model can be formulated as follows in Java:</p>
+
+<pre>
+/* demo.java */
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import lpsolve.*;
+
+public class Demo {
+
+	public Demo() {
+	}
+
+	public int execute() throws LpSolveException {
+          LpSolve lp;
+          int Ncol, j, ret = 0;
+
+          /* We will build the model row by row
+             So we start with creating a model with 0 rows and 2 columns */
+          Ncol = 2; /* there are two variables in the model */
+
+          /* create space large enough for one row */
+          int[] colno = new int[Ncol];
+          double[] row = new double[Ncol];
+
+          lp = LpSolve.makeLp(0, Ncol);
+          if(lp.getLp() == 0)
+            ret = 1; /* couldn't construct a new model... */
+
+          if(ret == 0) {
+            /* let us name our variables. Not required, but can be useful for debugging */
+            lp.setColName(1, "x");
+            lp.setColName(2, "y");
+
+            lp.setAddRowmode(true);  /* makes building the model faster if it is done rows by row */
+
+            /* construct first row (120 x + 210 y &lt;= 15000) */
+            j = 0;
+
+            colno[j] = 1; /* first column */
+            row[j++] = 120;
+
+            colno[j] = 2; /* second column */
+            row[j++] = 210;
+
+            /* add the row to lpsolve */
+            lp.addConstraintex(j, row, colno, LpSolve.LE, 15000);
+          }
+
+          if(ret == 0) {
+            /* construct second row (110 x + 30 y &lt;= 4000) */
+            j = 0;
+
+            colno[j] = 1; /* first column */
+            row[j++] = 110;
+
+            colno[j] = 2; /* second column */
+            row[j++] = 30;
+
+            /* add the row to lpsolve */
+            lp.addConstraintex(j, row, colno, LpSolve.LE, 4000);
+          }
+
+          if(ret == 0) {
+            /* construct third row (x + y &lt;= 75) */
+            j = 0;
+
+            colno[j] = 1; /* first column */
+            row[j++] = 1;
+
+            colno[j] = 2; /* second column */
+            row[j++] = 1;
+
+            /* add the row to lpsolve */
+            lp.addConstraintex(j, row, colno, LpSolve.LE, 75);
+          }
+
+          if(ret == 0) {
+            lp.setAddRowmode(false); /* rowmode should be turned off again when done building the model */
+
+            /* set the objective function (143 x + 60 y) */
+            j = 0;
+
+            colno[j] = 1; /* first column */
+            row[j++] = 143;
+
+            colno[j] = 2; /* second column */
+            row[j++] = 60;
+
+            /* set the objective in lpsolve */
+            lp.setObjFnex(j, row, colno);
+          }
+
+          if(ret == 0) {
+            /* set the object direction to maximize */
+            lp.setMaxim();
+
+            /* just out of curioucity, now generate the model in lp format in file model.lp */
+            lp.writeLp("model.lp");
+
+            /* I only want to see important messages on screen while solving */
+            lp.setVerbose(LpSolve.IMPORTANT);
+
+            /* Now let lpsolve calculate a solution */
+            ret = lp.solve();
+            if(ret == LpSolve.OPTIMAL)
+              ret = 0;
+            else
+              ret = 5;
+          }
+
+          if(ret == 0) {
+            /* a solution is calculated, now lets get some results */
+
+            /* objective value */
+            System.out.println("Objective value: " + lp.getObjective());
+
+            /* variable values */
+            lp.getVariables(row);
+            for(j = 0; j &lt; Ncol; j++)
+              System.out.println(lp.getColName(j + 1) + ": " + row[j]);
+
+            /* we are done now */
+          }
+
+          /* clean up such that all used memory by lpsolve is freed */
+          if(lp.getLp() != 0)
+            lp.deleteLp();
+
+          return(ret);
+        }
+
+	public static void main(String[] args) {
+		try {
+			new Demo().execute();
+		}
+		catch (LpSolveException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+
+<!-- Compile & run commands:
+javac -classpath ..\lib\lpsolve55j.jar Demo.java
+java -cp .;..\lib\lpsolve55j.jar Demo
+-->
+
+<p>When this is run, the following is shown on screen:</p>
+
+<pre>
+Objective value: 6315.625
+x: 21.875000000000007
+y: 53.12499999999999
+</pre>
+
+<p>And a file model.lp is created with the following contents:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+</pre>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+<p>Also note that the API names in Java are a bit different than in the native lpsolve API and the lp argument
+is not there.
+See the lpsolve Java wrapper documentation for more details.</p>
+
+<a name="Delphi, Free Pascal"></a>
+<h4><u>Delphi, Free Pascal</u></h4>
+
+<p>The example model can be formulated as follows in Delphi or Free Pascal:</p>
+
+<pre>
+program demo;
+
+{$APPTYPE CONSOLE}
+
+uses
+  SysUtils,
+  lpsolve;
+
+var
+  Ncol, j, ret: integer;
+  colno: PIntArray;
+  row: PFloatArray;
+  lp: THandle;
+
+begin
+  ret := 0;
+  colno := nil;
+  row := nil;
+
+  (* We will build the model row by row
+     So we start with creating a model with 0 rows and 2 columns *)
+  Ncol := 2; (* there are two variables in the model *)
+  lp := make_lp(0, Ncol);
+  if (lp = 0) then
+    ret := 1; (* couldn't construct a new model... *)
+  (* let us name our variables. Not required, but can be usefull for debugging *)
+  set_col_name(lp, 1, 'x');
+  set_col_name(lp, 2, 'y');
+
+  if (ret = 0) then
+  begin
+    (* create space large enough for one row *)
+    GetMem(colno, SizeOf(integer) * Ncol);
+    GetMem(row, SizeOf(double) * Ncol);
+    if ((colno = nil) or (row = nil)) then
+      ret := 2;
+  end;
+
+  if (ret = 0) then
+  begin
+    set_add_rowmode(lp, true);  (* makes building the model faster if it is done rows by row *)
+
+    (* construct first row (120 x + 210 y &lt;= 15000) *)
+    j := 0;
+
+    colno^[j] := 1; (* first column *)
+    row^[j] := 120;
+    j := j + 1;
+
+    colno^[j] := 2; (* second column *)
+    row^[j] := 210;
+    j := j + 1;
+
+    (* add the row to lp_solve *)
+    if (not add_constraintex(lp, j, row, colno, LE, 15000)) then
+      ret := 3;
+  end;
+
+  if (ret = 0) then
+  begin
+    (* construct second row (110 x + 30 y &lt;= 4000) *)
+    j := 0;
+
+    colno^[j] := 1; (* first column *)
+    row^[j] := 110;
+    j := j + 1;
+
+    colno^[j] := 2; (* second column *)
+    row^[j] := 30;
+    j := j + 1;
+
+    (* add the row to lp_solve *)
+    if (not add_constraintex(lp, j, row, colno, LE, 4000)) then
+      ret := 3;
+  end;
+
+  if (ret = 0) then
+  begin
+    (* construct third row (x + y &lt;= 75) *)
+    j := 0;
+
+    colno^[j] := 1; (* first column *)
+    row^[j] := 1;
+    j := j + 1;
+
+    colno^[j] := 2; (* second column *)
+    row^[j] := 1;
+    j := j + 1;
+
+    (* add the row to lp_solve *)
+    if (not add_constraintex(lp, j, row, colno, LE, 75)) then
+      ret := 3;
+  end;
+
+  if (ret = 0) then
+  begin
+    set_add_rowmode(lp, false); (* rowmode should be turned off again when done building the model *)
+
+    (* set the objective function (143 x + 60 y) *)
+    j := 0;
+
+    colno^[j] := 1; (* first column *)
+    row^[j] := 143;
+    j := j + 1;
+
+    colno^[j] := 2; (* second column *)
+    row^[j] := 60;
+    j := j + 1;
+
+    (* set the objective in lp_solve *)
+    if (not set_obj_fnex(lp, j, row, colno)) then
+      ret := 4;
+  end;
+
+  if (ret = 0) then
+  begin
+    (* set the object direction to maximize *)
+    set_maxim(lp);
+
+    (* just out of curioucity, now show the model in lp format *)
+    write_lp(lp, 'model.lp');
+
+    (* I only want to see importand messages on screen while solving *)
+    set_verbose(lp, IMPORTANT);
+
+    (* Now let lp_solve calculate a solution *)
+    ret := solve(lp);
+    if (ret = OPTIMAL) then
+      ret := 0
+    else
+      ret := 5;
+  end;
+
+  if (ret = 0) then
+  begin
+    (* a solution is calculated, now lets get some results *)
+
+    (* objective value *)
+    writeln(format('Objective value: %f', [get_objective(lp)]));
+
+    (* variable values *)
+    get_variables(lp, row);
+    for j := 0 to Ncol-1 do
+      writeln(format('%s: %f', [get_col_name(lp, j + 1), row^[j]]));
+
+    (* we are done now *)
+  end;
+
+  (* free allocated memory *)
+  if (row &lt;&gt; nil) then
+    FreeMem(row);
+  if (colno &lt;&gt; nil) then
+    FreeMem(colno);
+
+  if(lp &lt;&gt; 0) then
+  begin
+    (* clean up such that all used memory by lp_solve is freeed *)
+    delete_lp(lp);
+  end;
+end.
+</pre>
+
+<p>When this is run, the following is shown:</p>
+
+<pre>
+Objective value: 6315.63
+x: 21.88
+y: 53.12
+</pre>
+
+<p>And a file model.lp is created with the following contents:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+</pre>
+
+<p>Note that a unit lpsolve.pas+lpsolve.inc is needed for this to work.
+This is available via the Delphi example.</p>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+<a name="VB, VBScript"></a>
+<h4><u>VB, VBScript</u></h4>
+
+<p>The example model can be formulated as follows in VB or VBScript:</p>
+
+<pre>
+Option Explicit
+
+'demo
+
+Private lpsolve As lpsolve55
+
+Sub Main()
+
+    Set lpsolve = New lpsolve55
+
+    lpsolve.Init "."
+
+    Demo
+
+    Set lpsolve = Nothing
+
+End Sub
+
+Private Function Demo() As Integer
+    Dim lp As Long
+    Dim Ncol As Long, colno() As Long
+    Dim j As Integer, ret As Integer
+    Dim row() As Double
+
+    With lpsolve
+        ' We will build the model row by row
+        ' So we start with creating a model with 0 rows and 2 columns
+        Ncol = 2 ' there are two variables in the model
+        lp = .make_lp(0, Ncol)
+        If lp = 0 Then
+            ret = 1 ' couldn't construct a new model...
+        End If
+
+        If ret = 0 Then
+            ' let us name our variables. Not required, but can be useful for debugging
+            .set_col_name lp, 1, "x"
+            .set_col_name lp, 2, "y"
+            ' create space large enough for one row
+            ReDim colno(0 To Ncol - 1)
+            ReDim row(0 To Ncol - 1)
+        End If
+
+        If ret = 0 Then
+            .set_add_rowmode lp, True  ' makes building the model faster if it is done rows by row
+
+            ' construct first row (120 x + 210 y &lt;= 15000)
+            j = 0
+
+            colno(j) = 1  ' first column
+            row(j) = 120
+            j = j + 1
+
+            colno(j) = 2 ' second column
+            row(j) = 210
+            j = j + 1
+
+            ' add the row to lpsolve
+            If .add_constraintex(lp, j, row(0), colno(0), LE, 15000) = False Then
+                ret = 3
+            End If
+        End If
+
+        If ret = 0 Then
+            ' construct second row (110 x + 30 y &lt;= 4000)
+            j = 0
+
+            colno(j) = 1 ' first column
+            row(j) = 110
+            j = j + 1
+
+            colno(j) = 2 ' second column
+            row(j) = 30
+            j = j + 1
+
+            ' add the row to lpsolve
+            If .add_constraintex(lp, j, row(0), colno(0), LE, 4000) = False Then
+                ret = 3
+            End If
+        End If
+
+        If ret = 0 Then
+            ' construct third row (x + y &lt;= 75)
+            j = 0
+
+            colno(j) = 1 ' first column
+            row(j) = 1
+            j = j + 1
+
+            colno(j) = 2 ' second column
+            row(j) = 1
+            j = j + 1
+
+            ' add the row to lpsolve
+            If .add_constraintex(lp, j, row(0), colno(0), LE, 75) = False Then
+                ret = 3
+            End If
+        End If
+
+        If ret = 0 Then
+            .set_add_rowmode lp, False ' rowmode should be turned off again when done building the model
+
+            ' set the objective function (143 x + 60 y)
+            j = 0
+
+            colno(j) = 1 ' first column
+            row(j) = 143
+            j = j + 1
+
+            colno(j) = 2 ' second column
+            row(j) = 60
+            j = j + 1
+
+            ' set the objective in lpsolve
+            If .set_obj_fnex(lp, j, row(0), colno(0)) = False Then
+                ret = 4
+            End If
+        End If
+
+        If ret = 0 Then
+            ' set the object direction to maximize
+            .set_maxim lp
+
+            ' just out of curioucity, now show the model in lp format on screen
+            ' this only works if this is a console application. If not, use write_lp and a filename
+            .write_lp lp, "model.lp"
+
+            ' I only want to see important messages on screen while solving
+            .set_verbose lp, 3
+
+            ' Now let lpsolve calculate a solution
+            ret = .solve(lp)
+            If ret = OPTIMAL Then
+                ret = 0
+            Else
+                ret = 5
+            End If
+        End If
+
+        If ret = 0 Then
+            ' a solution is calculated, now lets get some results
+
+            ' objective value
+            Debug.Print "Objective value: " & .get_objective(lp)
+
+            ' variable values
+            .get_variables lp, row(0)
+            For j = 1 To Ncol
+                Debug.Print .get_col_name(lp, j) & ": " & row(j - 1)
+            Next
+
+            ' we are done now
+        End If
+
+        ' free allocated memory
+        Erase row
+        Erase colno
+
+        If lp &lt;&gt; 0 Then
+            ' clean up such that all used memory by lpsolve is freed
+            .delete_lp lp
+        End If
+
+        Demo = ret
+    End With
+
+End Function
+</pre>
+
+<p>When this is run, the following is shown in the debug window:</p>
+
+<pre>
+Objective value: 6315.625
+x: 21.875
+y: 53.125
+</pre>
+
+<p>And a file model.lp is created with the following contents:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+</pre>
+
+<p>Note that a class lpsolve55.cls or the lpsolve55 COM object is needed for this to work.
+The class is available via the VB example and the COM object is also available.</p>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+<a name="VB.NET"></a>
+<h4><u>VB.NET</u></h4>
+
+<p>The example model can be formulated as follows in VB.NET:</p>
+
+<pre>
+Option Strict Off
+Option Explicit On
+Module Module1
+
+  'demo
+
+  Private lpsolve As lpsolve55
+
+  Public Sub Main()
+
+    lpsolve = New lpsolve55
+
+    lpsolve.Init(".")
+
+    Demo()
+
+    lpsolve = Nothing
+
+  End Sub
+
+  Private Function Demo() As Integer
+    Dim lp As Integer
+    Dim Ncol As Integer
+    Dim colno() As Integer
+    Dim j, ret As Short
+    Dim row() As Double
+
+    With lpsolve
+      ' We will build the model row by row
+      ' So we start with creating a model with 0 rows and 2 columns
+      Ncol = 2 ' there are two variables in the model
+      lp = .make_lp(0, Ncol)
+      If lp = 0 Then
+        ret = 1 ' couldn't construct a new model...
+      End If
+
+      If ret = 0 Then
+        ' let us name our variables. Not required, but can be useful for debugging
+        .set_col_name(lp, 1, "x")
+        .set_col_name(lp, 2, "y")
+        ' create space large enough for one row
+        ReDim colno(Ncol - 1)
+        ReDim row(Ncol - 1)
+      End If
+
+      If ret = 0 Then
+        .set_add_rowmode(lp, True) ' makes building the model faster if it is done rows by row
+
+        ' construct first row (120 x + 210 y &lt;= 15000)
+        j = 0
+
+        colno(j) = 1 ' first column
+        row(j) = 120
+        j = j + 1
+
+        colno(j) = 2 ' second column
+        row(j) = 210
+        j = j + 1
+
+        ' add the row to lpsolve
+        If .add_constraintex(lp, j, row(0), colno(0), lpsolve55.lpsolve_constr_types.LE, 15000) = False Then
+          ret = 3
+        End If
+      End If
+
+      If ret = 0 Then
+        ' construct second row (110 x + 30 y &lt;= 4000)
+        j = 0
+
+        colno(j) = 1 ' first column
+        row(j) = 110
+        j = j + 1
+
+        colno(j) = 2 ' second column
+        row(j) = 30
+        j = j + 1
+
+        ' add the row to lpsolve
+        If .add_constraintex(lp, j, row(0), colno(0), lpsolve55.lpsolve_constr_types.LE, 4000) = False Then
+          ret = 3
+        End If
+      End If
+
+      If ret = 0 Then
+        ' construct third row (x + y &lt;= 75)
+        j = 0
+
+        colno(j) = 1 ' first column
+        row(j) = 1
+        j = j + 1
+
+        colno(j) = 2 ' second column
+        row(j) = 1
+        j = j + 1
+
+        ' add the row to lpsolve
+        If .add_constraintex(lp, j, row(0), colno(0), lpsolve55.lpsolve_constr_types.LE, 75) = False Then
+          ret = 3
+        End If
+      End If
+
+      If ret = 0 Then
+        .set_add_rowmode(lp, False) ' rowmode should be turned off again when done building the model
+
+        ' set the objective function (143 x + 60 y)
+        j = 0
+
+        colno(j) = 1 ' first column
+        row(j) = 143
+        j = j + 1
+
+        colno(j) = 2 ' second column
+        row(j) = 60
+        j = j + 1
+
+        ' set the objective in lpsolve
+        If .set_obj_fnex(lp, j, row(0), colno(0)) = False Then
+          ret = 4
+        End If
+      End If
+
+      If ret = 0 Then
+        ' set the object direction to maximize
+        .set_maxim(lp)
+
+        ' just out of curioucity, now show the model in lp format on screen
+        ' this only works if this is a console application. If not, use write_lp and a filename
+        .write_lp(lp, "model.lp")
+
+        ' I only want to see important messages on screen while solving
+        .set_verbose(lp, 3)
+
+        ' Now let lpsolve calculate a solution
+        ret = .solve(lp)
+        If ret = lpsolve55.lpsolve_return.OPTIMAL Then
+          ret = 0
+        Else
+          ret = 5
+        End If
+      End If
+
+      If ret = 0 Then
+        ' a solution is calculated, now lets get some results
+
+        ' objective value
+        System.Diagnostics.Debug.WriteLine("Objective value: " & .get_objective(lp))
+
+        ' variable values
+        .get_variables(lp, row(0))
+        For j = 1 To Ncol
+          System.Diagnostics.Debug.WriteLine(.get_col_name(lp, j) & ": " & row(j - 1))
+        Next
+
+        ' we are done now
+      End If
+
+      ' free allocated memory
+      Erase row
+      Erase colno
+
+      If lp &lt;&gt; 0 Then
+        ' clean up such that all used memory by lpsolve is freed
+        .delete_lp(lp)
+      End If
+
+      Demo = ret
+    End With
+
+  End Function
+End Module
+</pre>
+
+<p>When this is run, the following is shown in the debug window:</p>
+
+<pre>
+Objective value: 6315.625
+x: 21.875
+y: 53.125
+</pre>
+
+<p>And a file model.lp is created with the following contents:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+</pre>
+
+<p>Note that a class lpsolve55.vb is needed for this to work.
+The class is available via the VB.NET example.</p>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+<a name="CS.NET"></a>
+<h4><u>C#.NET</u></h4>
+
+<p>The example model can be formulated as follows in C#.NET:</p>
+
+<pre>
+using System.Windows.Forms;
+using lpsolve55;
+
+/* demo.cs */
+
+namespace demo
+{
+  public class demo
+  {
+    public static void Main()
+    {
+      lpsolve.Init(".");
+
+      Demo();
+    }
+
+    private static int Demo()
+    {
+      int lp;
+      int Ncol;
+      int[] colno;
+      int j, ret = 0;
+      double[] row;
+
+      /* We will build the model row by row */
+      /* So we start with creating a model with 0 rows and 2 columns */
+      Ncol = 2; /* there are two variables in the model */
+      lp = lpsolve.make_lp(0, Ncol);
+      if (lp == 0)
+        ret = 1; /* couldn't construct a new model... */
+
+      if (ret == 0) {
+        /* let us name our variables. Not required, but can be useful for debugging */
+        lpsolve.set_col_name(lp, 1, "x");
+        lpsolve.set_col_name(lp, 2, "y");
+      }
+
+      /* create space large enough for one row */
+      colno = new int[Ncol];
+      row = new double[Ncol];
+
+      if (ret == 0) {
+        lpsolve.set_add_rowmode(lp, true); /* makes building the model faster if it is done rows by row */
+
+        /* construct first row (120 x + 210 y &lt;= 15000) */
+        j = 0;
+
+        colno[j] = 1; /* first column */
+        row[j++] = 120;
+
+        colno[j] = 2; /* second column */
+        row[j++] = 210;
+
+        /* add the row to lpsolve */
+        if (lpsolve.add_constraintex(lp, j, ref row[0], ref colno[0], lpsolve.lpsolve_constr_types.LE, 15000) == false)
+          ret = 3;
+      }
+
+      if (ret == 0) {
+        /* construct second row (110 x + 30 y &lt;= 4000) */
+        j = 0;
+
+        colno[j] = 1; /* first column */
+        row[j++] = 110;
+
+        colno[j] = 2; /* second column */
+        row[j++] = 30;
+
+        /* add the row to lpsolve */
+        if (lpsolve.add_constraintex(lp, j, ref row[0], ref colno[0], lpsolve.lpsolve_constr_types.LE, 4000) == false)
+          ret = 3;
+      }
+
+      if (ret == 0) {
+        /* construct third row (x + y &lt;= 75) */
+        j = 0;
+
+        colno[j] = 1; /* first column */
+        row[j++] = 1;
+
+        colno[j] = 2; /* second column */
+        row[j++] = 1;
+
+        /* add the row to lpsolve */
+        if (lpsolve.add_constraintex(lp, j, ref row[0], ref colno[0], lpsolve.lpsolve_constr_types.LE, 75) == false)
+          ret = 3;
+      }
+
+      if (ret == 0) {
+        lpsolve.set_add_rowmode(lp, false); /* rowmode should be turned off again when done building the model */
+
+        /* set the objective function (143 x + 60 y) */
+        j = 0;
+
+        colno[j] = 1; /* first column */
+        row[j++] = 143;
+
+        colno[j] = 2; /* second column */
+        row[j++] = 60;
+
+        /* set the objective in lpsolve */
+        if (lpsolve.set_obj_fnex(lp, j, ref row[0], ref colno[0]) == false)
+          ret = 4;
+      }
+
+      if (ret == 0) {
+        lpsolve.lpsolve_return s;
+
+        /* set the object direction to maximize */
+        lpsolve.set_maxim(lp);
+
+        /* just out of curioucity, now show the model in lp format on screen */
+        /* this only works if this is a console application. If not, use write_lp and a filename */
+        lpsolve.write_lp(lp, "model.lp");
+
+        /* I only want to see important messages on screen while solving */
+        lpsolve.set_verbose(lp, 3);
+
+        /* Now let lpsolve calculate a solution */
+        s = lpsolve.solve(lp);
+        if (s == lpsolve.lpsolve_return.OPTIMAL)
+          ret = 0;
+        else
+          ret = 5;
+      }
+
+      if (ret == 0) {
+        /* a solution is calculated, now lets get some results */
+
+        /* objective value */
+        System.Diagnostics.Debug.WriteLine("Objective value: " + lpsolve.get_objective(lp));
+
+        /* variable values */
+        lpsolve.get_variables(lp, ref row[0]);
+        for(j = 0; j &lt; Ncol; j++)
+          System.Diagnostics.Debug.WriteLine(lpsolve.get_col_name(lp, j + 1) + ": " + row[j]);
+
+        /* we are done now */
+      }
+
+      /* free allocated memory */
+
+      if (lp != 0) {
+        /* clean up such that all used memory by lpsolve is freed */
+        lpsolve.delete_lp(lp);
+      }
+
+      return(ret);
+    } //Demo
+  }
+}
+</pre>
+
+<p>When this is run, the following is shown in the debug window:</p>
+
+<pre>
+Objective value: 6315.625
+x: 21.875
+y: 53.125
+</pre>
+
+<p>And a file model.lp is created with the following contents:</p>
+
+<pre>
+/* Objective function */
+max: +143 x +60 y;
+
+/* Constraints */
++120 x +210 y &lt;= 15000;
++110 x +30 y &lt;= 4000;
++x +y &lt;= 75;
+</pre>
+
+<p>Note that a class lpsolve55.cs is needed for this to work.
+The class is available via the CS.NET example.</p>
+
+<p>Note that this example is very limited. It is also possible to set bounds on variables, ranges on constraints,
+define variables as integer, get more result information, changing solver options and parameters and much more.
+See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview of the API to do this.</p>
+
+	</BODY>
+</html>

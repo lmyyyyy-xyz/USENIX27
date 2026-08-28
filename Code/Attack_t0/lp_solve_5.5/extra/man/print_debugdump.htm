@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>print_debugdump</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>print_debugdump</h1>
+					<p>
+						Do a generic readable data dump of key lp_solve model variables; principally
+						for run difference and debugging purposes.</p>
+					<p>
+						<b>unsigned char print_debugdump(lprec </b>*<i>lp</i><b>, char </b>*<i>filename</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>print_debugdump</b> returns TRUE if data could be written, else FALSE.</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>print_debugdump</b> function creates a generic readable data dump of key
+						lp_solve model variables; principally for run difference and debugging purposes<br>
+						This function is meant for debugging purposes.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 1);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  solve(lp);
+
+  print_debugdump(lp, "debug.txt"); /* dump to file debug.txt in current directory */
+
+  delete_lp(lp);
+
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="print_lp.htm">
+							print_lp</A>, <A HREF="print_objective.htm">print_objective</A>, <A HREF="print_constraints.htm">
+							print_constraints</A>, <A HREF="print_duals.htm">print_duals</A>, <A HREF="print_scales.htm">
+							print_scales</A>, <A HREF="print_tableau.htm">print_tableau</A>, <A HREF="print_str.htm">print_str</A>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

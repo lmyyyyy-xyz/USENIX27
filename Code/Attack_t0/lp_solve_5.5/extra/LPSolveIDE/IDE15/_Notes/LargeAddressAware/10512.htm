@@ -1,0 +1,855 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+
+
+<meta name="description" content="lp_solve: lp_solve">
+<meta name="keywords" content="lp_solve">
+<link rel="shortcut icon" href="http://us.i1.yimg.com/us.yimg.com/i/yg/img/logo/favicon.ico" type="image/x-icon"><title>lp_solve : Message: Re: [lp_solve] IDE exception with 5.5.0.12</title>
+
+<link rel="stylesheet" type="text/css" href="10512_files/global_200704120000.css">
+<link rel="stylesheet" type="text/css" href="10512_files/dynamic_200602130000.css">
+<link rel="stylesheet" type="text/css" href="10512_files/msgview_200602130000.css">
+<link rel="stylesheet" type="text/css" href="10512_files/msgidx_200506210000.css">
+<script type="text/javascript">
+<!--
+function setDocumentCharset(oForm)
+{
+var charset = (typeof document.charset == "undefined" || document.charset == null) ? document.characterSet : document.charset;
+if(oForm.charset.value != charset && typeof charset != "undefined" )
+oForm.charset.value = charset;
+}
+// -->
+</script>
+<link type="text/css" rel="stylesheet" href="10512_files/uh-1.css"><style type="text/css">#ygma div{clear:none;}#ygma {margin:0 auto;min-width:750px;}ul#ygmanav{padding: 0 0 0 1px;}#ygma .btn {font-size:100%;)</style><script src="10512_files/yahoo-dom-event.js" type="text/javascript"></script><script src="10512_files/uh_utils-1.js" type="text/javascript"></script></head><body onload="pref();clear_gmp();">
+<script type="text/javascript" charset="utf-8">(function(){var B={};var A=function(){B=YAHOO.one.uh.hotlistInfo={rd:"http://us.ard.yahoo.com",space:"/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=0",adid:"5530067",prop:"groups",protocol:"http",host:"tech.groups.yahoo.com",url:"%2fgroup%2flp_solve%2fmessage%2f10512",aliasid:"pattonwhp",shortaliasid:"pattonwhp",pvid:"0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ",shortfname:"William"};YAHOO.one.uh.translate=function(C){var D={yahoo_homepage:"http://www.yahoo.com",hp_detect_script:"http://www.yahoo.com/includes/hdhpdetect.php",set_hp_script:"http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=1/SIG=11te3u6o2/*http://www.yahoo.com/bin/set",set_hp_firefox_instructions:['Drag the "Y!" and drop it onto the "Home" icon.','Select "Yes" from the pop up window.',"Nothing, you're done."],close_this_window:"Close this window",set_hp_alternative_instructions1:"If this didn't work for you see ",detailed_set_hp_instructions:"detailed instructions",set_hp_alternative_instructions2:""};return D[C]};YAHOO.one.uh.accountOptions=[["Profile","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=2/SIG=000000000/*http://profiles.yahoo.com/"],["Contacts","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=3/*http://profiles.yahoo.com/contacts.php"],["Applications","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=4/*http://apps.yahoo.com/myapps"],["Account Info","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=5/SIG=11juka5l7/*https://edit.yahoo.com/config/eval_profile?.done="+B.protocol+"://"+B.host+B.url+"&.src=ygrp&.intl=us"],["You are signed in as: <span class='yid' title='"+B.aliasid+"'>"+B.shortaliasid+"</span>",B.aliasid]];YAHOO.one.uh.yahooServices=[["News","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=6/SIG=000000000/*http://news.yahoo.com"],["Sports","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=7/*http://sports.yahoo.com"],["Finance","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=8/*http://finance.yahoo.com"],["Entertainment","http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=9/*http://entertainment.yahoo.com"]]};if("undefined"!==typeof YAHOO&&"undefined"!==typeof YAHOO.one&&"undefined"!==typeof YAHOO.one.uh){A()}else{setTimeout(arguments.callee,500)}})();</script><div id="ygma"><div id="ygmaheader"><div class="bd sprite_bg"><div id="ygmatop" class="sprite_bg"><ul id="ygmanav"><li class="sprite_bg delim"><a href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=10/SIG=10np9vmbm/*http://www.yahoo.com/" target="_top">Yahoo!</a></li><li class="sprite_bg delim"><a href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=11/SIG=10m97m5i1/*http://my.yahoo.com/" target="_top">My Yahoo!</a></li><li class="sprite_bg delim"><a href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=12/SIG=10od5rqfs/*http://mail.yahoo.com/" target="_top">Mail</a></li><li class="last-child"><a class="stop_key_nav sprite_bg lst yltasis" id="ygmamore" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=13/SIG=119rld6dj/*http://docs.yahoo.com/docs/family/more/" target="_top">More<span class="offscrn"> Yahoo! Services</span></a><ul class="menu sprite_bg hidden" id="ygmasubnav"><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=6/SIG=000000000/*http://news.yahoo.com">News</a></li><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=7/*http://sports.yahoo.com">Sports</a></li><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=8/*http://finance.yahoo.com">Finance</a></li><li class="last-child"><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=9/*http://entertainment.yahoo.com">Entertainment</a></li></ul></li></ul><div id="ygmapromo"><a id="ygmamyyhp" class="stop_nav yltasis yltiefix" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=14/SIG=10uacnjgh/*http://www.yahoo.com/bin/set" target="_top">Make <abbr class="stop_nav" title="Yahoo!">Y!</abbr> My Homepage</a><a style="display: none;" id="ygmatoolbar" class="hidden yltasis yltiefix" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=15/SIG=117bakia1/*http://toolbar.yahoo.com/?.cpdl=ushdl" target="_top">Get Yahoo! Toolbar</a></div><script type="text/javascript" charset="utf-8">(function(){var C=document.getElementById("ygmamore");var A=document.getElementById("ygmamyyhp");var B=document.getElementById("ygmatoolbar");C.className+=((""==C.className)?"":" ")+"sprite_bg lst yltasis";A.className+=((""==A.className)?"":" ")+"yltasis yltiefix";B.className+=((""==A.className)?"":" ")+"yltasis yltiefix";if(document.cookie.indexOf("HP=")>-1){A.style.display="none";B.style.display="block"}else{B.style.display="none"}if(document.cookie.indexOf("CP=")>-1){B.style.display="none"}})();</script><div id="ygmauserinfo"><h2 class="offscrn">Account Options</h2><span class="sprite_bg delim"><em>Hi, <a class="stop_key_nav sprite_bg lst" id="ygmausername" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=16/SIG=10so08guo/*http://profiles.yahoo.com/" title="William" target="_top">William</a><ul class="menu sprite_bg hidden" id="ygmauseroptions"><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=2/SIG=000000000/*http://profiles.yahoo.com/">Profile</a></li><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=3/*http://profiles.yahoo.com/contacts.php">Contacts</a></li><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=4/*http://apps.yahoo.com/myapps">Applications</a></li><li><a target="_top" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=5/SIG=11juka5l7/*https://edit.yahoo.com/config/eval_profile?.done=http://tech.groups.yahoo.com%2fgroup%2flp_solve%2fmessage%2f10512&amp;.src=ygrp&amp;.intl=us">Account Info</a></li><li class="last-child" title="pattonwhp">You are signed in as: <span class="yid" title="pattonwhp">pattonwhp</span></li></ul></em></span><a class="sprite_bg delim" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=17/SIG=13714l49d/*https://login.yahoo.com/config/login?logout=1&amp;.direct=2&amp;.done=http://www.yahoo.com&amp;.src=ygrp&amp;.intl=us" target="_top">Sign Out</a><a id="ygmahelp" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=18/SIG=11jrojv2q/*http://help.yahoo.com/l/us/yahoo/groups/original/" target="_top" title="Yahoo! Help Central - Groups help">Help</a></div><script type="text/javascript" charset="utf-8">(function(){var A=document.getElementById("ygmausername");A.className+=((""==A.className)?"":" ")+"sprite_bg lst"})();</script><div id="ygmashpd" class="shdw hidden"><div class="bd"><div id="pnt" class="myyhpbg"></div><a class="ygmashp myyhpbg" href="http://www.yahoo.com/" title="Yahoo!">Yahoo!</a><ol id="ygmahpinstr"><li>Drag the "Y!" and drop it onto the "Home" icon.</li><li>Select "Yes" from the pop up window.</li><li>Nothing, you're done.</li></ol><div class="hr"><p>If this didn't work for you see <a id="ygmashpdetails" class="ygmashps" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=1/SIG=11te3u6o2/*http://www.yahoo.com/bin/set">detailed instructions</a></p><p><a id="ygmashpdclose" href="javascript:void(0);">Close this window</a></p></div></div></div></div><div id="ygmabot" class="sprite_bg"><a id="ygmalogo" href="http://us.ard.yahoo.com/SIG=15tdfqg3m/M=650008.13105338.13293890.12621715/D=groups/S=1707281942:HEADR/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KfxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=5530067/R=19/SIG=10p65kol6/*http://groups.yahoo.com" target="_top"><img id="ygmalogoimg" src="10512_files/ma_grp_1.gif" alt="Yahoo! Groups" height="33" width="233"></a><div class="srch sprite_bg"><form name="ygmasrchfrm" id="ygmasrchfrm" action="http://srd.yahoo.com/loc=head&amp;st=yahoo/*http://search.yahoo.com/search" method="get"><div class="fieldset"><label for="ygmasrchquery" class="sprite_bg"><span class="offscrn">Yahoo! </span>Search</label><input id="ygmasrchquery" name="p" maxlength="100" type="text"><span class="btn sprite_bg"><span class="first-child"><button name="ygmasrchbtn" id="ygmasrchbtn" value="web search" type="submit">web search</button></span></span><input id="fr" name="fr" value="ush-groups" type="hidden"></div></form></div></div></div></div></div><script charset="utf-8" type="text/javascript" src="10512_files/uh-1.js"></script><script language="javascript">
+if(window.yzq_d==null)window.yzq_d=new Object();
+window.yzq_d['KfxzFEPDhFg-']='&U=13hv6lku3%2fN%3dKfxzFEPDhFg-%2fC%3d650008.13105338.13293890.12621715%2fD%3dHEADR%2fB%3d5530067%2fV%3d1';
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=151nm8pll%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d2.1%2fW%3dH%2fY%3dYAHOO%2fF%3d2955424131%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962&U=13hv6lku3%2fN%3dKfxzFEPDhFg-%2fC%3d650008.13105338.13293890.12621715%2fD%3dHEADR%2fB%3d5530067%2fV%3d1"></noscript>
+<div class="doc-layout-head">
+<div id="ygrp-title">
+<div class="top">
+<span class="corner-top"><span class="corner-left"></span></span>
+<table class="ygrp-header"><tbody><tr>
+<td class="body">
+pattonwhp · pattonwh@comcast.net | Group Member&nbsp; - <a href="http://tech.groups.yahoo.com/group/lp_solve/join">Edit Membership</a> </td>
+<td class="groups">
+<a href="http://tech.groups.yahoo.com/start">Start&nbsp;a Group</a>
+|
+<a href="http://tech.groups.yahoo.com/mygroups">My&nbsp;Groups</a>
+</td>
+</tr></tbody></table>
+</div>
+<div class="bottom">
+<div class="body">
+<div style="float: left;">
+<span class="ygrp-pname">lp_solve</span>
+</div>
+<script>function clearText(thefield){
+if (thefield.defaultValue==thefield.value)
+thefield.value = ""
+}</script>
+<div style="float: right; clear: none;">
+<form method="get" action="/search">
+<input size="40" name="query" value="Search for other groups..." onfocus="clearText(this);" type="text">
+<input value="Search" type="submit">	</form>
+</div>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+</div>
+</div>
+<div class="doc-layout-body">
+<table class="doc-layout-3" cellpadding="0" cellspacing="0"><tbody><tr>
+<td class="ygrp-gnav" valign="top" width="1%">
+<div class="ygrp-container-border" id="ygrp-menu">
+<span class="corner-top"><span class="corner-left"></span></span>
+<div class="ygrp-contentblock">
+<ul class="ygrp-ul menulist">
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/">Home</a> </li>
+<li class="active"> <a href="http://tech.groups.yahoo.com/group/lp_solve/messages">Messages</a> </li>
+<li> <a class="sublink" href="http://tech.groups.yahoo.com/group/lp_solve/post">Post</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/files">Files</a> </li>
+<li> <a href="http://tech.ph.groups.yahoo.com/group/lp_solve/photos">Photos</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/links">Links</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/database">Database</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/polls">Polls</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/members">Members</a> </li>
+<li> <a href="http://tech.groups.yahoo.com/group/lp_solve/cal">Calendar</a> </li>
+</ul>
+<div class="menulist-hr"></div>
+<ul class="ygrp-ul menulist">
+<li> Groups Labs (Beta) </li>
+<li> <a class="sublink" href="http://tech.groups.yahoo.com/group/lp_solve/grouplets/subscriptions">Applications</a> </li>
+</ul>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+<div class="ygrp-container-border" id="ygrp-gtips">
+<span class="corner-top"><span class="corner-left"></span></span>
+<div class="ygrp-contentblock">
+<h4>Yahoo! Groups Tips</h4>
+<h5>Did you know...</h5>
+<span class="smalltype">Message search is now enhanced, find messages faster. Take it for a spin.</span>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+<div class="ygrp-container-border" id="ygrp-mgl-promo">
+<span class="corner-top"><span class="corner-left"></span></span>
+<div class="ygrp-contentblock">
+<h4><a href="http://advision.webevents.yahoo.com/bestofyahoogroups/">Best of Y! Groups</a></h4>
+<table valign="top" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td><a href="http://advision.webevents.yahoo.com/bestofyahoogroups/"><img src="10512_files/bestofygroups.jpg" height="77" width="46"></a></td>
+<td>&nbsp;&nbsp;</td>
+<td>Check them out and nominate your group.</td>
+</tr>
+</tbody></table>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+</td>
+<td valign="top">
+<table class="ygrp-titlebar" id="ygrp-titlebarhr" cellpadding="0" cellspacing="0"><tbody><tr>
+<td nowrap="nowrap"><h3>Messages</h3>
+</td>
+<td class="ygrp-nowrap" align="right" width="100%">
+&nbsp;
+</td>
+<td style="padding-left: 20px;" nowrap="nowrap">
+<a href="http://help.yahoo.com/l/us/yahoo/groups/original/members/web/index.htmlmessages" class="smalltype">Messages Help</a>
+</td>
+</tr>
+</tbody></table>
+<div class="ygrp-topic">
+<table class="headview" cellpadding="0" cellspacing="0"><tbody><tr>
+<td style="text-align: left;" nowrap="nowrap">
+<div class="searcharea" style="text-align: left;">
+<div class="searcharea" style="text-align: left;">
+<form class="getmessagenumber" method="get" action="/group/lp_solve/message">
+<div class="search">
+<input name="Message.JumpSubmitCheck" value="1" type="hidden">
+<input name="threaded" value="1" type="hidden">
+Message #
+<input maxlength="8" size="3" name="Message.Number.Input" type="text">
+<input class="ygrp-button" value="Go" type="submit">
+</div>
+</form>
+<form action="/group/lp_solve/msearch" method="get" onsubmit="setDocumentCharset(this)"><div class="search">
+Search: <input name="query" size="20" value="" type="text">
+<input class="ygrp-button" name="submit" value="Search" type="submit">
+<input name="charset" value="" type="hidden">
+</div></form><a href="http://tech.groups.yahoo.com/group/lp_solve/msearch_adv" class="smalltype">Advanced</a></div>
+</div>
+</td>
+<td> <div class="headview">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post" class="action ygrp-nowrap">Start Topic</a>
+</div>
+</td>
+</tr></tbody></table>
+<table class="headview headnav" cellpadding="0" cellspacing="0"><tbody><tr>
+<td class="ygrp-topic-title" align="left">IDE exception with 5.5.0.12</td>
+<td class="viewright">
+&nbsp;
+<a href="http://tech.groups.yahoo.com/group/lp_solve/messages/10380?xm=1&amp;m=p&amp;tidx=1">Topic List</a>
+&nbsp; <a href="http://tech.groups.yahoo.com/group/lp_solve/message/10415?var=1">&lt;&nbsp;Prev Topic</a>
+&nbsp;|&nbsp;
+<a href="http://tech.groups.yahoo.com/group/lp_solve/message/10777?var=1">Next Topic&nbsp;&gt;</a>
+</td>
+</tr></tbody></table>
+</div>
+<!-- start content include -->
+<script type="text/javascript" language="javascript" src="10512_files/yg_cookie_1_2.js">
+</script>
+<script type="text/javascript">
+var ygrp_p = new yg_cookie();
+function set_gmp(p){ if (p == "") ygrp_p.remove("GMP");
+else
+ygrp_p.set("GMP",p);
+}
+function clear_gmp() {
+ygrp_p.remove("GMP");
+}
+</script>
+<script type="text/javascript" language="javascript" src="10512_files/yg_cookie_1_2.js">
+</script>
+<script type="text/javascript">
+var ygrp_ck = new yg_cookie();
+var envPref = ygrp_ck.get('GMI');
+function pref(){
+if (envPref){ // if pref is open
+msgInfo(); // toggle the display, default is close
+} // otherwise, don't do anything default is close
+getDocumentCharset();
+}
+function getDocumentCharset()
+{
+var charset = (typeof document.charset == "undefined" || document.charset == null) ? document.characterSet : document.charset;
+var msxml = ['Microsoft.XMLHTTP','MSXML2.XMLHTTP.5.0','MSXML2.XMLHTTP.4.0','MSXML2.XMLHTTP.3.0','MSXML2.XMLHTTP'];
+var http;try{http=new XMLHttpRequest();}catch(e){for(var i=0;i<msxml.length;++i){try{http=new ActiveXObject(msxml[i]);if(http){break;}}catch(e){}}}
+if(http){http.open('GET','../modapi?cmd=ed&c='+charset+'&z=/message/10512',true);http.send(null);}
+}
+function msgInfo(){
+var x = document.getElementById('x');
+var l = document.getElementById('l');
+var i = document.getElementById('i');
+x.style.display = (x.style.display == 'none') ? 'inline' : 'none';
+l.innerHTML = (l.innerHTML == "Hide Message Info") ? "Show Message Info" : "Hide Message Info";
+i.src = (i.src == 'http://us.i1.yimg.com/us.yimg.com/i/us/plus/csp/cn/norgie_closed_dna.gif') ? 'http://us.i1.yimg.com/us.yimg.com/i/us/plus/csp/cn/norgie_open_dna.gif' : 'http://us.i1.yimg.com/us.yimg.com/i/us/plus/csp/cn/norgie_closed_dna.gif';
+if (x.style.display == "inline"){
+ygrp_ck.set("GMI","true");
+} else {
+ygrp_ck.remove("GMI");
+}
+}
+</script>
+<div class="ygrp-container-border" id="ygrp-msg-exp">
+<span class="corner-top"><span class="corner-left"></span></span>
+<div class="ygrp-contentblock">
+<div class="footaction" style="margin-top: -3px;">
+<table class="footaction" cellpadding="4" width="100%"><tbody><tr>
+<td class="smalltype" align="left" nowrap="nowrap" width="20%">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?act=reply&amp;messageNum=10512" class="action ygrp-nowrap">Reply</a>
+| <a href="http://tech.groups.yahoo.com/group/lp_solve/post?act=forward&amp;messageNum=10512" class="action ygrp-nowrap">Forward</a>
+</td>
+<td class="smalltype" align="center">
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10508\" onclick=\"set_gmp('?var=1&amp;p=8');return true;\">&lt;&nbsp;Prev Message</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10508" onclick="set_gmp('?var=1&p=8');return true;">&lt;&nbsp;Prev Message</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10508?var=1&amp;p=8">&lt;&nbsp;Prev Message</a>
+</noscript>
+&nbsp;|&nbsp; <script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10513\" onclick=\"set_gmp('?var=1&amp;p=10');return true;\">Next Message&nbsp;&gt;</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10513" onclick="set_gmp('?var=1&p=10');return true;">Next Message&nbsp;&gt;</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10513?var=1&amp;p=10">Next Message&nbsp;&gt;</a>
+</noscript>
+</td>
+<td width="20%"></td>
+</tr></tbody></table>
+</div>
+<table class="wide" cellpadding="0" cellspacing="0"><tbody><tr>
+<td class="msg content user first">
+<div class="subject root grey">
+Re: [lp_solve] IDE exception with 5.5.0.12 </div>
+<br> <div class="msgarea">
+
+<div><font face="Arial" size="2">No that is not the problem. The
+problem is that the IDE opens the file via the C FILE stream. This
+structure is stored in the MSVCRT.DLL file. Then the IDE calls the
+lpsolve dll&nbsp;which is compiled now with VC7 and this now uses
+another dll: msvcr71.dll and lpsolve now tries to access the FILE
+stream but id does not exist in msvcr71.dll. Resulting in a protection
+error.</font></div>
+<div><font face="Arial" size="2"></font>&nbsp;</div>
+<div><font face="Arial" size="2">The IDE should be adapted not use open
+the file himself and pass the FILE structure to lpsolve (by using
+read_lp - note the lower case) but instead pass the filename to lpsolve
+by using API call read_LP.</font></div>
+<div><font face="Arial" size="2"></font>&nbsp;</div>
+<div><font face="Arial" size="2">Peter</font></div>
+<div style="font-family: Tahoma; font-style: normal; font-variant: normal; font-weight: normal; font-size: 10pt; line-height: normal; font-size-adjust: none; font-stretch: normal;">
+<div><br></div>
+<div style="background: rgb(245, 245, 245) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+<div><b>From:</b> <a title="pattonwh@comcast.net" href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=GG_rL-NwOwwxRcLsgQYdx0Y1-zybgtGOpSx1YRMufp18y7KofpUJRajjCEJaz7zK0tuiiOWIk2od_9g">William H. Patton</a> </div>
+<div><b>Sent:</b> Wednesday, June 04, 2008 06:29</div>
+<div><b>To:</b> <a title="lp_solve@yahoogroups.com" href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=4ZbZ_RWGH2c5cMtWWqQj6NKMwVZoh5ul4wbVk_vSYT25qvZEGrndrza3S54FjCZQocAYIivJa7IBIiKmkVo5">lp_solve@yahoogroups.com</a> </div>
+<div><b>Subject:</b> RE: [lp_solve] IDE exception with 5.5.0.12</div></div></div>
+<div><br></div>
+<div id="ygrp-text">
+<p>
+</p><div class="Section1">
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">Maybe
+the /MT option will still get rid of MSVCRT and possibly allow the IDE
+to call the LARGEADDRESSAWARE dll.&nbsp; I do not have VS2008 up yet to
+test. There could still be trouble with the 32 bit IDE trying to call a
+64 bit dll.<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<div style="border-bottom: 2.25pt double windowtext;">
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">Here is the relevant section from cvc8NOmsvcrt80.<wbr>bat<o></o></span></font></p></div>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rc lpsolve.rc<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem use /MT to remove dependence on msvcrt80.dll calls kernel libs directly about 200K larger dll.<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem %c% -W1 -I.. -I../shared -I../bfp -I../bfp/bfp_<wbr>LUSOL -I../bfp/bfp_<wbr>LUSOL/LUSOL -I../colamd /LD </span></font><b><font color="navy" face="Arial"><span style="font-weight: bold; color: navy; font-family: Arial;">/MD</span></font></b><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"> /O2 /Zp8 /Gz -D_WINDLL -D_USRDLL -DWIN32 -D_CRT_SECURE_<wbr>NO_DEPRECATE -D_CRT_NONSTDC_<wbr>NO_DEPRECATE -DYY_NEVER_INTERACT<wbr>IVE -DPARSER_LP -DINVERSE_ACTIVE=<wbr>INVERSE_LUSOL -DRoleIsExternalInv<wbr>Engine %src% lpsolve.res ..\lp_solve.<wbr>def&nbsp; -o lpsolve55.dll<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">&nbsp;&nbsp;&nbsp; %c% -W1 -I.. -I../shared -I../bfp -I../bfp/bfp_<wbr>LUSOL -I../bfp/bfp_<wbr>LUSOL/LUSOL -I../colamd /LD </span></font><b><font color="navy" face="Arial" size="5"><span style="font-weight: bold; font-size: 16pt; color: navy; font-family: Arial;">/MT </span></font></b><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">/O2 /Zp8 /Gz -D_WINDLL -D_USRDLL -DWIN32 -D_CRT_SECURE_<wbr>NO_DEPRECATE -D_CRT_NONSTDC_<wbr>NO_DEPRECATE -DYY_NEVER_INTERACT<wbr>IVE -DPARSER_LP -DINVERSE_ACTIVE=<wbr>INVERSE_LUSOL -DRoleIsExternalInv<wbr>Engine %src% lpsolve.res ..\lp_solve.<wbr>def&nbsp; -o lpsolve55.dll<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem http://msdn2.<wbr>microsoft.<wbr>com/en-us/<wbr>library/ms235229<wbr>.aspx<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem for vs2005 need to embed manifest in dll with manifest tool #2 on the next line does this.<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem mt /outputresource:".\lpsolve55.<wbr>dll;#2" /manifest ".\lpsolve55.<wbr>dll.manifest"<o></o></span></font></p>
+<div style="border-bottom: 2.25pt double windowtext;">
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">rem pause<o></o></span></font></p></div>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">See <a href="http://tech.groups.yahoo.com/group/lp_solve/message/7325">http://tech.<wbr>groups.yahoo.<wbr>com/group/<wbr>lp_solve/<wbr>message/7325</a><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><a href="http://tech.groups.yahoo.com/group/lp_solve/message/7477">http://tech.<wbr>groups.yahoo.<wbr>com/group/<wbr>lp_solve/<wbr>message/7477</a><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><a href="http://tech.groups.yahoo.com/group/lp_solve/message/8313">http://tech.<wbr>groups.yahoo.<wbr>com/group/<wbr>lp_solve/<wbr>message/8313</a><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">This link suggests that it may work to tag the standard cvc6 dll as largeaddressaware.<o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><a href="http://www.tech-archive.net/Archive/DotNet/microsoft.public.dotnet.languages.csharp/2007-01/msg01269.html">http://www.tech-<wbr>archive.net/<wbr>Archive/DotNet/<wbr>microsoft.<wbr>public.dotnet.<wbr>languages.<wbr>csharp/2007-<wbr>01/msg01269.<wbr>html</a><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><a href="http://msdn.microsoft.com/en-us/library/d25ddyfc%28VS.80%29.aspx">http://msdn.<wbr>microsoft.<wbr>com/en-us/<wbr>library/d25ddyfc<wbr>(VS.80).aspx</a><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;"><o></o></span></font></p>
+<p class="MsoNormal"><font color="navy" face="Arial" size="2"><span style="font-size: 10pt; color: navy; font-family: Arial;">William<o></o></span></font></p>
+<div>
+<div class="MsoNormal" style="text-align: center;" align="center"><font face="Times New Roman" size="3"><span style="font-size: 12pt;">
+<hr tabindex="-1" align="center" size="3" width="100%">
+</span></font></div>
+<p class="MsoNormal"><b><font face="Tahoma" size="2"><span style="font-weight: bold; font-size: 10pt; font-family: Tahoma;">From:</span></font></b><font face="Tahoma" size="2"><span style="font-size: 10pt; font-family: Tahoma;"> <st1>lp_solve@yahoogroup<wbr>s.com</st1> [mailto:<st1>lp_solve@yahoogroup<wbr>s.com</st1>] <b><span style="font-weight: bold;">On Behalf Of </span></b>Peter Notebaert<br><b><span style="font-weight: bold;">Sent:</span></b> Tuesday, June 03, 2008 2:04 PM<br><b><span style="font-weight: bold;">To:</span></b> <st1>lp_solve@yahoogroup<wbr>s.com</st1><br><b><span style="font-weight: bold;">Subject:</span></b> Re: [lp_solve] IDE exception with 5.5.0.12</span></font><o></o></p></div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><o></o></span></font></p>
+<div id="ygrp-mlmsg">
+<div id="ygrp-msg">
+<div id="ygrp-text">
+<div>
+<p class="MsoNormal"><st1><st1><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">Troy</span></font></st1></st1><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">,</span></font><o></o></p></div>
+<div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><o></o></span></font></p></div>
+<div>
+<p class="MsoNormal"><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">The
+protection error only occurs when the lpsolve55.dll is compiled with
+the MS .NET compiler, not with the VC6 MS compiler. The distributed
+version is still compiled with VC6 and should not give a problem. Only
+the test version that can be found on <a href="http://www.peno.be/lp_solve/LARGEADDRESSAWARE/">http://www.peno.<wbr>be/lp_solve/<wbr>LARGEADDRESSAWAR<wbr>E/</a>&nbsp;is compiled with the .NET compiler and gives the problem.</span></font><o></o></p></div>
+<div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><o></o></span></font></p></div>
+<div>
+<p class="MsoNormal"><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">The
+problem was adressed to Henri, the designer of the IDE, but he has no
+intentions anymore&nbsp;to continue development on the IDE.</span></font><o></o></p></div>
+<div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><o></o></span></font></p></div>
+<div>
+<p class="MsoNormal"><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">So
+there will be no update in the (near) feature of the IDE. The sources
+are available but when I once tried to compile the IDE I found it hard
+to succeed to accomplish this task. Besides a <st1>Delphi</st1> environment you also need several extra add-ins...</span></font><o></o></p></div>
+<div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><o></o></span></font></p></div>
+<div>
+<p class="MsoNormal"><font face="Arial" size="2"><span style="font-size: 10pt; font-family: Arial;">Peter</span></font><o></o></p></div></div></div>
+<div>
+<p class="MsoNormal"><font color="white" face="Times New Roman" size="1"><span style="font-size: 1pt; color: white;">.<o></o></span></font></p></div></div>
+<p class="MsoNormal"><font face="Times New Roman" size="3"><span style="font-size: 12pt;"><img id="_x0000_i1027" src="10512_files/serv.gif" border="0" height="1" width="1"><br><font color="white"><span style="color: white;"></span></font><o></o></span></font></p></div><!--End group email -->
+<p></p></div><!--End group email -->
+<br><br> </div>
+</td>
+<td class="info env first">
+<div class="smalltype ygrp-nowrap">
+Wed Jun&nbsp;4,&nbsp;2008 2:19&nbsp;pm </div><br> <div class="smalltype">
+<a href="#" onclick="msgInfo();return false;"><img src="10512_files/norgie_closed_dna.gif" id="i" alt=""> <span id="l">Show Message Info</span>
+</a><hr>
+</div>
+<div id="x" style="display: none;">
+<span style="font-weight: bold;">#10512 of 11877</span><br> <span class="smalltype ygrp-nowrap">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/messages/10512?o=1&amp;xm=1&amp;m=p">
+Msg List </a>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10511\" onclick=\"set_gmp('?var=1');return true;\">&lt;Prev</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10511" onclick="set_gmp('?var=1');return true;">&lt;Prev</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10511?var=1">&lt;Prev</a>
+</noscript>
+| <script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10513\" onclick=\"set_gmp('?var=1');return true;\">Next&gt;</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10513" onclick="set_gmp('?var=1');return true;">Next&gt;</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10513?var=1">Next&gt;</a>
+</noscript>
+</span>
+<div style="padding: 4px;"></div>
+<span class="smalltype"> <a href="http://tech.groups.yahoo.com/group/lp_solve/message/10512?source=1&amp;var=1" class="action ygrp-nowrap">View Source</a><br> <a href="http://tech.groups.yahoo.com/group/lp_solve/message/10512?var=0" class="action ygrp-nowrap">Use&nbsp;Fixed&nbsp;Width&nbsp;Font</a><br> <a href="http://tech.groups.yahoo.com/group/lp_solve/message/10512?unwrap=1&amp;var=1" class="action ygrp-nowrap">Unwrap&nbsp;Lines</a><br> </span>
+<hr>
+</div>
+<div style="font-weight: bold;">
+"Peter Notebaert" &lt;_peno_@...&gt; </div>
+<span class="name">
+<a href="http://profiles.yahoo.com/peter_notebaert">peter_notebaert</a> </span>
+<br> <a href="ymsgr:sendIM?peter_notebaert" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"> Offline</a>
+<br> <a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=DBqxUbauKJ524yPd_4jMIK_3_khIILKaTywARTOLztasLVnMGIQZamSuZ5WITTCzWVh1KKm_ch7qXa2RKa0O8KDzLt1yxmUEkZNtrw" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"> Send Email</a>
+<br> <br> <div class="smalltype ygrp-nowrap">
+</div>
+</td>
+</tr></tbody></table>
+</div>
+<div class="footaction">
+<div class="list-action-bottom-right">
+<div class="footaction">
+<table class="footaction" cellpadding="2" width="100%"><tbody><tr>
+<td align="left" nowrap="nowrap" width="20%">
+<form method="get" action="/group/lp_solve/post">
+<input name="act" value="reply" type="hidden">
+<input name="messageNum" value="10512" type="hidden">
+<input class="ygrp-action" value="Reply" type="submit">
+</form>
+<span class="smalltype" style="vertical-align: bottom;"> <a href="http://tech.groups.yahoo.com/group/lp_solve/post?act=forward&amp;messageNum=10512" class="action ygrp-nowrap">Forward</a>
+</span>
+</td>
+<td class="smalltype" style="vertical-align: bottom;" align="center">
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10508\" onclick=\"set_gmp('?var=1&amp;p=8');return true;\">&lt;&nbsp;Prev Message</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10508" onclick="set_gmp('?var=1&p=8');return true;">&lt;&nbsp;Prev Message</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10508?var=1&amp;p=8">&lt;&nbsp;Prev Message</a>
+</noscript>
+&nbsp;|&nbsp; <script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10513\" onclick=\"set_gmp('?var=1&amp;p=10');return true;\">Next Message&nbsp;&gt;</a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10513" onclick="set_gmp('?var=1&p=10');return true;">Next Message&nbsp;&gt;</a>
+
+<noscript>
+<a href="/group/lp_solve/message/10513?var=1&amp;p=10">Next Message&nbsp;&gt;</a>
+</noscript>
+</td>
+<td align="right" width="20%"></td>
+</tr></tbody></table>
+</div>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+</div>
+<div style="padding: 4px;"></div>
+<div class="ygrp-container-border" id="ygrp-msg-exp">
+<span class="corner-top"><span class="corner-left"></span></span>
+<div class="ygrp-contentblock">
+<div class="msgarea">
+<table class="datatable" id="ygrp-msglist" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<th class="message" colspan="1">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/messages/10380?threaded=1&amp;m=e&amp;var=1&amp;tidx=1" class="action ygrp-nowrap">Expand Messages</a> </th>
+<th class="info">Author</th>
+<th class="date selected" nowrap="nowrap">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/message/10512?o=0&amp;var=1">Sort by Date</a>
+</th>
+</tr>
+<tr class="firstrow"> <td class="message">
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10380\" onclick=\"set_gmp('?threaded=1&var=1');return true;\"><span>IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10380" onclick="set_gmp('?threaded=1&var=1');return true;"><span>IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10380?threaded=1&var=1"><span>IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Has anyone had problems using the LPSolve IDE with 5.5.0.12? I had
+been using the 5.5.0.11 dll. I renamed the lpsolve55.dll file in the
+IDE directory and...
+</td>
+<td class="info">
+Daniels, Troy (US SSA)<br> <span class="name">
+<a href="http://profiles.yahoo.com/troy_danielsus">troy_danielsus</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?troy_danielsus" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=Ho9YUZiBmj7ioX8aIB_uz8rhDFkIypzZylvU6Tai0g0qiDA4J9hUl6rkTX97TzAzIkxQI3EN-7F0zypZb5Yi6Bc" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+May&nbsp;12,&nbsp;2008 <br> 3:03&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10381\" onclick=\"set_gmp('?threaded=1&var=1&p=1');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10381" onclick="set_gmp('?threaded=1&var=1&p=1');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10381?threaded=1&var=1&p=1"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Are you using the lpsolve55.dll file from the official distribution of the one from /peno/lp_solve/<wbr>LARGEADDRESSAWAR<wbr>E The latter indeed gives a protection error...
+</div></td>
+<td class="info">
+Peter Notebaert<br> <span class="name">
+<a href="http://profiles.yahoo.com/peter_notebaert">peter_notebaert</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?peter_notebaert" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=nG4JazdO6IdR67om8dDGHDvXljpHTnx46NGZ31r8AiU9UhriiuzfNYY4p7B6aB0toIKOfGJUKs0umkXt" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+May&nbsp;12,&nbsp;2008 <br> 5:02&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent2"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10401\" onclick=\"set_gmp('?threaded=1&var=1&p=2');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10401" onclick="set_gmp('?threaded=1&var=1&p=2');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10401?threaded=1&var=1&p=2"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Hi, I was busy these last days, but I don't forget you. I will produce a new version nextly, to solve this problem. henri...
+</div></td>
+<td class="info">
+Henri Gourvest<br> <span class="name">
+<a href="http://profiles.yahoo.com/hgourvest">hgourvest</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?hgourvest" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=i6sbK0ih1xfyEgTz5B4JwDX9rOKq7xHlCWYKNHpqwx-bbno3bN5aYshySNVd_a62Lg8oG2f7D-upIWK3gzg" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+May&nbsp;19,&nbsp;2008 <br> 3:13&nbsp;am </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10382\" onclick=\"set_gmp('?threaded=1&var=1&p=3');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10382" onclick="set_gmp('?threaded=1&var=1&p=3');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10382?threaded=1&var=1&p=3"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>I believe I'm using the one from the official distribution. (I told
+another team member to get it, so I'm not entirely certain of the
+pedigree.) Is there a...
+</div></td>
+<td class="info">
+Daniels, Troy (US SSA)<br> <span class="name">
+<a href="http://profiles.yahoo.com/troy_danielsus">troy_danielsus</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?troy_danielsus" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=688AIlWDdnBHdVhi8ZkE6UpxXctl6kIDEUM8aH47ng4LAKsK0n34-CyysljRPvkFcXcfkgmKV9Qtt3qLgr2gnV082flVVQ" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+May&nbsp;12,&nbsp;2008 <br> 5:36&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10383\" onclick=\"set_gmp('?threaded=1&var=1&p=4');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10383" onclick="set_gmp('?threaded=1&var=1&p=4');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10383?threaded=1&var=1&p=4"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>The official one works here. If you are using that one and still
+have the problem, try to delete default.lpo under the IDE folder. It is
+easiest to redownload...
+</div></td>
+<td class="info">
+Peter Notebaert<br> <span class="name">
+<a href="http://profiles.yahoo.com/peter_notebaert">peter_notebaert</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?peter_notebaert" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=cxTpUMCXg_mqrvgSLfI_T3blaPI7r_zkWhWWxakYthwaswKUAJrQdqpTo97rZ5V8EYp-bjO9vw" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+May&nbsp;13,&nbsp;2008 <br> 1:56&nbsp;am </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent2"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10778\" onclick=\"set_gmp('?threaded=1&var=1&p=5');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10778" onclick="set_gmp('?threaded=1&var=1&p=5');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10778?threaded=1&var=1&p=5"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Hi, i get the same error message when using lp_solve 5.5.0.12 dll in VS2008 c#. int lp = lpsolve.read_<wbr>LP("input.<wbr>lp", 5, "test"); lpsolve.set_<wbr>outputfile(<wbr>lp,...
+</div></td>
+<td class="info">
+nikolaus.obwegeser<br> <span class="name">
+<a href="http://profiles.yahoo.com/nikolaus%2Eobwegeser" title="nikolaus.obwegeser">nikolaus.obw...</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?nikolaus%2Eobwegeser" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=CWzClRJTHNx3mVJ1-HSfk5Q-mZLYyX55cmYIMgO_B993RMRwHfYRAGuRpre4IEQ8kJyn3GIT709Wh9LpRLFosk1SrQ" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+Jul&nbsp;27,&nbsp;2008 <br> 8:31&nbsp;am </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10500\" onclick=\"set_gmp('?threaded=1&var=1&p=6');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10500" onclick="set_gmp('?threaded=1&var=1&p=6');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10500?threaded=1&var=1&p=6"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Is there any progress on a new version of the IDE? I have an LP
+that gives numerical failure called from Java (using 5.5.0.12), but if
+I load the LP into the...
+</div></td>
+<td class="info">
+Daniels, Troy (US SSA)<br> <span class="name">
+<a href="http://profiles.yahoo.com/troy_danielsus">troy_danielsus</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?troy_danielsus" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=0wptKhtQ4hQ1Qd2ETFFDNPvk9YGv2k-IwjU1oQIcUxbnSmZrVkH6-cUZ9UeXF3FoV2xVmzEfHOtuEpMsPl0Hebu_MKHY" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+Jun&nbsp;3,&nbsp;2008 <br> 1:42&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10501\" onclick=\"set_gmp('?threaded=1&var=1&p=7');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10501" onclick="set_gmp('?threaded=1&var=1&p=7');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10501?threaded=1&var=1&p=7"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Troy, The protection error only occurs when the lpsolve55.dll is
+compiled with the MS .NET compiler, not with the VC6 MS compiler. The
+distributed version is...
+</div></td>
+<td class="info">
+Peter Notebaert<br> <span class="name">
+<a href="http://profiles.yahoo.com/peter_notebaert">peter_notebaert</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?peter_notebaert" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=vq-bi8pW2PiIJmIpUyrD_wdNErXHrGu6r7KcA7R8xkAAQ7gRKqGVS9Nh9FrX4cjswWmFDO8J2gER" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+Jun&nbsp;3,&nbsp;2008 <br> 2:04&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent2"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10508\" onclick=\"set_gmp('?threaded=1&var=1&p=8');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10508" onclick="set_gmp('?threaded=1&var=1&p=8');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10508?threaded=1&var=1&p=8"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>Maybe the /MT option will still get rid of MSVCRT and possibly
+allow the IDE to call the LARGEADDRESSAWARE dll. I do not have VS2008
+up yet to test. There...
+</div></td>
+<td class="info">
+William H. Patton<br> <span class="name">
+<a href="http://profiles.yahoo.com/pattonwhp">pattonwhp</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?pattonwhp" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=CCL4qJnlqzpqsO5wnVEQVF95xG7R-Y5P-hC0AQ5Mi8T9lUABOnq2-zPiMwdSq-9MQf5O6j0HjkKklgnJt_7g" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+Jun&nbsp;3,&nbsp;2008 <br> 11:29&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message footaction">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10512\" onclick=\"set_gmp('?threaded=1&var=1&p=9');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10512" onclick="set_gmp('?threaded=1&var=1&p=9');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10512?threaded=1&var=1&p=9"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>No that is not the problem. The problem is that the IDE opens the
+file via the C FILE stream. This structure is stored in the MSVCRT.DLL
+file. Then the IDE...
+</div></td>
+<td class="info footaction">
+Peter Notebaert<br> <span class="name">
+<a href="http://profiles.yahoo.com/peter_notebaert">peter_notebaert</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?peter_notebaert" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=qZXi3SwF_y7Jh51ujd1M-JEQvgMc-H4KrNDISeThl9bCJeP6edZF4b096XTBNJtGElK9L9NsmEJXbYSs" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date footaction">
+Jun&nbsp;4,&nbsp;2008 <br> 2:19&nbsp;pm </td>
+</tr>
+<tr>
+<td class="message">
+<div class="ygrp-indent1"><div class="ygrp-elbow"><img class="ygrp-ielbow" src="10512_files/elbow.gif" alt="" height="9" width="13"></div>
+<script type="text/javascript">
+<!--
+document.writeln("<a href=\"/group/lp_solve/message/10513\" onclick=\"set_gmp('?threaded=1&var=1&p=10');return true;\"><span>Re: IDE exception with 5.5.0.12</span></a>");
+// -->
+</script><a href="http://tech.groups.yahoo.com/group/lp_solve/message/10513" onclick="set_gmp('?threaded=1&var=1&p=10');return true;"><span>Re: IDE exception with 5.5.0.12</span></a>
+
+<noscript>
+<a href="/group/lp_solve/message/10513?threaded=1&var=1&p=10"><span>Re: IDE exception with 5.5.0.12</span></a>
+</noscript>
+<br>To confirm this, I get the same error, whether I compile with /MD or /MT. Troy _____ From: lp_solve@yahoogroup<wbr>s.com [mailto:lp_solve@yahoogroup<wbr>s.com] On Behalf...
+</div></td>
+<td class="info">
+Daniels, Troy (US SSA)<br> <span class="name">
+<a href="http://profiles.yahoo.com/troy_danielsus">troy_danielsus</a> </span>
+<br> <span class="ygrp-nowrap">
+<a href="ymsgr:sendIM?troy_danielsus" class="smalltype ygrp-nowrap" title="Offline"><img src="10512_files/notonline.gif" alt="Offline" height="12" width="12"></a>
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post?postID=QQV8QTD883dyrU-f0UR-9-BtnLh284EyK9jh-zdXA3gLlyiKkqqPlmnE0aoCzEe_fRH0CwtDN76-kkVVkRlMLrI5ng1b" class="smalltype ygrp-nowrap" title="Send Email"><img src="10512_files/sendemail.gif" alt="Send Email" height="12" width="12"></a>
+</span>
+</td>
+<td class="date">
+Jun&nbsp;4,&nbsp;2008 <br> 2:46&nbsp;pm </td>
+</tr>
+<tr>
+<td class="ygrp-blank" colspan="6"></td>
+</tr>
+</tbody></table>
+<div class="ygrp-topicnav">
+</div>
+</div>
+</div>
+<div class="footaction">
+<div class="list-action-bottom-right">
+<div class="footaction" style="text-align: center;">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/message/10415?var=1">
+&lt;&nbsp;Prev Topic </a> &nbsp;|&nbsp; <a href="http://tech.groups.yahoo.com/group/lp_solve/message/10777?var=1"> Next Topic&nbsp;&gt;
+</a>
+</div>
+</div>
+<span class="corner-bottom"><span class="corner-left"></span></span>
+</div>
+</div>
+<!-- end content include -->
+<div class="ygrp-topic">
+<table class="footview footnav" cellpadding="0" cellspacing="0"><tbody><tr>
+<td class="viewright">
+</td>
+</tr></tbody></table>
+<table class="footview" cellpadding="0" cellspacing="0"><tbody><tr>
+<td class="ygrp-nowrap"><div class="searcharea" style="text-align: left;">
+<form class="getmessagenumber" method="get" action="/group/lp_solve/message">
+<div class="search">
+<input name="Message.JumpSubmitCheck" value="1" type="hidden">
+<input name="threaded" value="1" type="hidden">
+Message #
+<input maxlength="8" size="3" name="Message.Number.Input" type="text">
+<input class="ygrp-button" value="Go" type="submit">
+</div>
+</form>
+<form action="/group/lp_solve/msearch" method="get" onsubmit="setDocumentCharset(this)"><div class="search">
+Search: <input name="query" size="20" value="" type="text">
+<input class="ygrp-button" name="submit" value="Search" type="submit">
+<input name="charset" value="" type="hidden">
+</div></form><a href="http://tech.groups.yahoo.com/group/lp_solve/msearch_adv" class="smalltype">Advanced</a></div>
+</td>
+<td> <div class="footview">
+<a href="http://tech.groups.yahoo.com/group/lp_solve/post" class="action ygrp-nowrap">Start Topic</a>
+</div>
+</td>
+</tr></tbody></table>
+<div id="ygrp-sponsored-links">
+<div class="ygrp-adh"><h4>SPONSOR RESULTS</h4></div>
+<p>
+<a href="http://rc.us-west.srv.overture.com/d/sr/?xargs=20ADnzjhopgHwgUd5Fnri9W9-rWedfANicbUQ8Zfagu6DL5o_VBeozbL2waXKDejHl0fnBDGHOMGSTCcSz21MvO3SfCycTCs3TyEislOe87n7dKLYlN6R6mC7B4Y4F5V73KgjzndotJwH3AqH2xuehJDnA7cZTkKgkDCK8xeoB_ZMetvauux4qV4DvMyqNJEFHXQadizD8otB0ELgRdFSXf0wWNVnSXOH0iJtdN_RsbHgWU4AIxACYsskhHMoI4LgPQQ.000000020aa60f9d"><div class="ygrp-adt">IT Solutions Using Open Source Software</div>
+<span class="ygrp-adu">www.optaros.<wbr>com</span> <span class="ygrp-add"> - Learn about IT solutions assembled with open source - a third alternative to "build versus buy."</span><br></a>
+</p>
+</div>
+<span class="footerbase"></span>
+</div>
+</td>
+</tr></tbody></table>
+</div>
+<div class="doc-layout-foot" id="doc-foot">
+<hr>
+<center><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="center" valign="bottom" width="100%"><font face="arial" size="-2">Copyright © 2009 Yahoo! Inc. All rights reserved.<br><a href="http://us.ard.yahoo.com/SIG=15p7t4b0h/M=289534.8588553.9382312.4155847/D=groups/S=1707281942:FOOT/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KvxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=3651951/R=0/SIG=1163rhhok/*http://privacy.yahoo.com/privacy/us/" target="_top">Privacy Policy</a> - <a href="http://us.ard.yahoo.com/SIG=15p7t4b0h/M=289534.8588553.9382312.4155847/D=groups/S=1707281942:FOOT/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KvxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=3651951/R=1/SIG=1136qnvkg/*http://docs.yahoo.com/info/terms/" target="_top">Terms of Service</a> - <a href="http://us.ard.yahoo.com/SIG=15p7t4b0h/M=289534.8588553.9382312.4155847/D=groups/S=1707281942:FOOT/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KvxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=3651951/R=2/SIG=11lp7krrc/*http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - <a href="http://us.ard.yahoo.com/SIG=15p7t4b0h/M=289534.8588553.9382312.4155847/D=groups/S=1707281942:FOOT/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KvxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=3651951/R=3/SIG=11f4ctsek/*http://groups.yahoo.com/local/guidelines.html" target="_top">Guidelines</a> - <a href="http://us.ard.yahoo.com/SIG=15p7t4b0h/M=289534.8588553.9382312.4155847/D=groups/S=1707281942:FOOT/Y=YAHOO/EXP=1236747911/L=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ/B=KvxzFEPDhFg-/J=1236740711778958/K=8YGh15WiE2PuFIWNItrNhg/A=3651951/R=4/SIG=114qqluh9/*http://help.yahoo.com/help/groups/" target="_top">Help</a></font><br>&nbsp; </td></tr></tbody></table></center><!-- SpaceID=1707281942 loc=FSRVY noad -->
+<script language="javascript">
+if(window.yzq_d==null)window.yzq_d=new Object();
+window.yzq_d['LPxzFEPDhFg-']='&U=12dr258vf%2fN%3dLPxzFEPDhFg-%2fC%3d-1%2fD%3dFSRVY%2fB%3d-1%2fV%3d0';
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=150qd0ge1%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d2.1%2fW%3dH%2fY%3dYAHOO%2fF%3d500683808%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962&U=12dr258vf%2fN%3dLPxzFEPDhFg-%2fC%3d-1%2fD%3dFSRVY%2fB%3d-1%2fV%3d0"></noscript> <!-- SpaceID=1707281942 loc=SIP noad -->
+<script language="javascript">
+if(window.yzq_d==null)window.yzq_d=new Object();
+window.yzq_d['K_xzFEPDhFg-']='&U=12b5v151h%2fN%3dK_xzFEPDhFg-%2fC%3d-1%2fD%3dSIP%2fB%3d-1%2fV%3d0';
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=151e24659%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d2.1%2fW%3dH%2fY%3dYAHOO%2fF%3d3183811509%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962&U=12b5v151h%2fN%3dK_xzFEPDhFg-%2fC%3d-1%2fD%3dSIP%2fB%3d-1%2fV%3d0"></noscript>
+<script language="JavaScript" type="text/javascript" src="10512_files/s_code.js"></script>
+<script language="JavaScript" type="text/javascript"><!--
+function stringMatchesArray(pStr,pArr) {
+var len = pArr.length, i;
+for (i=0; i<len; i++)
+{
+if (pArr[i] == pStr)
+return true;
+}
+return false;
+}
+var url = location.href;
+var host = location.hostname.split("."); var path = location.pathname.substr(1).split("/");
+var query = location.search;
+var countries = ["ar", "br", "ca", "mx", "cf", "espanol", "asia", "au", "hk", "in", "de", "it", "es", "fr", "uk"]; var pn = stringMatchesArray(host[0],countries) ? host[0] : "us";
+if (path.length > 0)
+{
+if ((path[0] == "group"))
+{
+pn += ":group";
+for (var i=2, len=path.length; i<len; i++)
+pn += (path[i].length > 0) ? (":" + path[i]) : "";
+}
+else
+{
+for (var i=0, len=path.length; i<len; i++)
+pn += (path[i].length > 0) ? (":" + path[i]) : "";
+}
+}
+s.pageName=pn;
+s.prop24 = (query.length > 1) ? (":param" + query) : "";
+s.linkInternalFilters="javascript:,#,.";
+var s_code=s.t();if(s_code)document.write(s_code)//--></script><script language="javascript">
+if(window.yzq_d==null)window.yzq_d=new Object();
+window.yzq_d['KvxzFEPDhFg-']='&U=13d71r6s3%2fN%3dKvxzFEPDhFg-%2fC%3d289534.8588553.9382312.4155847%2fD%3dFOOT%2fB%3d3651951%2fV%3d1';
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=150cni88c%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d2.1%2fW%3dH%2fY%3dYAHOO%2fF%3d607710650%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962&U=13d71r6s3%2fN%3dKvxzFEPDhFg-%2fC%3d289534.8588553.9382312.4155847%2fD%3dFOOT%2fB%3d3651951%2fV%3d1"></noscript></div>
+<!-- ad call: NE4 err #1 --> <!-- SpaceID=1707281942 loc=NE4 noad -->
+<script language="javascript">
+if(window.yzq_d==null)window.yzq_d=new Object();
+window.yzq_d['J_xzFEPDhFg-']='&U=12b71lv1v%2fN%3dJ_xzFEPDhFg-%2fC%3d-1%2fD%3dNE4%2fB%3d-1%2fV%3d0';
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=14viimdsj%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d2.1%2fW%3dH%2fY%3dYAHOO%2fF%3d55813410%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962&U=12b71lv1v%2fN%3dJ_xzFEPDhFg-%2fC%3d-1%2fD%3dNE4%2fB%3d-1%2fV%3d0"></noscript> <!-- ad call: PU err #1 --> <!-- SpaceID=1707281942 loc=PU noad -->
+<!-- ad call: HEADR ok --> <!-- spid=1707281942 a=5530067 m=650008.13105338.13293890.12621715 -->
+<!-- ad call: FOOT ok --> <!-- spid=1707281942 a=3651951 m=289534.8588553.9382312.4155847 -->
+<!-- etime: 0.106 -->
+<script language="javascript">
+if(window.yzq_p==null)document.write("<scr"+"ipt language=javascript src=http://l.yimg.com/d/lib/bc/bc_2.0.4.js></scr"+"ipt>");
+</script><script language="javascript" src="10512_files/bc_2.js"></script><script language="javascript">
+if(window.yzq_p)yzq_p('P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=14srklgaq%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d1.1%2fW%3dJ%2fY%3dYAHOO%2fF%3d1231950695%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fS%3d1%2fJ%3d48228962');
+if(window.yzq_s)yzq_s();
+</script><noscript><img width=1 height=1 alt=""
+src="http://us.bc.yahoo.com/b?P=0Vjh.2KJInSBf.5sSM5AwQAmR8J5c0m3KmcACwnJ&T=151q3tpoj%2fX%3d1236740711%2fE%3d1707281942%2fR%3dgroups%2fK%3d5%2fV%3d3.1%2fW%3dJ%2fY%3dYAHOO%2fF%3d4012925204%2fH%3dY2FjaGVoaW50PSJ1cy10ZWNoIg--%2fQ%3d-1%2fS%3d1%2fJ%3d48228962"></noscript>
+<!-- w6.grp.sp2.yahoo.com compressed/chunked Tue Mar 10 20:05:11 PDT 2009 -->
+</body></html>

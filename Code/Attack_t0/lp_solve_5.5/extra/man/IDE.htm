@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>LPSolve IDE</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>LPSolve IDE</u></h1>
+					<p>The LPSolve IDE (Integrated Development Interface) is a very user friendly Windows interface to the lpsolve API.
+					   All functionality of lpsolve can be accessed via a graphical and very user friendly application.
+					</p>
+					<p>
+					   Many thanks to <a href="mailto:hgourvest@progdigy.com">Henri Gourvest</a> for making this nice
+					   interface to lpsolve and making it available to the community.
+					</p>
+					<p>Here is a list of some of the features of the IDE:</p>
+					<ul>
+					    <li>Everything is graphical and mouse controled</li>
+					    <li>Enter your lp model in all supported formats and even via an XLI interface (See <a href="XLI.htm">External Language Interfaces</a>)</li>
+					    <li>Convert your lp model from any supported format to another supported format and even via an XLI interface (See <a href="XLI.htm">External Language Interfaces</a>)</li>
+					    <li>Very user friendly editor to enter/change the model with syntax highlight.</li>
+					    <li>Syntax checking of the model</li>
+					    <li>Solve the model</li>
+					    <li>See the results in grids</li>
+					    <li>Control every possible lpsolve option (tolerances, presolve, scaling, ...)</li>
+					    <li>View the matrix in grids</li>
+					    <li>Export model to HTML, RTF, LaTeX output</li>
+					    <li>Export matrix to CSV, HTML, RTF output</li>
+					    <li>Export results to CSV, HTML, RTF output</li>
+					    <li>Show statistics about the model.</li>
+						<li>...</li>
+					</ul>
+					<p>
+					   Here are some screen shorts:
+					</p>
+					<p><IMG alt="Source" src="IDE/IDE1.gif" border="0"></p>
+					<p><IMG alt="Results" src="IDE/IDE2.gif" border="0"></p>
+					<p><IMG alt="Matrix" src="IDE/IDE3.gif" border="0"></p>
+					<p><IMG alt="Options" src="IDE/IDE4.gif" border="0"></p>
+					<br>
+
+					<h3 align="left"><u>Installation</u></h3>
+					Download the setup lp_solve_5.5.2.14_IDE_Setup.exe and run the setup, that is all.<br>
+Note that it needs the lpsolve dll (lpsolve55.dll) to do its job.
+For your convenience, a dll is provided with this archive, but it is not
+guaranteed to be the most recent one. To get the most recent lpsolve dll,
+extract if from the lp_solve_5.5.2.14_dev.zip archive and put it in the folder where you installed the IDE files in.
+
+Also note that the IDE also puts some messages on the console. This may be changed in the future.
+When started from a command prompt, the messages are shown in this screen, when started from Windows,
+a console screen will also be created. If you are looking for a message not shown in the IDE, maybe
+it is shown on the console window...
+
+				    <h3 align="left"><u>Usage</u></h3>
+				    The IDE is very easy to use and doesn't need much explanations.
+				    When you start it, you get an editor window where a model file must be entered.
+				    By default this in the lp format. Initially, you will see the following:
+
+<pre>
+/* Objective function */
+min: ;
+
+/* Variable bounds */
+</pre>
+
+                    As an example, clear this and enter the following:
+
+<pre>max: 143 x + 60 y;
+
+120 x + 210 y &lt;= 15000;
+110 x + 30 y &lt;= 4000;
+x + y &lt;= 75;</pre>
+
+                    Now press the F9 button or click the green arrow (Solve) in the toolbar to solve this model.
+
+                    In the result tab you see the result of this model.
+                    Note that this is the model presented in <a href="formulate.htm">Formulation of an lp problem in lpsolve</a>.
+                    The model is formulated in the lp format. See <a href="lp-format.htm">lp-format</a> for a description of it.
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,56 @@
+Solver "lpsolve" is based on lp_solve, a simplex-based code for linear
+and integer programming problems by
+
+        Michel Berkelaar
+        michel@es.ele.tue.nl
+
+whose source is
+
+        http://groups.yahoo.com/group/lp_solve/
+
+The version of this source file that was available on 20 Oct 2004
+is file lp_solve_5.5_source.tar.gz, which was released under the LGPL license
+(as explained in its README and LGPL.txt files).  Some executable
+"lpsolve" binaries built from this source appear in the system-dependent
+subdirectories of /netlib/ampl/student/solvers.
+
+The makefile has a line "LPSOLVE =" that you may need to adjust.
+
+Note that lpsolve.c is made in such a way that it can be used with historical
+versions of lp_solve. Versions 3, 4 and 5 are supported.
+The makefiles end with the version number. So for example to make lpsolve for
+version 5 on Windows, use makefile.vc5. For version 3, you would use makefile.vc3
+
+For a summary of using solver "lpsolve", execute
+
+        lpsolve '-?'
+
+Lpsolve reads keywords and values from the environment (shell) variable
+lpsolve_options (known in an AMPL session as option lpsolve_options) and
+from the command line.  Execute
+
+	lpsolve -=
+
+for a summary of keywords that lpsolve recognizes.
+
+With this version, a lot of new keywords are added to have the full potential
+of lp_solve.
+
+Here is a table of solve_result_num values that "lpsolve" can return
+to an AMPL session, along with the text that appears in the associated
+solve_message.
+
+        Value   Message
+
+        0       optimal
+        100     suboptimal
+        200     infeasible
+        300     unbounded
+        500     bug
+        501     failure
+        502     integer programming failure
+
+Questions about this stuff?
+Contact dmg@ampl.com (David M. Gay) or lpsolve@peno.be (Peter Notebaert)
+
+Also see AMPL.htm for more information or the lp_solve reference guide.

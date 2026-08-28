@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Ratio's</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Ratios</u></h1>
+					
+					<h3 align="left"><u>Constraints</u></h3>
+					
+					<P align="left">
+						Linear constraints are of the form:</P>
+					<P align="left">a1 x1 + a2 x2 + a3 x3 + ... &gt;= minimum</P>
+					<P align="left">a1 x1 + a2 x2 + a3 x3 + ... &lt;= maximum</P>
+					<P align="left">Where minimum and maximum are constants.</P>
+					<P align="left">lp_solve can only handle these kind of Linear equations. However
+						sometimes there are tricks to convert an equation that seems non-Linear at
+						first sight to a Linear equation. One of these is ratio's:</P>
+					<P align="left"><U>a11 x1 + a12 x2 + a13 x3 + ...</U> &lt;= minimum<br>
+						a21 x1 + a22 x2 + a23 x3 + ...</P>
+					<P align="left">On condition that a21 x1 + a22 x2 + a23 x3 + ... is positive, this
+						is equal to:</P>
+					<P align="left">a11 x1 + a12 x2 + a13 x3 + ... &lt;=                     minimum * (a21 x1 + a22 x2 +
+						a23 x3 + ...)<BR>
+					</P>
+					<P align="left">If the&nbsp;denominator is always negative, then it can be
+						converted to:</P>
+					<P align="left">a11 x1 + a12 x2 + a13 x3 + ... &gt;= minimum * (a21 x1 + a22 x2 +
+						a23 x3 + ...)</P>
+					<P align="left">Let's continue with the case that the denominator is positive, then
+						the equation is also equal to:</P>
+					<P align="left">a11 x1 + a12 x2 + a13 x3 + ...&nbsp;- minimum * (a21 x1 + a22 x2 +
+						a23 x3 + ...) &lt;= 0</P>
+					<P align="left">Or</P>
+					<P align="left">(a11 - minimum * a21)&nbsp;x1 + (a12 - minimum * a22)&nbsp;x2 +
+						(a13 - minimum * a23)&nbsp;x3 + ...&nbsp;&lt;= 0</P>
+					<P align="left">And there we have again a Linear equation. The same can be done for
+						a maximum or equality of course. Don't forget that there is one assumption: the
+						denominator is positive or negative. If it can be both, then this trick cannot
+						be used.</P>
+					<P align="left">One example of this is for example that it is required that two
+						variables must have a ration of 1/2. For example:</P>
+					<P align="left"><U>x1</U> = 1/2<BR>
+						x2</P>
+					<P align="left">With the formula above, this gives:</P>
+					<P align="left">x1 - 0.5 x2 = 0</P>
+					<P align="left">Adding this equation will result in the fact that x2 will be two
+						times larger than x1. Again in the assumption that x2 stays positive.</P>
+					<P align="left">
+						Oh, and what if the denominator is zero? Division by zero is undefined and
+						cannot give a real value. In the above example with two variables, if x2 is
+						zero, then x1 is also forced to be zero. That is the side effect by converting
+						the non-Linear equation to a Linear equation.</P>
+					
+					<h3 align="left"><u>Objective function</u></h3>
+<pre>
+max   <U>c0 + c1 x1 + c2 x2 + c3 x3 + ...</U>
+      d0 + d1 x1 + d2 x2 + d3 x3 + ...
+
+s.t.  ai1 x1 + ai2 x2 + ai3 x3 + ... &lt;= bi
+      xj &gt;= 0
+</pre>
+                    <p>Note that c0 and d0 are constants. They are optional and not required for this solution.<br>
+                       Also note that the explanation uses &lt;= constraints, but they can as well be &gt;= constraints
+                       without any modification.<br>
+                       And as a last note, this text uses maximization of the objective function, but minimization
+                       works as good without any modification.
+                    </p>
+                    <p>Linear programming <b>only</b> accepts models with equations in the first degree.
+                       The objective function however has a numerator and denominator so this seems not
+                       possible to solve with pure linear programming. However there is a trick to overcome
+                       to this problem. This model can be <b>transformed</b> to another model that is pure linear. When the solution is
+                       found to this transformed model, the results can be recalculated back to the original model.</p>
+                    <p>
+                       There is only one condition to make this possible: the denominator <b>must</b> be
+                       strictly positive (or negative, but in that case you can multiply numerator and denominator
+                       by -1 such that the denominator becomes positive).
+                    </p>
+<pre>      d0 + d1 x1 + d2 x2 + d3 x3 + ... &gt; 0</pre>
+                    <p>Again note the &gt;  sign. The denominator may also not become zero. If the transformed model
+                       returns a solution saying that it is zero, then the solution is <b>invalid</b>.
+                    </p>
+                    <p>Now with this assumption in mind, we can introduce a new variable y0:</p>
+<pre>
+      y0 = <u>                  1               </u>
+            d0 + d1 x1 + d2 x2 + d3 x3 + ...</pre>
+                    <p>Then the model can also be written as:</p>
+<pre>
+max   c0 y0 + c1 x1 y0 + c2 x2 y0 + c3 x3 y0 + ...
+
+s.t.  ai1 x1 + ai2 x2 + ai3 x3 + ... &lt;= bi
+      y0 = <u>                  1               </u>
+            d0 + d1 x1 + d2 x2 + d3 x3 + ...
+      y0, xj &gt;= 0
+</pre>
+                    <p>The constraints can also be multiplied by y0 and the y0 constraint can be written differently:</p>
+<pre>
+max   c0 y0 + c1 x1 y0 + c2 x2 y0 + c3 x3 y0 + ...
+
+s.t.  ai1 x1 y0 + ai2 x2 y0 + ai3 x3 y0 + ... &lt;= bi y0
+      d0 y0 + d1 x1 y0 + d2 x2 y0 + d3 x3 y0 + ... = 1
+      y0, xj y0 &gt;= 0
+</pre>
+                    <p>Note again that this can <b>only</b> be done if y0 &gt; 0</p>
+                    <p>Now also make following substitution:</p>
+<pre>
+      yj = xj y0
+</pre>
+                    <p>Also put the bi y0 term to the left:</p>
+<pre>
+max   c0 y0 + c1 y1 + c2 y2 + c3 y3 + ...
+
+s.t.  -bi y0 + ai1 y1 + ai2 y1 + ai3 y3 + ... &lt;= 0
+      d0 y0 + d1 y1 + d2 y2 + d3 y3 + ... = 1
+      yj &gt;= 0
+</pre>
+                    <p>All yj are variables (j starting from 0)</p>
+                    <p>This new transformed model is an exact transformation of the original model, but
+                    with the advantage that it is a pure linear model. Also note that this model has one extra
+                    variable (y0) with coefficients in the matrix which are the negative of the right hand side (-bi y0).
+                    A constraint is also added requiring the constant term in the denominator times the new variable (d0 y0)
+                    plus the denominator terms involving the transformed variables to equal 1. The transformed model
+                    uses the same aij's as the original. Its right hand sides are all 0's except the one in the new constraint.
+                    The objective function does not have a denominator term and the objective function altered to include
+                    the numerator constant times the new variable y0.<br>
+                    This model can now be solved with lp_solve. Then to get the solution of the original model
+                    we must do a reverse transformation of this solution. This can be easily done:</p>
+<pre>
+      yj = xj y0
+      
+So:
+
+      xj = yj / y0
+</pre>
+                    <h5 align="left">Example</h5>
+                    <p>Suppose that it is desirable to solve the following problem.</p>
+<pre>
+max   <U>      1.8 x1 + 1.7 x2  </U>
+       10 + 4.0 x1 + 4.1 x2
+
+s.t.  1.5 x1 +   x2 &lt;= 6
+      3.0 x1 + 4 x2 &lt;= 20
+      x1, x2 &gt;= 0
+</pre>
+                    <p>Then the transformed problem is:</p>
+<pre>
+max            1.8 y1 + 1.7 y2
+
+s.t.   -6 y0 + 1.5 y1 +     y2 &lt;= 0
+      -20 y0 + 3.0 y1 +   4 y2 &lt;= 0
+       10 y0 + 4.0 y1 + 4.1 y2 = 1
+          y0, y1, y2 &gt;= 0
+</pre>
+                    <p>The solution of this transformed model is:</p>
+<pre>
+Value of objective function: 0.289916
+
+Actual values of the variables:
+y1                      0.0420168
+y2                        0.12605
+y0                      0.0315126
+
+Dual values with from - till limits:
+                           Dual value            From            Till
+R1                           0.342437     -0.03278689       0.1090909
+R2                         0.04222689      -0.3076923       0.1156069
+R3                           0.289916               0          1e+030
+y1                                  0         -1e+030          1e+030
+y2                                  0         -1e+030          1e+030
+y0                                  0         -1e+030          1e+030
+</pre>
+                    <p>The value of the objective function of this transformed model is also the value of the
+                    objective function of the original model. The values of the original xi variables are calculated
+                    by dividing the yi values by y0:</p>
+<pre>
+x1 = y1 / y0 = 0.0420168 / 0.0315126 = 1.33333333
+x2 = y2 / y0 = 0.12605 / 0.0315126 = 4
+</pre>
+                    <p>Plugging back into the original problem, the numerator equals 9.2; the denominator, 31.73, 
+                       and their fraction 0.289916 (the objective function value reported).
+                       One may also recover the dual values or reduced costs. In this case since the rows are multiplied by
+                       one over the denominator, the original values may be recovered by dividing through
+                       by the denominator (1 / y0 or multiplying them by y0). Thus the effective dual value for 
+                       constraint 1 is 0.01079, and constraint 2 is 0.0013307. Constraint 3 has no analogue in the original problem, and
+                       thus, is not transformed. The From - Till limits can also be recalculated back by 
+                       dividing them by y0 and correcting these values with the bi y0 term.</p>
+                    <h5 align="left">Comments</h5>
+                    <p>This is an exact transformation as long as the denominator remains strictly positive. The
+                       formulation fails if y0 equals zero in the optimal solution.
+                       Much research has been done on fractional programming. The original development appears in
+                       Charnes and Cooper (1962). A historical perspective and literature review can be found in Schaible and
+                       Ibaraki.
+                    </p>
+
+                    <h5 align="left">Integer variables</h5>
+                    Extra complexity arises if there are integer variables in the original model.
+                    Ie, one or more of the xi variables must be integer. Remember that:
+                    <pre>yj = xj y0</pre> and <pre>y0 = 1 / denominator</pre>
+                    Because of the latter, y0 is a real number. So yj is real, even if xj is integer.
+                    None of the xj variables are in the transformed model and from above you can see that
+                    you can't make the yj variables integer to have xj integer. So is it then not possible
+                    to define something that xj become integer?<br>
+                    Remember that 
+                    <pre>xj = yj / y0</pre>
+                    Suppose that xj must take an integer value i:
+                    <pre>yj / y0 = i</pre>
+                    or
+                    <pre>yj = i * y0</pre>
+                    Unfortunately, this constraint can't be handled by lpsolve since it is quadratic.<br>
+                    However a special case of integer variables can be solved:
+                    
+                    <h5 align="left">Binary variables</h5>
+                    
+                    Binary variables are a special kind of integer variables. They can only take 0 or 1 values.
+                    From the previous section we know that
+                    <pre>yj = i * y0</pre>
+                    
+                    In this case is i either zero or one. If zero, then yj must be zero. If one, then yj = y0.
+                    If we can put this into the formulation, then the xj variables will be binary.<br>
+                    <br>
+                    To make this possible, you must introduce extra binary variables: zj<br>
+                    <br>
+					When zj = 0, then it must make yj = 0 and when zj = 1, then it must make yj = y0<br>
+					<br>
+					One way to make this possible is by doing the following.<br>
+					First you must determine a constant value f1 for which you know that f1 &gt; yj in all cases and 
+					f2 for which you know that f2 &gt; y0 in all cases.<br>
+					<br>
+					Then you can write:<br>
+<pre>
+yj &lt;= f1 zj
+yj - y0 - f2 zj &gt;= -f2
+yj - y0 + f2 zj &lt;= f2
+</pre>
+					
+					Two cases have to be considered:<br>
+					<br>
+					1) zj = 0<br>
+<pre>
+yj &lt;= 0
+yj - y0 &gt;= -f2
+yj - y0 &lt;= f2
+</pre>
+
+					or
+
+<pre>
+yj = 0
+-y0 &gt;= -f2
+-y0 &lt;= f2
+</pre>
+
+					or
+
+<pre>
+yj = 0
+y0 &lt;= f2
+y0 &gt;= -f2
+</pre>
+
+					since you have chosen the constant f2 such that it is always larger than y0, 
+					equations 2 and 3 are redundant in this case and yj is indeed 0. 
+					And from above, this means that xj will be 0.<br>
+					<br>
+					2) zj = 1<br>
+
+<pre>
+yj &lt;= f1
+yj - y0 - f2 &gt;= -f2
+yj - y0 + f2 &lt;= f2
+</pre>
+
+					or
+
+<pre>
+yj &lt;= f1
+yj - y0 &gt;= 0
+yj - y0 &lt;= 0
+</pre>
+
+					since you have chosen the constant f1 such that it is always larger than yj, 
+					equation 1 is redundant. 
+					Equations 2 and 3 together make that yj equals y0. And from above, this means that xj will be 1.<br>
+					<br>
+					Of course your model becomes alot more complex. 
+					Per xj integer variable, you must introduce an extra binary variable zj and add 3 constraints for each.
+					And you must have a guess for f1 and f2. 
+					Don't take a very very large number like 1e10 or something like this because that would make the model very unstable because of scaling/rouding errors. 
+					You must deduce from your model what these two factors can be. 
+					Maybe by first solving the model without integer constraints and determine f1 and f2 from this real result.<br>
+					<br>
+					Using the example from above, now requiring that both x1 and x2 are integer. 
+					The result of the real model is:
+<pre>
+Value of objective function: 0.289916
+
+Actual values of the variables:
+y1                      0.0420168
+y2                        0.12605
+y0                      0.0315126
+</pre>
+From this, choose f1 and f2 being 10.<br>
+<br>
+Now add the following constraints to this model:<br>
+
+<pre>
+y1 &lt;= 10 z1
+y1 - y0 - 10 z1 &gt;= -10
+y1 - y0 + 10 z1 &lt;= 10
+
+y2 &lt;= 10 z2
+y2 - y0 - 10 z2 &gt;= -10
+y2 - y0 + 10 z2 &lt;= 10
+
+int z1, z2
+</pre>
+
+The solution of this model is:<br>
+<pre>
+Value of objective function: 0.19337
+
+Actual values of the variables:
+y1                      0.0552486
+y2                      0.0552486
+y0                      0.0552486
+z1                              1
+z2                              1
+
+x1 = y1 / y0 = 1
+x2 = y2 / y0 = 1
+</pre>
+
+Indeed binary values.
+
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

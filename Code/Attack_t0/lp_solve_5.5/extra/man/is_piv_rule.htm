@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_piv_rule</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_piv_rule</h1>
+					<p>Checks if the specified pivot rule is active.</p>
+					<p><b>unsigned char is_piv_rule(lprec </b>*<i>lp</i><b>, int </b><i>rule</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_piv_rule</b> returns TRUE if the specified pivot rule is active, else FALSE</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>rule</i></p>
+					Can be <b>one</b> of the following values:
+					<TABLE id="Table2" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>PRICER_FIRSTINDEX&nbsp;(0)</TD>
+							<TD>Select first</TD>
+						</TR>
+						<TR>
+							<TD>PRICER_DANTZIG&nbsp;(1)</TD>
+							<TD>
+								Select according to Dantzig</TD>
+						</TR>
+						<TR>
+							<TD>PRICER_DEVEX&nbsp;(2)</TD>
+							<TD>
+								Devex pricing from Paula Harris</TD>
+						</TR>
+						<TR>
+							<TD>PRICER_STEEPESTEDGE&nbsp;(3)</TD>
+							<TD>
+								Steepest Edge</TD>
+						</TR>
+					</TABLE><br>
+					<b>Remarks</b>
+					<p>This rule can influence solving times
+						considerably. Depending on the model one rule can be best and for another model
+						another rule.<br>
+						The default is PRICER_DEVEX (2).
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  unsigned char piv_rule;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  piv_rule = is_piv_rule(lp, PRICER_FIRSTINDEX);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="get_pivoting.htm">get_pivoting</a>, <A HREF="set_pivoting.htm">set_pivoting</A>, <A HREF="is_piv_mode.htm">
+							is_piv_mode</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

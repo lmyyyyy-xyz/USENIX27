@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_lambda, get_ptr_lambda</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_lambda, get_ptr_lambda</h1>
+					<p>Returns the Lamdba vectors (Lagrangian optimization).</p>
+					<p><b>unsigned char get_lambda(lprec </b>*<i>lp</i><b>, REAL </b>*<i>lambda</i><b>);</b></p>
+					<p><b>unsigned char get_ptr_lambda(lprec </b>*<i>lp</i><b>, REAL </b>**<i>ptr_lambda</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_lambda, get_ptr_lambda</b> returns TRUE (1) if the operation was
+						successful. A return value of FALSE (0) indicates an error.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>lambda</i></p>
+					<p class="indent">An array that will contain the values of the Lamdba vectors.</p>
+					<p class="dt"><i>ptr_lambda</i></p>
+					<p class="indent">The address of a pointer that will point to an array that will
+						contain the values of the Lamdba vectors.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_lambda</b>, <b>get_ptr_lambda</b> functions retrieve the Lamdba
+						vectors.<br>
+						These values are only valid after a successful <A href="lag_solve.htm">lag_solve</A>.
+						Function <b>get_lambda</b> needs an array that is already dimensioned with <A href="get_Lrows.htm">
+							get_Lrows</A> elements. <b>get_ptr_lambda</b> returns a pointer to an array
+						already dimensioned by lp_solve.
+					</p>
+					<p>Note that <b>get_ptr_lambda</b> returns a pointer to memory allocated and maintained
+					   by lp_solve. Be careful what you do with it. Don't modify its contents or free the memory.
+					   Unexpected behaviour would occur. Also note that this memory pointer is only guaranteed to
+					   remain constant until a next lp_solve API call is done. You should call this function again
+					   to make sure you have again the correct pointer. Otherwise, this pointer could point to invalid
+					   memory. This should not be a problem since this call is very efficient.</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int ret;
+  REAL row[1+2]; /* must be 1 more than number of columns ! */
+  REAL *ptr_lambda, lambda[1];
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  row[1] = 1.0;
+  row[2] = 1.0;
+  add_lag_con(lp, row, LE, 1.0);
+
+  ret = lag_solve(lp, 0, 30, FALSE);
+
+  get_lambda(lp, lambda);
+  get_ptr_lambda(lp, &amp;ptr_lambda);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="is_feasible.htm">is_feasible</a>, <A HREF="get_objective.htm">
+							get_objective</A>, <A HREF="get_working_objective.htm">get_working_objective</A>, <a href="get_variables.htm">get_variables, get_ptr_variables</a>,
+						<a href="get_primal_solution.htm">get_primal_solution, get_ptr_primal_solution, get_var_primalresult</a>,
+						<a href="get_sensitivity_rhs.htm">
+							get_sensitivity_rhs, get_ptr_sensitivity_rhs, get_dual_solution,
+							get_ptr_dual_solution, get_var_dualresult</a>, <a href="get_sensitivity_obj.htm">get_sensitivity_obj,
+							get_ptr_sensitivity_obj, get_sensitivity_objex, get_ptr_sensitivity_objex</a>,
+						<a href="get_constraints.htm">get_constraints, get_ptr_constraints</a>, <a href="get_constr_value.htm">get_constr_value</a>, <a href="lag_solve.htm">
+							lag_solve</a>
+					</p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,10 @@
+lp_solve:           The stand-alone lp_solve program
+
+libbfp_etaPFI.so:   etaPFI bfp library
+libbfp_GLPK.so:     GLPK bfp library
+libbfp_LUSOL.so:    LUSOL bfp library
+
+libxli_CPLEX.so:    Library to read/write CPLEX lp model files.
+libxli_LINDO.so:    Library to read/write LINDO lp model files.
+libxli_MPS.so:      Library to read/write MPS models.
+libxli_XPRESS.so:   Library to read/write Xpress lp model files.

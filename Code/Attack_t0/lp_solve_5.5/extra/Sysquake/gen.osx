@@ -1,0 +1,4 @@
+:
+sh ccc.osx
+cp bin/osx32/*.so "/Applications/Sysquake 4.1 Pro/Sysquake.app/Contents/Resources/LMEExt/" >/dev/null 2>&1
+cp bin/osx64/*.so "/Applications/Sysquake 4.1 Pro/Sysquake.app/Contents/Resources/LMEExt/" >/dev/null 2>&1

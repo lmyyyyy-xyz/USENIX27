@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>get_constr_value</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>get_constr_value</h1>
+					<p>Gets the value of a constraint according to provided variable values.</p>
+					<p><b>REAL get_constr_value(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>, int </b><i>count</i><b>, REAL </b>*<i>primsolution</i><b>, int </b>*<i>nzindex</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>get_constr_value</b> returns the value of the constraint as calculated with the provided variable values.</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>row</i></p>
+					<p class="indent">The row for which the constraint value must be calculated. Must be
+						between 1 and number of rows in the lp.</p>
+					<p class="dt"><i>count</i></p>
+					<p class="indent">The number of items in <i>primsolution</i> and <i>nzindex</i>.</p>
+					<p class="dt"><i>primsolution</i></p>
+					<p class="indent">The values of the variables.</p>
+					<p class="dt"><i>nzindex</i></p>
+					<p class="indent">The variable indexes.</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>get_constr_value</b> function returns the value of a constraint according to provided variable values.<br>
+					If <i>primsolution</i> is NULL, then the solution of the last solve is taken. <i>count</i> and <i>nzindex</i> are then ignored.<br>
+					If <i>primsolution</i> is not NULL, and <i>nzindex</i> is NULL, then the variable values are taken from <i>primsolution</i> and element i
+					must specify the value for variable i. Element 0 is not used and thus data starts from element 1. The variable must then contain
+					1+<A href="get_Ncolumns.htm">get_Ncolumns</A> elements. <i>count</i> is ignored in that case.<br>
+					If <i>primsolution</i> is not NULL, and <i>nzindex</i> is not NULL, then the variable values are taken from <i>primsolution</i>.
+					<i>nzindex</i> contains the indexes of the variables and <i>count</i> specifies how many elements there are in <i>primsolution</i> and <i>nzindex</i>.
+					So the data is then provided in a sparse vector. Elements start from index 0 in that case.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  int constr;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  solve(lp);
+
+  printf("%f\n", get_constr_value(lp, 0, 0, NULL, NULL));
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <a href="get_constraints.htm">get_constraints, get_ptr_constraints</a>, <a href="get_variables.htm">get_variables, get_ptr_variables</a>, <a href="get_primal_solution.htm">
+							get_primal_solution, get_ptr_primal_solution, get_var_primalresult</a></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

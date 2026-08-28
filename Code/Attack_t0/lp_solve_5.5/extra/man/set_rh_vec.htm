@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_rh_vec, str_set_rh_vec</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>set_rh_vec, str_set_rh_vec</h1>
+					<p>
+						Set the right hand side (RHS) vector (column 0).</p>
+					<p>
+						<b>void set_rh_vec(lprec </b>*<i>lp</i><b>, REAL </b>*<i>rh</i><b>);</b></p>
+					<p>
+						<b>unsigned char str_set_rh_vec(lprec </b>*<i>lp</i><b>, char </b>*<i>rh_string</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>set_rh_vec</b> has no return value. <b>str_set_rh_vec</b> returns TRUE (1)
+						if the operation was successful. A return value of FALSE (0) indicates an
+						error.
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt">
+						<i>rh</i></p>
+					<p class="indent">
+						An array with row elements that contains the values of the RHS.</p>
+					<p class="dt">
+						<i>rh_string</i></p>
+					<p class="indent">
+						A string with row elements that contains the values of the RHS. Each element
+						must be separated by space(s).</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						The <b>set_rh_vec</b>, <b>str_set_rh_vec</b> functions set all values of the
+						RHS vector (column 0) at once.<br>
+						Note that element 0 of the array is not considered (i.e. ignored). Row 1 is
+						element 1, row 2 is element 2, ...<br>
+						If the initial value of the objective function must also be set, use <A HREF="set_rh.htm">
+							set_rh</A>.
+					</p>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  REAL rhs[1+2]; /* must be 1 more then number of rows ! */
+
+  /* Create a new LP model */
+  lp = make_lp(2, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  rhs[1] = 1.0;
+  rhs[2] = 2.0;
+  set_rh_vec(lp, rhs);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_rh.htm">set_rh</A>, <A HREF="get_rh.htm">get_rh</A>,
+						<A HREF="add_constraint.htm">add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="add_column.htm">add_column,
+							add_columnex, str_add_column</A>, <A HREF="get_mat.htm">get_mat</A>,
+						<A HREF="get_column.htm">get_column, get_columnex</A>, <A HREF="set_column.htm">set_column, set_columnex</A>, <A HREF="get_row.htm">get_row, get_rowex</A>, <A HREF="set_row.htm">set_row, set_rowex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

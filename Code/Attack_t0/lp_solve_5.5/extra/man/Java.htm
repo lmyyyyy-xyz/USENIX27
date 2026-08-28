@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<HEAD>
+	<TITLE>Using lpsolve from Java</TITLE>
+	<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:15; }
+</style>
+</HEAD>
+<BODY>
+<h1 align="left"><u>Using lpsolve from Java</u></h1>
+<h3>Java?</h3>
+<p>
+Java is a programming language originally developed by Sun Microsystems and released in 1995 as a core component of Sun's Java platform. The language derives much of its syntax from C and C++ but has a simpler object model and fewer low-level facilities. Java applications are typically compiled to bytecode which can run on any Java virtual machine (JVM) regardless of computer architecture.<br>
+<br>
+The original and reference implementation Java compilers, virtual machines, and class libraries were developed by Sun from 1995. As of May 2007, in compliance with the specifications of the Java Community Process, Sun made available most of their Java technologies as free software under the GNU General Public License. Others have also developed alternative implementations of these Sun technologies, such as the GNU Compiler for Java and GNU Classpath.
+</p>
+
+<h3>Java and lpsolve</h3>
+
+<p>
+Java is an object oriented programming language. The lpsolve API is not object oriented.
+However there is a wrapper created by <a href="mailto:juergen.ebert@web.de">Juergen Ebert</a> that is
+object oriented. All lpsolve API is available via this wrapper but in an object oriented way and in the
+case as used by Java. For example lpsolve API call <a href="make_lp.htm">make_lp</a> is accessed as makeLP
+in Java. The general rule of renamed API names is that a name begins in lower case, each underscore is removed
+and the letter after the underscore is in upper case.<br>
+See <a href="Java/docs/reference.html">C - Java function reference</a> for the translation of calls.<br>
+An introduction of using lpsolve with Java is given in the document <a href="Java/README.html">Using lp_solve 5.5 in Java programs</a><br>
+The Java object model is described in the document <a href="Java/docs/api/index.html">Java api</a>
+</p>
+
+</BODY>
+</html>

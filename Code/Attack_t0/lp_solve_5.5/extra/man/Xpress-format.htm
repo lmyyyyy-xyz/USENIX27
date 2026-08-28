@@ -1,0 +1,586 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Xpress lp files</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<p><h1 align="left"><u>Xpress lp files</u></h1>
+					<p>The Xpress LP file format provides a facility for entering a problem in a
+						natural, algebraic LP formulation from the keyboard. The problem can be
+						modified and saved from within lpsolve. This procedure is one way to create a
+						file in a format that lpsolve can read. An alternative technique is to create a
+						similar file using a standard text editor and to read it into lpsolve.</p>
+
+					<P>The Xpress LP format is provided as an input alternative to the MPS file format.
+						An LP format file may be easier to generate than an MPS file if your problem
+						already exists in an algebraic format or if you have an application that
+						generates the problem file more readily in algebraic format (such as a C
+						application).</P>
+
+					<p>Note that the Xpress LP format is not the same as the lpsolve LP format.
+					   See <a href="lp-format.htm">LP file format</a> for a description about
+					   the native lpsolve lp format. To read/write this format from lpsolve, you need
+					   an XLI (see <a href="XLI.htm">External Language Interfaces</a>). The XLI for the Xpress
+					   format is called xli_Xpress.</p>
+
+                    <h3>Options</h3>
+                    <p>The XLI accepts several options:</p>
+
+                    <h4>Reading</h4>
+<pre>
+  -objconst      Allow constants in the objective (default).
+  -noobjconst    Don't allow constants in the objective.
+</pre>
+					<p>From the documentation of the format it is not sure if Xpress allows a constant
+                                           in the objective. Tests have shown that it allows a constant as first term in
+                                           the objective function.
+                                           Note that the lp_solve XLI allows a constant in the objective by default and it can be
+                                           anywere in the objective.
+					   Use the option -noobjconst if this should not be allowed.
+					   The parser will then give an error.</p>
+
+                    <h4>Writing</h4>
+<pre>
+  -objconst      Allow constants in the objective.
+  -noobjconst    Don't use constants in the objective (default).
+</pre>
+
+					<p>From the documentation of the format it is not sure if Xpress allows a constant
+                                           in the objective. Tests have shown that it allows a constant as first term in
+                                           the objective function.
+                                           The lp_solve XLI writes the constant as first term when the option -objconst is active.
+					   By default or when the option -noobjconst is used, a constant in the objective
+					   is translated to a variable objconst_term with a bound equal to the constant set
+					   to it. So no error is generated when there is a constant.</p>
+
+					<h3>Example</h3>
+
+<pre>
+lp_solve -rxli xli_Xpress input.lp
+lp_solve -mps input.mps -wxli xli_Xpress output.lp -wxliopt "-objconst"
+</pre>
+
+                    <h3>Syntax Rules of LP File Format</h3>
+
+		    <P>lpsolve will accept any problem saved in an ASCII file provided that it adheres
+			    to the following syntax rules.
+		    </P>
+
+		    <ol>
+
+<li><p><b>Comments and blank lines</b></p>
+
+<p>
+Text following a backslash (\) and up to the subsequent carriage return is treated as a comment.
+Blank lines are ignored. Blank lines and comments may be inserted anywhere in an .lp
+file. For example, a common comment to put in LP files is the name of the problem:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+\Problem name: prob01
+</pre>
+</BLOCKQUOTE>
+</li>
+
+<li><p><b>File lines, white space and identifiers</b></p>
+
+<p>
+White space and carriage returns delimit variable names and keywords from other identifiers.
+Keywords are case insensitive. Variable names are case sensitive. Although it is not strictly
+necessary, for clarity of your LP files it is perhaps best to put your section keywords on their
+own lines starting at the first character position on the line. No
+line continuation character is needed when expressions are required to span multiple lines.
+Lines may be broken for continuation wherever you may use white space.
+</p>
+</li>
+
+<li><p><b>Sections</b></p>
+
+<p>
+The LP file is broken up into sections separated by section keywords. The following are a list
+of section keywords you can use in your LP files. A section started by a keyword is terminated
+with another section keyword indicating the start of the subsequent section.
+</p>
+
+<table width="100%" border="1">
+<tr>
+<th>Section keywords</th><th>Synonyms</th><th>Section contents</th>
+</tr>
+<tr>
+<td VALIGN="top">maximize or minimize</td><td VALIGN="top">maximum<br>max<br>minimum<br>min</td><td VALIGN="top">One linear expression describing the objective function.</td>
+</tr>
+<tr>
+<td VALIGN="top">subject to</td><td VALIGN="top">subject to:<br>such that<br>st<br>s.t.<br>st.<br>subjectto<br>suchthat<br>subject<br>such</td><td VALIGN="top">A list of constraint expressions.</td>
+</tr>
+<tr>
+<td VALIGN="top">bounds</td><td VALIGN="top">bound</td><td VALIGN="top">A list of bounds expressions for variables.</td>
+</tr>
+<tr>
+<td VALIGN="top">integers</td><td VALIGN="top">integer<br>ints<br>int<br></td><td VALIGN="top">A list of variable names of integer variables. Unless otherwise specified in the bounds section, the default relaxation interval of the variables is [0, 1].</td>
+</tr>
+<tr>
+<td VALIGN="top">generals</td><td VALIGN="top">general<br>gens<br>gen<br></td><td VALIGN="top">A list of variable names of integer variables. Unless otherwise specified in the bounds section, the default relaxation interval of the variables is [0, infinite].</td>
+</tr>
+<tr>
+<td VALIGN="top">binaries</td><td VALIGN="top">binary<br>bins<br>bin<br></td><td VALIGN="top">A list of variable names of binary variables.</td>
+</tr>
+<tr>
+<td VALIGN="top">semi-continuous</td><td VALIGN="top">semi<br>continuous<br>semis<br>semi<br>s.c.<br></td><td VALIGN="top">A list of variable names of semicontinuous variables.</td>
+</tr>
+<tr>
+<td VALIGN="top">semi integer</td><td VALIGN="top">s.i.</td><td VALIGN="top">A list of variable names of semiinteger variables.</td>
+</tr>
+<tr>
+<td VALIGN="top">partial integer</td><td VALIGN="top">p.i.</td><td VALIGN="top">A list of variable names of partial integer variables.<br><b>Not supported by lp_solve</b></td>
+</tr>
+</table>
+
+<p>
+Variables that do not appear in any of the variable type registration sections (i.e., integers,
+generals, binaries, semi-continuous, semi integer, partial integer) are defined
+to be continuous variables by default. That is, there is no section defining variables to be
+continuous variables.
+</p>
+
+<p>
+With the exception of the objective function section (maximize or minimize) and the constraints
+section (subject to), which must appear as the first and second sections respectively,
+the sections may appear in any order in the file. The only mandatory section is the objective
+function section. Note that you can define the objective function to be a constant in which
+case the problem is a so-called constraint satisfaction problem. The following two examples of
+LP file contents express empty problems with constant objective functions and no variables or
+constraints.
+</p>
+
+<p>
+Empty problem 1:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Minimize
+
+End
+</pre>
+</BLOCKQUOTE>
+
+<p>
+Empty problem 2:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Minimize
+
+0
+
+End
+</pre>
+</BLOCKQUOTE>
+
+<p>
+The end of a matrix description in an LP file can be indicated with the keyword end entered
+on a line by itself. This can be useful for allowing the remainder of the file for storage of
+comments, unused matrix definition information or other data that may be of interest to be
+kept together with the LP file.
+</p>
+</li>
+
+<li><p><b>Variable names</b></p>
+
+<p>
+Variable names can use any of the alphanumeric characters (a-z, A-Z, 0-9) and any of the following
+symbols:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+!"#$%&/,.;?@_`´{}()|~'
+</pre>
+</BLOCKQUOTE>
+
+<p>
+A variable name can not begin with a number or a period. Care should be taken using the
+characters E or e since these may be interpreted as exponential notation for numbers.
+</p>
+</li>
+
+<li><p><b>Linear expressions</b></p>
+
+<p>
+Linear expressions are used to define the objective function and constraints. Terms in a linear
+expression must be separated by either a + or a - indicating addition or subtraction of the
+following term in the expression. A term in a linear expression is either a variable name or a
+numerical coefficient followed by a variable name. It is not necessary to separate the coefficient
+and its variable with white space or a carriage return although it is advisable to do so
+since this can lead to confusion. For example, the string " 2e3x" in an LP file is interpreted using
+exponential notation as 2000 multiplied by variable x rather than 2 multiplied by variable
+e3x. Coefficients must precede their associated variable names. If a coefficient is omitted it is
+assumed to be 1.
+</p>
+</li>
+
+<li><p><b>Objective function</b></p>
+
+<p>
+The objective function section can be written in a similar way to the following examples using
+either of the keywords maximize or minimize. Note that the keywords maximize and
+minimize are not used for anything other than to indicate the following linear expression to
+be the objective function. Note the following two examples of an LP file objective definition:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Maximize
+- 1 x1 + 2 x2 + 3x + 4y
+</pre>
+</BLOCKQUOTE>
+
+<p>
+or
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Minimize
+- 1 x1 + 2 x2 + 3x + 4y
+</pre>
+</BLOCKQUOTE>
+
+<p>
+Generally objective functions are defined using many terms and thus the objective function definitions are typically always
+broken with line continuations. No line continuation character is required and lines may be
+broken for continuation wherever you may use white space.
+</p>
+
+<p>
+The objective function can be named in the same way as for constraints (see later).
+</p>
+</li>
+
+<li><p><b>Constraints</b></p>
+
+<p>
+The section of the LP file defining the constraints is preceded by the keyword subject to.
+Each constraint definition must begin on a new line. A constraint may be named with an
+identifier followed by a colon before the constraint expression. Constraint names must follow
+the same rules as variable names. If no constraint name is specified for a constraint then a
+default name is assigned. Constraint names
+are trimmed of white space before being stored.
+The constraints are defined as a linear expression in the variables followed by an indicator
+of the constraint's sense and a numerical right-hand side coefficient. The constraint sense is
+indicated intuitively using one of the tokens: &gt;=, &lt;=, or =. For example, here is a named
+constraint:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+depot01: - x1 + 1.6 x2 - 1.7 x3 &lt;= 40
+</pre>
+</BLOCKQUOTE>
+
+<p>
+Note that tokens &gt; and &lt; can be used, respectively, in place of the tokens &gt;= and &lt;=.
+</p>
+
+<p>
+Generally, constraints are defined using many terms so the constraint definitions are typically broken with
+line continuations. No line continuation character is required and lines may be broken for
+continuation wherever you may use white space.
+</p>
+</li>
+
+<li><p><b>Bounds</b></p>
+<p>
+The list of bounds in the bounds section are preceded by the keyword bounds. Each bound
+definition must begin on a new line. Single or double bounds can be defined for variables.
+Double bounds can be defined on the same line as 10 &lt;= x &lt;= 15 or on separate lines in the
+following ways:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+10 &lt;= x
+15 &gt;= x
+</pre>
+</BLOCKQUOTE>
+
+<p>
+or
+</p>
+
+<BLOCKQUOTE>
+<pre>
+x &gt;= 10
+x &lt;= 15
+</pre>
+</BLOCKQUOTE>
+
+<p>
+If no bounds are defined for a variable, default lower and upper
+bounds are used. An important point to note is that the default bounds are different for different
+types of variables. For continuous variables the interval defined by the default bounds is [0,
+infinity] while for variables declared in the integers and generals section
+(see later) the relaxation interval defined by the default bounds is [0, 1] and [0, infinity],
+respectively.</p>
+
+<p>
+If a single bound is defined for a variable the appropriate default
+bounds are used as the second bound. Note that negative upper bounds on variables must be declared
+together with an explicit definition of the lower bound for the variable. Also note that variables
+can not be declared in the bounds section. That is, a variable appearing in a bounds
+section that does not appear in a constraint in the constraint section is ignored.
+</p>
+
+<p>
+Bounds that fix a variable can be entered as simple equalities. For example, x6 = 7.8 is equivalent
+to 7.8 &lt;= x6 &lt;= 7.8. The bounds +inf (positive infinity) and -inf (negative infinity) must be
+entered as strings (case insensitive):
+</p>
+
+<BLOCKQUOTE>
+<pre>
++infinity, -infinity, +inf, -inf.
+</pre>
+</BLOCKQUOTE>
+
+<p>
+Note that the keywords infinity and inf may not be used as a right-hand side coefficient of
+a constraint.
+</p>
+
+<p>
+A variable with a negative infinity lower bound and positive infinity upper bound may be entered
+as free (case insensitive). For example, x9 free in an LP file bounds section is equivalent
+to:
+</p>
+
+<BLOCKQUOTE>
+<pre>
+- infinity &lt;= x9 &lt;= + infinity
+</pre>
+</BLOCKQUOTE>
+
+<p>
+or
+</p>
+
+<BLOCKQUOTE>
+<pre>
+- infinity &lt;= x9
+</pre>
+</BLOCKQUOTE>
+
+<p>
+In the last example here, which uses a single bound is used for x9 (which is positive infinity for
+continuous example variable x9).
+</p>
+
+<li><p><b>Generals, Integers and binaries</b></p>
+
+<p>
+The generals, integers and binaries sections of an LP file is used to indicate the variables
+that must have integer values in a feasible solution. The difference between the variables
+registered in each of these sections is in the definition of the default bounds that the variables
+will have. For variables registered in the generals section the default bounds are 0 and
+infinity. For variables registered in the integers section the default bounds are 0 and
+1. The bounds for variables registered in the binaries section are 0 and 1.
+</p>
+
+<p>
+The lines in the generals, integers and binaries sections are a list of white space or carriage
+return delimited variable names. Note that variables can not be declared in these sections.
+That is, a variable appearing in one of these sections that does not appear in a constraint
+in the constraint section is ignored.
+</p>
+
+<li><p><b>Semi-continuous and semi-integer</b></p>
+
+<p>
+The semi-continuous and semi integer sections of an LP file relate to two similar classes
+of variables and so their details are documented here simultaneously.
+</p>
+
+<p>
+The semi-continuous (or semi integer) section of an LP file are used to specify variables as
+semi-continuous (or semi-integer) variables, that is, as variables that may take either (a) value 0
+or (b) real (or integer) values from specified thresholds and up to the variables' upper bounds.
+</p>
+
+<p>
+The lines in a semi-continuous (or semi integer) section are a list of white space or carriage
+return delimited entries that are either (i) a variable name or (ii) a variable name-number
+pair. The following example shows the format of entries in the semi-continuous section.
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Semi-continuous
+x7 &gt;= 2.3
+x8
+x9 &gt;= 4.5
+</pre>
+</BLOCKQUOTE>
+
+<p>
+The following example shows the format of entries in the semi integer section.
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Semi integer
+x7 &gt;= 3
+x8
+x9 &gt;= 5
+</pre>
+</BLOCKQUOTE>
+
+<p>
+Note that you can not use the &lt;= token in place of the &gt;= token.
+</p>
+
+<p>
+The threshold of the interval within which a variable may have real (or integer) values is defined in two ways depending on whether the entry for the variable is (i) a variable name or (ii)
+a variable name-number pair. If the entry is just a variable name, then the variable's threshold
+is the variable's lower bound, defined in the bounds section (see earlier). If the entry for a
+variable is a variable name-number pair, then the variable's threshold is the number value in
+the pair.
+</p>
+
+<p>
+It is important to note that if (a) the threshold of a variable is defined by a variable namenumber
+pair and (b) a lower bound on the variable is defined in the bounds section, then:
+</p>
+
+<p>
+Case 1) If the lower bound is less then zero, then the lower bound is zero.
+</p>
+
+<p>
+Case 2) If the lower bound is greater than zero but less than the threshold, then the value of
+zero is essentially cut off the domain of the semi-continuous (or semi-integer) variable and the
+variable becomes a simple bounded continuous (or integer) variable.
+</p>
+
+<p>
+Case 3) If the lower bound is greater than the threshold, then the variable becomes a simple
+lower bounded continuous (or integer) variable.
+</p>
+
+<p>
+If no upper bound is defined in the bounds section for a semi-continuous (or semi-integer)
+variable, then the default upper bound that is used is the same as for continuous variables, for
+semi-continuous variables, and generals section variables, for semi-integer variables.
+</p>
+
+<li><p><b>Partial integers</b></p>
+
+<p>
+The partial integers section of an LP file is used to specify variables as partial integer
+variables, that is, as variables that can only take integer values from their lower bounds up to
+specified thresholds and then take continuous values from the specified thresholds up to the
+variables' upper bounds.
+</p>
+
+<p>
+<b>lp_solve does not support partial integers.</b>
+An error will be generated by the parser if a partial integer section is found.
+</p>
+
+<li><p><b>Special ordered sets</b></p>
+
+<p>
+Special ordered sets are defined as part of the constraints section of the LP file. The definition
+of each special ordered set looks the same as a constraint except that the sense is always
+= and the right hand side is either S1 or S2 (case sensitive) depending on whether the set is to
+be of type 1 or 2, respectively. Special ordered sets of type 1 require that, of the non-negative
+variables in the set, one at most may be non-zero. Special ordered sets of type 2 require that
+at most two variables in the set may be non-zero, and if there are two non-zeros, they must be
+adjacent. Adjacency is defined by the weights, which must be unique within a set given to the
+variables. The weights are defined as the coefficients on the variables in the set constraint. The
+sorted weights define the order of the special ordered set. It is perhaps best practice to keep
+the special order sets definitions together in the LP file to indicate (for your benefit) the start
+of the special ordered sets definition with the comment line \Special Ordered Sets as is
+done when a problem is written to an LP file. The following example
+shows the definition of a type 1 and type 2 special ordered set.
+</p>
+
+<BLOCKQUOTE>
+<pre>
+Sos101: 1.2 x1 + 1.3 x2 + 1.4 x4 = S1
+Sos201: 1.2 x5 + 1.3 x6 + 1.4 x7 = S2
+</pre>
+</BLOCKQUOTE>
+
+		    </ol>
+
+<h3>Some examples</h3>
+
+<h4>Example 1</h4>
+<pre>
+Minimize
+ COST:    XONE + 4 YTWO + 9 ZTHREE + 2
+Subject To
+ LIM1:    XONE + YTWO &lt;= 5
+ LIM2:    XONE + ZTHREE &gt;= 10
+ MYEQN:   - YTWO + ZTHREE  = 7
+Bounds
+ 0 &lt;= XONE &lt;= 4
+-1 &lt;= YTWO &lt;= 1
+End
+</pre>
+
+<h4>Example 2</h4>
+<pre>
+Minimize
+obj: - 2 x3
+
+Subject To
+c1: x2 - x1 &lt;= 10
+c2: x1 + x2 + x3 &lt;= 20
+
+Bounds
+x1 &lt;= 30
+2 &lt;= x3 &lt;= 3
+
+s.i.
+x3
+x1 &gt;= 2.1
+
+End
+</pre>
+
+<h4>Example 3</h4>
+<pre>
+Minimize
+obj: - 2 x3
+
+Subject To
+c1: x2 - x1 &lt;= 10
+
+\SOS
+sos101: 4 x2 + 2 x3 = S2
+
+c2: x1 + x2 + x3 &lt;= 20
+
+sos102: x1 + x2 + x3 = S1
+sos201: 1.2 x3 +1.3 x2 + 1.4 x1 = S2
+
+Bounds
+x1 &lt;= 30
+2 &lt;= x3 &lt;= 3
+
+End
+</pre>
+                   </TD>
+                  </TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,71 @@
+
+/* begin profile-detail */
+.pos-img {
+  padding-left:9px;
+}
+.list-action-top img {
+  margin:5px 6px -14px 0px;
+  position: relative;
+  z-index: 200;
+}
+.footaction img {
+  margin: -20px 4px 0 0;
+  position: relative;
+  z-index: 200;
+}
+
+#ygrp-msg-ext .ygrp-contentblock {padding:0; }
+#ygrp-msg-ext .datatable th {padding-top:5px;}
+
+.datatable th.checks {width:1%; border-bottom:0; margin:0; padding:0;}
+.datatable th.margin {width:1%; border-bottom:0; padding:0 7px;}
+.datatable th.msgnum {width:1%;}
+.datatable th.message {padding-left:0;}
+.datatable th.info {width:12%;}
+.datatable th.date {width:8%;}
+.datatable th.status {width:10%;}
+.datatable th.actions {width:10%;}
+
+.datatable td.checks {border-top:0; padding:10px 5px;}
+.datatable td.margin {border-top:0; padding:0 7px;}
+.datatable td.msgnum {padding-left:0;}
+.datatable td.message {padding-left:0; font:88% georgia, times new roman, serif;}
+.datatable td.message span {font-weight:bold;}
+.datatable td.info {white-space:nowrap; padding-right:0;}
+.datatable td.ygrp-blank {border:0; padding:7px 0; font-size:1px; height:15px;}
+.datatable .date {padding-right:5px;}
+
+table.ygrp-compact .margin {padding:0 3px;}
+table.ygrp-compact th {padding:4px 5px;}
+table.ygrp-compact th {padding:4px 5px;}
+table.ygrp-compact td {padding:4px 5px;}
+table.ygrp-compact td.info {font:74% verdana, arial, helvetica, sans-serif;;}
+table.ygrp-compact td.checks {padding:2px 5px;}
+
+.wide td.checks {width:1%; padding:10px 5px;}
+.wide td.msg {background:#fff;}
+
+.ygrp-indent1 { padding-left:20px;}
+.ygrp-indent2 { padding-left:35px;}
+.ygrp-indent3 { padding-left:50px;}
+.ygrp-indent4 { padding-left:65px;}
+.ygrp-indent5 { padding-left:80px;}
+.ygrp-indent6 { padding-left:95px;}
+.ygrp-indent7 { padding-left:120px;}
+.ygrp-indent8 { padding-left:120px;}
+.ygrp-indent9 { padding-left:120px;}
+.ygrp-indent10 { padding-left:120px;}
+.ygrp-indent11 { padding-left:120px;}
+.ygrp-indent12 { padding-left:120px;}
+.ygrp-indent13 { padding-left:120px;}
+.ygrp-indent14 { padding-left:120px;}
+.ygrp-indent15 { padding-left:120px;}
+.ygrp-ielbow {
+  margin-top:-7px;
+  padding-right:5px;
+}
+.ygrp-elbow {
+  display:inline;
+  margin-left:-20px;
+}
+

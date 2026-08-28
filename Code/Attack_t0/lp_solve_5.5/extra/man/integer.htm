@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Integer variables</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>integer variables</u></h1>
+					<P align="left">Integer variables are variables that must take an integer value (0,
+						1, 2, ...). A special kind of integer variables is binary variables. Binary
+						variables can only take the value 0 or 1. They are integer variables with a
+						maximum of 1 on them (and don't forget there is always an implicit minimum of 0
+						on each variable). If all variables are integer then it is a pure integer
+						model, else it is a mixed-integer model, sometimes denoted as MIP (Mixed
+						Integer Programming).</P>
+					<P align="left">
+						There are many practical uses of such variables. Binary variables for example
+						are used to specify that something may be used or not. Integer variables say
+						that a variable must take a multiple of a given value. For example if you want
+						that a given variable must be a multiple of 25 then you can construct following
+						equation:</P>
+					<P align="left">var - 25 i = 0</P>
+					<P align="left">with i the integer variable and var the variable that must be a
+						multiple of 25. So an extra variable and an extra constraint is needed. This
+						is ok if only a limited number of such variables are in the model, but if there
+						are alot then the model dimensions will increase considerably. As an alternative
+						you can also do a substitution of the variable:</P>
+					<P align="left">var = 25 i</P>
+					<P align="left">Everywhere where variable var is used, substitute it by 25 i.
+					    This in the objective function, the constraints and bounds. So variable var is
+					    removed from the model and replaced by i. i can be defined as integer. The objective
+					    value of this substituted model will be the same as the original one. However to obtain
+					    the value of variable var, you must multiply the returned variable i with 25.
+					</P>
+					<P align="left">There is however one drawback on integer variables. These models
+						are harder to solve and solution time can increment exponentially. The more
+						integer variables there are the more time it takes to solve the model. A model
+						without the integer variables may for example be solved in 0.1 seconds while
+						the same model with some of the variables integer can take several minutes to
+						solve. Be aware of this. Also try to limit the solution as much as possible. If
+						you know some extra bounds on variables then it can be very good for the
+						solution time to set them because this limits the number of combinations the
+						algorithm has to examine. Another negative site on integer variables is the
+						inaccurate sensitivity analysis when integer variables are used. See <a href="sensitivity.htm#Inacurate_Sensitivity_Integer">
+							Inaccurate sensitivity analysis in a model with integer variables</a></P>
+					<P align="left">The integer solution is searched via the so-called
+						'branch-and-bound' algorithm. The model is first solved without the integer
+						restrictions. Then it is investigated which of the integer variables are
+						non-integer. When such a variable is found the model is split in two sub
+						models. A first one with a minimum restriction on this variable that has the
+						ceiling integer value and a second one with a maximum restriction on this
+						variable that has the floor integer value. Both these sub models are optimised
+						again and now this variable will have an integer value (if there is a
+						solution). The algorithm then looks again if there are still (other) integer
+						variables that have a non-integer value and if so the process is done again.
+						This until a solution is found where are integer variables have integer values.
+						This solution is then remembered as the best-until-now solution and the
+						algorithm continues until it finds again an integer solution and if it is
+						better it takes this one as the best-until-now solution. The more integer
+						variables there are, the more combinations must be investigated and the more
+						time it takes to solve the model.</P>
+					<P align="left">
+						lp_solve supports integer variables since a long time. The API call <A HREF="set_int.htm">
+							set_int</A> can be used to define a variable as integer. The API call <A HREF="set_binary.htm">
+							set_binary</A> can be used to define a variable as binary.</P>
+					<P align="left">In the mps format, integer variables can be specified in the
+						COLUMNS section. See <a href="mps-format.htm">mps-format</a> .
+						<br>
+						<br>
+						Example:
+					</P>
+					<pre>
+ROWS
+ N  r_0
+ L  r_1
+ G  r_2
+ G  r_3
+ G  r_4
+COLUMNS
+    x1        r_0                 -1   r_1                  1
+    x1        r_2                  2   r_3                 -1
+    x2        r_0                 -2   r_1                  1
+    x2        r_2                 -1   r_3                  3
+<FONT color=red>    MARK0000  'MARKER'                 'INTORG'</FONT>
+    x3        r_0                0.1   r_4                  1
+<FONT color=red>    MARK0001  'MARKER'                 'INTEND'</FONT>
+    x4        r_0                  3   r_4                  1
+RHS
+    RHS       r_1                  5   r_4                0.5
+BOUNDS
+ LO BND       x3                 1.1
+ENDATA
+</pre>
+					<PRE>The red lines are two lines that specify that variable x3 is an integer variable. It also has a lower bound of 1.1 set on it. The solution of this model is:</PRE>
+					<pre>
+Value of objective function: -8.13333
+
+Actual values of the variables:
+x1                   1.66667
+x2                   3.33333
+x3                   2
+x4                   0
+</pre>
+					<P align="left">
+					As can be seen, the value of x3 is 2, an integer value. If the integer
+					restrictions would not be set on x3 then the value would be 1.1.
+					<P align="left">In the lp-format, variables can be specified as integer by putting
+						them in the int section. See <a href="lp-format.htm">lp-format</a>. The above
+						mps example would be in lp-format:</p>
+						<pre>
+min: -x1 -2 x2 +0.1 x3 +3 x4;
+r_1: +x1 +x2 &lt;= 5;
+r_2: +2 x1 -x2 &gt;= 0;
+r_3: -x1 +3 x2 &gt;= 0;
+r_4: +x3 +x4 &gt;= 0.5;
+x3 &gt;= 1.1;
+
+int x3;</pre>
+
+					<P align="left">In the lp-format, variables can be specified as binary by putting
+						them in the bin section. See <a href="lp-format.htm">lp-format</a>. For example:</p>
+						<pre>
+min: -x1 -2 x2 +0.1 x3 +3 x4;
+r_1: +x1 +x2 &lt;= 5;
+r_2: +2 x1 -x2 &gt;= 0;
+r_3: -x1 +3 x2 &gt;= 0;
+r_4: +x3 +x4 &gt;= 0.5;
+
+bin x3;</pre>
+
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

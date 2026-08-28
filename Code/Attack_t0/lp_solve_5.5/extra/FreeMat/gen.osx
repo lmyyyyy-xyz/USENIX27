@@ -1,0 +1,5 @@
+:
+sh ccc.osx 2>&1 | tee out
+rm *.so 2>/dev/null
+ln bin/osx32/fmlpsolve.so fmlpsolve.so 2>/dev/null
+ln bin/osx64/fmlpsolve.so fmlpsolve.so 2>/dev/null

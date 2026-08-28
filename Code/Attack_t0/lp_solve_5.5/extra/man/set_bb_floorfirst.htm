@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_bb_floorfirst</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_bb_floorfirst</h1>
+					<p>Specifies which branch to take first in branch-and-bound algorithm.</p>
+					<p><b>void set_bb_floorfirst(lprec </b>*<i>lp</i><b>, int </b><i>bb_floorfirst</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_bb_floorfirst</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>bb_floorfirst</i></p>
+					<p class="indent">Specifies which branch to take first in branch-and-bound
+						algorithm. Can by any of the following values:</p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>BRANCH_CEILING (0)</TD>
+							<TD>Take ceiling branch first</TD>
+						</TR>
+						<TR>
+							<TD>BRANCH_FLOOR (1)</TD>
+							<TD>Take floor branch first</TD>
+						</TR>
+						<TR>
+							<TD>BRANCH_AUTOMATIC (2)</TD>
+							<TD>Algorithm decides which branch being taken first</TD>
+						</TR>
+					</TABLE>
+					<br>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_bb_floorfirst</b> function specifies which branch to take first in
+						branch-and-bound algorithm. This can influence solving times considerably.
+						Depending on the model one rule can be best and for another model another rule.<br>
+						The default is BRANCH_AUTOMATIC (2).<br>
+						Note that this setting can be overruled by a user routine to choose the branch. See
+						<A HREF="put_bb_branchfunc.htm">put_bb_branchfunc</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_bb_floorfirst(lp, BRANCH_AUTOMATIC);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_bb_floorfirst.htm">get_bb_floorfirst</A>, <A HREF="set_var_branch.htm">
+							set_var_branch</A>, <A HREF="get_var_branch.htm">get_var_branch</A>, <A HREF="set_var_weights.htm">
+							set_var_weights</A>, <A HREF="get_var_priority.htm">get_var_priority</A>, <A HREF="put_bb_branchfunc.htm">put_bb_branchfunc</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

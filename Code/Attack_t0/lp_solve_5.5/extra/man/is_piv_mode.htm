@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>is_piv_mode</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>is_piv_mode</h1>
+					<p>Returns if pivot mode specified in <i>testmask</i> is active.</p>
+					<p><b>unsigned char is_piv_mode(lprec </b>*<i>lp</i><b>, int </b><i>testmask</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>is_piv_mode</b> returns TRUE or FALSE.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>testmask</i></p>
+					<TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>PRICE_PRIMALFALLBACK&nbsp;(4)</TD>
+							<TD>In case of Steepest Edge, fall back to DEVEX in primal</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_MULTIPLE&nbsp;(8)</TD>
+							<TD>Preliminary implementation of the multiple pricing scheme. This means that
+attractive candidate entering columns from one iteration may be used in the
+subsequent iteration, avoiding full updating of reduced costs.  In the current
+implementation, lp_solve only reuses the 2nd best entering column alternative</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_PARTIAL&nbsp;(16)</TD>
+							<TD>Enable partial pricing</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_ADAPTIVE&nbsp;(32)</TD>
+							<TD>Temporarily use alternative strategy if cycling is detected</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_RANDOMIZE&nbsp;(128)</TD>
+							<TD>Adds a small randomization effect to the selected pricer</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_AUTOPARTIAL&nbsp;(256)</TD>
+							<TD>Indicates automatic detection of segmented/staged/blocked models. It refers to
+partial pricing rather than full pricing. With full pricing, all non-basic
+columns are scanned, but with partial pricing only a subset is scanned for every
+iteration. This can speed up several models</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_AUTOMULTIPLE&nbsp;(512)</TD>
+							<TD>Automatically select multiple pricing (primal simplex)</TD>
+						</TR>
+                                                <TR>
+							<TD>PRICE_LOOPLEFT&nbsp;(1024)</TD>
+							<TD>Scan entering/leaving columns left rather than right</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_LOOPALTERNATE&nbsp;(2048)</TD>
+							<TD>Scan entering/leaving columns alternatingly left/right</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_HARRISTWOPASS&nbsp;(4096)</TD>
+							<TD>Use Harris' primal pivot logic rather than the default</TD>
+						</TR>
+						<TR>
+							<TD>PRICE_TRUENORMINIT&nbsp;(16384)</TD>
+							<TD>Use true norms for Devex and Steepest Edge initializations</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>is_piv_mode</b> function checks if the pivot mode
+						specified in <i>testmask</i> is active. The pivot mode is an extra modifier to the
+						pivot rule. Any combination (OR) of the defined values is possible.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+  unsigned char piv_mode;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  piv_mode = is_piv_mode(lp, PRICE_ADAPTIVE); /* Will return TRUE, because this is the default */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="set_pivoting.htm">set_pivoting</A>, <A HREF="get_pivoting.htm">
+							get_pivoting</A>, <a href="is_piv_rule.htm">is_piv_rule</a><br></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

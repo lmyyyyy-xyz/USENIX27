@@ -1,0 +1,13 @@
+lp_solve.exe:       The stand-alone lp_solve program
+
+bfp_etaPFI.dll:     etaPFI bfp library
+bfp_GLPK.dll:       GLPK bfp library
+bfp_LUSOL.dll:      LUSOL bfp library
+
+xli_CPLEX.dll:      Library to read/write CPLEX lp model files.
+xli_DIMACS.dll:     Library to read/write DIMACS minimum cost flow problems.
+xli_LINDO.dll:      Library to read/write LINDO lp model files.
+xli_MathProg.dll:   Library to read MathProg models. Writing is not supported at this time.
+                    Library is built without MySQL support.
+xli_MPS.dll:        Library to read/write MPS models.
+xli_XPRESS.dll:     Library to read/write Xpress lp model files.

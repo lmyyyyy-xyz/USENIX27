@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>put_msgfunc</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>put_msgfunc</h1>
+					<p>Sets a message routine.</p>
+					<p><b>void put_msgfunc(lprec </b>*<i>lp</i><b>, lphandleint_func </b><i>newmsg</i><b>, void </b>*<i>msghandle</i><b>, int </b><i>mask</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>put_msgfunc</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>newmsg</i></p>
+					<p class="indent">The message routine.<br>
+						<br>
+						typedef void (__WINAPI lphandleint_func)(lprec *lp, void *userhandle, int message);<br>
+						<br>
+						Note the __WINAPI attribute. This is important under Windows. It ensures __stdcall calling
+						convention which is required.
+					</p>
+					<p class="dt"><i>msghandle</i></p>
+					<p class="indent">A parameter that will be provided to the message routine.</p>
+					<p class="dt"><i>mask</i></p>
+					<p class="indent">Any combination of the following values:</p>
+						<TABLE id="Table3" cellSpacing="1" cellPadding="1" width="100%" border="1">
+							<TR>
+								<TD>MSG_PRESOLVE (1)</TD>
+								<TD>Presolve done.</TD>
+							</TR>
+							<TR>
+								<TD>MSG_ITERATION (2)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_INVERT (4)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_LPFEASIBLE (8)</TD>
+								<TD>Feasible solution found.</TD>
+							</TR>
+							<TR>
+								<TD>MSG_LPOPTIMAL (16)</TD>
+								<TD>Real optimal solution found. Only fired when there are integer variables
+								    at the start of B&amp;B</TD>
+							</TR>
+							<TR>
+								<TD>MSG_LPEQUAL (32)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_LPBETTER (64)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_MILPFEASIBLE (128)</TD>
+								<TD>First MILPsolution found. Only fired when there are integer variables
+								    during B&amp;B</TD>
+							</TR>
+							<TR>
+								<TD>MSG_MILPEQUAL (256)</TD>
+								<TD>Equal MILP solution found. Only fired when there are integer variables
+								    during B&amp;B</TD>
+							</TR>
+							<TR>
+								<TD>MSG_MILPBETTER (512)</TD>
+								<TD>Better MILPsolution found. Only fired when there are integer variables
+								    during B&amp;B</TD>
+							</TR>
+							<TR>
+								<TD>MSG_MILPSTRATEGY (1024)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_MILPOPTIMAL (2048)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_PERFORMANCE (4096)</TD>
+								<TD></TD>
+							</TR>
+							<TR>
+								<TD>MSG_INITPSEUDOCOST (8192)</TD>
+								<TD></TD>
+							</TR>
+						</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>put_msgfunc</b> function sets a message routine. This routine is called
+						when a situation specified in <i>mask</i> occurs. Note that this routine is
+						called while solving the model. This can be useful to follow the solving progress.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+void __WINAPI msgfunction(lprec *lp, void *userhandle, int msg)
+{
+ switch(msg) {
+ case MSG_LPFEASIBLE:
+  printf("Feasible solution found\n");
+  break;
+ case MSG_MILPFEASIBLE:
+  printf("Integer feasible solution found\n");
+  break;
+ case MSG_MILPBETTER:
+  printf("Better integer feasible solution found\n");
+  break;
+ }
+}
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  put_msgfunc(lp, msgfunction, NULL, MSG_LPFEASIBLE | MSG_MILPFEASIBLE | MSG_MILPBETTER);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="put_abortfunc.htm">put_abortfunc</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_constr_type</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_constr_type</h1>
+					<p>Set the type of a constraint.</p>
+					<p><b>unsigned char set_constr_type(lprec </b>*<i>lp</i><b>, int </b><i>row</i><b>, int </b><i>con_type</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_constr_type</b> returns TRUE (1) if the operation was successful. A
+						return value of FALSE (0) indicates an error.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>row</i></p>
+					<p class="indent">The row for which the constraint type must be set. Must be
+						between 1 and number of rows in the lp.</p>
+					<p class="dt"><i>con_type</i></p>
+					<p class="indent">The type of the constraint. Can by any of the following values:</p>
+					<TABLE id="Table2" cellSpacing="1" cellPadding="1" width="100%" border="1">
+						<TR>
+							<TD>LE (1)</TD>
+							<TD>Less than or equal (&lt;=)</TD>
+						</TR>
+						<TR>
+							<TD>EQ (3)</TD>
+							<TD>Equal (=)</TD>
+						</TR>
+						<TR>
+							<TD>GE (2)</TD>
+							<TD>Greater than or equal (&gt;=)</TD>
+						</TR>
+						<TR>
+							<TD>FR (0)</TD>
+							<TD>Free</TD>
+						</TR>
+					</TABLE>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_constr_type</b> function sets the constraint type for the specified
+						row.<br>
+						The default constraint type is LE.<br>
+						Note the free (FR) constraint type. This is new from version 5.1.0.1<br>
+						A free constraint will act as if the constraint is not there.
+						The lower bound is -Infinity and the upper bound is +Infinity.<br>
+						This can be used to temporary disable a constraint without having to delete it from
+						the model. Note that the already set RHS and range on this constraint is overruled with
+						Infinity by this.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(1, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_constr_type(lp, 1, GE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_constr_type.htm">get_constr_type</A>, <A HREF="is_constr_type.htm">is_constr_type</A>, <A HREF="add_constraint.htm">
+							add_constraint, add_constraintex, str_add_constraint</A>, <A HREF="del_constraint.htm">del_constraint</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

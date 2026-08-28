@@ -1,0 +1,83 @@
+Fri Apr  3 10:53:49 EST 1998
+  Update to reflect lp_solve version 2.2 (by changing "2.0" to "2.2"
+in various places).  Return solve_result_num and .sstatus to AMPL.
+(Unfortunately, there seems to be no way to suggest a starting
+basis to lp_solve.)  Shift variables with negative lower bounds
+to reflect lp_solve's restriction to variables with nonnegative
+lower bounds.
+
+Tue Jul 28 22:30:00 EDT 1998
+  README: add table of possible solve_result_num values.
+
+Sun Nov 14 18:21:48 EST 1999
+  README, lpsolve.c, makefile: adjust for version 3.0; should future
+versions of lp_solve appear, it may suffice to change the LPSOLVE =
+line in the makefile to point to the directory for the version of
+interest.
+
+Thu Nov 18 16:02:45 EST 1999
+ lpsolve.c: portability tweak: change (int) to Intcast.
+ makefile: renamed makefile.u (for Unix); makefile.vc added.
+
+Thu Feb  3 22:39:16 EST 2000
+  makefile.vc: adjusted reflecting changes to ../makefile.vc.
+
+Tue Oct  3 00:28:07 EDT 2000
+  lpsolve.c: fix bug in supplying variable bounds in problems
+involving some free variables (-Infinity <= var <= +Infinity)
+followed by variables with finite nonzero bounds.  Example:
+steelpl5.mod + steelpl5.dat in the AMPL book.
+
+Wed Apr 10 14:30 EDT 2002
+  lpsolve.c: use sos_add() and sos_finish() to handle .sosno and .ref;
+add "version" keyword.
+  makefile.*: adjust for lp_solve_3.2.
+
+Tue May  7 16:36:21 EDT 2002
+  More tweaks to "version" for consistency with other solvers.
+
+Thu Feb  7 13:14:00 EDT 2002
+  lpsolve.c: use sos_add() and sos_finish() to handle .sosno and .ref;
+add "version" keyword.
+  makefile.*: adjust for lp_solve_3.2.
+
+Fri Feb 28 19:03:12 EST 2003
+  Update for lp_solve_4.0 (lpsolve.c still works with 3.x).
+
+Fri Mar 28 16:06:14 EST 2003
+  README:  mention lpsolve_options.
+
+Thu Jun 12 23:33:02 EDT 2003
+  Adjust so "lpsolve" (no arguments) shows usage rather than faulting.
+
+Sun Oct 3 17:21:00 GMT+1 2003
+  Update for lp_solve_5.1 (lpsolve.c still works with 3.x and 4.x).
+  Created different makefile for the different lp_solve versions.
+  Several options added to provide full functionality of lp_solve.
+
+Mon Oct 18 2004
+- Implemented the starting base / warm start feature.
+- Added new lpsolve option coldstart to disable a starting base / warm start.
+- Made building the model faster by making use of the version 5 features.
+- A constant term in the objective function is now handled as a constant term instead
+  of adding an extra column to the model. Makes it a bit faster.
+- Implemented the free row feature. Previously, the lpsolve driver didn't supported this.
+
+Thu Nov 11 2004
+- No changes in driver.
+
+Mon Nov 16 2004
+- Some changes in makefiles. VC makefiles now also work with gmake. Renamed makefiles.
+- Added a new makefile to generate driver that uses shared library instead of statically link
+  lpsolve routines to lpsolve program.
+- From now on the distributed lpsolve program uses the shared library of lpsolve instead of
+  linking the code statically. This has as advantage that the AMPL driver does not have to be
+  updated when a new lpsolve version is distributed.
+
+Sat Dec 17 2005 (version 20051217)
+- For models with integer variables and negative (-Infinite ?) lower bounds on variables,
+  a crash could occur after solve. This because the current basis in the lpsolve library
+  can not be retrieved and this case was not handled in the AMPL layer.
+- makefile makefile5stat.vc was not up to date for version 5.5
+- a model with integer variables doesn't has sensitivity information, but lpsolve still tried
+  to retrieve it. A message that this information is not available was printed on screen.

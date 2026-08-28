@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D0710171-5FC9-48BF-84C5-EDF273440E1B}</ProjectGuid>
+    <RootNamespace>SoPlex</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\thirdparty\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)x86\SoPlexLib.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4274;4068;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\thirdparty\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(IntDir)x86\SoPlexLib.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4274;4068;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\thirdparty\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4274;4068;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\thirdparty\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WITH_ZLIB;NDEBUG;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4274;4068;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\changesoplex.cpp" />
+    <ClCompile Include="src\didxset.cpp" />
+    <ClCompile Include="src\dsvector.cpp" />
+    <ClCompile Include="src\dvector.cpp" />
+    <ClCompile Include="src\enter.cpp" />
+    <ClCompile Include="src\factor.cpp" />
+    <ClCompile Include="src\forest.cpp" />
+    <ClCompile Include="src\gzstream.cpp" />
+    <ClCompile Include="src\idxset.cpp" />
+    <ClCompile Include="src\leave.cpp" />
+    <ClCompile Include="src\lpcolset.cpp" />
+    <ClCompile Include="src\lprow.cpp" />
+    <ClCompile Include="src\lprowset.cpp" />
+    <ClCompile Include="src\message.cpp" />
+    <ClCompile Include="src\mpsinput.cpp" />
+    <ClCompile Include="src\nameset.cpp" />
+    <ClCompile Include="src\slufactor.cpp" />
+    <ClCompile Include="src\solve.cpp" />
+    <ClCompile Include="src\soplex.cpp" />
+    <ClCompile Include="src\spxbasis.cpp" />
+    <ClCompile Include="src\spxbounds.cpp" />
+    <ClCompile Include="src\spxchangebasis.cpp" />
+    <ClCompile Include="src\spxdantzigpr.cpp" />
+    <ClCompile Include="src\spxdefaultrt.cpp" />
+    <ClCompile Include="src\spxdefines.cpp" />
+    <ClCompile Include="src\spxdesc.cpp" />
+    <ClCompile Include="src\spxdevexpr.cpp" />
+    <ClCompile Include="src\spxequilisc.cpp" />
+    <ClCompile Include="src\spxfastrt.cpp" />
+    <ClCompile Include="src\spxfileio.cpp" />
+    <ClCompile Include="src\spxgeometsc.cpp" />
+    <ClCompile Include="src\spxharrisrt.cpp" />
+    <ClCompile Include="src\spxhybridpr.cpp" />
+    <ClCompile Include="src\spxid.cpp" />
+    <ClCompile Include="src\spxio.cpp" />
+    <ClCompile Include="src\spxlp.cpp" />
+    <ClCompile Include="src\spxlpfread.cpp" />
+    <ClCompile Include="src\spxlpfwrite.cpp" />
+    <ClCompile Include="src\spxmainsm.cpp" />
+    <ClCompile Include="src\spxmpsread.cpp" />
+    <ClCompile Include="src\spxmpswrite.cpp" />
+    <ClCompile Include="src\spxout.cpp" />
+    <ClCompile Include="src\spxparmultpr.cpp" />
+    <ClCompile Include="src\spxproof.cpp" />
+    <ClCompile Include="src\spxquality.cpp" />
+    <ClCompile Include="src\spxscaler.cpp" />
+    <ClCompile Include="src\spxshift.cpp" />
+    <ClCompile Include="src\spxsolve.cpp" />
+    <ClCompile Include="src\spxsolver.cpp" />
+    <ClCompile Include="src\spxstarter.cpp" />
+    <ClCompile Include="src\spxsteeppr.cpp" />
+    <ClCompile Include="src\spxsumst.cpp" />
+    <ClCompile Include="src\spxvecs.cpp" />
+    <ClCompile Include="src\spxvectorst.cpp" />
+    <ClCompile Include="src\spxweightpr.cpp" />
+    <ClCompile Include="src\spxweightst.cpp" />
+    <ClCompile Include="src\spxwritestate.cpp" />
+    <ClCompile Include="src\ssvector.cpp" />
+    <ClCompile Include="src\svector.cpp" />
+    <ClCompile Include="src\svset.cpp" />
+    <ClCompile Include="src\timer.cpp" />
+    <ClCompile Include="src\tracemethod.cpp" />
+    <ClCompile Include="src\unitvector.cpp" />
+    <ClCompile Include="src\update.cpp" />
+    <ClCompile Include="src\updatevector.cpp" />
+    <ClCompile Include="src\vector.cpp" />
+    <ClCompile Include="src\vsolve.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\array.h" />
+    <ClInclude Include="src\clufactor.h" />
+    <ClInclude Include="src\cring.h" />
+    <ClInclude Include="src\dataarray.h" />
+    <ClInclude Include="src\datahashtable.h" />
+    <ClInclude Include="src\datakey.h" />
+    <ClInclude Include="src\dataset.h" />
+    <ClInclude Include="src\didxset.h" />
+    <ClInclude Include="src\dsvector.h" />
+    <ClInclude Include="src\dvector.h" />
+    <ClInclude Include="src\exceptions.h" />
+    <ClInclude Include="src\gzstream.h" />
+    <ClInclude Include="src\idlist.h" />
+    <ClInclude Include="src\idxset.h" />
+    <ClInclude Include="src\islist.h" />
+    <ClInclude Include="src\lpcol.h" />
+    <ClInclude Include="src\lpcolset.h" />
+    <ClInclude Include="src\lprow.h" />
+    <ClInclude Include="src\lprowset.h" />
+    <ClInclude Include="src\message.h" />
+    <ClInclude Include="src\mpsinput.h" />
+    <ClInclude Include="src\nameset.h" />
+    <ClInclude Include="src\random.h" />
+    <ClInclude Include="src\slinsolver.h" />
+    <ClInclude Include="src\slufactor.h" />
+    <ClInclude Include="src\soplex.h" />
+    <ClInclude Include="src\sorter.h" />
+    <ClInclude Include="src\spxalloc.h" />
+    <ClInclude Include="src\spxbasis.h" />
+    <ClInclude Include="src\spxdantzigpr.h" />
+    <ClInclude Include="src\spxdefaultrt.h" />
+    <ClInclude Include="src\spxdefines.h" />
+    <ClInclude Include="src\spxdevexpr.h" />
+    <ClInclude Include="src\spxequilisc.h" />
+    <ClInclude Include="src\spxfastrt.h" />
+    <ClInclude Include="src\spxfileio.h" />
+    <ClInclude Include="src\spxgeometsc.h" />
+    <ClInclude Include="src\spxharrisrt.h" />
+    <ClInclude Include="src\spxhybridpr.h" />
+    <ClInclude Include="src\spxid.h" />
+    <ClInclude Include="src\spxlp.h" />
+    <ClInclude Include="src\spxmainsm.h" />
+    <ClInclude Include="src\spxout.h" />
+    <ClInclude Include="src\spxparmultpr.h" />
+    <ClInclude Include="src\spxpricer.h" />
+    <ClInclude Include="src\spxratiotester.h" />
+    <ClInclude Include="src\spxscaler.h" />
+    <ClInclude Include="src\spxsimplifier.h" />
+    <ClInclude Include="src\spxsolver.h" />
+    <ClInclude Include="src\spxstarter.h" />
+    <ClInclude Include="src\spxsteeppr.h" />
+    <ClInclude Include="src\spxsumst.h" />
+    <ClInclude Include="src\spxvectorst.h" />
+    <ClInclude Include="src\spxweightpr.h" />
+    <ClInclude Include="src\spxweightst.h" />
+    <ClInclude Include="src\ssvector.h" />
+    <ClInclude Include="src\svector.h" />
+    <ClInclude Include="src\svset.h" />
+    <ClInclude Include="src\timer.h" />
+    <ClInclude Include="src\tracemethod.h" />
+    <ClInclude Include="src\unitvector.h" />
+    <ClInclude Include="src\updatevector.h" />
+    <ClInclude Include="src\vector.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

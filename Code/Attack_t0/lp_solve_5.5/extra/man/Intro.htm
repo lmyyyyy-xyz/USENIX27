@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Introduction</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0" ID="Table1">
+			<TR>
+				<TD VALIGN="top">
+					<h1 align="left"><u>Introduction to lp_solve 5.5.2.14</u></h1>
+					<p>What is lp_solve and what is it not?
+					The simple answer is, lp_solve is a Mixed Integer Linear Programming (MILP) solver.</p>
+
+                                        <p>And what is Linear Programming?
+                                        See <a href="http://www-unix.mcs.anl.gov/otc/Guide/faq/linear-programming-faq.html#Q1">"What is Linear Programming?"</a>
+                                        and <a href="http://www-unix.mcs.anl.gov/otc/Guide/faq/linear-programming-faq.html#Q3">"Oh, and we also want to solve it as an integer program."</a>
+                                        for a brief description.
+                                        Also see <a href="formulate.htm">Formulation of an lp problem in lpsolve</a>.</p>
+
+					<p>lp_solve is a <b>free</b> (see <a href="LGPL.htm">LGPL</a> for the GNU lesser general public license)
+					linear (integer) programming solver based on the revised simplex method and the Branch-and-bound method
+					for the integers.<br>
+					It contains <b>full source, examples and manuals</b>.<br>
+					lp_solve solves pure linear, (mixed) integer/binary, semi-continuous and special ordered sets (SOS) models.
+					Note the word linear. This means that equations must be of the first order. 5 * x - 3 * y is an example. However
+					x * y is not linear and cannot be handled by lp_solve. Both the objective function and the
+					constraints have this restriction. Also see <a href="ratio.htm">Ratios</a>.<br>
+					Via the Branch-and-bound algorithm, it can handle integer variables
+					(see <a href="integer.htm">integer variables</a>), semi-continuous variables (see <a href="semi-cont.htm">semi-continuous variables</a>)
+					and Special Ordered Sets (see <a href="SOS.htm">Special Ordered Sets (SOS)</a>).<br>
+					lp_solve has no limit on model size and accepts standard both lp or mps input files, but even that can be extended.
+					Note however that some models could give lp_solve a hard time and will even fail to solve. The larger the model
+					the likely the chance for that. But even commercial solvers have problems with that.<br>
+					It can also be called as a library from different languages like C, VB, .NET, Delphi, Excel, Java, ...<br>
+                                        It can also be called from AMPL, MATLAB, O-Matrix, Scilab, Octave, R via a driver program.
+					lp_solve is written in ANSI C and can be compiled on many different platforms like linux and WINDOWS.</p>
+
+					<p>lp_solve has its own community via the Google group <a href="https://groups.google.com/g/lp_solve" target="_blank">https://groups.google.com/g/lp_solve</a>.
+					There you can find the latest sources, executables for the common platforms, examples, manuals and a message
+					board where people can share their thoughts on lp_solve.</p>
+
+					<p>lp_solve was originally developed by <a href="mailto:michel@magma-da.com">Michel Berkelaar</a> at Eindhoven University of Technology.
+					The work of <a href="mailto:jeroen.dirks@sympatico.ca">Jeroen Dirks</a> made the transition from the basic version 1.5 to the full version 2.0 possible.
+					He contributed the procedural interface, a built-in MPS reader, and many fixes and enhancements to the code.
+					At that point there was also a Java port of lp_solve 2.0. This was not a Java native interface (JNI) to the C
+					library, but rather a translation of the algorithm (ver 2.0) from C into Java. It was also very limited
+					This meant that it did not keep up with lp_solve as it evolved.
+					Starting at version 3.0, lp_solve is released under the LGPL license. Before the code could only be used for
+					non-commercial purposes. Many other people also contributed to lp_solve, but there was no track of them. Sorry
+					if you are not mentioned.
+					Development was stagnated for some time at version 3.2, but now it is again alive and well via the new
+					developers <a href="mailto:kjell.eikland@broadpark.no">Kjell Eikland</a> and <a href="mailto:lpsolve@peno.be">Peter Notebaert</a>.
+					But also other people help to improve the product.
+					For example the new Java interface to lp_solve was made by <a href="mailto:juergen.ebert@web.de">Juergen Ebert</a>.
+					It is a JNI interface that supports the full functionality of lp_solve. He did a great job. We encourage other people to participate in the development of lp_solve.<br>
+					First a version 4 was introduced that had already several enhancements
+					and improvements and now with version 5 this enhancement continues resulting is faster solving times,
+					more stability and able to solver larger models and new functionality.
+					See <a href="changes5.htm">Changes from version 4 to version 5.1</a> for the changes done to version 5
+                                        and <a href="changes55.htm">Changes from version 5.1 to version 5.5</a> for the changes done to version 5.5.</p>
+
+					<p>Basically, lp_solve is a library, a set of routines, called the API that can be called from almost
+					any programming language to solve MILP problems. There are several ways to pass the data to the library:</p>
+					<ul>
+						<li>Via the API
+						<li>Via input files</li>
+						<li>Via an IDE</li>
+					</ul>
+					<h4>Via the API</h4>
+					The API is a set of routines that can be called from a programming language to build the model
+					in memory, solve it and return the results. There are many API routines to perform many possible
+					tasks and set several options. See <a href="lp_solveAPIreference.htm">lp_solve API reference</a> for an overview.<br><br>
+
+					<h4>Via input files</h4>
+					<p>Standard, lp_solve supports several input files types.
+					The common known MPS format (see <a href="mps-format.htm">mps-format</a>) is supported by most solvers, but
+					it is not very readable for humans. Another format is the lp format (see <a href="lp-format.htm">lp-format</a>)
+					that is more readable. lp_solve has the unique ability to use user-written routines to input the model
+					(see <a href="XLI.htm">External Language Interface</a>).
+					See <a href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</a> and <a href="read_lp.htm">read_lp, read_LP</a> for
+					the API calls to read the model from file.<br>
+					<br>
+					There is also a driver program called lp_solve that uses the API to provide a command line application
+					to solve models. See <a href="lp_solve.htm">lp_solve</a> for its usage. With this program you don't
+					have to know anything of API or computer programming languages. You can just provide your model
+					via file to the program and it will solve the model and give you the result.</p>
+
+					<h4>Via an IDE</h4>
+					<p>Thanks to <a href="mailto:hgourvest@progdigy.com">Henri Gourvest</a>, there is now also an IDE program called LPSolve IDE that uses the API to provide a Windows application
+					to solve models. See <a href="IDE.htm">LPSolve IDE</a> for its usage. With this program you don't
+					have to know anything of API or computer programming languages. You can just provide your model
+					to the program and it will solve the model and give you the result.</p>
+
+					<p>As already stated, lp_solve can be called from many programming language. Among them are
+					C, C++, Pascal, Delphi, Java, VB, C#, VB.NET, Excel. But let this list not be a limitation.
+					Any programming language capable of calling external libraries (DLLs under Windows, Shared libraries (.so) under Unix/Linux)
+					can call lp_solve.</p>
+
+					<p>Here is a list of some key features of lp_solve:</p>
+					<ul>
+						<li>Mixed Integer Linear Programming (MILP) solver
+
+						<li>Basically no limit on model size
+
+						<li>It is free and with sources
+
+						<li>Supports Integer variables, Semi-continuous
+        variables and Special Ordered Sets
+
+						<li>Can read model from MPS, LP or user written
+        format
+
+						<li>Models can be build in-memory without the use of
+        files
+
+						<li>Has a powerful API interface
+
+						<li>Easy callable from other programming languages
+
+						<li>Advanced pricing using Devex and Steepest Edge
+        for both primal and dual simplexes
+
+						<li>Provides different scaling methods to make the
+        model more numerical stable
+
+						<li>Has presolve capabilities to tighten
+        constraints/make the model smaller and faster to solve
+
+						<li>Has a base crashing routine to determine a
+        starting point
+
+						<li>Allows restart after making changes to the
+        model. Solve continues from the last found solution
+
+						<li>Possible to select desired combinations of
+        primal and dual phases 1 and 2
+
+						<li>Possible to set several solver parameters like
+        tolerances
+
+						<li>Alternative (and faster) inverse/re-factorisation libraries are provided for. See <A href="BFP.htm">Basis Factorization Packages</A>
+						<li>Alternative model readers and writers possible via the XLI implementation. See <A href="XLI.htm">External Language Interfaces</A>
+						<li>Has the possibility to convert one model format
+        to another format
+
+						<li>Provides post-optimal sensitivity analysis. See <A href="sensitivity.htm">Sensitivity</A>
+						<li>...</li>
+					</ul>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

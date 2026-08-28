@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>read_lp, read_LP</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>read_lp, read_LP</h1>
+					<p>
+						Create an lprec structure and read an lp model from file.</p>
+					<p>
+						<b>lprec *read_lp(FILE </b>*<i>stream</i><b>, int </b><i>verbose</i><B>, char </B>*<I>lp_name</I><b>);</b></p>
+					<P><B>lprec *read_LP(char </B>*<I>filename</I><B>, int </B><I>verbose</I><B>, char </B>*<I>lp_name</I><B>);</B></P>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						Returns a pointer to a new lprec structure. This must be provided to almost all
+						lp_solve functions.<br>
+						A <b>NULL</b> return value indicates an error. Specifically file could not be
+						opened or file has wrong structure&nbsp;or not enough memory available to setup
+						an lprec structure.</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>stream</i></p>
+					<p class="indent">
+						Pointer to <b>FILE</b> structure.</p>
+					<P class="dt"><I>filename</I></P>
+					<P class="indent">
+					Filename to read the lp model from.
+					<P class="indent">
+						<i>verbose</i>
+					<p class="indent">The verbose level. Can be one of the following values:<br>
+						CRITICAL (1), SEVERE (2), IMPORTANT (3), NORMAL (4), DETAILED (5), FULL (6)</p>
+					<p>See also <A href="set_verbose.htm">set_verbose</A> and <A href="get_verbose.htm">get_verbose</A>.</p>
+					<P class="indent"><I>lp_name</I>
+					<P class="indent">Initial name of the model. See also <A href="set_lp_name.htm">set_lp_name</A>
+						and <A href="get_lp_name.htm">get_lp_name</A>. May be <b>NULL</b> if the model
+						has no name.</P>
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						The <b>read_lp</b> and <B>read_LP</B> functions construct a
+						new lprec structure and read the model from <i>filename</i>. <B>read_lp</B>
+						needs a file pointer to an already opened file. <B>read_LP </B>accepts the name
+						of the file. The latter function will generally be more convenient.</P>
+					<P>
+						The model in the file must be in <a href="lp-format.htm">lp-format</a>.
+						<br>
+						<br>
+						It is advised not to read/write the lprec structure. Instead, use the function
+						interface to communicate with the lp_solve library. This because the structure
+						can change over time. The function interface will be more stable.</P>
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+int main(void)
+{
+  lprec *lp;
+
+  /* Read LP model */
+  lp = read_LP("model.lp", NORMAL, "test model");
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to read model\n");
+    return(1);
+  }
+
+  /* Model read */
+
+  /*
+  .
+  .
+  .
+  */
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A HREF="write_lp.htm">write_lp, write_LP, write_lpex</A>,
+						<A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="write_mps.htm">write_mps, write_freemps,
+							write_MPS, write_freeMPS, MPS_writefileex</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

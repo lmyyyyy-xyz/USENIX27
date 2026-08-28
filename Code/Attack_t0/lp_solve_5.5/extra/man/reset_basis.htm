@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><html>
+	<HEAD>
+		<TITLE>reset_basis</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"  WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>reset_basis</h1>
+					<p>Causes reinversion at next opportunity</p>
+					<p>
+						<b>void reset_basis(lprec </b>*<i>lp</i><b>);</b></p>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>reset_basis</b> has no return value.
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt">
+						<i>lp</i></p>
+					<p class="indent">
+						Pointer to previously created lp model. See return value of <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A HREF="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<p>
+						This routine is ment for internal use and development.
+						It causes a reinversion of the matrix at a next opportunity.
+						The routine should only be used by people deeply understanding the code.<br>
+						In the past, this routine was documented as the routine to set an initial base.
+						<b>This is incorrect</b>. <A HREF="default_basis.htm">default_basis</A> must be used
+						for this purpose. It is <b>very</b> unlikely that you must call this routine.
+					</p>
+
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_basis.htm">get_basis</A>, <A HREF="set_basis.htm">set_basis</A>,
+						<a href="default_basis.htm">default_basis</a>,
+						<a href="get_basiscrash.htm">get_basiscrash</a>
+						<a href="set_basiscrash.htm">set_basiscrash</a></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</HTML>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>Data structures</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>Datastructures</h1>
+
+                                        <h2>A-matrix</h2>
+                                        <p>The A-matrix is stored in the lp structure in element matA and is defined in structure MATrec.
+                                           Only the non-zero elements of this matrix are stored. This is called a sparse matrix.
+                                           In MATrec, the following elements are of importance in the matrix data:</p>
+                                        <ul>
+						<li>rows</li>
+						<li>columns</li>
+                                                <li>col_end</li>
+                                                <li>row_mat</li>
+                                                <li>row_end</li>
+                                                <li>col_mat_colnr</li>
+                                                <li>col_mat_rownr</li>
+                                                <li>col_mat_value</li>
+					</ul>
+                                        <p>Elements are stored per column, then per row. col_mat_value containts the values.
+                                           So first a[1][1], then a[2][1], then a[3][1], ..., a[2][1], a[2][2], ...
+                                        </p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

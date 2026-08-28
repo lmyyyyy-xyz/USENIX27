@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>set_bounds_tighter</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE class="clsContainer" style="TABLE-LAYOUT: fixed" cellSpacing="0" cellPadding="15"
+			width="100%" border="0">
+			<TR>
+				<TD vAlign="top">
+					<h1>set_bounds_tighter</h1>
+					<p>Specifies if set bounds may only be tighter or also less restrictive.</p>
+					<p><b>void set_bounds_tighter(lprec </b>*<i>lp</i><b>, unsigned char </b><i>tighten</i><b>);</b></p>
+					<p class="label"><b>Return Value</b></p>
+					<p><b>set_bounds_tighter</b> has no return value.<br>
+					</p>
+					<p class="label"><b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<p class="dt"><i>tighten</i></p>
+					<p class="indent">Specifies if set bounds may only be tighter (TRUE) or also less
+						restrictive (FALSE).</p>
+					<p class="label"><b>Remarks</b></p>
+					<p>The <b>set_bounds_tighter</b> function sets if bounds may only be tighter or
+						also less restrictive. If set to TRUE then bounds may only be tighter. This
+						means that when <A href="set_upbo.htm">set_lowbo</A> or <A href="set_upbo.htm">set_lowbo</A>
+						is used to set a bound and the bound is less restrictive than an already set
+						bound, then this new bound will be ignored. If <i>tighten</i> is set to FALSE,
+						the new bound is accepted. This functionality is useful when several bounds are
+						set on a variable and at the end you want the most restrictive ones. By
+						default, this setting is FALSE. Note that this setting does not affect <A href="set_bounds.htm">
+							set_bounds</A>.
+					</p>
+					<p class="label"><b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 2);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_bounds_tighter(lp, TRUE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>,
+						<A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">read_mps,
+							read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="get_bounds_tighter.htm">get_bounds_tighter</A>, <A HREF="set_upbo.htm">
+							set_upbo</A>, <A HREF="get_upbo.htm">get_upbo</A>, <A HREF="set_lowbo.htm">set_lowbo</A>,
+						<A HREF="get_lowbo.htm">get_lowbo</A>, <A HREF="set_bounds.htm">set_bounds</A>, <A HREF="set_unbounded.htm">set_unbounded</A>, <A HREF="is_unbounded.htm">is_unbounded</A>, <A HREF="is_negative.htm">is_negative</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>

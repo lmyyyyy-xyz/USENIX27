@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<HEAD>
+		<TITLE>write_XLI</TITLE>
+		<style TYPE="text/css"> BODY { font-family:verdana,arial,helvetica; margin:0; }
+	</style>
+	</HEAD>
+	<BODY>
+		<TABLE STYLE="TABLE-LAYOUT:fixed" class="clsContainer" CELLPADDING="15" CELLSPACING="0"
+			WIDTH="100%" BORDER="0">
+			<TR>
+				<TD VALIGN="top">
+					<h1>write_XLI</h1>
+					<p>
+						Write a model to a file via the External Language Interface.</p>
+					<P><B>unsigned char write_XLI(lprec </B>*<i>lp</i><b>, char </b>*<I>filename</I><b>, char </B>*<I>options</I><B>, unsigned char </b><I>results</I><B>);</B></P>
+					<p class="label">
+						<b>Return Value</b></p>
+					<p>
+						<b>write_XLI</b> returns TRUE (1) if the operation was
+						successful. A return value of FALSE (0) indicates an error.<br>
+					</p>
+					<p class="label">
+						<b>Parameters</b></p>
+					<p class="dt"><i>lp</i></p>
+					<p class="indent">Pointer to previously created lp model. See return value of <A href="make_lp.htm">
+							make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp,
+							read_LP</A>, <A href="read_mps.htm">read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A></p>
+					<P class="dt"><I>filename</I></P>
+					<P class="indent">Filename to write the model to.</p>
+					<P class="dt"><I>options</I></P>
+					<P class="indent">Extra options that can be used by the writer.</p>
+					<P class="dt"><I>results</I></P>
+					<P class="indent">
+					FALSE to generate a model file and TRUE to generate a solution file.</p>
+					<p class="label">
+						<b>Remarks</b></p>
+					<P>
+						The <b>write_XLI</b> function writes the model to <i>filename</i> via the External Language Interface.
+						Note that <a href="set_XLI.htm">set_XLI</a> must be called before this routine to set an XLI.
+						</P>
+						See <a href="XLI.htm">External Language Interfaces</a> for a complete description on XLIs.
+					<p class="label">
+						<b>Example</b></p>
+					<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include "lp_lib.h"
+int main(void)
+{
+  lprec *lp;
+
+  /* Create a new LP model */
+  lp = make_lp(0, 0);
+  if(lp == NULL) {
+    fprintf(stderr, "Unable to create new LP model\n");
+    return(1);
+  }
+
+  set_XLI(lp, "xli_MathProg");
+
+  write_XLI(lp, "model.mod", "", FALSE);
+
+  delete_lp(lp);
+  return(0);
+}
+</code></pre>
+					<p>
+						<A HREF="lp_solveAPIreference.htm">lp_solve API reference</A></p>
+					<p>
+						<b>See Also</b> <A HREF="delete_lp.htm">delete_lp</A>, <A HREF="free_lp.htm">free_lp</A>,
+						<A HREF="make_lp.htm">make_lp</A>, <A HREF="copy_lp.htm">copy_lp</A>, <A href="read_lp.htm">read_lp, read_LP</A>, <A HREF="read_mps.htm">
+							read_mps, read_freemps, read_MPS, read_freeMPS</A>, <A HREF="read_XLI.htm">read_XLI</A>, <A HREF="write_mps.htm">write_mps, write_freemps, write_MPS, write_freeMPS, MPS_writefileex</A>,
+							<A HREF="read_XLI.htm">read_XLI</A>, <A HREF="has_XLI.htm">has_XLI</A>, <A HREF="is_nativeXLI.htm">is_nativeXLI</A>, <A HREF="set_XLI.htm">set_XLI</A></p>
+				</TD>
+			</TR>
+		</TABLE>
+	</BODY>
+</html>
