@@ -1,17 +1,42 @@
-一、实验环境说明：
-Python 3.8.0
-Linux Ubuntu 20.04.6
-OpenSSL 1.1.1f
+# Signature-Forgery Experiment
 
-二所需安装库函数以及版本信息
-numpy-------------1.24.4
+## Experimental Environment
 
-三、用法:
-1、文件夹input_s1_pk_m存放输入文件，文件夹中包含meta_data_part{序号}.npz、s1_true.txt和pk_16.txt 三个文件作为输入文件，从中去拿msg,pk和s1.
-   可以通过修改forgery_signature.py文件中的main函数的read_data()函数的参数来修改输入的msg，pk，s1
-   读取函数read_data()，返回一个msg列表，pk是字符串，s1是二维列表
-   forgery_sign()函数中需要传入一个字符串形式的消息、二维列表形式的s1、字符串形式的pk,输出结果是一个字符串形式的伪造签名。
-   输出结果存放在forgery_signature_output文件夹下，该文件夹下的new_sm.txt包含了对多条消息执行签名后的伪造签名
-2、运行方法：
-   修改正确forgery_signature.py文件中的main函数的文件路径后
-   在安装完依赖的模块后，在命令行运行python3  forgery_signature.py即可在forgery_signature_output文件夹下得到输出结果
+- Python 3.8.0
+- Ubuntu 20.04.6 LTS
+- OpenSSL 1.1.1f
+
+## Dependency
+
+- NumPy 1.24.4
+
+## Usage
+
+### 1. Prepare the Input Files
+
+The `input_s1_pk_m` directory contains the input files
+`meta_data_part{index}.npz`, `s1_true.txt`, and `pk_16.txt`. These files
+provide the messages (`msg`), public key (`pk`), and secret component (`s1`)
+used by the experiment.
+
+To select different input values, modify the arguments passed to `read_data()`
+in the `main` function of `forgery_signature.py`. The function returns a list
+of messages, the public key as a string, and `s1` as a two-dimensional list.
+
+The `forgery_sign()` function takes a message as a string, `s1` as a
+two-dimensional list, and the public key as a string. It returns the forged
+signature as a string.
+
+Results are written to the `forgery_signature_output` directory. The file
+`new_sm.txt` contains the forged signatures generated for multiple messages.
+
+### 2. Run the Experiment
+
+After configuring the file paths in the `main` function of
+`forgery_signature.py` and installing the dependency, run:
+
+```bash
+python3 forgery_signature.py
+```
+
+The results will be available in the `forgery_signature_output` directory.

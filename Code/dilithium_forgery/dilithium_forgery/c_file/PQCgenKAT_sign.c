@@ -189,11 +189,11 @@ main(int argc, char *argv[])
             return KAT_DATA_ERROR;
         }*/
         
-        //读取pk文件=======================================================
+        // Read the public-key file.
         char pkstr[2625];
 
          if (fgets(pkstr, 2625, fp_pk) != NULL) {
-        //printf("读取的字符串: %s\n", pkstr);
+        //printf("Read string: %s\n", pkstr);
        }
         int cacheint1[2624];	
          for(int i=0; i < 2624;i++)
@@ -209,12 +209,12 @@ main(int argc, char *argv[])
             printf("%d\n",pk[i]);*/
         //=====================================================================================
         
-        //读取sk文件===========================================================================
+        // Read the secret-key file.
         /*
          char skstr[5089];
 
          if (fgets(skstr, 5089, fp_sk) != NULL) {
-           printf("读取的字符串: %s\n", skstr);
+           printf("Read string: %s\n", skstr);
        }
        
        int cacheint2[5088];	
@@ -299,29 +299,29 @@ main(int argc, char *argv[])
         //printf("haha");
         if ( (ret_val = crypto_sign_open(m1, &mlen1, sm, smlen, pk)) != 0) {
             printf("crypto_sign_open returned <%d>\n", ret_val);
-            printf("验证失败1");
+            printf("Verification failed 1");
             return KAT_CRYPTO_FAILURE;
         }
         else{
-        printf("验证成功");
+        printf("Verification succeeded");
         }
         
         if ( mlen != mlen1 ) {
-        	 printf("验证失败2");
+            printf("Verification failed 2");
             printf("crypto_sign_open returned bad 'mlen': Got <%llu>, expected <%llu>\n", mlen1, mlen);
             return KAT_CRYPTO_FAILURE;
         }
         else{
-        printf("验证成功");
+        printf("Verification succeeded");
         }
         
         if ( memcmp(m, m1, mlen) ) {
-         printf("验证失败3");
+         printf("Verification failed 3");
             printf("crypto_sign_open returned bad 'm' value\n");
             return KAT_CRYPTO_FAILURE;
         }
         else{
-        printf("验证成功");
+        printf("Verification succeeded");
         }
         
         free(m);
@@ -442,4 +442,3 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)
 
 	fprintf(fp, "\n");
 }
-

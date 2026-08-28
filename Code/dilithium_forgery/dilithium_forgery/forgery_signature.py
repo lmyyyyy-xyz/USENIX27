@@ -17,24 +17,24 @@ Q = 8380417
 #
 # number_one =0
 def read_data(filename, s1_file, pk_file):
-    # 从第二个压缩包读取 s1
+    # Read s1 from the second data package.
     s1 = get_s1(s1_file)
 
-    # 消息仍然从原来的 metadata 文件中读取
+    # Read the messages from the original metadata file.
     profiling_data = np.load(filename, allow_pickle=True)
     msg = profiling_data["msg"]
 
-    # 公钥从第二个压缩包的 pk_16.txt 中读取
+    # Read the public key from pk_16.txt in the second data package.
     with open(pk_file, "r", encoding="ascii") as f:
         pk = "".join(f.read().split()).lower()
 
     if len(pk) != 2624:
         raise ValueError(
-            f"公钥长度错误：{len(pk)} 个十六进制字符，应为 2624"
+            f"Invalid public-key length: got {len(pk)} hexadecimal characters; expected 2624"
         )
 
     if any(c not in "0123456789abcdef" for c in pk):
-        raise ValueError("pk_16.txt 中包含非法字符")
+        raise ValueError("pk_16.txt contains non-hexadecimal characters")
 
     return msg, s1, pk
 
@@ -128,10 +128,10 @@ def forgery_sign(m,s1,pk):
 
     makefile_path = "./c_file/"
     if os.path.exists(makefile_path+'PQCgenKAT_sign'):
-        #print("文件存在")
+        #print("File exists")
         pass
     else:
-        #print("文件不存在")
+        #print("File does not exist")
         subprocess.run(["make"],cwd=makefile_path)
     #subprocess.run(["make"],cwd=makefile_path)
     with open('./median_value/m.txt','w',encoding='utf-8') as f:
@@ -178,7 +178,7 @@ def forgery_sign(m,s1,pk):
         print(result.stdout, end='')
         print(result.stderr, end='')
         diedai +=1
-        print("第{}次迭代".format(diedai))
+        print("Iteration {}".format(diedai))
         number_one = 0
         t = get_t()
         w = get_w1()
@@ -198,7 +198,7 @@ def forgery_sign(m,s1,pk):
         #     continue
         # else:
         #     flag = False
-        # if '验证失败' in result.stdout:
+        # if 'Verification failed' in result.stdout:
         #     flag = True
         #     #print('verify signature failure')
         # else:
@@ -207,46 +207,46 @@ def forgery_sign(m,s1,pk):
 
         z = get_z()
         
-        # C 程序是否通过 crypto_sign_open() 验证
+        # Check whether the C program passes crypto_sign_open() verification.
         verify_ok = (
             result.returncode == 0
-            and "验证失败" not in result.stdout
+            and "Verification failed" not in result.stdout
         )
 
-        # 输出 C 程序的验证信息
+        # Print the verification output from the C program.
         print(result.stdout, end="")
         print(result.stderr, end="")
 
-        # rejection 条件
+        # Rejection conditions.
         rejected_by_norm = max_z(z, gamma1 - beta)
         rejected_by_hint = number_one > omega
 
         if rejected_by_norm or rejected_by_hint or not verify_ok:
             flag = True
             print(
-                "当前候选被拒绝："
+                "Current candidate rejected: "
                 f"norm={rejected_by_norm}, "
                 f"hint={rejected_by_hint}, "
                 f"verify={verify_ok}"
             )
             continue
 
-        # 三个条件都满足
+        # All three conditions are satisfied.
         flag = False
-        print("伪造签名成功")
+        print("Signature forgery succeeded")
             
-        #print("迭代次数是:{}".format(diedai))
+        #print("Number of iterations: {}".format(diedai))
     with open('./c_file/PQCsignKAT_2544.rsp','r',encoding = 'utf-8') as f:
         for line in f:
             if 'sm =' in line:
                 if flag == False:
-                    #print("签名是：")
+                    #print("Signature:")
                     print(line.split('=')[1].split(' ')[1].split('\n')[0])
                     return line.split('=')[1].split(' ')[1].split('\n')[0]
 
 '''
 def verify_sign(z,h,c):
-    #写入z
+    # Write z.
     with open('new_z.txt','w',encoding='utf-8') as f:
         for i in range(l):
             for j in range(256):
@@ -256,7 +256,7 @@ def verify_sign(z,h,c):
                     f.write('{} '.format(z[i][j]))
             f.write('\n')
     
-    #写入h
+    # Write h.
     with open('new_h.txt','w',encoding='utf-8') as f:
         for i in range(k):
             for j in range(256):
@@ -265,7 +265,7 @@ def verify_sign(z,h,c):
                 else:
                     f.write('{} '.format(h[i][j]))
             f.write('\n')
-    #写入c
+    # Write c.
     with open('new_c.txt','w',encoding='utf-8') as f:
         for i in range(256):
             if i == 255:
@@ -277,7 +277,7 @@ def verify_sign(z,h,c):
     #subprocess.run(execute_command)
     result = subprocess.run(execute_command, capture_output=True, text=True)
     print(result)
-    if '验证失败' in result.stdout:
+    if 'Verification failed' in result.stdout:
         return False
     else:
         return True
@@ -294,8 +294,8 @@ def random_get_msg(length):
     return str
 
 if __name__ == '__main__': 	
-    #m返回是一个消息列表m，包含700条消息，pk是一个str类型
-    #输入文件是包含s1秘钥的文件s1.txt和meta_data_part0.npz
+    # m is a list of 700 messages, and pk is a string.
+    # The input files are s1.txt, which contains s1, and meta_data_part0.npz.
     
     m, s1, pk = read_data(
         './input_s1_pk_m/meta_data_part0.npz',
@@ -307,15 +307,15 @@ if __name__ == '__main__':
     
     
     
-    #sm是存放签名的列表
+    # Store the signatures in sm_list.
     sm_list =[]
     s1_work = [row[:] for row in s1]
-    #meta_data_part0.npz中包含len(m)条消息，对每条消息签名
+    # Sign each of the len(m) messages in meta_data_part0.npz.
     for i in range(len(m)):
         sm = forgery_sign(m[i],s1,pk)
         sm_list.append(sm)
         
-    #把生成的sm写入文件夹output的new_sm.txt中
+    # Write the generated signed messages to forgery_signature_output/new_sm.txt.
     with open('./forgery_signature_output/new_sm.txt','w',encoding='utf-8') as f:
         for sm in sm_list:
             f.write('sm = {}\n'.format(sm))

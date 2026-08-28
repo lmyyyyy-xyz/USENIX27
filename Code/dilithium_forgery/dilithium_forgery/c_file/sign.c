@@ -21,7 +21,7 @@ void write_to_file(char *filename,int32_t data_array[],int size){
 FILE* file = fopen(filename, "a");
 
 if (file == NULL) {
-        printf("无法打开文件。\n");
+        printf("Unable to open file.\n");
         //return 1;
     }
     
@@ -156,18 +156,18 @@ int crypto_sign_signature(uint8_t *sig,
   /*printf("print tr\n");
   for(int i=0; i < CRHBYTES;i++)
   	printf("%d\n",tr[i]);
-  printf("tr结束");
+  printf("tr complete");
   
   printf("print tr1\n");
   for(int i=0; i < CRHBYTES;i++)
   	printf("%d\n",tr1[i]);
-  printf("tr1结束");
+  printf("tr1 complete");
   
   
   printf("print key");
   for(int i=0; i < SEEDBYTES;i++)
   	printf("%d\n",key[i]);
-  printf("key结束");*/
+  printf("key complete");*/
   
   
   /*for(int i = 0; i < SEEDBYTES; ++i)
@@ -176,25 +176,25 @@ int crypto_sign_signature(uint8_t *sig,
   
   rho = rhoo;
   
-  //读取s1==========================================
+  // Read s1.
   
   char buffer[5000];
    file = fopen("../median_value/write_s1.txt", "r");
     
     if (file == NULL) {
-        printf("无法打开文件\n");
+        printf("Unable to open file\n");
         return 1;
     }
-    // 逐行读取文件内容
+    // Read the file line by line.
     int j=0;
     int k=0;
     
     while (fgets(buffer, sizeof(buffer), file)) {
     	//printf("haha\n");
-    	//printf("%s", buffer); // 打印每行内容
+        //printf("%s", buffer); // Print each line.
     	k =0;
     	int num=0;
-    	//printf("%s\n",token);// 使用空格作为分隔符，将字符串分割成数字
+        //printf("%s\n",token); // Split the string into numbers using spaces.
     	while (num<256) {
     	 	int temp = 0;
     	 	//printf("%c ",buffer[2*num]);
@@ -231,7 +231,7 @@ int crypto_sign_signature(uint8_t *sig,
     		//printf("%s ", token);
 		s1.vec[j].coeffs[k++] = temp;
 		num++;
-		 // 将提取的数字转换为整数并存入数组 // 继续提取下一个数字
+		 // Convert the extracted number to an integer and store it in the array.
 	    }
 
         j++;
@@ -239,7 +239,7 @@ int crypto_sign_signature(uint8_t *sig,
     
      fclose(file);
      //=================================
-     //输出s1
+     // Output s1.
      int32_t buf_s1[L][256];
   
   for(int i=0; i < L;i++){
@@ -247,14 +247,14 @@ int crypto_sign_signature(uint8_t *sig,
   	   buf_s1[i][j] = s1.vec[i].coeffs[j];
   }
   if (access("../median_value/ssss.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/ssss.txt") == 0) {
-            printf("ssss文件删除成功\n");
+            printf("Deleted ssss file\n");
         } else {
-            printf("ssss文件删除失败\n");
+            printf("Failed to delete ssss file\n");
         }
     } else {
-        printf("ssss文件不存在\n");
+        printf("ssss file does not exist\n");
     }
   for(int i=0; i < L ;i++)
   	write_to_file("../median_value/ssss.txt",buf_s1[i],256);
@@ -269,14 +269,14 @@ int crypto_sign_signature(uint8_t *sig,
   	   buf_ss[i][j] = s1.vec[i].coeffs[j];
   }
   if (access("../median_value/ss.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/ss.txt") == 0) {
-            printf("ss文件删除成功\n");
+            printf("Deleted ss file\n");
         } else {
-            printf("ss文件删除失败\n");
+            printf("Failed to delete ss file\n");
         }
     } else {
-        printf("ss文件不存在\n");
+        printf("ss file does not exist\n");
     }
   for(int i=0; i < L ;i++)
   	write_to_file("../median_value/ss.txt",buf_ss[i],256);
@@ -298,7 +298,7 @@ int crypto_sign_signature(uint8_t *sig,
   
   //===========================================
   
-  //====================注释
+  // Intermediate values used by the forgery procedure.
   /*shake256_init(&state);
   shake256_absorb(&state, tr, CRHBYTES);
   shake256_absorb(&state, m, mlen);
@@ -330,25 +330,24 @@ int crypto_sign_signature(uint8_t *sig,
 
   /* Decompose w and call the random oracle */
   polyveck_caddq(&w1);
-  polyveck_decompose(&w1, &w0, &w1);//取高位
+  polyveck_decompose(&w1, &w0, &w1); // Extract the high-order bits.
 
   //------------------------------------
-  //将w1返回到python文件中
-  //输出w1到文件中
+  // Return w1 to the Python program by writing it to a file.
   int32_t buf_w1[K][256];
   for(int i=0; i < K;i++){
   	for(int j=0; j < 256 ;j++)
   	   buf_w1[i][j] = w1.vec[i].coeffs[j];
   }
   if (access("../median_value/w1.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/w1.txt") == 0) {
-            printf("w1文件删除成功\n");
+            printf("Deleted w1 file\n");
         } else {
-            printf("w1文件删除失败\n");
+            printf("Failed to delete w1 file\n");
         }
     } else {
-        printf("w1文件不存在\n");
+        printf("w1 file does not exist\n");
     }
   for(int i=0; i < K ;i++)
   	write_to_file("../median_value/w1.txt",buf_w1[i],256);
@@ -356,7 +355,7 @@ int crypto_sign_signature(uint8_t *sig,
   
   polyveck_pack_w1(sig, &w1);
    //------------------------------------
-  //将s1返回到python文件中
+  // Return s1 to the Python program.
   //------------------------------------
 
   shake256_init(&state);
@@ -364,7 +363,7 @@ int crypto_sign_signature(uint8_t *sig,
   shake256_absorb(&state, sig, K*POLYW1_PACKEDBYTES);
   shake256_finalize(&state);
   shake256_squeeze(sig, SEEDBYTES, &state);
-  poly_challenge(&cp, sig);//生成挑战c的过程
+  poly_challenge(&cp, sig); // Generate the challenge c.
   
   int32_t buf_c[256];
   
@@ -372,28 +371,28 @@ int crypto_sign_signature(uint8_t *sig,
   	buf_c[i] = cp.coeffs[i];
   	
   if (access("../median_value/c.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/c.txt") == 0) {
-            printf("c文件删除成功\n");
+            printf("Deleted c file\n");
         } else {
-            printf("c文件删除失败\n");
+            printf("Failed to delete c file\n");
         }
     } else {
-        printf("c文件不存在\n");
+        printf("c file does not exist\n");
     }
     
   write_to_file("../median_value/c.txt",buf_c,256);
   
   
-  poly_ntt(&cp);//对c进行NTT
+  poly_ntt(&cp); // Apply the NTT to c.
 
   /* Compute z, reject if it reveals secret */
-  polyvecl_pointwise_poly_montgomery(&z, &cp, &s1);//这步运算是要在NTT域下进行的
-  polyvecl_invntt_tomont(&z);//cs回归正常域
-  polyvecl_add(&z, &z, &y);//正常域的加法
-  polyvecl_reduce(&z);//约简
+  polyvecl_pointwise_poly_montgomery(&z, &cp, &s1); // Compute the product in the NTT domain.
+  polyvecl_invntt_tomont(&z); // Return cs to the standard domain.
+  polyvecl_add(&z, &z, &y); // Add y in the standard domain.
+  polyvecl_reduce(&z); // Reduce the coefficients.
   
-  //输出z到文件
+  // Write z to a file.
   //===============================================================
   int32_t buf_z[L][256];
   
@@ -402,14 +401,14 @@ int crypto_sign_signature(uint8_t *sig,
   	   buf_z[i][j] = z.vec[i].coeffs[j];
   }
   if (access("../median_value/z.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/z.txt") == 0) {
-            printf("z文件删除成功\n");
+            printf("Deleted z file\n");
         } else {
-            printf("z文件删除失败\n");
+            printf("Failed to delete z file\n");
         }
     } else {
-        printf("z文件不存在\n");
+        printf("z file does not exist\n");
     }
   for(int i=0; i < L ;i++)
   	write_to_file("../median_value/z.txt",buf_z[i],256);
@@ -442,7 +441,7 @@ int crypto_sign_signature(uint8_t *sig,
 
   polyveck_add(&w0, &w0, &h);//w0=w-cs2+ct0
   polyveck_caddq(&w0);
-  //n = polyveck_make_hint(&h, &w0, &w1);//利用w1和w0之间的差距h，并返回h中1的个数
+  //n = polyveck_make_hint(&h, &w0, &w1); // Compute h and return its Hamming weight.
   
   //gaidong1====================================================
  
@@ -474,21 +473,21 @@ int crypto_sign_signature(uint8_t *sig,
   		h.vec[i].coeffs[j] = 0;
   polyveck_use_hint(&tmp, &tmp, &h);//az-ct=tmp
   
-  //输出tmp到文件中
+  // Write tmp to a file.
   int32_t buf_tmp[K][256];
   for(int i=0; i < K;i++){
   	for(int j=0; j < 256 ;j++)
   	   buf_tmp[i][j] = tmp.vec[i].coeffs[j];
   }
   if (access("../median_value/t.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/t.txt") == 0) {
-            printf("t文件删除成功\n");
+            printf("Deleted t file\n");
         } else {
-            printf("t文件删除失败\n");
+            printf("Failed to delete t file\n");
         }
     } else {
-        printf("t文件不存在\n");
+        printf("t file does not exist\n");
     }
   for(int i=0; i < K ;i++)
   	write_to_file("../median_value/t.txt",buf_tmp[i],256);
@@ -528,14 +527,14 @@ int crypto_sign_signature(uint8_t *sig,
   	   buf_h[i][j] = h.vec[i].coeffs[j];
   }
   if (access("../median_value/h.txt", F_OK) != -1) {
-        // 文件存在，删除文件
+        // Delete the file if it exists.
         if (remove("../median_value/h.txt") == 0) {
-            printf("h文件删除成功\n");
+            printf("Deleted h file\n");
         } else {
-            printf("h文件删除失败\n");
+            printf("Failed to delete h file\n");
         }
     } else {
-        printf("h文件不存在\n");
+        printf("h file does not exist\n");
     }
   for(int i=0; i < K ;i++)
   	write_to_file("../median_value/h.txt",buf_h[i],256);
