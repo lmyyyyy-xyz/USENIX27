@@ -20,7 +20,7 @@ The expected layout is:
 
 ```text
 Code/
-|-- one_bit_attack/
+|-- single_bit_attack/
 |   |-- README.md
 |   |-- sweep_bp_greedy_noiseless.py
 |   |-- binary_search_bp_equality_inequality_noiseless.py
